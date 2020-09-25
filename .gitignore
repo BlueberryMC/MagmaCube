@@ -5,3 +5,4 @@ work/Minecraft/
 work/decompiler/
 Minecraft/src/*
 Minecraft/
+/Minecraft/target/

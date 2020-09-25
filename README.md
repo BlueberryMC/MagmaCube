@@ -1,4 +1,4 @@
-# Minecraft
+# MagmaCube
 
 ## What's this
 
