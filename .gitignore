@@ -3,6 +3,8 @@
 dependency-reduced-pom.xml
 work/Minecraft/
 work/decompiler/
-Minecraft/src/*
-Minecraft/
+/Minecraft/src/*
+/Minecraft/
 /Minecraft/target/
+target/
+/target/

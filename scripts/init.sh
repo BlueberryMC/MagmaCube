@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-./downloadJars.sh
-./applyPatches.sh
+./scripts/downloadJars.sh
+./scripts/applyPatches.sh

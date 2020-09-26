@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source ./scripts/functions.sh
 basedir="$(cd "$1" && pwd -P)"
 git="git -c commit.gpgsign=false"
 apply="$git am --3way --ignore-whitespace"
@@ -8,7 +9,7 @@ echo "Resetting Minecraft..."
 cd "$basedir/Minecraft"
 $git init
 $git remote rm upstream > /dev/null 2>&1
-$git remote add upstream "$basedir/work/Minecraft/source" >/dev/null 2>&1
+$git remote add upstream "$basedir/work/Minecraft/$version/source" >/dev/null 2>&1
 $git checkout master 2>/dev/null || $git checkout -b master
 $git fetch upstream >/dev/null 2>&1
 $git reset --hard upstream/master

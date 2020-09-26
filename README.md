@@ -9,6 +9,7 @@ A Minecraft that you can patch your own patches into the Minecraft.
 - You should not use this project for any bad usages
 - I'm not accepting contribution *for now*. (until I resolve the many issues)
 - This project is not guaranteed to work.
-
-## Issues
-- There are many errors, like decompile went wrong and passing wrong type of object to the method.
+- This project is not guaranteed to work.
+- This project is not guaranteed to work.
+- There are 10000+ compilation errors
+- Some textures maybe broken
