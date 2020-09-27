@@ -16,7 +16,8 @@ decompOutput2="$basedir/work/Minecraft/$version/imports"
 decompBin2="$basedir/work/procyon/procyon"
 rm -rf "$basedir"/Minecraft/src/main
 rm -rf "$basedir"/work/Minecraft/$version/source
-mkdir -p "$basedir"/Minecraft/src/main/java
+mkdir -p "$basedir/work/decompiler"
+mkdir -p "$basedir/Minecraft/src/main/java"
 mkdir -p "$decompOutput"
 echo "Downloading client jar..."
 curl $clientJarUrl --output "$clientJarPath"
