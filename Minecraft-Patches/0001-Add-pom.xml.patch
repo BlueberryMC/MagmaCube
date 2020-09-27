@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..14602a52ca58e125ae6e7597976e48c2f9e9f667
+index 0000000000000000000000000000000000000000..19b34d26ba16d9fec0ff4801f42caf0b2680381d
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,176 @@
@@ -63,7 +63,7 @@ index 0000000000000000000000000000000000000000..14602a52ca58e125ae6e7597976e48c2
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>1.5.21</version>
++            <version>1.6.25</version>
 +            <scope>provided</scope>
 +        </dependency>
 +        <dependency>
