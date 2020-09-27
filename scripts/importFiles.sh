@@ -655,6 +655,7 @@ import net/minecraft/util/datafix/fixes/EntityRidingToPassengersFix
 import net/minecraft/data/loot/BlockLoot
 import net/minecraft/world/level/chunk/storage/OldChunkStorage
 import net/minecraft/client/sounds/SoundEngine # procyon version seems broken, so we import the cfr version.
+import com/mojang/blaze3d/audio/Channel # why the fuck procyon breaks on some environment
 
 importRaw com/mojang/realmsclient/gui/screens
 importRaw net/minecraft/client/gui/screens/worldselection

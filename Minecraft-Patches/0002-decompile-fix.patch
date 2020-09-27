@@ -4,28 +4,6 @@ Date: Sat, 26 Sep 2020 00:02:07 +0900
 Subject: [PATCH] decompile fix
 
 
-diff --git a/src/main/java/com/mojang/blaze3d/audio/Channel.java b/src/main/java/com/mojang/blaze3d/audio/Channel.java
-index a52832640a5258bc00b8d9c70c6bd936d2899aa4..ea954fe38cfd0e580c1958f05ad8f0b9d05c1d09 100644
---- a/src/main/java/com/mojang/blaze3d/audio/Channel.java
-+++ b/src/main/java/com/mojang/blaze3d/audio/Channel.java
-@@ -121,7 +121,7 @@ public class Channel
-     }
-     
-     public void attachStaticBuffer(final SoundBuffer debug1) {
--        debug1.getAlBuffer().ifPresent(debug1 -> AL10.alSourcei(this.source, 4105, debug1));
-+        debug1.getAlBuffer().ifPresent(debug1l -> AL10.alSourcei(this.source, 4105, debug1l)); // MagmaCube - decompile fix
-     }
-     
-     public void attachBufferStream(final AudioStream debug1) {
-@@ -141,7 +141,7 @@ public class Channel
-                 for (int debug2 = 0; debug2 < debug1; ++debug2) {
-                     final ByteBuffer debug3 = this.stream.read(this.streamingBufferSize);
-                     if (debug3 != null) {
--                        new SoundBuffer(debug3, this.stream.getFormat()).releaseAlBuffer().ifPresent(debug1 -> AL10.alSourceQueueBuffers(this.source, new int[] { debug1 }));
-+                        new SoundBuffer(debug3, this.stream.getFormat()).releaseAlBuffer().ifPresent(debug1l -> AL10.alSourceQueueBuffers(this.source, new int[] { debug1l })); // MagmaCube - decompile fix
-                     }
-                 }
-             }
 diff --git a/src/main/java/com/mojang/blaze3d/audio/Library.java b/src/main/java/com/mojang/blaze3d/audio/Library.java
 index 2437f2e6c982b2103f5fa875c3c1060e8fc931ff..b4ae2316c2e1ed8252ec4421a5ce2354c1a4b83b 100644
 --- a/src/main/java/com/mojang/blaze3d/audio/Library.java
