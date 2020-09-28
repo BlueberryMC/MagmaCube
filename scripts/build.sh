@@ -25,3 +25,4 @@ echo "}" >> "$version_json"
 cat "$version_json"
 mvn clean install
 cp "$version_json_bak" "$version_json" || exit 1
+rm "$version_json_bak"
