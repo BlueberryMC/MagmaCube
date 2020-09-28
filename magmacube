@@ -38,12 +38,21 @@ case "$1" in
     scripts/init.sh || exit 1
   )
   ;;
+  "runclient" | "client" | "run")
+  (
+    set -e
+    cd "$basedir"
+    scripts/build.sh || exit 1
+    scripts/runClient.sh || exit 1
+  )
+  ;;
   *)
     echo "MagmaCube build tool command. This provides a easy way to build, and manage MagmaCube Project."
     echo ""
     echo " Commands:"
-    echo "  * rb, rebuild       | Rebuild patches, can be called from anywhere."
-    echo "  * p, patch          | Apply all patches to the project without building it. Can be run from anywhere."
-    echo "  * j, jar            | Apply all patches and build the project. (Not available yet)"
+    echo "  * rb, rebuild            | Rebuild patches, can be called from anywhere."
+    echo "  * p, patch               | Apply all patches to the project without building it. Can be run from anywhere."
+    echo "  * run, client, runclient | Builds project and run the client. A project must already be applied patches."
+    echo "  * j, jar                 | Apply all patches and build the project. (Not available yet)"
   ;;
 esac
