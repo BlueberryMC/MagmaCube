@@ -1,0 +1,533 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: acrylic-style <me@acrylicstyle.xyz>
+Date: Wed, 30 Sep 2020 15:23:36 +0900
+Subject: [PATCH] Trying to fix renderer
+
+
+diff --git a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
+index 66046fe644937638ccf812ce4bd97c2750146920..def1c901ec09ec24601f9a7abe007304c0247020 100644
+--- a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
++++ b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
+@@ -18,11 +18,11 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+ {
+     private static final Logger LOGGER;
+     private ByteBuffer buffer;
+-    private final List<DrawState> vertexCounts;
+-    private int lastRenderedCountIndex;
+-    private int totalRenderedBytes;
+-    private int nextElementByte;
+-    private int totalUploadedBytes;
++    private final List<DrawState> vertexCounts = Lists.newArrayList(); // MagmaCube - decompile fix
++    private int lastRenderedCountIndex = 0; // MagmaCube - decompile fix
++    private int totalRenderedBytes = 0; // MagmaCube - decompile fix
++    private int nextElementByte = 0; // MagmaCube - decompile fix
++    private int totalUploadedBytes = 0; // MagmaCube - decompile fix
+     private int vertices;
+     @Nullable
+     private VertexFormatElement currentElement;
+@@ -34,11 +34,6 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+     private boolean building;
+     
+     public BufferBuilder(final int debug1) {
+-        this.vertexCounts = Lists.newArrayList(); // MagmaCube - decompile fix
+-        this.lastRenderedCountIndex = 0;
+-        this.totalRenderedBytes = 0;
+-        this.nextElementByte = 0;
+-        this.totalUploadedBytes = 0;
+         this.buffer = MemoryTracker.createByteBuffer(debug1 * 4);
+     }
+     
+@@ -80,8 +75,8 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+         final FloatBuffer debug4 = this.buffer.asFloatBuffer();
+         final int debug5 = this.vertices / 4;
+         final float[] debug6 = new float[debug5];
+-        for (int debug7 = 0; debug7 < debug5; ++debug7) {
+-            debug6[debug7] = getQuadDistanceFromPlayer(debug4, debug1, debug2, debug3, this.format.getIntegerSize(), this.totalRenderedBytes / 4 + debug7 * this.format.getVertexSize());
++        for (int i = 0; i < debug5; ++i) { // MagmaCube - decompile fix
++            debug6[i] = getQuadDistanceFromPlayer(debug4, debug1, debug2, debug3, this.format.getIntegerSize(), this.totalRenderedBytes / 4 + i * this.format.getVertexSize()); // MagmaCube - decompile fix
+         }
+         final int[] debug8 = new int[debug5];
+         for (int debug9 = 0; debug9 < debug8.length; ++debug9) {
+@@ -90,25 +85,33 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+         IntArrays.mergeSort(debug8, (debug1l, debug2l) -> Floats.compare(debug6[debug2l], debug6[debug1l])); // MagmaCube - decompile fix
+         final BitSet debug10 = new BitSet();
+         final FloatBuffer debug11 = MemoryTracker.createFloatBuffer(this.format.getIntegerSize() * 4);
+-        for (int debug12 = debug10.nextClearBit(0); debug12 < debug8.length; debug12 = debug10.nextClearBit(debug12 + 1)) {
+-            final int debug13 = debug8[debug12];
+-            if (debug13 != debug12) {
+-                this.limitToVertex(debug4, debug13);
++        // MagmaCube start - decompile fix
++        int debug10l = debug10.nextClearBit(0);
++        while (debug10l < debug8.length) {
++            int debug11l = debug8[debug10l];
++            if (debug11l != debug10l) {
++                limitToVertex(debug4, debug11l);
+                 debug11.clear();
+                 debug11.put(debug4);
+-                for (int debug14 = debug13, debug15 = debug8[debug14]; debug14 != debug12; debug14 = debug15, debug15 = debug8[debug14]) {
+-                    this.limitToVertex(debug4, debug15);
+-                    final FloatBuffer debug16 = debug4.slice();
+-                    this.limitToVertex(debug4, debug14);
+-                    debug4.put(debug16);
+-                    debug10.set(debug14);
++                int debug12 = debug11l;
++                int debug13 = debug8[debug12];
++                while (debug12 != debug10l) {
++                    limitToVertex(debug4, debug13);
++                    FloatBuffer debug14 = debug4.slice();
++                    limitToVertex(debug4, debug12);
++                    debug4.put(debug14);
++                    debug10.set(debug12);
++                    debug12 = debug13;
++                    debug13 = debug8[debug12];
+                 }
+-                this.limitToVertex(debug4, debug12);
++                limitToVertex(debug4, debug10l);
+                 debug11.flip();
+                 debug4.put(debug11);
+             }
+-            debug10.set(debug12);
++            debug10.set(debug10l);
++            debug10l = debug10.nextClearBit(debug10l + 1);
+         }
++        // MagmaCube end - decompile fix
+     }
+     
+     private void limitToVertex(final FloatBuffer debug1, final int debug2) {
+@@ -127,22 +130,24 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+     }
+     
+     private static float getQuadDistanceFromPlayer(final FloatBuffer debug0, final float debug1, final float debug2, final float debug3, final int debug4, final int debug5) {
+-        final float debug6 = debug0.get(debug5 + debug4 * 0 + 0);
+-        final float debug7 = debug0.get(debug5 + debug4 * 0 + 1);
+-        final float debug8 = debug0.get(debug5 + debug4 * 0 + 2);
+-        final float debug9 = debug0.get(debug5 + debug4 * 1 + 0);
+-        final float debug10 = debug0.get(debug5 + debug4 * 1 + 1);
+-        final float debug11 = debug0.get(debug5 + debug4 * 1 + 2);
+-        final float debug12 = debug0.get(debug5 + debug4 * 2 + 0);
+-        final float debug13 = debug0.get(debug5 + debug4 * 2 + 1);
+-        final float debug14 = debug0.get(debug5 + debug4 * 2 + 2);
+-        final float debug15 = debug0.get(debug5 + debug4 * 3 + 0);
+-        final float debug16 = debug0.get(debug5 + debug4 * 3 + 1);
+-        final float debug17 = debug0.get(debug5 + debug4 * 3 + 2);
++        // MagmaCube start - decompile fix? todo: verify
++        final float debug6 = debug0.get(debug5 + debug4 * (0 + 0));
++        final float debug7 = debug0.get(debug5 + debug4 * (0 + 1));
++        final float debug8 = debug0.get(debug5 + debug4 * (0 + 2));
++        final float debug9 = debug0.get(debug5 + debug4 * (1 + 0));
++        final float debug10 = debug0.get(debug5 + debug4 * (1 + 1));
++        final float debug11 = debug0.get(debug5 + debug4 * (1 + 2));
++        final float debug12 = debug0.get(debug5 + debug4 * (2 + 0));
++        final float debug13 = debug0.get(debug5 + debug4 * (2 + 1));
++        final float debug14 = debug0.get(debug5 + debug4 * (2 + 2));
++        final float debug15 = debug0.get(debug5 + debug4 * (3 + 0));
++        final float debug16 = debug0.get(debug5 + debug4 * (3 + 1));
++        final float debug17 = debug0.get(debug5 + debug4 * (3 + 2));
+         final float debug18 = (debug6 + debug9 + debug12 + debug15) * 0.25f - debug1;
+         final float debug19 = (debug7 + debug10 + debug13 + debug16) * 0.25f - debug2;
+         final float debug20 = (debug8 + debug11 + debug14 + debug17) * 0.25f - debug3;
+         return debug18 * debug18 + debug19 * debug19 + debug20 * debug20;
++        // MagmaCube end - decompile fix?
+     }
+     
+     public void restoreState(final State debug1) {
+@@ -214,7 +219,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+         if (this.elementIndex != 0) {
+             throw new IllegalStateException("Not filled all elements of the vertex");
+         }
+-        ++this.vertices;
++        this.vertices++; // MagmaCube - decompile fix
+         this.ensureVertexCapacity();
+     }
+     
+@@ -229,7 +234,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+             this.nextElement();
+         }
+         if (this.defaultColorSet && this.currentElement.getUsage() == VertexFormatElement.Usage.COLOR) {
+-            super.color((float) this.defaultR, this.defaultG, this.defaultB, this.defaultA); // MagmaCube - decompile fix
++            BufferVertexConsumer.super.color(this.defaultR, this.defaultG, this.defaultB, this.defaultA); // MagmaCube - decompile fix
+         }
+     }
+     
+@@ -250,10 +255,10 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+             this.putFloat(0, debug1);
+             this.putFloat(4, debug2);
+             this.putFloat(8, debug3);
+-            this.putByte(12, (byte)(debug4 * 255.0f));
+-            this.putByte(13, (byte)(debug5 * 255.0f));
+-            this.putByte(14, (byte)(debug6 * 255.0f));
+-            this.putByte(15, (byte)(debug7 * 255.0f));
++            this.putByte(12, (byte)(int)(debug4 * 255.0f)); // MagmaCube - decompile fix
++            this.putByte(13, (byte)(int)(debug5 * 255.0f)); // MagmaCube - decompile fix
++            this.putByte(14, (byte)(int)(debug6 * 255.0f)); // MagmaCube - decompile fix
++            this.putByte(15, (byte)(int)(debug7 * 255.0f)); // MagmaCube - decompile fix
+             this.putFloat(16, debug8);
+             this.putFloat(20, debug9);
+             int debug15;
+diff --git a/src/main/java/com/mojang/blaze3d/vertex/DefaultedVertexConsumer.java b/src/main/java/com/mojang/blaze3d/vertex/DefaultedVertexConsumer.java
+index fae0a6a7281c006b498db140242e4843bfbc7173..edeb9a595c8e177c99ffee3abc9997233ff0ef09 100644
+--- a/src/main/java/com/mojang/blaze3d/vertex/DefaultedVertexConsumer.java
++++ b/src/main/java/com/mojang/blaze3d/vertex/DefaultedVertexConsumer.java
+@@ -2,19 +2,11 @@ package com.mojang.blaze3d.vertex;
+ 
+ public abstract class DefaultedVertexConsumer implements VertexConsumer
+ {
+-    protected boolean defaultColorSet;
+-    protected int defaultR;
+-    protected int defaultG;
+-    protected int defaultB;
+-    protected int defaultA;
+-    
+-    public DefaultedVertexConsumer() {
+-        this.defaultColorSet = false;
+-        this.defaultR = 255;
+-        this.defaultG = 255;
+-        this.defaultB = 255;
+-        this.defaultA = 255;
+-    }
++    protected boolean defaultColorSet = false;
++    protected int defaultR = 255; // MagmaCube - decompile fix
++    protected int defaultG = 255; // MagmaCube - decompile fix
++    protected int defaultB = 255; // MagmaCube - decompile fix
++    protected int defaultA = 255; // MagmaCube - decompile fix
+     
+     public void defaultColor(final int debug1, final int debug2, final int debug3, final int debug4) {
+         this.defaultR = debug1;
+diff --git a/src/main/java/net/minecraft/SharedConstants.java b/src/main/java/net/minecraft/SharedConstants.java
+index aa6306fa8e272332a0bdf35b3bd9a55b88335d81..e8b0da24138076c9aa61adb64d7c947ab5dc05dd 100644
+--- a/src/main/java/net/minecraft/SharedConstants.java
++++ b/src/main/java/net/minecraft/SharedConstants.java
+@@ -12,7 +12,7 @@ public class SharedConstants
+     public static final ResourceLeakDetector.Level NETTY_LEAK_DETECTION;
+     public static final long MAXIMUM_TICK_TIME_NANOS;
+     public static boolean CHECK_DATA_FIXER_SCHEMA;
+-    public static boolean IS_RUNNING_IN_IDE = true;
++    public static boolean IS_RUNNING_IN_IDE = false;
+     public static final char[] ILLEGAL_FILE_CHARACTERS;
+     private static GameVersion CURRENT_VERSION;
+     
+diff --git a/src/main/java/net/minecraft/client/gui/components/DebugScreenOverlay.java b/src/main/java/net/minecraft/client/gui/components/DebugScreenOverlay.java
+index e0a9169b38080bcf216ff146ba9977fab1a766d6..41b672d5783fedc8d0baa3c24f8071a43fce69dc 100644
+--- a/src/main/java/net/minecraft/client/gui/components/DebugScreenOverlay.java
++++ b/src/main/java/net/minecraft/client/gui/components/DebugScreenOverlay.java
+@@ -210,7 +210,7 @@ extends GuiComponent {
+             this.clearChunkCache();
+         }
+         LongSet debug122 = (debug11 = this.getLevel()) instanceof ServerLevel ? ((ServerLevel)debug11).getForcedChunks() : LongSets.EMPTY_SET; // MagmaCube - decompile fix
+-        ArrayList debug13 = Lists.newArrayList((Object[])new String[]{"Minecraft " + SharedConstants.getCurrentVersion().getName() + " (" + this.minecraft.getLaunchedVersion() + "/" + ClientBrandRetriever.getClientModName() + ("release".equalsIgnoreCase(this.minecraft.getVersionType()) ? "" : "/" + this.minecraft.getVersionType()) + ")", this.minecraft.fpsString, debug12, this.minecraft.levelRenderer.getChunkStatistics(), this.minecraft.levelRenderer.getEntityStatistics(), "P: " + this.minecraft.particleEngine.countParticles() + ". T: " + this.minecraft.level.getEntityCount(), this.minecraft.level.gatherChunkSourceStats()});
++        ArrayList<String> debug13 = Lists.newArrayList(new String[]{"Minecraft " + SharedConstants.getCurrentVersion().getName() + " (" + this.minecraft.getLaunchedVersion() + "/" + ClientBrandRetriever.getClientModName() + ("release".equalsIgnoreCase(this.minecraft.getVersionType()) ? "" : "/" + this.minecraft.getVersionType()) + ")", this.minecraft.fpsString, debug12, this.minecraft.levelRenderer.getChunkStatistics(), this.minecraft.levelRenderer.getEntityStatistics(), "P: " + this.minecraft.particleEngine.countParticles() + ". T: " + this.minecraft.level.getEntityCount(), this.minecraft.level.gatherChunkSourceStats()}); // MagmaCube - decompile fix
+         String debug14 = this.getServerChunkStats();
+         if (debug14 != null) {
+             debug13.add(debug14);
+@@ -259,6 +259,7 @@ extends GuiComponent {
+                     debug13.add(((StringBuilder)debug20).toString());
+                     if (debug6.getY() >= 0 && debug6.getY() < 256) {
+                         debug13.add("Biome: " + this.minecraft.level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(this.minecraft.level.getBiome(debug6)));
++                        debug13.add("Biome in registry: " + this.minecraft.level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getResourceKey(this.minecraft.level.getBiome(debug6)).orElse(null)); // MagmaCube - debug
+                         long debug21 = 0L;
+                         float debug23 = 0.0f;
+                         if (debug19 != null) {
+@@ -290,6 +291,15 @@ extends GuiComponent {
+             debug13.add("Shader: " + debug16.getName());
+         }
+         debug13.add(this.minecraft.getSoundManager().getDebugString() + String.format(" (Mood %d%%)", Math.round(this.minecraft.player.getCurrentMood() * 100.0f)));
++        // MagmaCube start - add debug information
++        debug13.add("");
++        debug13.add("Game Renderer: " + this.minecraft.gameRenderer.getClass().getSimpleName());
++        debug13.add("Level Renderer: " + this.minecraft.levelRenderer.getClass().getSimpleName());
++        debug13.add("Block Renderer: " + this.minecraft.getBlockRenderer().getClass().getSimpleName());
++        debug13.add("Current Screen: " + (this.minecraft.screen == null ? ChatFormatting.YELLOW + "null" : this.minecraft.screen.getClass().getSimpleName()));
++        debug13.add("Current GUI: " + this.minecraft.gui.getClass().getSimpleName());
++        debug13.add("Current Overlay: " + (this.minecraft.overlay == null ? ChatFormatting.YELLOW + "null" : this.minecraft.overlay.getClass().getSimpleName()));
++        // MagmaCube end - add debug information
+         return debug13;
+     }
+ 
+@@ -341,7 +351,7 @@ extends GuiComponent {
+         long debug3 = Runtime.getRuntime().totalMemory();
+         long debug5 = Runtime.getRuntime().freeMemory();
+         long debug7 = debug3 - debug5;
+-        ArrayList debug9 = Lists.newArrayList((Object[])new String[]{String.format("Java: %s %dbit", System.getProperty("java.version"), this.minecraft.is64Bit() ? 64 : 32), String.format("Mem: % 2d%% %03d/%03dMB", debug7 * 100L / debug1, DebugScreenOverlay.bytesToMegabytes(debug7), DebugScreenOverlay.bytesToMegabytes(debug1)), String.format("Allocated: % 2d%% %03dMB", debug3 * 100L / debug1, DebugScreenOverlay.bytesToMegabytes(debug3)), "", String.format("CPU: %s", GlUtil.getCpuInfo()), "", String.format("Display: %dx%d (%s)", Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(), GlUtil.getVendor()), GlUtil.getRenderer(), GlUtil.getOpenGLVersion()});
++        ArrayList<String> debug9 = Lists.newArrayList(new String[]{String.format("Java: %s %dbit", System.getProperty("java.version"), this.minecraft.is64Bit() ? 64 : 32), String.format("Mem: % 2d%% %03d/%03dMB", debug7 * 100L / debug1, DebugScreenOverlay.bytesToMegabytes(debug7), DebugScreenOverlay.bytesToMegabytes(debug1)), String.format("Allocated: % 2d%% %03dMB", debug3 * 100L / debug1, DebugScreenOverlay.bytesToMegabytes(debug3)), "", String.format("CPU: %s", GlUtil.getCpuInfo()), "", String.format("Display: %dx%d (%s)", Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(), GlUtil.getVendor()), GlUtil.getRenderer(), GlUtil.getOpenGLVersion()}); // MagmaCube - decompile fix
+         if (this.minecraft.showOnlyReducedInfo()) {
+             return debug9;
+         }
+@@ -377,6 +387,11 @@ extends GuiComponent {
+             debug9.add((Object)((Object)ChatFormatting.UNDERLINE) + "Targeted Entity");
+             debug9.add(String.valueOf(Registry.ENTITY_TYPE.getKey(((Entity)debug10).getType())));
+         }
++        // MagmaCube start - add debug information
++        debug9.add("");
++        debug9.add("Game Directory: " + this.minecraft.gameDirectory);
++        debug9.add("Resource Packs: " + this.minecraft.getResourcePackRepository().getSelectedIds());
++        // MagmaCube end - add debug information
+         return debug9;
+     }
+ 
+diff --git a/src/main/java/net/minecraft/client/renderer/block/ModelBlockRenderer.java b/src/main/java/net/minecraft/client/renderer/block/ModelBlockRenderer.java
+index e4c3e820e54c464713e62b2dd39642aa7a7dfec8..c844eabb3cc75ed272a0488ba0ff765f6beef638 100644
+--- a/src/main/java/net/minecraft/client/renderer/block/ModelBlockRenderer.java
++++ b/src/main/java/net/minecraft/client/renderer/block/ModelBlockRenderer.java
+@@ -312,145 +312,131 @@ public class ModelBlockRenderer {
+         private final int[] lightmap = new int[4];
+ 
+         public void calculate(BlockAndTintGetter debug1, BlockState debug2, BlockPos debug3, Direction debug4, float[] debug5, BitSet debug6, boolean debug7) {
+-            float debug43;
+-            float debug42;
+-            float debug41;
+-            float debug40;
+-            int debug35;
+-            float debug31;
+-            int debug34;
+-            float debug30;
+-            int debug33;
+-            float debug29;
+-            int debug32;
+-            float debug28;
+-            BlockState debug36;
+-            boolean debug27;
++            // MagmaCube start - rewrite code
++            float debug28, debug29, debug30, debug31;
++            int debug32, debug33, debug34, debug35;
+             BlockPos debug8 = debug6.get(0) ? debug3.relative(debug4) : debug3;
+-            AdjacencyInfo debug9 = AdjacencyInfo.fromFacing(debug4);
++            ModelBlockRenderer.AdjacencyInfo debug9 = ModelBlockRenderer.AdjacencyInfo.fromFacing(debug4);
+             BlockPos.MutableBlockPos debug10 = new BlockPos.MutableBlockPos();
+-            Cache debug11 = (Cache)CACHE.get();
++            ModelBlockRenderer.Cache debug11 = ModelBlockRenderer.CACHE.get();
+             debug10.setWithOffset(debug8, debug9.corners[0]);
+-            BlockState debug12 = debug1.getBlockState(debug10);
+-            int debug13 = debug11.getLightColor(debug12, debug1, debug10);
+-            float debug14 = debug11.getShadeBrightness(debug12, debug1, debug10);
++            BlockState debug12 = debug1.getBlockState((BlockPos)debug10);
++            int debug13 = debug11.getLightColor(debug12, debug1, (BlockPos)debug10);
++            float debug14 = debug11.getShadeBrightness(debug12, debug1, (BlockPos)debug10);
+             debug10.setWithOffset(debug8, debug9.corners[1]);
+-            BlockState debug15 = debug1.getBlockState(debug10);
+-            int debug16 = debug11.getLightColor(debug15, debug1, debug10);
+-            float debug17 = debug11.getShadeBrightness(debug15, debug1, debug10);
++            BlockState debug15 = debug1.getBlockState((BlockPos)debug10);
++            int debug16 = debug11.getLightColor(debug15, debug1, (BlockPos)debug10);
++            float debug17 = debug11.getShadeBrightness(debug15, debug1, (BlockPos)debug10);
+             debug10.setWithOffset(debug8, debug9.corners[2]);
+-            BlockState debug18 = debug1.getBlockState(debug10);
+-            int debug19 = debug11.getLightColor(debug18, debug1, debug10);
+-            float debug20 = debug11.getShadeBrightness(debug18, debug1, debug10);
++            BlockState debug18 = debug1.getBlockState((BlockPos)debug10);
++            int debug19 = debug11.getLightColor(debug18, debug1, (BlockPos)debug10);
++            float debug20 = debug11.getShadeBrightness(debug18, debug1, (BlockPos)debug10);
+             debug10.setWithOffset(debug8, debug9.corners[3]);
+-            BlockState debug21 = debug1.getBlockState(debug10);
+-            int debug22 = debug11.getLightColor(debug21, debug1, debug10);
+-            float debug23 = debug11.getShadeBrightness(debug21, debug1, debug10);
++            BlockState debug21 = debug1.getBlockState((BlockPos)debug10);
++            int debug22 = debug11.getLightColor(debug21, debug1, (BlockPos)debug10);
++            float debug23 = debug11.getShadeBrightness(debug21, debug1, (BlockPos)debug10);
+             debug10.setWithOffset(debug8, debug9.corners[0]).move(debug4);
+-            boolean debug24 = debug1.getBlockState(debug10).getLightBlock(debug1, debug10) == 0;
++            boolean debug24 = (debug1.getBlockState((BlockPos)debug10).getLightBlock(debug1, (BlockPos)debug10) == 0);
+             debug10.setWithOffset(debug8, debug9.corners[1]).move(debug4);
+-            boolean debug25 = debug1.getBlockState(debug10).getLightBlock(debug1, debug10) == 0;
++            boolean debug25 = (debug1.getBlockState((BlockPos)debug10).getLightBlock(debug1, (BlockPos)debug10) == 0);
+             debug10.setWithOffset(debug8, debug9.corners[2]).move(debug4);
+-            boolean debug26 = debug1.getBlockState(debug10).getLightBlock(debug1, debug10) == 0;
++            boolean debug26 = (debug1.getBlockState((BlockPos)debug10).getLightBlock(debug1, (BlockPos)debug10) == 0);
+             debug10.setWithOffset(debug8, debug9.corners[3]).move(debug4);
+-            boolean bl = debug27 = debug1.getBlockState(debug10).getLightBlock(debug1, debug10) == 0;
++            boolean debug27 = (debug1.getBlockState((BlockPos)debug10).getLightBlock(debug1, (BlockPos)debug10) == 0);
+             if (debug26 || debug24) {
+                 debug10.setWithOffset(debug8, debug9.corners[0]).move(debug9.corners[2]);
+-                debug36 = debug1.getBlockState(debug10);
+-                debug28 = debug11.getShadeBrightness(debug36, debug1, debug10);
+-                debug32 = debug11.getLightColor(debug36, debug1, debug10);
++                BlockState blockState = debug1.getBlockState((BlockPos)debug10);
++                debug28 = debug11.getShadeBrightness(blockState, debug1, (BlockPos)debug10);
++                debug32 = debug11.getLightColor(blockState, debug1, (BlockPos)debug10);
+             } else {
+                 debug28 = debug14;
+                 debug32 = debug13;
+             }
+             if (debug27 || debug24) {
+                 debug10.setWithOffset(debug8, debug9.corners[0]).move(debug9.corners[3]);
+-                debug36 = debug1.getBlockState(debug10);
+-                debug29 = debug11.getShadeBrightness(debug36, debug1, debug10);
+-                debug33 = debug11.getLightColor(debug36, debug1, debug10);
++                BlockState blockState = debug1.getBlockState((BlockPos)debug10);
++                debug29 = debug11.getShadeBrightness(blockState, debug1, (BlockPos)debug10);
++                debug33 = debug11.getLightColor(blockState, debug1, (BlockPos)debug10);
+             } else {
+                 debug29 = debug14;
+                 debug33 = debug13;
+             }
+             if (debug26 || debug25) {
+                 debug10.setWithOffset(debug8, debug9.corners[1]).move(debug9.corners[2]);
+-                debug36 = debug1.getBlockState(debug10);
+-                debug30 = debug11.getShadeBrightness(debug36, debug1, debug10);
+-                debug34 = debug11.getLightColor(debug36, debug1, debug10);
++                BlockState blockState = debug1.getBlockState((BlockPos)debug10);
++                debug30 = debug11.getShadeBrightness(blockState, debug1, (BlockPos)debug10);
++                debug34 = debug11.getLightColor(blockState, debug1, (BlockPos)debug10);
+             } else {
+                 debug30 = debug14;
+                 debug34 = debug13;
+             }
+             if (debug27 || debug25) {
+                 debug10.setWithOffset(debug8, debug9.corners[1]).move(debug9.corners[3]);
+-                debug36 = debug1.getBlockState(debug10);
+-                debug31 = debug11.getShadeBrightness(debug36, debug1, debug10);
+-                debug35 = debug11.getLightColor(debug36, debug1, debug10);
++                BlockState blockState = debug1.getBlockState((BlockPos)debug10);
++                debug31 = debug11.getShadeBrightness(blockState, debug1, (BlockPos)debug10);
++                debug35 = debug11.getLightColor(blockState, debug1, (BlockPos)debug10);
+             } else {
+                 debug31 = debug14;
+                 debug35 = debug13;
+             }
+-            int debug362 = debug11.getLightColor(debug2, debug1, debug3);
++            int debug36 = debug11.getLightColor(debug2, debug1, debug3);
+             debug10.setWithOffset(debug3, debug4);
+-            BlockState debug37 = debug1.getBlockState(debug10);
+-            if (debug6.get(0) || !debug37.isSolidRender(debug1, debug10)) {
+-                debug362 = debug11.getLightColor(debug37, debug1, debug10);
+-            }
++            BlockState debug37 = debug1.getBlockState((BlockPos)debug10);
++            if (debug6.get(0) || !debug37.isSolidRender(debug1, (BlockPos)debug10))
++                debug36 = debug11.getLightColor(debug37, debug1, (BlockPos)debug10);
+             float debug38 = debug6.get(0) ? debug11.getShadeBrightness(debug1.getBlockState(debug8), debug1, debug8) : debug11.getShadeBrightness(debug1.getBlockState(debug3), debug1, debug3);
+-            AmbientVertexRemap debug39 = AmbientVertexRemap.fromFacing(debug4);
++            ModelBlockRenderer.AmbientVertexRemap debug39 = ModelBlockRenderer.AmbientVertexRemap.fromFacing(debug4);
+             if (!debug6.get(1) || !debug9.doNonCubicWeight) {
+-                debug40 = (debug23 + debug14 + debug29 + debug38) * 0.25f;
+-                debug41 = (debug20 + debug14 + debug28 + debug38) * 0.25f;
+-                debug42 = (debug20 + debug17 + debug30 + debug38) * 0.25f;
+-                debug43 = (debug23 + debug17 + debug31 + debug38) * 0.25f;
+-                this.lightmap[((AmbientVertexRemap)debug39).vert0] = this.blend(debug22, debug13, debug33, debug362);
+-                this.lightmap[((AmbientVertexRemap)debug39).vert1] = this.blend(debug19, debug13, debug32, debug362);
+-                this.lightmap[((AmbientVertexRemap)debug39).vert2] = this.blend(debug19, debug16, debug34, debug362);
+-                this.lightmap[((AmbientVertexRemap)debug39).vert3] = this.blend(debug22, debug16, debug35, debug362);
+-                this.brightness[((AmbientVertexRemap)debug39).vert0] = debug40;
+-                this.brightness[((AmbientVertexRemap)debug39).vert1] = debug41;
+-                this.brightness[((AmbientVertexRemap)debug39).vert2] = debug42;
+-                this.brightness[((AmbientVertexRemap)debug39).vert3] = debug43;
++                float f1 = (debug23 + debug14 + debug29 + debug38) * 0.25F;
++                float f2 = (debug20 + debug14 + debug28 + debug38) * 0.25F;
++                float debug42 = (debug20 + debug17 + debug30 + debug38) * 0.25F;
++                float debug43 = (debug23 + debug17 + debug31 + debug38) * 0.25F;
++                this.lightmap[debug39.vert0] = blend(debug22, debug13, debug33, debug36);
++                this.lightmap[debug39.vert1] = blend(debug19, debug13, debug32, debug36);
++                this.lightmap[debug39.vert2] = blend(debug19, debug16, debug34, debug36);
++                this.lightmap[debug39.vert3] = blend(debug22, debug16, debug35, debug36);
++                this.brightness[debug39.vert0] = f1;
++                this.brightness[debug39.vert1] = f2;
++                this.brightness[debug39.vert2] = debug42;
++                this.brightness[debug39.vert3] = debug43;
+             } else {
+-                debug40 = (debug23 + debug14 + debug29 + debug38) * 0.25f;
+-                debug41 = (debug20 + debug14 + debug28 + debug38) * 0.25f;
+-                debug42 = (debug20 + debug17 + debug30 + debug38) * 0.25f;
+-                debug43 = (debug23 + debug17 + debug31 + debug38) * 0.25f;
+-                float debug44 = debug5[debug9.vert0Weights[0].shape] * debug5[debug9.vert0Weights[1].shape];
+-                float debug45 = debug5[debug9.vert0Weights[2].shape] * debug5[debug9.vert0Weights[3].shape];
+-                float debug46 = debug5[debug9.vert0Weights[4].shape] * debug5[debug9.vert0Weights[5].shape];
+-                float debug47 = debug5[debug9.vert0Weights[6].shape] * debug5[debug9.vert0Weights[7].shape];
+-                float debug48 = debug5[debug9.vert1Weights[0].shape] * debug5[debug9.vert1Weights[1].shape];
+-                float debug49 = debug5[debug9.vert1Weights[2].shape] * debug5[debug9.vert1Weights[3].shape];
+-                float debug50 = debug5[debug9.vert1Weights[4].shape] * debug5[debug9.vert1Weights[5].shape];
+-                float debug51 = debug5[debug9.vert1Weights[6].shape] * debug5[debug9.vert1Weights[7].shape];
+-                float debug52 = debug5[debug9.vert2Weights[0].shape] * debug5[debug9.vert2Weights[1].shape];
+-                float debug53 = debug5[debug9.vert2Weights[2].shape] * debug5[debug9.vert2Weights[3].shape];
+-                float debug54 = debug5[debug9.vert2Weights[4].shape] * debug5[debug9.vert2Weights[5].shape];
+-                float debug55 = debug5[debug9.vert2Weights[6].shape] * debug5[debug9.vert2Weights[7].shape];
+-                float debug56 = debug5[debug9.vert3Weights[0].shape] * debug5[debug9.vert3Weights[1].shape];
+-                float debug57 = debug5[debug9.vert3Weights[2].shape] * debug5[debug9.vert3Weights[3].shape];
+-                float debug58 = debug5[debug9.vert3Weights[4].shape] * debug5[debug9.vert3Weights[5].shape];
+-                float debug59 = debug5[debug9.vert3Weights[6].shape] * debug5[debug9.vert3Weights[7].shape];
+-                this.brightness[((AmbientVertexRemap)debug39).vert0] = debug40 * debug44 + debug41 * debug45 + debug42 * debug46 + debug43 * debug47;
+-                this.brightness[((AmbientVertexRemap)debug39).vert1] = debug40 * debug48 + debug41 * debug49 + debug42 * debug50 + debug43 * debug51;
+-                this.brightness[((AmbientVertexRemap)debug39).vert2] = debug40 * debug52 + debug41 * debug53 + debug42 * debug54 + debug43 * debug55;
+-                this.brightness[((AmbientVertexRemap)debug39).vert3] = debug40 * debug56 + debug41 * debug57 + debug42 * debug58 + debug43 * debug59;
+-                int debug60 = this.blend(debug22, debug13, debug33, debug362);
+-                int debug61 = this.blend(debug19, debug13, debug32, debug362);
+-                int debug62 = this.blend(debug19, debug16, debug34, debug362);
+-                int debug63 = this.blend(debug22, debug16, debug35, debug362);
+-                this.lightmap[((AmbientVertexRemap)debug39).vert0] = this.blend(debug60, debug61, debug62, debug63, debug44, debug45, debug46, debug47);
+-                this.lightmap[((AmbientVertexRemap)debug39).vert1] = this.blend(debug60, debug61, debug62, debug63, debug48, debug49, debug50, debug51);
+-                this.lightmap[((AmbientVertexRemap)debug39).vert2] = this.blend(debug60, debug61, debug62, debug63, debug52, debug53, debug54, debug55);
+-                this.lightmap[((AmbientVertexRemap)debug39).vert3] = this.blend(debug60, debug61, debug62, debug63, debug56, debug57, debug58, debug59);
+-            }
+-            debug40 = debug1.getShade(debug4, debug7);
+-            int debug412 = 0;
+-            while (debug412 < this.brightness.length) {
+-                int n = debug412++;
+-                this.brightness[n] = this.brightness[n] * debug40;
++                float f1 = (debug23 + debug14 + debug29 + debug38) * 0.25F;
++                float f2 = (debug20 + debug14 + debug28 + debug38) * 0.25F;
++                float debug42 = (debug20 + debug17 + debug30 + debug38) * 0.25F;
++                float debug43 = (debug23 + debug17 + debug31 + debug38) * 0.25F;
++                float debug44 = debug5[(debug9.vert0Weights[0]).shape] * debug5[(debug9.vert0Weights[1]).shape];
++                float debug45 = debug5[(debug9.vert0Weights[2]).shape] * debug5[(debug9.vert0Weights[3]).shape];
++                float debug46 = debug5[(debug9.vert0Weights[4]).shape] * debug5[(debug9.vert0Weights[5]).shape];
++                float debug47 = debug5[(debug9.vert0Weights[6]).shape] * debug5[(debug9.vert0Weights[7]).shape];
++                float debug48 = debug5[(debug9.vert1Weights[0]).shape] * debug5[(debug9.vert1Weights[1]).shape];
++                float debug49 = debug5[(debug9.vert1Weights[2]).shape] * debug5[(debug9.vert1Weights[3]).shape];
++                float debug50 = debug5[(debug9.vert1Weights[4]).shape] * debug5[(debug9.vert1Weights[5]).shape];
++                float debug51 = debug5[(debug9.vert1Weights[6]).shape] * debug5[(debug9.vert1Weights[7]).shape];
++                float debug52 = debug5[(debug9.vert2Weights[0]).shape] * debug5[(debug9.vert2Weights[1]).shape];
++                float debug53 = debug5[(debug9.vert2Weights[2]).shape] * debug5[(debug9.vert2Weights[3]).shape];
++                float debug54 = debug5[(debug9.vert2Weights[4]).shape] * debug5[(debug9.vert2Weights[5]).shape];
++                float debug55 = debug5[(debug9.vert2Weights[6]).shape] * debug5[(debug9.vert2Weights[7]).shape];
++                float debug56 = debug5[(debug9.vert3Weights[0]).shape] * debug5[(debug9.vert3Weights[1]).shape];
++                float debug57 = debug5[(debug9.vert3Weights[2]).shape] * debug5[(debug9.vert3Weights[3]).shape];
++                float debug58 = debug5[(debug9.vert3Weights[4]).shape] * debug5[(debug9.vert3Weights[5]).shape];
++                float debug59 = debug5[(debug9.vert3Weights[6]).shape] * debug5[(debug9.vert3Weights[7]).shape];
++                this.brightness[debug39.vert0] = f1 * debug44 + f2 * debug45 + debug42 * debug46 + debug43 * debug47;
++                this.brightness[debug39.vert1] = f1 * debug48 + f2 * debug49 + debug42 * debug50 + debug43 * debug51;
++                this.brightness[debug39.vert2] = f1 * debug52 + f2 * debug53 + debug42 * debug54 + debug43 * debug55;
++                this.brightness[debug39.vert3] = f1 * debug56 + f2 * debug57 + debug42 * debug58 + debug43 * debug59;
++                int debug60 = blend(debug22, debug13, debug33, debug36);
++                int debug61 = blend(debug19, debug13, debug32, debug36);
++                int debug62 = blend(debug19, debug16, debug34, debug36);
++                int debug63 = blend(debug22, debug16, debug35, debug36);
++                this.lightmap[debug39.vert0] = blend(debug60, debug61, debug62, debug63, debug44, debug45, debug46, debug47);
++                this.lightmap[debug39.vert1] = blend(debug60, debug61, debug62, debug63, debug48, debug49, debug50, debug51);
++                this.lightmap[debug39.vert2] = blend(debug60, debug61, debug62, debug63, debug52, debug53, debug54, debug55);
++                this.lightmap[debug39.vert3] = blend(debug60, debug61, debug62, debug63, debug56, debug57, debug58, debug59);
+             }
++            float debug40 = debug1.getShade(debug4, debug7);
++            for (int debug41 = 0; debug41 < this.brightness.length; debug41++)
++                this.brightness[debug41] = this.brightness[debug41] * debug40;
++            // MagmaCube end - rewrite code
+         }
+ 
+         private int blend(int debug1, int debug2, int debug3, int debug4) {
+diff --git a/src/main/java/net/minecraft/client/renderer/entity/ItemRenderer.java b/src/main/java/net/minecraft/client/renderer/entity/ItemRenderer.java
+index 57b9300bd867a85f7c9118999594416c2d7894cf..55189833defa456d57f1128d4bcdd9abe701f7f4 100644
+--- a/src/main/java/net/minecraft/client/renderer/entity/ItemRenderer.java
++++ b/src/main/java/net/minecraft/client/renderer/entity/ItemRenderer.java
+@@ -94,12 +94,11 @@ implements ResourceManagerReloadListener {
+     }
+ 
+     public void render(ItemStack debug1, ItemTransforms.TransformType debug2, boolean debug3, PoseStack debug4, MultiBufferSource debug5, int debug6, int debug7, BakedModel debug8) {
+-        boolean debug9;
+         if (debug1.isEmpty()) {
+             return;
+         }
+         debug4.pushPose();
+-        boolean bl = debug9 = debug2 == ItemTransforms.TransformType.GUI || debug2 == ItemTransforms.TransformType.GROUND || debug2 == ItemTransforms.TransformType.FIXED;
++        boolean debug9 = debug2 == ItemTransforms.TransformType.GUI || debug2 == ItemTransforms.TransformType.GROUND || debug2 == ItemTransforms.TransformType.FIXED;
+         if (debug1.getItem() == Items.TRIDENT && debug9) {
+             debug8 = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation("minecraft:trident#inventory"));
+         }
+diff --git a/src/main/resources/log4j2.xml b/src/main/resources/log4j2.xml
+index 4d156f225141165e5dca26becdde59f089e98649..aea01980678d1a4f74982b0c08f42456d557b124 100644
+--- a/src/main/resources/log4j2.xml
++++ b/src/main/resources/log4j2.xml
+@@ -16,7 +16,7 @@
+         </RollingRandomAccessFile>
+     </Appenders>
+     <Loggers>
+-        <Root level="info">
++        <Root level="debug">
+             <filters>
+                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
+             </filters>
