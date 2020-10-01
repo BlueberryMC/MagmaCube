@@ -23,4 +23,3 @@ A Minecraft that you can patch your own patches into the Minecraft.
 ## Todo
 - Check Blaze3D
 - Check renderer
-- Biomes may not be broken on single player
