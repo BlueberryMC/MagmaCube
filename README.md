@@ -11,10 +11,14 @@ A Minecraft that you can patch your own patches into the Minecraft.
 ## Note
 - This project is incomplete and may not be able to compile.
 - You should not use this project for any bad usages
-- Blocks are black at all, excluding models.
-- Spectator game mode is bork (can't pass through the blocks)
-- Item textures are transparent at all
 - Do not redistribute the jar file, without any exception. It is against the Mojang's ToS.
+
+## Bugs
+- Item textures are transparent at all
+- Spectator mode is broken, can't pass through blocks
+- Blocks are completely black, but except some blocks.
+- World Generation is trash
+- Some blocks (example: grass block, sugar cane) is transparent, and its rendering like x-ray...
 
 ## Todo
 - Check Blaze3D
