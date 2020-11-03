@@ -21,5 +21,8 @@ A Minecraft that you can patch your own patches into the Minecraft.
 - Some blocks (example: grass block, sugar cane) is transparent, and its rendering like x-ray...
 
 ## Todo
-- Check Blaze3D
-- Check renderer
+- Fix GuiComponent#fill
+
+# Things I noticed
+- I think we can comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
+- We can write Line 258 at `net.minecraft.client.gui.screens.TitleScreen` to display custom title text
