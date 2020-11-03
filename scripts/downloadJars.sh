@@ -14,8 +14,8 @@ decompilerBin="$basedir"/work/decompiler/cfr.jar
 decompOutput="$basedir/work/Minecraft/$version/source"
 decompOutput2="$basedir/work/Minecraft/$version/imports"
 decompBin2="$basedir/work/procyon/procyon"
-rm -rf "$basedir"/Minecraft/src/main
-rm -rf "$basedir"/work/Minecraft/$version/source
+rm -rf "$basedir/Minecraft/src/main"
+rm -rf "$basedir/work/Minecraft/$version/source"
 mkdir -p "$basedir/work/decompiler"
 mkdir -p "$basedir/Minecraft/src/main/java"
 mkdir -p "$decompOutput"
@@ -42,7 +42,7 @@ echo "Applying mapping"
 echo "Unpacking jar..."
 rm -rf "$basedir/work/Minecraft/$version/unpacked"
 mkdir -p "$basedir/work/Minecraft/$version/unpacked"
-cd "$basedir/work/Minecraft/$version/unpacked"
+cd "$basedir/work/Minecraft/$version/unpacked" || exit 1
 unzip "$clientRemappedJarPath"
 echo "Manifest-Version: 1.0" > "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
 echo "Main-Class: net.minecraft.client.Main" >> "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
@@ -51,7 +51,7 @@ rm "$basedir/work/Minecraft/$version/unpacked/META-INF/MOJANGCS.RSA"
 rm "$basedir/work/Minecraft/$version/unpacked/META-INF/MOJANGCS.SF"
 echo "Creating jar..."
 jar cf "$clientRemapped2JarPath" "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF" .
-cd "$basedir"
+cd "$basedir" || exit 1
 echo "Decompiling the remapped jar..."
 rm -rf "$decompOutput"
 rm -rf "$decompOutput2"

@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
+version=""
+basedir=""
+source ./scripts/functions.sh
 WORLD_VERSION=2580
 PROTOCOL_VERSION=753
 PACK_VERSION=6
 
-basedir=$(pwd -P)
 datetime=$(date +%Y-%m-%dT%T%:z)
 cd ./Minecraft || exit 1
-version=$(git rev-parse HEAD | head -c 10)
+commit=$(git rev-parse HEAD | head -c 10)
 cd "$basedir" || exit 1
 version_json="$basedir/Minecraft/src/main/resources/version.json"
 version_json_bak="$basedir/Minecraft/src/main/resources/version.json.bak"
@@ -15,7 +17,7 @@ echo "{" > "$version_json"
 echo "  \"id\": \"$version\"," >> "$version_json"
 echo "  \"name\": \"$version\"," >> "$version_json"
 echo "  \"release_target\": \"$version\"," >> "$version_json"
-echo "  \"id\": \"$version\"," >> "$version_json"
+echo "  \"magmacube_version\": \"$commit\"," >> "$version_json"
 echo "  \"world_version\": $WORLD_VERSION," >> "$version_json"
 echo "  \"protocol_version\": $PROTOCOL_VERSION," >> "$version_json"
 echo "  \"pack_version\": $PACK_VERSION," >> "$version_json"
