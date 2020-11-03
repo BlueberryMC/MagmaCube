@@ -4,6 +4,8 @@
 
 A Minecraft that you can patch your own patches into the Minecraft.
 
+Based on MC 1.16.3 currently.
+
 ## Goal
 - Make it editable easily by everyone who wants to code Minecraft
 - Complete compatibility with vanilla
