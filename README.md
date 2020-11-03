@@ -30,3 +30,7 @@ Based on MC 1.16.3 currently.
 ## Things I noticed
 - I think we can comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
 - We can write Line 258 at `net.minecraft.client.gui.screens.TitleScreen` to display custom title text
+
+----
+
+See [here](https://github.com/acrylic-style/MagmaCube/blob/master/CONTRIBUTING.md) for more information about building the project.

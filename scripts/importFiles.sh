@@ -17,7 +17,7 @@ importRaw() {
 
 # nms imports
 # -----------
-# Use this for classes that is empty, or completely broken.
+# Use this for remove classes that is empty, or completely broken.
 # This imports the file from another decompiler.
 #
 # Usage
@@ -656,6 +656,8 @@ import net/minecraft/data/loot/BlockLoot
 import net/minecraft/world/level/chunk/storage/OldChunkStorage
 import net/minecraft/client/sounds/SoundEngine # procyon version seems broken, so we import the cfr version.
 import com/mojang/blaze3d/audio/Channel # why the fuck procyon breaks on some environment
+
+# importRaw does same as 'import', but it imports the entire directory.
 
 importRaw com/mojang/realmsclient/gui/screens
 importRaw net/minecraft/client/gui/screens/worldselection
