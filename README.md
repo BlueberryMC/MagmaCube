@@ -23,6 +23,7 @@ Based on MC 1.16.3 currently.
 - World Generation is trash
 - Translation in TranslatableComponent is missing?
 - Not loading some textures
+- Block break animation does not play (block breaks will be saved to the world, though)
 
 ## Todo
 - Fix GuiComponent#fill
