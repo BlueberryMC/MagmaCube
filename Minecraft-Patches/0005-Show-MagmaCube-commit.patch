@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: acrylic-style <me@acrylicstyle.xyz>
+Date: Wed, 4 Nov 2020 01:36:09 +0900
+Subject: [PATCH] Show MagmaCube commit
+
+
+diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
+index 9c9eabbaca66d1067d88d58b9b04e029c7fa227c..649e07f4d45bc379e5fa7eacbe31ad4ae5ef9293 100644
+--- a/src/main/java/net/minecraft/DetectedVersion.java
++++ b/src/main/java/net/minecraft/DetectedVersion.java
+@@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion
+     private final int packVersion;
+     private final Date buildTime;
+     private final String releaseTarget;
++    @javax.annotation.Nullable public final String magmaCubeVersion; // MagmaCube
+     
+     private DetectedVersion() {
+         this.id = UUID.randomUUID().toString().replaceAll("-", "");
+@@ -36,6 +37,7 @@ public class DetectedVersion implements GameVersion
+         this.packVersion = 6;
+         this.buildTime = new Date();
+         this.releaseTarget = "1.16.3";
++        this.magmaCubeVersion = null;
+     }
+     
+     private DetectedVersion(final JsonObject debug1) {
+@@ -47,6 +49,7 @@ public class DetectedVersion implements GameVersion
+         this.protocolVersion = GsonHelper.getAsInt(debug1, "protocol_version");
+         this.packVersion = GsonHelper.getAsInt(debug1, "pack_version");
+         this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(debug1, "build_time")).toInstant());
++        this.magmaCubeVersion = debug1.has("magmacube_version") ? GsonHelper.getAsString(debug1, "magmacube_version") : null; // MagmaCube
+     }
+     
+     public static GameVersion tryDetectVersion() {
+diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
+index 21dda9c86e31465e6b5a6bfde2c8d761ecdf6465..2a85c73674475e7629ef25391de71e60cefee735 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
++++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
+@@ -19,6 +19,8 @@ import java.util.Random;
+ import java.util.concurrent.CompletableFuture;
+ import java.util.concurrent.Executor;
+ import javax.annotation.Nullable;
++
++import net.minecraft.DetectedVersion;
+ import net.minecraft.SharedConstants;
+ import net.minecraft.Util;
+ import net.minecraft.client.gui.components.AbstractWidget;
+@@ -255,6 +257,7 @@ extends Screen {
+         if (this.minecraft.isProbablyModded()) {
+             debug11 = debug11 + I18n.get("menu.modded", new Object[0]);
+         }
++        TitleScreen.drawString(debug1, this.font, "MagmaCube " + ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion, 2, this.height - 20, 0xFFFFFF | debug10); // MagmaCube
+         TitleScreen.drawString(debug1, this.font, debug11, 2, this.height - 10, 0xFFFFFF | debug10);
+         TitleScreen.drawString(debug1, this.font, "Copyright Mojang AB. Do not distribute!", this.copyrightX, this.height - 10, 0xFFFFFF | debug10);
+         if (debug22 > this.copyrightX && debug22 < this.copyrightX + this.copyrightWidth && debug32 > this.height - 10 && debug32 < this.height) {

@@ -76,6 +76,29 @@ index 1c52c8eb3229816dbd004628a6ec3922a9bde711..1831bf0e7ff4a5df59747d66a99a17a1
              }
          }
          return debug3;
+diff --git a/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java b/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java
+index 6970515434160c7438fcbfafec87529329676c37..ae27b7e99f43f65564d48908b9072003998f1c14 100644
+--- a/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java
++++ b/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java
+@@ -61,13 +61,15 @@ public class RenderSystem {
+         return isInInit || RenderSystem.isOnRenderThread();
+     }
+ 
+-    public static void initGameThread(boolean debug0) {
+-        boolean debug1 = renderThread == Thread.currentThread(); // MagmaCube - decompile fix
+-        if (gameThread != null || renderThread == null || debug1 == debug0) {
++    // MagmaCube start - rename parameter and variable
++    public static void initGameThread(boolean expectRenderThread) {
++        boolean isRenderThread = renderThread == Thread.currentThread();
++        if (gameThread != null || renderThread == null || isRenderThread == expectRenderThread) {
+             throw new IllegalStateException("Could not initialize tick thread");
+         }
+         gameThread = Thread.currentThread();
+     }
++    // MagmaCube end - rename parameter and variable
+ 
+     public static boolean isOnGameThread() {
+         return true;
 diff --git a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
 index def1c901ec09ec24601f9a7abe007304c0247020..cdace9c04921a3cffc45f7beec1fd047b32224b5 100644
 --- a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
@@ -781,3 +804,18 @@ index 72512c22d696c73dae7f154016205aa29ff95a01..5b9442d57f242bc053632cdcb399fc91
          final int debug5 = debug0.length();
          Style debug6 = debug2;
          for (int debug7 = debug1; debug7 < debug5; ++debug7) {
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/synth/PerlinNoise.java b/src/main/java/net/minecraft/world/level/levelgen/synth/PerlinNoise.java
+index c48a0ca499e053091bdb5ba157dd62061caa95b0..4a12f90b2917cf646b3f6a0351ca321fa57967ed 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/synth/PerlinNoise.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/synth/PerlinNoise.java
+@@ -126,8 +126,8 @@ implements SurfaceNoise {
+             if (debug19 != null) {
+                 debug12 += this.amplitudes.getDouble(debug18) * debug19.noise(PerlinNoise.wrap(debug1 * debug14), debug11 ? -debug19.yo : PerlinNoise.wrap(debug3 * debug14), PerlinNoise.wrap(debug5 * debug14), debug7 * debug14, debug9 * debug14) * debug16;
+             }
+-            debug14 *= 2.0;
+-            debug16 /= 2.0;
++            debug14 /= 2.0; // MagmaCube - decompile fix todo: verify
++            debug16 *= 2.0; // MagmaCube - decompile fix todo: verify
+         }
+         return debug12;
+     }
