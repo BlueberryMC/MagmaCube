@@ -21,9 +21,10 @@ Based on MC 1.16.3 currently.
 ## Bugs
 - Spectator mode is broken, can't pass through blocks
 - World Generation is trash
-- Translation in TranslatableComponent is missing?
-- Not loading some textures
-- Block break animation does not play (block breaks will be saved to the world, though)
+- Some translations aren't showing correctly
+- Not loading some textures(= Models?)
+- Cannot break/place blocks in single player (If I place it, it will disappear when I right clicked the placed block)
+- Not rendering models at all ("missing model" too!) (Most GUIs are rendered correctly)
 
 ## Todo
 - Fix GuiComponent#fill
