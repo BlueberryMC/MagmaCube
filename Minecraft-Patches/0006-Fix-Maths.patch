@@ -48,10 +48,10 @@ index 5c0a294049c980f73a05410a3065c392a9e7741d..4283393c68621745307cc1a4fa98f180
          final float debug5 = sin(0.5f * debug1);
          final float debug6 = cos(0.5f * debug1);
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 94b920c0c2b833bfa5d477bb59b5c0b1349a3ab2..ef341eb5c4cfd4a6117a164a833085d34d8e1f88 100644
+index e6c2eb79de86920d722df2e5f83ab0eeb2dc54f2..15c213553a597b9f9f840eaf4549bf247d4310db 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -2031,7 +2031,7 @@ implements ClientGamePacketListener {
+@@ -2033,7 +2033,7 @@ implements ClientGamePacketListener {
              boolean debug11 = (debug5 & 1 << debug9) != 0;
              boolean debug12 = (debug6 & 1 << debug9) != 0; // MagmaCube - decompile fix - remove unused var
              if (!debug11 && !debug12) continue;

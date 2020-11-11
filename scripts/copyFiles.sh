@@ -24,5 +24,5 @@ echo "Setting up git"
 cd "$basedir/work/Minecraft/$version/source/"
 $git init
 $git add src
-$git commit -m "Vanilla $ $(date)" --author="Vanilla <auto@mated.null>"
+$git commit -m "Vanilla $ $(date +%Y-%m-%dT%T%:z)" --author="Vanilla <auto@mated.null>"
 $git status

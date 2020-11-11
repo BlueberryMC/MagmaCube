@@ -2,9 +2,9 @@
 source ./scripts/functions.sh
 procyondir="$basedir/work/procyon"
 CLASSPATH=$CLASSPATH:$procyondir/jcommander.jar:$procyondir/procyon-core.jar:$procyondir/procyon-compilertools.jar:$procyondir/procyon-expressions.jar:$procyondir/procyon-reflection.jar:$procyondir/procyon-decompiler.jar
-clientJarUrl="https://launcher.mojang.com/v1/objects/1321521b2caf934f7fc9665aab7e059a7b2bfcdf/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/1952d94a0784e7abda230aae6a1e8fc0522dba99/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/faac5028fbca3859db970cc4ca041aeec55f6d9d/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/0837de813d1a6b67e23da3c520a84e872c8d2f0e/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
 clientRemapped2JarPath="$basedir"/work/Minecraft/$version/client-remapped2.jar

@@ -2,8 +2,8 @@
 version=""
 basedir=""
 source ./scripts/functions.sh
-WORLD_VERSION=2580
-PROTOCOL_VERSION=753
+WORLD_VERSION=2584
+PROTOCOL_VERSION=754
 PACK_VERSION=6
 
 datetime=$(date +%Y-%m-%dT%T%:z)

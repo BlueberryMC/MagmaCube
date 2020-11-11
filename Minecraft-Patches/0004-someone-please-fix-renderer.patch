@@ -5,10 +5,10 @@ Subject: [PATCH] someone please fix renderer
 
 
 diff --git a/src/main/java/com/mojang/blaze3d/platform/GlStateManager.java b/src/main/java/com/mojang/blaze3d/platform/GlStateManager.java
-index 183cb499d9b1f87da41b9d326e83ab6a6e05d5af..d291067cac6508de6206af479e8f6e7b3662ea4c 100644
+index 830367db52addc73392778af54ddb31a1b10ba03..c8067b411f016f06ac38febdad9d89929c3631d6 100644
 --- a/src/main/java/com/mojang/blaze3d/platform/GlStateManager.java
 +++ b/src/main/java/com/mojang/blaze3d/platform/GlStateManager.java
-@@ -180,13 +180,19 @@ public class GlStateManager
+@@ -196,13 +196,19 @@ public class GlStateManager
              GL11.glBlendFunc(GlStateManager.BLEND.srcRgb = debug0, GlStateManager.BLEND.dstRgb = debug1);
          }
      }
@@ -33,7 +33,7 @@ index 183cb499d9b1f87da41b9d326e83ab6a6e05d5af..d291067cac6508de6206af479e8f6e7b
      
      public static void _blendColor(final float debug0, final float debug1, final float debug2, final float debug3) {
          GL14.glBlendColor(debug0, debug1, debug2, debug3);
-@@ -1121,10 +1127,10 @@ public class GlStateManager
+@@ -1137,10 +1143,10 @@ public class GlStateManager
      }
      
      @Deprecated
@@ -47,7 +47,7 @@ index 183cb499d9b1f87da41b9d326e83ab6a6e05d5af..d291067cac6508de6206af479e8f6e7b
          }
      }
      
-@@ -1156,9 +1162,9 @@ public class GlStateManager
+@@ -1172,9 +1178,9 @@ public class GlStateManager
      }
      
      @Deprecated
@@ -77,7 +77,7 @@ index 1c52c8eb3229816dbd004628a6ec3922a9bde711..1831bf0e7ff4a5df59747d66a99a17a1
          }
          return debug3;
 diff --git a/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java b/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java
-index 6970515434160c7438fcbfafec87529329676c37..ae27b7e99f43f65564d48908b9072003998f1c14 100644
+index 1f267a992c24314310a5cc5c56ce3b93f29430b7..d51b0dca97795a145357bc7138a60733f72103a2 100644
 --- a/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java
 +++ b/src/main/java/com/mojang/blaze3d/systems/RenderSystem.java
 @@ -61,13 +61,15 @@ public class RenderSystem {
@@ -265,10 +265,10 @@ index 19983c81650106269c8faf604d603540c0929b67..8c5134ca7034b20997ed58fdd269a229
      public void transform(final Quaternion debug1) {
          final Quaternion debug2 = new Quaternion(debug1);
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 6c21618c6218e3b4124ace4288452301eba963ff..3659f5d77b11d790ab5f93f1646c841674862fed 100644
+index caa7b49fcc3c55410ad1bfcadf76e4b7675f4202..83d5060bc399683d7aa2b4766df3f1d6982da397 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -515,6 +515,7 @@ WindowEventHandler {
+@@ -532,6 +532,7 @@ WindowEventHandler {
                  this.selfTest();
              }
          }), false));
@@ -378,10 +378,10 @@ index 1832e076a5555b4a7d2f5242ea5c0d9bf6cc5a67..a414d081aac6d99567082321442079e9
      public static void registerTextures(Minecraft debug0) {
          debug0.getTextureManager().register(MOJANG_STUDIOS_LOGO_LOCATION, new LogoTexture());
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 8b8fa52b5aa6b1aa9c2bb154159c689f55b220ed..94b920c0c2b833bfa5d477bb59b5c0b1349a3ab2 100644
+index 387811ef932cf6ca29e8140d64c35527ef40fdb6..e6c2eb79de86920d722df2e5f83ab0eeb2dc54f2 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -2027,10 +2027,9 @@ implements ClientGamePacketListener {
+@@ -2029,10 +2029,9 @@ implements ClientGamePacketListener {
  
      private void readSectionList(int debug1, int debug2, LevelLightEngine debug3, LightLayer debug4, int debug5, int debug6, Iterator<byte[]> debug7, boolean debug8) {
          for (int debug9 = 0; debug9 < 18; ++debug9) {
@@ -793,7 +793,7 @@ index 83b396c86e80ae8e090dcfa54c3c7ae77b9175bf..fbf6a2fbaaf581b13c8d1b7246b0d535
                      // MagmaCube end - decompile fix
                      try {
 diff --git a/src/main/java/net/minecraft/util/StringDecomposer.java b/src/main/java/net/minecraft/util/StringDecomposer.java
-index 72512c22d696c73dae7f154016205aa29ff95a01..5b9442d57f242bc053632cdcb399fc916e2015bc 100644
+index 6dfef3468e49e2ee538e52b8bebc55dfcfe0f19f..c101ff9822710d21515971b2ed86d3d1317eca82 100644
 --- a/src/main/java/net/minecraft/util/StringDecomposer.java
 +++ b/src/main/java/net/minecraft/util/StringDecomposer.java
 @@ -86,6 +86,7 @@ public class StringDecomposer

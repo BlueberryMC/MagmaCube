@@ -642,6 +642,8 @@ import net/minecraft/client/gui/screens/advancements/AdvancementWidget
 import net/minecraft/client/gui/screens/advancements/AdvancementsScreen
 import net/minecraft/client/gui/screens/achievement/StatsScreen
 import net/minecraft/client/gui/screens/PresetFlatWorldScreen
+import net/minecraft/client/gui/screens/social/PlayerSocialManager
+import net/minecraft/client/gui/screens/social/SocialInteractionsScreen
 import net/minecraft/client/server/IntegratedPlayerList
 import net/minecraft/network/protocol/game/ClientboundLoginPacket
 import net/minecraft/world/level/newbiome/layer/traits/AreaTransformer1
@@ -655,7 +657,7 @@ import net/minecraft/util/datafix/fixes/EntityRidingToPassengersFix
 import net/minecraft/data/loot/BlockLoot
 import net/minecraft/world/level/chunk/storage/OldChunkStorage
 import net/minecraft/client/sounds/SoundEngine # procyon version seems broken, so we import the cfr version.
-import com/mojang/blaze3d/audio/Channel # why the fuck procyon breaks on some environment
+import com/mojang/blaze3d/audio/Channel # procyon breaks on some environment?
 
 # importRaw does same as 'import', but it imports the entire directory.
 

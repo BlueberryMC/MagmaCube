@@ -5,22 +5,24 @@ Subject: [PATCH] Show MagmaCube commit
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 9c9eabbaca66d1067d88d58b9b04e029c7fa227c..649e07f4d45bc379e5fa7eacbe31ad4ae5ef9293 100644
+index 5cfb0b90967b1c221e5720da6a1b829e7ba4b56f..855a785de16f0f61f57a71af0baae640189128cb 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
-@@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion
+@@ -26,7 +26,8 @@ public class DetectedVersion implements GameVersion
      private final int packVersion;
      private final Date buildTime;
      private final String releaseTarget;
+-    
 +    @javax.annotation.Nullable public final String magmaCubeVersion; // MagmaCube
-     
++
      private DetectedVersion() {
          this.id = UUID.randomUUID().toString().replaceAll("-", "");
+         this.name = "1.16.4";
 @@ -36,6 +37,7 @@ public class DetectedVersion implements GameVersion
          this.packVersion = 6;
          this.buildTime = new Date();
-         this.releaseTarget = "1.16.3";
-+        this.magmaCubeVersion = null;
+         this.releaseTarget = "1.16.4";
++        this.magmaCubeVersion = null; // MagmaCube
      }
      
      private DetectedVersion(final JsonObject debug1) {
