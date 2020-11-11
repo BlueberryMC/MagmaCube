@@ -644,6 +644,8 @@ import net/minecraft/client/gui/screens/achievement/StatsScreen
 import net/minecraft/client/gui/screens/PresetFlatWorldScreen
 import net/minecraft/client/gui/screens/social/PlayerSocialManager
 import net/minecraft/client/gui/screens/social/SocialInteractionsScreen
+import net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList
+import net/minecraft/client/gui/screens/social/PlayerEntry
 import net/minecraft/client/server/IntegratedPlayerList
 import net/minecraft/network/protocol/game/ClientboundLoginPacket
 import net/minecraft/world/level/newbiome/layer/traits/AreaTransformer1

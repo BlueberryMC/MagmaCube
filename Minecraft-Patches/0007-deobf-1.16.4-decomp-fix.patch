@@ -1,0 +1,837 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: acrylic-style <me@acrylicstyle.xyz>
+Date: Thu, 12 Nov 2020 00:26:33 +0900
+Subject: [PATCH] deobf / 1.16.4 decomp fix
+
+
+diff --git a/pom.xml b/pom.xml
+index edd0529aef61ba76fb8b95743c92c89a79f9d969..b5e4a96b994a43f75a8eea62b11e12691247f0bd 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -5,7 +5,7 @@
+     <parent>
+         <artifactId>minecraft-parent</artifactId>
+         <groupId>xyz.acrylicstyle.minecraft</groupId>
+-        <version>1.16.3</version>
++        <version>1.16.4</version>
+     </parent>
+     <modelVersion>4.0.0</modelVersion>
+     
+diff --git a/src/main/java/net/minecraft/client/gui/screens/social/PlayerEntry.java b/src/main/java/net/minecraft/client/gui/screens/social/PlayerEntry.java
+index b1497f4bad67def796b30bd41604c39bdd2efc44..f4fc39059df8aa7fe92b199acce527c912abb60b 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/social/PlayerEntry.java
++++ b/src/main/java/net/minecraft/client/gui/screens/social/PlayerEntry.java
+@@ -99,7 +99,7 @@ extends ContainerObjectSelectionList.Entry<PlayerEntry> {
+             };
+             this.showButton.visible = debug62.isHidden(debug32);
+             this.hideButton.visible = !this.showButton.visible;
+-            this.children = ImmutableList.of((Object)this.hideButton, (Object)this.showButton);
++            this.children = ImmutableList.of(this.hideButton, this.showButton); // MagmaCube - decompile fix
+         } else {
+             this.children = ImmutableList.of();
+         }
+diff --git a/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsScreen.java b/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsScreen.java
+index dd75a4c2140eb74fad43b6c8c7cbf5e3ce0b48ab..bb5e10ec44385a54febdab0d8ed99f1178e84173 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsScreen.java
++++ b/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsScreen.java
+@@ -139,7 +139,7 @@ extends Screen {
+     }
+ 
+     private void showPage(Page debug1) {
+-        Object debug2;
++        Collection<UUID> debug2; // MagmaCube - decompile fix
+         this.page = debug1;
+         this.allButton.setMessage(TAB_ALL);
+         this.hiddenButton.setMessage(TAB_HIDDEN);
+diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientHandshakePacketListenerImpl.java b/src/main/java/net/minecraft/client/multiplayer/ClientHandshakePacketListenerImpl.java
+index 814761f6a4fe4ab19a732c8db01568e00233de6b..90808e66793c289072ebd97038d4d449ca8aff38 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/ClientHandshakePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/client/multiplayer/ClientHandshakePacketListenerImpl.java
+@@ -65,50 +65,50 @@ implements ClientLoginPacketListener {
+     private final Connection connection;
+     private GameProfile localGameProfile;
+ 
+-    public ClientHandshakePacketListenerImpl(Connection debug1, Minecraft debug2, @Nullable Screen debug3, Consumer<Component> debug4) {
+-        this.connection = debug1;
+-        this.minecraft = debug2;
+-        this.parent = debug3;
+-        this.updateStatus = debug4;
++    public ClientHandshakePacketListenerImpl(Connection connection, Minecraft minecraft, @Nullable Screen screen, Consumer<Component> consumer) {
++        this.connection = connection;
++        this.minecraft = minecraft;
++        this.parent = screen;
++        this.updateStatus = consumer;
+     }
+ 
+     @Override
+-    public void handleHello(ClientboundHelloPacket debug1) {
+-        ServerboundKeyPacket debug5;
+-        Cipher debug3;
+-        Cipher debug2;
+-        String debug4;
++    public void handleHello(ClientboundHelloPacket packet) {
++        ServerboundKeyPacket keyPacket;
++        Cipher prepender;
++        Cipher splitter;
++        String serverId;
+         try {
+-            SecretKey debug6 = Crypt.generateSecretKey();
+-            PublicKey debug7 = debug1.getPublicKey();
+-            debug4 = new BigInteger(Crypt.digestData(debug1.getServerId(), debug7, debug6)).toString(16);
+-            debug2 = Crypt.getCipher(2, debug6);
+-            debug3 = Crypt.getCipher(1, debug6);
+-            debug5 = new ServerboundKeyPacket(debug6, debug7, debug1.getNonce());
++            SecretKey secretKey = Crypt.generateSecretKey();
++            PublicKey publicKey = packet.getPublicKey();
++            serverId = new BigInteger(Crypt.digestData(packet.getServerId(), publicKey, secretKey)).toString(16);
++            splitter = Crypt.getCipher(2, secretKey);
++            prepender = Crypt.getCipher(1, secretKey);
++            keyPacket = new ServerboundKeyPacket(secretKey, publicKey, packet.getNonce());
+         }
+-        catch (CryptException debug6) {
+-            throw new IllegalStateException("Protocol error", debug6);
++        catch (CryptException ex) {
++            throw new IllegalStateException("Protocol error", ex);
+         }
+         this.updateStatus.accept(new TranslatableComponent("connect.authorizing"));
+         HttpUtil.DOWNLOAD_EXECUTOR.submit(() -> {
+-            Component debug5l = this.authenticateServer(debug4);
+-            if (debug5l != null) {
++            Component component = this.authenticateServer(serverId);
++            if (component != null) {
+                 if (this.minecraft.getCurrentServer() != null && this.minecraft.getCurrentServer().isLan()) {
+-                    LOGGER.warn(debug5l.getString());
++                    LOGGER.warn(component.getString());
+                 } else {
+-                    this.connection.disconnect(debug5l);
++                    this.connection.disconnect(component);
+                     return;
+                 }
+             }
+             this.updateStatus.accept(new TranslatableComponent("connect.encrypting"));
+-            this.connection.send(debug5, (GenericFutureListener<? extends Future<? super Void>>)((GenericFutureListener)debug3l -> this.connection.setEncryptionKey(debug2, debug3)));
++            this.connection.send(keyPacket, debug3l -> this.connection.setEncryptionKey(splitter, prepender));
+         });
+     }
+ 
+     @Nullable
+-    private Component authenticateServer(String debug1) {
++    private Component authenticateServer(String serverId) {
+         try {
+-            this.getMinecraftSessionService().joinServer(this.minecraft.getUser().getGameProfile(), this.minecraft.getUser().getAccessToken(), debug1);
++            this.getMinecraftSessionService().joinServer(this.minecraft.getUser().getGameProfile(), this.minecraft.getUser().getAccessToken(), serverId);
+         }
+         catch (AuthenticationUnavailableException debug2) {
+             return new TranslatableComponent("disconnect.loginFailedInfo", new TranslatableComponent("disconnect.loginFailedInfo.serversUnavailable"));
+@@ -130,19 +130,19 @@ implements ClientLoginPacketListener {
+     }
+ 
+     @Override
+-    public void handleGameProfile(ClientboundGameProfilePacket debug1) {
++    public void handleGameProfile(ClientboundGameProfilePacket packet) {
+         this.updateStatus.accept(new TranslatableComponent("connect.joining"));
+-        this.localGameProfile = debug1.getGameProfile();
++        this.localGameProfile = packet.getGameProfile();
+         this.connection.setProtocol(ConnectionProtocol.PLAY);
+         this.connection.setListener(new ClientPacketListener(this.minecraft, this.parent, this.connection, this.localGameProfile));
+     }
+ 
+     @Override
+-    public void onDisconnect(Component debug1) {
++    public void onDisconnect(Component component) {
+         if (this.parent != null && this.parent instanceof RealmsScreen) {
+-            this.minecraft.setScreen(new DisconnectedRealmsScreen(this.parent, CommonComponents.CONNECT_FAILED, debug1));
++            this.minecraft.setScreen(new DisconnectedRealmsScreen(this.parent, CommonComponents.CONNECT_FAILED, component));
+         } else {
+-            this.minecraft.setScreen(new DisconnectedScreen(this.parent, CommonComponents.CONNECT_FAILED, debug1));
++            this.minecraft.setScreen(new DisconnectedScreen(this.parent, CommonComponents.CONNECT_FAILED, component));
+         }
+     }
+ 
+@@ -152,21 +152,21 @@ implements ClientLoginPacketListener {
+     }
+ 
+     @Override
+-    public void handleDisconnect(ClientboundLoginDisconnectPacket debug1) {
+-        this.connection.disconnect(debug1.getReason());
++    public void handleDisconnect(ClientboundLoginDisconnectPacket packet) {
++        this.connection.disconnect(packet.getReason());
+     }
+ 
+     @Override
+-    public void handleCompression(ClientboundLoginCompressionPacket debug1) {
++    public void handleCompression(ClientboundLoginCompressionPacket packet) {
+         if (!this.connection.isMemoryConnection()) {
+-            this.connection.setupCompression(debug1.getCompressionThreshold());
++            this.connection.setupCompression(packet.getCompressionThreshold());
+         }
+     }
+ 
+     @Override
+-    public void handleCustomQuery(ClientboundCustomQueryPacket debug1) {
++    public void handleCustomQuery(ClientboundCustomQueryPacket packet) {
+         this.updateStatus.accept(new TranslatableComponent("connect.negotiating"));
+-        this.connection.send(new ServerboundCustomQueryPacket(debug1.getTransactionId(), null));
++        this.connection.send(new ServerboundCustomQueryPacket(packet.getTransactionId(), null));
+     }
+ }
+ 
+diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
+index f94543b5ab1662d2ab3011590a7d5b0bfb8eba85..ada66b7439e841cacf12fe0056277bb2a677cec4 100644
+--- a/src/main/java/net/minecraft/core/RegistryAccess.java
++++ b/src/main/java/net/minecraft/core/RegistryAccess.java
+@@ -48,7 +48,7 @@ import org.apache.logging.log4j.Logger;
+ 
+ public abstract class RegistryAccess {
+     private static final Logger LOGGER = LogManager.getLogger();
+-    private static final Map<ResourceKey<? extends Registry<?>>, RegistryData<?>> REGISTRIES = (Map)Util.make(() -> {
++    private static final Map<ResourceKey<? extends Registry<?>>, RegistryData<?>> REGISTRIES = Util.make(() -> {
+         ImmutableMap.Builder debug0 = ImmutableMap.builder();
+         RegistryAccess.put(debug0, Registry.DIMENSION_TYPE_REGISTRY, DimensionType.DIRECT_CODEC, DimensionType.DIRECT_CODEC);
+         RegistryAccess.put(debug0, Registry.BIOME_REGISTRY, Biome.DIRECT_CODEC, Biome.NETWORK_CODEC);
+@@ -87,13 +87,13 @@ public abstract class RegistryAccess {
+     }
+ 
+     public static RegistryHolder builtin() {
+-        RegistryHolder debug0 = new RegistryHolder();
+-        RegistryReadOps.ResourceAccess.MemoryMap debug1 = new RegistryReadOps.ResourceAccess.MemoryMap();
+-        for (RegistryData<?> debug3 : REGISTRIES.values()) {
+-            RegistryAccess.addBuiltinElements(debug0, debug1, debug3);
++        RegistryHolder registryHolder = new RegistryHolder();
++        RegistryReadOps.ResourceAccess.MemoryMap memoryMap = new RegistryReadOps.ResourceAccess.MemoryMap();
++        for (RegistryData<?> registryData : REGISTRIES.values()) {
++            RegistryAccess.addBuiltinElements(registryHolder, memoryMap, registryData);
+         }
+-        RegistryReadOps.create(JsonOps.INSTANCE, debug1, debug0);
+-        return debug0;
++        RegistryReadOps.create(JsonOps.INSTANCE, memoryMap, registryHolder);
++        return registryHolder;
+     }
+ 
+     private static <E> void addBuiltinElements(RegistryHolder debug0, RegistryReadOps.ResourceAccess.MemoryMap debug1, RegistryData<E> debug2) {
+@@ -128,16 +128,16 @@ public abstract class RegistryAccess {
+         }
+     }
+ 
+-    public static void load(RegistryHolder debug0, RegistryReadOps<?> debug1) {
+-        for (RegistryData<?> debug3 : REGISTRIES.values()) {
+-            RegistryAccess.readRegistry(debug1, debug0, debug3);
++    public static void load(RegistryHolder holder, RegistryReadOps<?> readOps) {
++        for (RegistryData<?> registryData : REGISTRIES.values()) {
++            RegistryAccess.readRegistry(readOps, holder, registryData);
+         }
+     }
+ 
+-    private static <E> void readRegistry(RegistryReadOps<?> debug02, RegistryHolder debug1, RegistryData<E> debug2) {
+-        ResourceKey debug3 = debug2.key();
+-        MappedRegistry debug4 = Optional.ofNullable(debug1.registries.get(debug3)).map(debug0 -> debug0).orElseThrow(() -> new IllegalStateException("Missing registry: " + debug3));
+-        DataResult<MappedRegistry<E>> debug5 = debug02.decodeElements(debug4, debug2.key(), debug2.codec());
++    private static <E> void readRegistry(RegistryReadOps<?> registryReadOps, RegistryHolder registryHolder, RegistryData<E> registryData) {
++        ResourceKey<?> debug3 = registryData.key();
++        MappedRegistry<E> debug4 = Optional.ofNullable((MappedRegistry<E>) registryHolder.registries.get(debug3)).map(debug0 -> debug0).orElseThrow(() -> new IllegalStateException("Missing registry: " + debug3));
++        DataResult<MappedRegistry<E>> debug5 = registryReadOps.decodeElements(debug4, registryData.key(), registryData.codec());
+         debug5.error().ifPresent(debug0 -> LOGGER.error("Error loading registry data: {}", (Object)debug0.message()));
+     }
+ 
+diff --git a/src/main/java/net/minecraft/network/FriendlyByteBuf.java b/src/main/java/net/minecraft/network/FriendlyByteBuf.java
+index 4b3499d9e5c24a40d7e8b84a025693ff220f28df..102af9e554e681a234c7e27430043225cbdca0b2 100644
+--- a/src/main/java/net/minecraft/network/FriendlyByteBuf.java
++++ b/src/main/java/net/minecraft/network/FriendlyByteBuf.java
+@@ -305,30 +305,30 @@ public class FriendlyByteBuf extends ByteBuf
+         return this.readUtf(32767);
+     }
+     
+-    public String readUtf(final int debug1) {
+-        final int debug2 = this.readVarInt();
+-        if (debug2 > debug1 * 4) {
+-            throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + debug2 + " > " + debug1 * 4 + ")");
++    public String readUtf(final int max) {
++        final int length = this.readVarInt();
++        if (length > max * 4) {
++            throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + length + " > " + max * 4 + ")");
+         }
+-        if (debug2 < 0) {
++        if (length < 0) {
+             throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
+         }
+-        final String debug3 = this.toString(this.readerIndex(), debug2, StandardCharsets.UTF_8);
+-        this.readerIndex(this.readerIndex() + debug2);
+-        if (debug3.length() > debug1) {
+-            throw new DecoderException("The received string length is longer than maximum allowed (" + debug2 + " > " + debug1 + ")");
++        final String string = this.toString(this.readerIndex(), length, StandardCharsets.UTF_8);
++        this.readerIndex(this.readerIndex() + length);
++        if (string.length() > max) {
++            throw new DecoderException("The received string length is longer than maximum allowed (" + length + " > " + max + ")");
+         }
+-        return debug3;
++        return string;
+     }
+     
+-    public FriendlyByteBuf writeUtf(final String debug1) {
+-        return this.writeUtf(debug1, 32767);
++    public FriendlyByteBuf writeUtf(final String s) {
++        return this.writeUtf(s, 32767);
+     }
+     
+-    public FriendlyByteBuf writeUtf(final String debug1, final int debug2) {
+-        final byte[] debug3 = debug1.getBytes(StandardCharsets.UTF_8);
+-        if (debug3.length > debug2) {
+-            throw new EncoderException("String too big (was " + debug3.length + " bytes encoded, max " + debug2 + ")");
++    public FriendlyByteBuf writeUtf(final String s, final int max) {
++        final byte[] debug3 = s.getBytes(StandardCharsets.UTF_8);
++        if (debug3.length > max) {
++            throw new EncoderException("String too big (was " + debug3.length + " bytes encoded, max " + max + ")");
+         }
+         this.writeVarInt(debug3.length);
+         this.writeBytes(debug3);
+diff --git a/src/main/java/net/minecraft/network/protocol/login/ClientboundGameProfilePacket.java b/src/main/java/net/minecraft/network/protocol/login/ClientboundGameProfilePacket.java
+index ffbc635a765445c7defc18182fe77f5821585e09..401de85bb739edb3cda8977d6b5093521e5d85b7 100644
+--- a/src/main/java/net/minecraft/network/protocol/login/ClientboundGameProfilePacket.java
++++ b/src/main/java/net/minecraft/network/protocol/login/ClientboundGameProfilePacket.java
+@@ -20,27 +20,27 @@ public class ClientboundGameProfilePacket implements Packet<ClientLoginPacketLis
+     }
+     
+     @Override
+-    public void read(final FriendlyByteBuf debug1) throws IOException {
+-        final int[] debug2 = new int[4];
+-        for (int debug3 = 0; debug3 < debug2.length; ++debug3) {
+-            debug2[debug3] = debug1.readInt();
++    public void read(final FriendlyByteBuf byteBuf) throws IOException {
++        final int[] intArray = new int[4];
++        for (int i = 0; i < intArray.length; ++i) {
++            intArray[i] = byteBuf.readInt();
+         }
+-        final UUID debug4 = SerializableUUID.uuidFromIntArray(debug2);
+-        final String debug5 = debug1.readUtf(16);
+-        this.gameProfile = new GameProfile(debug4, debug5);
++        final UUID uuid = SerializableUUID.uuidFromIntArray(intArray);
++        final String name = byteBuf.readUtf(16);
++        this.gameProfile = new GameProfile(uuid, name);
+     }
+     
+     @Override
+-    public void write(final FriendlyByteBuf debug1) throws IOException {
+-        for (final int debug2 : SerializableUUID.uuidToIntArray(this.gameProfile.getId())) {
+-            debug1.writeInt(debug2);
++    public void write(final FriendlyByteBuf byteBuf) throws IOException {
++        for (final int uuid : SerializableUUID.uuidToIntArray(this.gameProfile.getId())) {
++            byteBuf.writeInt(uuid);
+         }
+-        debug1.writeUtf(this.gameProfile.getName());
++        byteBuf.writeUtf(this.gameProfile.getName());
+     }
+     
+     @Override
+-    public void handle(final ClientLoginPacketListener debug1) {
+-        debug1.handleGameProfile(this);
++    public void handle(final ClientLoginPacketListener packet) {
++        packet.handleGameProfile(this);
+     }
+     
+     public GameProfile getGameProfile() {
+diff --git a/src/main/java/net/minecraft/resources/RegistryReadOps.java b/src/main/java/net/minecraft/resources/RegistryReadOps.java
+index 7df5e57deae2b92d92e03aad1956b90e97cb75bc..074c006e37413f94cbb1cf4b6dbfef4b7494965e 100644
+--- a/src/main/java/net/minecraft/resources/RegistryReadOps.java
++++ b/src/main/java/net/minecraft/resources/RegistryReadOps.java
+@@ -70,98 +70,98 @@ extends DelegatingOps<T> {
+     private final Map<ResourceKey<? extends Registry<?>>, ReadCache<?>> readCache;
+     private final RegistryReadOps<JsonElement> jsonOps;
+ 
+-    public static <T> RegistryReadOps<T> create(DynamicOps<T> debug0, ResourceManager debug1, RegistryAccess.RegistryHolder debug2) {
+-        return RegistryReadOps.create(debug0, ResourceAccess.forResourceManager(debug1), debug2);
++    public static <T> RegistryReadOps<T> create(DynamicOps<T> dynamicOps, ResourceManager resourceManager, RegistryAccess.RegistryHolder holder) {
++        return RegistryReadOps.create(dynamicOps, ResourceAccess.forResourceManager(resourceManager), holder);
+     }
+ 
+-    public static <T> RegistryReadOps<T> create(DynamicOps<T> debug0, ResourceAccess debug1, RegistryAccess.RegistryHolder debug2) {
+-        RegistryReadOps<T> debug3 = new RegistryReadOps<T>(debug0, debug1, debug2, Maps.newIdentityHashMap());
+-        RegistryAccess.load(debug2, debug3);
+-        return debug3;
++    public static <T> RegistryReadOps<T> create(DynamicOps<T> dynamicOps, ResourceAccess resourceAccess, RegistryAccess.RegistryHolder holder) {
++        RegistryReadOps<T> registryReadOps = new RegistryReadOps<T>(dynamicOps, resourceAccess, holder, Maps.newIdentityHashMap());
++        RegistryAccess.load(holder, registryReadOps);
++        return registryReadOps;
+     }
+ 
+-    private RegistryReadOps(DynamicOps<T> debug1, ResourceAccess debug2, RegistryAccess.RegistryHolder debug3, IdentityHashMap<ResourceKey<? extends Registry<?>>, ReadCache<?>> debug4) {
+-        super(debug1);
+-        this.resources = debug2;
+-        this.registryHolder = debug3;
+-        this.readCache = debug4;
+-        this.jsonOps = (debug1 == JsonOps.INSTANCE) ? (RegistryReadOps)this : new RegistryReadOps((DynamicOps<T>)JsonOps.INSTANCE, debug2, debug3, debug4); // MagmaCube - decompile fix
++    private RegistryReadOps(DynamicOps<T> dynamicOps, ResourceAccess resourceAccess, RegistryAccess.RegistryHolder registryHolder, IdentityHashMap<ResourceKey<? extends Registry<?>>, ReadCache<?>> map) {
++        super(dynamicOps);
++        this.resources = resourceAccess;
++        this.registryHolder = registryHolder;
++        this.readCache = map;
++        this.jsonOps = (dynamicOps == JsonOps.INSTANCE) ? (RegistryReadOps<JsonElement>) this : new RegistryReadOps<>(JsonOps.INSTANCE, resourceAccess, registryHolder, map); // MagmaCube - decompile fix
+     }
+ 
+-    protected <E> DataResult<Pair<java.util.function.Supplier<E>, T>> decodeElement(T debug12, ResourceKey<? extends Registry<E>> debug2, Codec<E> debug3, boolean debug4) {
+-        Optional<WritableRegistry<E>> debug5 = this.registryHolder.registry(debug2); // MagmaCube - decompile fix
+-        if (!debug5.isPresent()) {
+-            return DataResult.error((String)("Unknown registry: " + debug2));
++    protected <E> DataResult<Pair<java.util.function.Supplier<E>, T>> decodeElement(T input, ResourceKey<? extends Registry<E>> resourceKey, Codec<E> codec, boolean allowInlineDefinitions) {
++        Optional<WritableRegistry<E>> optional = this.registryHolder.registry(resourceKey); // MagmaCube - decompile fix
++        if (!optional.isPresent()) {
++            return DataResult.error((String)("Unknown registry: " + resourceKey));
+         }
+-        WritableRegistry debug6 = debug5.get();
+-        DataResult<Pair<ResourceLocation, T>> debug7 = ResourceLocation.CODEC.decode(this.delegate, debug12); // MagmaCube - decompile fix
+-        if (!debug7.result().isPresent()) {
+-            if (!debug4) {
++        WritableRegistry<E> writableRegistry = optional.get();
++        DataResult<Pair<ResourceLocation, T>> dataResult = ResourceLocation.CODEC.decode(this.delegate, input); // MagmaCube - decompile fix
++        if (!dataResult.result().isPresent()) {
++            if (!allowInlineDefinitions) {
+                 return DataResult.error((String)"Inline definitions not allowed here");
+             }
+-            return debug3.decode(this, debug12).map(debug02 -> debug02.mapFirst(debug0 -> () -> debug0)); // MagmaCube - decompile fix
++            return codec.decode(this, input).map(pair -> pair.mapFirst(instance -> () -> instance)); // MagmaCube - decompile fix
+         }
+-        Pair<ResourceLocation, T> debug8 = debug7.result().get(); // MagmaCube - decompile fix
+-        ResourceLocation debug9 = (ResourceLocation)debug8.getFirst();
+-        return this.readAndRegisterElement(debug2, debug6, debug3, debug9).map(debug1 -> Pair.of((Object)debug1, (Object)debug8.getSecond()));
++        Pair<ResourceLocation, T> pair = dataResult.result().get(); // MagmaCube - decompile fix
++        ResourceLocation resourceLocation = (ResourceLocation)pair.getFirst();
++        return this.readAndRegisterElement(resourceKey, writableRegistry, codec, resourceLocation).map(supplier -> Pair.of(supplier, pair.getSecond()));
+     }
+ 
+-    public <E> DataResult<MappedRegistry<E>> decodeElements(MappedRegistry<E> debug1, ResourceKey<? extends Registry<E>> debug2, Codec<E> debug3) {
+-        Collection<ResourceLocation> debug42 = this.resources.listResources(debug2);
+-        DataResult<MappedRegistry<E>> debug5 = DataResult.success(debug1, (Lifecycle)Lifecycle.stable()); // MagmaCube - decompile fix
+-        String debug6 = debug2.location().getPath() + "/";
+-        for (ResourceLocation debug8 : debug42) {
+-            String debug9 = debug8.getPath();
+-            if (!debug9.endsWith(".json")) {
+-                LOGGER.warn("Skipping resource {} since it is not a json file", (Object)debug8);
++    public <E> DataResult<MappedRegistry<E>> decodeElements(MappedRegistry<E> registry, ResourceKey<? extends Registry<E>> resourceKey, Codec<E> mapCodec) {
++        Collection<ResourceLocation> resources = this.resources.listResources(resourceKey);
++        DataResult<MappedRegistry<E>> dataResult = DataResult.success(registry, (Lifecycle)Lifecycle.stable());
++        String prefix = resourceKey.location().getPath() + "/";
++        for (ResourceLocation location : resources) {
++            String path = location.getPath();
++            if (!path.endsWith(".json")) {
++                LOGGER.warn("Skipping resource {} since it is not a json file", (Object)location);
+                 continue;
+             }
+-            if (!debug9.startsWith(debug6)) {
+-                LOGGER.warn("Skipping resource {} since it does not have a registry name prefix", (Object)debug8);
++            if (!path.startsWith(prefix)) {
++                LOGGER.warn("Skipping resource {} since it does not have a registry name prefix", (Object)location);
+                 continue;
+             }
+-            String debug10 = debug9.substring(debug6.length(), debug9.length() - ".json".length());
+-            ResourceLocation debug11 = new ResourceLocation(debug8.getNamespace(), debug10);
+-            debug5 = debug5.flatMap(debug4 -> this.readAndRegisterElement(debug2, (WritableRegistry)debug4, debug3, debug11).map(debug12 -> debug4));
++            String debug10 = path.substring(prefix.length(), path.length() - ".json".length());
++            ResourceLocation newLocation = new ResourceLocation(location.getNamespace(), debug10);
++            dataResult = dataResult.flatMap(mappedRegistry -> this.readAndRegisterElement(resourceKey, mappedRegistry, mapCodec, newLocation).map(debug12 -> mappedRegistry));
+         }
+-        return debug5.setPartial(debug1);
++        return dataResult.setPartial(registry);
+     }
+ 
+-    private <E> DataResult<Supplier<E>> readAndRegisterElement(ResourceKey<? extends Registry<E>> debug1, WritableRegistry<E> debug22, Codec<E> debug3, ResourceLocation debug4) {
+-        DataResult<Supplier<E>> debug11; // MagmaCube - decompile fix
+-        ResourceKey<E> debug5 = ResourceKey.create(debug1, debug4);
+-        ReadCache<E> debug6 = this.readCache(debug1);
+-        DataResult<Supplier<E>> debug7 = (DataResult)(debug6).values.get(debug5);
+-        if (debug7 != null) {
+-            return debug7;
++    private <E> DataResult<java.util.function.Supplier<E>> readAndRegisterElement(ResourceKey<? extends Registry<E>> key, WritableRegistry<E> writableRegistry, Codec<E> codec, ResourceLocation resourceLocation) {
++        DataResult<java.util.function.Supplier<E>> supplierDataResult; // MagmaCube - decompile fix
++        ResourceKey<E> objectKey = ResourceKey.create(key, resourceLocation);
++        ReadCache<E> cache = this.readCache(key);
++        DataResult<java.util.function.Supplier<E>> dataResult = cache.values.get(objectKey);
++        if (dataResult != null) {
++            return dataResult;
+         }
+-        Supplier debug8 = Suppliers.memoize(() -> {
+-            Object debug2 = debug22.get(debug5);
++        Supplier<E> supplier = Suppliers.memoize(() -> {
++            E debug2 = writableRegistry.get(objectKey);
+             if (debug2 == null) {
+-                throw new RuntimeException("Error during recursive registry parsing, element resolved too early: " + debug5);
++                throw new RuntimeException("Error during recursive registry parsing, element resolved too early: " + objectKey);
+             }
+             return debug2;
+         });
+-        ((ReadCache)debug6).values.put(debug5, DataResult.success((Object)debug8));
+-        DataResult<Pair<E, OptionalInt>> debug9 = this.resources.parseElement(this.jsonOps, debug1, debug5, debug3); // MagmaCube - decompile fix
+-        Optional<Pair<E, OptionalInt>> debug10 = debug9.result(); // MagmaCube - decompile fix
+-        if (debug10.isPresent()) {
+-            Pair<E, OptionalInt> pair = debug10.get(); // MagmaCube - decompile fix
+-            debug22.registerOrOverride((OptionalInt)pair.getSecond(), debug5, pair.getFirst(), debug9.lifecycle()); // MagmaCube - decompile fix
++        cache.values.put(objectKey, DataResult.success(supplier));
++        DataResult<Pair<E, OptionalInt>> result = this.resources.parseElement(this.jsonOps, key, objectKey, codec); // MagmaCube - decompile fix
++        Optional<Pair<E, OptionalInt>> optionalPair = result.result(); // MagmaCube - decompile fix
++        if (optionalPair.isPresent()) {
++            Pair<E, OptionalInt> pair = optionalPair.get(); // MagmaCube - decompile fix
++            writableRegistry.registerOrOverride((OptionalInt)pair.getSecond(), objectKey, pair.getFirst(), result.lifecycle()); // MagmaCube - decompile fix
+         }
+-        debug11 = !debug10.isPresent() && debug22.get(debug5) != null ? DataResult.success(() -> debug22.get(debug5), (Lifecycle)Lifecycle.stable()) : debug9.map(debug2 -> () -> debug22.get(debug5));
+-        ((ReadCache)debug6).values.put(debug5, debug11);
+-        return debug11;
++        supplierDataResult = !optionalPair.isPresent() && writableRegistry.get(objectKey) != null ? DataResult.success(() -> writableRegistry.get(objectKey), (Lifecycle)Lifecycle.stable()) : result.map(debug2 -> () -> writableRegistry.get(objectKey));
++        cache.values.put(objectKey, supplierDataResult);
++        return supplierDataResult;
+     }
+ 
+-    private <E> ReadCache<E> readCache(ResourceKey<? extends Registry<E>> debug1) {
+-        return (ReadCache<E>) this.readCache.computeIfAbsent(debug1, debug0 -> new ReadCache()); // MagmaCube - decompile fix
++    private <E> ReadCache<E> readCache(ResourceKey<? extends Registry<E>> resourceKey) {
++        return (ReadCache<E>) this.readCache.computeIfAbsent(resourceKey, debug0 -> new ReadCache<>()); // MagmaCube - decompile fix
+     }
+ 
+-    protected <E> DataResult<WritableRegistry<E>> registry(ResourceKey<? extends Registry<E>> debug1) {
+-        return this.registryHolder.registry(debug1)
+-                .map(debug0 -> DataResult.success(debug0, debug0.elementsLifecycle()))
+-                .orElseGet(() -> DataResult.error("Unknown registry: " + debug1));
++    protected <E> DataResult<WritableRegistry<E>> registry(ResourceKey<? extends Registry<E>> resourceKey) {
++        return this.registryHolder.registry(resourceKey)
++                .map(writableRegistry -> DataResult.success(writableRegistry, writableRegistry.elementsLifecycle()))
++                .orElseGet(() -> DataResult.error("Unknown registry: " + resourceKey));
+     }
+ 
+     public static interface ResourceAccess {
+@@ -169,35 +169,35 @@ extends DelegatingOps<T> {
+ 
+         public <E> DataResult<Pair<E, OptionalInt>> parseElement(DynamicOps<JsonElement> var1, ResourceKey<? extends Registry<E>> var2, ResourceKey<E> var3, Decoder<E> var4);
+ 
+-        public static ResourceAccess forResourceManager(final ResourceManager debug0) {
++        public static ResourceAccess forResourceManager(final ResourceManager resourceManager) {
+             return new ResourceAccess(){
+ 
+                 @Override
+                 public Collection<ResourceLocation> listResources(ResourceKey<? extends Registry<?>> debug1) {
+-                    return debug0.listResources(debug1.location().getPath(), debug0 -> debug0.endsWith(".json"));
++                    return resourceManager.listResources(debug1.location().getPath(), debug0 -> debug0.endsWith(".json"));
+                 }
+ 
+                 /*
+                  * Exception decompiling
+                  */
+                 @Override
+-                public <E> DataResult<Pair<E, OptionalInt>> parseElement(DynamicOps<JsonElement> debug1, ResourceKey<? extends Registry<E>> debug2, ResourceKey<E> debug3, Decoder<E> debug4) {
++                public <E> DataResult<Pair<E, OptionalInt>> parseElement(DynamicOps<JsonElement> jsonElementDynamicOps, ResourceKey<? extends Registry<E>> resourceKey, ResourceKey<E> objectKey, Decoder<E> decoder) {
+                     // MagmaCube start - decompile fix
+-                    ResourceLocation debug5 = debug3.location();
+-                    ResourceLocation debug6 = new ResourceLocation(debug5.getNamespace(), debug2.location().getPath() + "/" + debug5.getPath() + ".json");
+-                    try(Resource debug7 = debug0.getResource(debug6);
+-                        Reader debug9 = new InputStreamReader(debug7.getInputStream(), StandardCharsets.UTF_8)) {
+-                        JsonParser debug11 = new JsonParser();
+-                        JsonElement debug12 = debug11.parse(debug9);
+-                        return debug4.parse(debug1, debug12).map(debug0 -> Pair.of(debug0, OptionalInt.empty()));
+-                    } catch (IOException |com.google.gson.JsonIOException|com.google.gson.JsonSyntaxException debug7) {
+-                        return DataResult.error("Failed to parse " + debug6 + " file: " + debug7.getMessage());
++                    ResourceLocation objectLocation = objectKey.location();
++                    ResourceLocation resourceLocation = new ResourceLocation(objectLocation.getNamespace(), resourceKey.location().getPath() + "/" + objectLocation.getPath() + ".json");
++                    try(Resource resource = resourceManager.getResource(resourceLocation);
++                        Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
++                        JsonParser parser = new JsonParser();
++                        JsonElement element = parser.parse(reader);
++                        return decoder.parse(jsonElementDynamicOps, element).map(instance -> Pair.of(instance, OptionalInt.empty()));
++                    } catch (IOException |com.google.gson.JsonIOException|com.google.gson.JsonSyntaxException ex) {
++                        return DataResult.error("Failed to parse " + resourceLocation + " file: " + ex.getMessage());
+                     }
+                     // MagmaCube end - decompile fix
+                 }
+ 
+                 public String toString() {
+-                    return "ResourceAccess[" + debug0 + "]";
++                    return "ResourceAccess[" + resourceManager + "]";
+                 }
+             };
+         }
+@@ -208,30 +208,30 @@ extends DelegatingOps<T> {
+             private final Object2IntMap<ResourceKey<?>> ids = new Object2IntOpenCustomHashMap(Util.identityStrategy());
+             private final Map<ResourceKey<?>, Lifecycle> lifecycles = Maps.newIdentityHashMap();
+ 
+-            public <E> void add(RegistryAccess.RegistryHolder debug1, ResourceKey<E> debug2, Encoder<E> debug3, int debug4, E debug5, Lifecycle debug6) {
+-                DataResult debug7 = debug3.encodeStart(RegistryWriteOps.create(JsonOps.INSTANCE, debug1), debug5);
+-                Optional debug8 = debug7.error();
+-                if (debug8.isPresent()) {
+-                    LOGGER.error("Error adding element: {}", (Object)((DataResult.PartialResult)debug8.get()).message());
++            public <E> void add(RegistryAccess.RegistryHolder registryHolder, ResourceKey<E> resourceKey, Encoder<E> encoder, int id, E instance, Lifecycle lifecycle) {
++                DataResult<JsonElement> dataResult = encoder.encodeStart(RegistryWriteOps.create(JsonOps.INSTANCE, registryHolder), instance);
++                Optional<DataResult.PartialResult<JsonElement>> optional = dataResult.error();
++                if (optional.isPresent()) {
++                    LOGGER.error("Error adding element: {}", optional.get().message());
+                     return;
+                 }
+-                this.data.put(debug2, (JsonElement)debug7.result().get());
+-                this.ids.put(debug2, debug4);
+-                this.lifecycles.put(debug2, debug6);
++                this.data.put(resourceKey, dataResult.result().get());
++                this.ids.put(resourceKey, id);
++                this.lifecycles.put(resourceKey, lifecycle);
+             }
+ 
+             @Override
+-            public Collection<ResourceLocation> listResources(ResourceKey<? extends Registry<?>> debug12) {
+-                return this.data.keySet().stream().filter(debug1 -> debug1.isFor(debug12)).map(debug1 -> new ResourceLocation(debug1.location().getNamespace(), debug12.location().getPath() + "/" + debug1.location().getPath() + ".json")).collect(Collectors.toList());
++            public Collection<ResourceLocation> listResources(ResourceKey<? extends Registry<?>> resourceKey) {
++                return this.data.keySet().stream().filter(objectKey -> objectKey.isFor(resourceKey)).map(objectKey -> new ResourceLocation(objectKey.location().getNamespace(), resourceKey.location().getPath() + "/" + objectKey.location().getPath() + ".json")).collect(Collectors.toList());
+             }
+ 
+             @Override
+-            public <E> DataResult<Pair<E, OptionalInt>> parseElement(DynamicOps<JsonElement> debug1, ResourceKey<? extends Registry<E>> debug22, ResourceKey<E> debug3, Decoder<E> debug4) {
+-                JsonElement debug5 = this.data.get(debug3);
+-                if (debug5 == null) {
+-                    return DataResult.error((String)("Unknown element: " + debug3));
++            public <E> DataResult<Pair<E, OptionalInt>> parseElement(DynamicOps<JsonElement> dynamicOps, ResourceKey<? extends Registry<E>> resourceKey, ResourceKey<E> key, Decoder<E> decoder) {
++                JsonElement json = this.data.get(key);
++                if (json == null) {
++                    return DataResult.error((String)("Unknown element: " + key));
+                 }
+-                return debug4.parse(debug1, debug5).setLifecycle(this.lifecycles.get(debug3)).map(debug2 -> Pair.of(debug2, OptionalInt.of(this.ids.getInt((Object)debug3)))); // MagmaCube - decompile fix
++                return decoder.parse(dynamicOps, json).setLifecycle(this.lifecycles.get(key)).map(instance -> Pair.of(instance, OptionalInt.of(this.ids.getInt(key)))); // MagmaCube - decompile fix
+             }
+         }
+     }
+diff --git a/src/main/java/net/minecraft/server/commands/EmoteCommands.java b/src/main/java/net/minecraft/server/commands/EmoteCommands.java
+index 01877b8844176fb656511a5b46d84eb0e2a8bad6..c1706c27f830ad50fd4e0800d71f0463f4a86df3 100644
+--- a/src/main/java/net/minecraft/server/commands/EmoteCommands.java
++++ b/src/main/java/net/minecraft/server/commands/EmoteCommands.java
+@@ -34,7 +34,7 @@ public class EmoteCommands {
+             if (debug2 != null) {
+                 TextFilter debug4;
+                 if (debug2 instanceof ServerPlayer && (debug4 = ((ServerPlayer)debug2).getTextFilter()) != null) {
+-                    debug4.processStreamMessage(debug1).thenAcceptAsync(debug32 -> debug32.ifPresent(debug3 -> debug3.getPlayerList().broadcastMessage(EmoteCommands.createMessage((CommandContext<CommandSourceStack>)debug0, debug3), ChatType.CHAT, debug2.getUUID())), (Executor)debug3);
++                    debug4.processStreamMessage(debug1).thenAcceptAsync(debug32 -> debug32.ifPresent(debug3l -> debug3.getPlayerList().broadcastMessage(EmoteCommands.createMessage((CommandContext<CommandSourceStack>)debug0, debug3l), ChatType.CHAT, debug2.getUUID())), (Executor)debug3); // MagmaCube - decompile fix
+                     return 1;
+                 }
+                 debug3.getPlayerList().broadcastMessage(EmoteCommands.createMessage((CommandContext<CommandSourceStack>)debug0, debug1), ChatType.CHAT, debug2.getUUID());
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index dce2893bfdee9ba6f9f5fab113524d8841865c83..bfec8f5f65548095337c8b01ec01dd612cf9d9d6 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -315,7 +315,7 @@ implements ServerGamePacketListener {
+ 
+     private <T> void filterTextPacket(T debug12, Consumer<T> debug22, BiFunction<TextFilter, T, CompletableFuture<Optional<T>>> debug3) {
+         MinecraftServer debug4 = this.player.getLevel().getServer();
+-        Consumer<Object> debug5 = debug2 -> {
++        Consumer<T> debug5 = debug2 -> { // MagmaCube - decompile fix
+             if (this.getConnection().isConnected()) {
+                 debug22.accept(debug2);
+             } else {
+@@ -324,7 +324,7 @@ implements ServerGamePacketListener {
+         };
+         TextFilter debug6 = this.player.getTextFilter();
+         if (debug6 != null) {
+-            debug3.apply(debug6, (TextFilter)debug12).thenAcceptAsync(debug1 -> debug1.ifPresent(debug5), (Executor)debug4);
++            debug3.apply(debug6, debug12).thenAcceptAsync(debug1 -> debug1.ifPresent(debug5), (Executor)debug4); // MagmaCube - decompile fix
+         } else {
+             debug4.execute(() -> debug5.accept(debug12));
+         }
+@@ -706,7 +706,8 @@ implements ServerGamePacketListener {
+         if (!Inventory.isHotbarSlot(debug7) && debug7 != 40) {
+             return;
+         }
+-        this.filterTextPacket(debug4, debug5 ? debug2 -> this.signBook((String)debug2.get(0), debug2.subList(1, debug2.size()), debug7) : debug2 -> this.updateBookContents((List<String>)debug2, debug7));
++        int finalDebug = debug7; // MagmaCube - decompile fix
++        this.filterTextPacket(debug4, debug5 ? debug2 -> this.signBook((String)debug2.get(0), debug2.subList(1, debug2.size()), finalDebug) : debug2 -> this.updateBookContents((List<String>)debug2, finalDebug)); // MagmaCube - decompile fix
+     }
+ 
+     private void updateBookContents(List<String> debug1, int debug2) {
+diff --git a/src/main/java/net/minecraft/server/network/TextFilterClient.java b/src/main/java/net/minecraft/server/network/TextFilterClient.java
+index 74be68db987001bb323c42201734afb01063521d..09eb81a17d0f6ecfafd82082fbef8dc17b6f8ea3 100644
+--- a/src/main/java/net/minecraft/server/network/TextFilterClient.java
++++ b/src/main/java/net/minecraft/server/network/TextFilterClient.java
+@@ -1,6 +1,9 @@
+ package net.minecraft.server.network;
+ 
+ import java.util.List;
++
++import com.google.common.collect.ImmutableList;
++import net.minecraft.Util;
+ import net.minecraft.util.thread.ProcessorMailbox;
+ import org.apache.logging.log4j.LogManager;
+ import com.google.gson.JsonElement;
+@@ -33,14 +36,14 @@ public class TextFilterClient implements AutoCloseable
+     private static final Logger LOGGER;
+     private static final AtomicInteger WORKER_COUNT;
+     private static final ThreadFactory THREAD_FACTORY;
+-    private final URL chatEndpoint;
+-    private final URL joinEndpoint;
+-    private final URL leaveEndpoint;
+-    private final String authKey;
+-    private final int ruleId;
+-    private final String serverId;
+-    private final IgnoreStrategy chatIgnoreStrategy;
+-    private final ExecutorService workerPool;
++    private final URL chatEndpoint = null; // MagmaCube - decompile fix
++    private final URL joinEndpoint = null; // MagmaCube - decompile fix
++    private final URL leaveEndpoint = null; // MagmaCube - decompile fix
++    private final String authKey = null; // MagmaCube - decompile fix
++    private final int ruleId = 0; // MagmaCube - decompile fix
++    private final String serverId = null; // MagmaCube - decompile fix
++    private final IgnoreStrategy chatIgnoreStrategy = null; // MagmaCube - decompile fix
++    private final ExecutorService workerPool = null; // MagmaCube - decompile fix
+     
+     private void processJoinOrLeave(final GameProfile debug1, final URL debug2, final Executor debug3) {
+         final JsonObject debug4 = new JsonObject();
+@@ -48,10 +51,9 @@ public class TextFilterClient implements AutoCloseable
+         debug4.addProperty("room", "Chat");
+         debug4.addProperty("user_id", debug1.getId().toString());
+         debug4.addProperty("user_display_name", debug1.getName());
+-        final JsonObject debug6;
+         debug3.execute(() -> {
+             try {
+-                this.processRequest(debug6, debug2);
++                this.processRequest(debug4, debug2); // MagmaCube - decompile fix
+             }
+             catch (Exception debug5) {
+                 TextFilterClient.LOGGER.warn("Failed to send join/leave packet to {} for player {}", (Object)debug2, (Object)debug1, (Object)debug5);
+@@ -70,25 +72,20 @@ public class TextFilterClient implements AutoCloseable
+         debug5.addProperty("player", debug1.getId().toString());
+         debug5.addProperty("player_display_name", debug1.getName());
+         debug5.addProperty("text", debug2);
+-        final JsonObject debug11;
+-        JsonObject debug6;
+-        boolean debug7;
+-        String debug8;
+-        int debug9;
+         return CompletableFuture.supplyAsync(() -> {
+             try {
+-                debug6 = this.processRequestResponse(debug11, this.chatEndpoint);
+-                debug7 = GsonHelper.getAsBoolean(debug6, "response", false);
++                JsonObject debug6 = this.processRequestResponse(debug5, this.chatEndpoint); // MagmaCube - decompile fix
++                boolean debug7 = GsonHelper.getAsBoolean(debug6, "response", false); // MagmaCube - decompile fix
+                 if (debug7) {
+                     return Optional.of(debug2);
+                 }
+                 else {
+-                    debug8 = GsonHelper.getAsString(debug6, "hashed", null);
++                    String debug8 = GsonHelper.getAsString(debug6, "hashed", null); // MagmaCube - decompile fix
+                     if (debug8 == null) {
+                         return Optional.empty();
+                     }
+                     else {
+-                        debug9 = GsonHelper.getAsJsonArray(debug6, "hashes").size();
++                        int debug9 = GsonHelper.getAsJsonArray(debug6, "hashes").size(); // MagmaCube - decompile fix
+                         return debug3.shouldIgnore(debug8, debug9) ? Optional.empty() : Optional.of(debug8);
+                     }
+                 }
+@@ -162,9 +159,8 @@ public class TextFilterClient implements AutoCloseable
+     static {
+         LOGGER = LogManager.getLogger();
+         WORKER_COUNT = new AtomicInteger(1);
+-        final Thread debug;
+         THREAD_FACTORY = (debug0 -> {
+-            debug = new Thread(debug0);
++            Thread debug = new Thread(debug0); // MagmaCube - decompile fix
+             debug.setName("Chat-Filter-Worker-" + TextFilterClient.WORKER_COUNT.getAndIncrement());
+             return debug;
+         });
+@@ -200,103 +196,12 @@ public class TextFilterClient implements AutoCloseable
+         
+         @Override
+         public CompletableFuture<Optional<List<String>>> processMessageBundle(final List<String> debug1) {
+-            // 
+-            // This method could not be decompiled.
+-            // 
+-            // Original Bytecode:
+-            // 
+-            //     1: invokeinterface java/util/List.stream:()Ljava/util/stream/Stream;
+-            //     6: aload_0         /* this */
+-            //     7: invokedynamic   BootstrapMethod #1, apply:(Lnet/minecraft/server/network/TextFilterClient$PlayerContext;)Ljava/util/function/Function;
+-            //    12: invokeinterface java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+-            //    17: invokestatic    com/google/common/collect/ImmutableList.toImmutableList:()invokestatic   !!! ERROR
+-            //    20: invokeinterface java/util/stream/Stream.collect:(invokeinterface!!! ERROR
+-            //    25: checkcast       Ljava/util/List;
+-            //    28: astore_2        /* debug2 */
+-            //    29: aload_2         /* debug2 */
+-            //    30: invokestatic    net/minecraft/Util.sequence:(Ljava/util/List;)Ljava/util/concurrent/CompletableFuture;
+-            //    33: invokedynamic   BootstrapMethod #2, apply:()Ljava/util/function/Function;
+-            //    38: invokevirtual   java/util/concurrent/CompletableFuture.thenApply:(Ljava/util/function/Function;)Ljava/util/concurrent/CompletableFuture;
+-            //    41: invokedynamic   BootstrapMethod #3, apply:()Ljava/util/function/Function;
+-            //    46: invokevirtual   java/util/concurrent/CompletableFuture.exceptionally:(Ljava/util/function/Function;)Ljava/util/concurrent/CompletableFuture;
+-            //    49: areturn        
+-            //    Signature:
+-            //  (Ljava/util/List<Ljava/lang/String;>;)Ljava/util/concurrent/CompletableFuture<Ljava/util/Optional<Ljava/util/List<Ljava/lang/String;>;>;>;
+-            // 
+-            // The error that occurred was:
+-            // 
+-            // java.lang.IllegalArgumentException: Argument 'type' cannot be null.
+-            //     at com.strobel.core.VerifyArgument.notNull(VerifyArgument.java:38)
+-            //     at com.strobel.assembler.ir.attributes.LocalVariableTableEntry.<init>(LocalVariableTableEntry.java:41)
+-            //     at com.strobel.assembler.ir.MetadataReader.readAttributeCore(MetadataReader.java:183)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.readAttributeCore(ClassFileReader.java:260)
+-            //     at com.strobel.assembler.ir.MetadataReader.readAttribute(MetadataReader.java:50)
+-            //     at com.strobel.assembler.ir.MetadataReader.readAttributes(MetadataReader.java:40)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.readAttributeCore(ClassFileReader.java:202)
+-            //     at com.strobel.assembler.ir.MetadataReader.inflateAttribute(MetadataReader.java:368)
+-            //     at com.strobel.assembler.ir.MetadataReader.inflateAttributes(MetadataReader.java:345)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.defineMethods(ClassFileReader.java:977)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.readClass(ClassFileReader.java:440)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.readClass(ClassFileReader.java:376)
+-            //     at com.strobel.assembler.metadata.MetadataSystem.resolveType(MetadataSystem.java:124)
+-            //     at com.strobel.decompiler.NoRetryMetadataSystem.resolveType(DecompilerDriver.java:482)
+-            //     at com.strobel.assembler.metadata.MetadataSystem.resolveCore(MetadataSystem.java:76)
+-            //     at com.strobel.assembler.metadata.MetadataResolver.resolve(MetadataResolver.java:104)
+-            //     at com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve(CoreMetadataFactory.java:614)
+-            //     at com.strobel.assembler.metadata.MetadataResolver.resolve(MetadataResolver.java:91)
+-            //     at com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve(CoreMetadataFactory.java:614)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.populateNamedInnerTypes(ClassFileReader.java:697)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.readClass(ClassFileReader.java:441)
+-            //     at com.strobel.assembler.metadata.ClassFileReader.readClass(ClassFileReader.java:376)
+-            //     at com.strobel.assembler.metadata.MetadataSystem.resolveType(MetadataSystem.java:124)
+-            //     at com.strobel.decompiler.NoRetryMetadataSystem.resolveType(DecompilerDriver.java:482)
+-            //     at com.strobel.assembler.metadata.MetadataSystem.resolveCore(MetadataSystem.java:76)
+-            //     at com.strobel.assembler.metadata.MetadataResolver.resolve(MetadataResolver.java:104)
+-            //     at com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve(CoreMetadataFactory.java:614)
+-            //     at com.strobel.assembler.metadata.ParameterizedType.getGenericParameters(ParameterizedType.java:71)
+-            //     at com.strobel.assembler.metadata.TypeReference.hasGenericParameters(TypeReference.java:244)
+-            //     at com.strobel.assembler.metadata.TypeReference.isGenericType(TypeReference.java:263)
+-            //     at com.strobel.assembler.metadata.MetadataHelper.isRawType(MetadataHelper.java:1597)
+-            //     at com.strobel.assembler.metadata.MetadataHelper.asSubType(MetadataHelper.java:735)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis$AddMappingsForArgumentVisitor.visitParameterizedType(TypeAnalysis.java:3205)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis$AddMappingsForArgumentVisitor.visitParameterizedType(TypeAnalysis.java:3116)
+-            //     at com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedGenericType.accept(CoreMetadataFactory.java:651)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis$AddMappingsForArgumentVisitor.visit(TypeAnalysis.java:3125)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.inferCall(TypeAnalysis.java:2512)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.doInferTypeForExpression(TypeAnalysis.java:1029)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.inferTypeForExpression(TypeAnalysis.java:803)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.inferTypeForExpression(TypeAnalysis.java:770)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.inferTypeForExpression(TypeAnalysis.java:766)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.doInferTypeForExpression(TypeAnalysis.java:1499)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.inferTypeForExpression(TypeAnalysis.java:803)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.inferTypeForExpression(TypeAnalysis.java:770)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.doInferTypeForExpression(TypeAnalysis.java:881)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.inferTypeForExpression(TypeAnalysis.java:803)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.runInference(TypeAnalysis.java:672)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.runInference(TypeAnalysis.java:655)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.runInference(TypeAnalysis.java:365)
+-            //     at com.strobel.decompiler.ast.TypeAnalysis.run(TypeAnalysis.java:96)
+-            //     at com.strobel.decompiler.ast.AstOptimizer.optimize(AstOptimizer.java:109)
+-            //     at com.strobel.decompiler.ast.AstOptimizer.optimize(AstOptimizer.java:42)
+-            //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:214)
+-            //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:99)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(AstBuilder.java:757)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(AstBuilder.java:655)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(AstBuilder.java:532)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(AstBuilder.java:499)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(AstBuilder.java:141)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(AstBuilder.java:556)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(AstBuilder.java:499)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(AstBuilder.java:141)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createType(AstBuilder.java:130)
+-            //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addType(AstBuilder.java:105)
+-            //     at com.strobel.decompiler.languages.java.JavaLanguage.buildAst(JavaLanguage.java:71)
+-            //     at com.strobel.decompiler.languages.java.JavaLanguage.decompileType(JavaLanguage.java:59)
+-            //     at com.strobel.decompiler.DecompilerDriver.decompileType(DecompilerDriver.java:336)
+-            //     at com.strobel.decompiler.DecompilerDriver.decompileJar(DecompilerDriver.java:257)
+-            //     at com.strobel.decompiler.DecompilerDriver.main(DecompilerDriver.java:141)
+-            // 
+-            throw new IllegalStateException("An error occurred while decompiling this method.");
++            // MagmaCube start - decompile fix
++            List<CompletableFuture<Optional<String>>> debug2 = debug1.stream().map(debug1l -> TextFilterClient.this.requestMessageProcessing(this.profile, debug1l, TextFilterClient.this.chatIgnoreStrategy, this.streamExecutor)).collect(ImmutableList.toImmutableList());
++            return Util.sequence(debug2)
++                    .thenApply(debug0 -> Optional.<List<String>>of(debug0.stream().map(o -> o.orElse("")).collect(ImmutableList.toImmutableList())))
++                    .exceptionally(debug0 -> Optional.empty());
++            // MagmaCube end - decompile fix
+         }
+         
+         @Override
