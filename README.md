@@ -4,7 +4,7 @@
 
 A Minecraft that you can patch your own patches into the Minecraft.
 
-Based on MC 1.16.3 currently.
+Based on MC 1.16.4 currently.
 
 ## Current goal
 - Make it work, without bugs.
