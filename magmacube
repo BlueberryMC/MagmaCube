@@ -52,7 +52,7 @@ case "$1" in
     echo " Commands:"
     echo "  * rb, rebuild            | Rebuild patches, can be called from anywhere."
     echo "  * p, patch               | Apply all patches to the project without building it. Can be run from anywhere."
-    echo "  * run, client, runclient | Builds project and run the client. A project must already be applied patches."
+    echo "  * run, client, runclient | Builds project and run the client. You must do patch before doing this."
     echo "  * j, jar                 | Apply all patches and build the project. (Not available yet)"
   ;;
 esac
