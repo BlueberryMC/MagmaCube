@@ -9,3 +9,4 @@ work/decompiler/
 target/
 /target/
 work/testClient/
+/logs/

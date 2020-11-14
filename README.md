@@ -19,15 +19,14 @@ Based on MC 1.16.4 currently.
 - Do not redistribute the jar file, without any exception. It is against the Mojang's ToS.
 
 ## Bugs
-- Spectator mode is broken, can't pass through blocks
-- World Generation is trash
-- Some translations aren't showing correctly
-- Not loading some textures(= Models?)
-- Cannot break/place blocks in single player (If I place it, it will disappear when I right clicked the placed block)
-- Not rendering models at all ("missing model" too!) (Most GUIs are rendered correctly)
+- World Generation is trash (Check ChunkGenerator)
+- Formatting codes on chat is broke
+- Can't break/place blocks (purely visual)
+- Sometimes Minecraft hangs while updating lighting (light update taking forever)
+- Chunk section sometimes disappear? (and comes back after)
 
 ## Todo
-- Fix GuiComponent#fill
+- Check around ChatComponent/ChatScreen
 
 ## Things I noticed
 - I think we can comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
