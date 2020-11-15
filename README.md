@@ -20,13 +20,12 @@ Based on MC 1.16.4 currently.
 
 ## Bugs
 - World Generation is trash (Check ChunkGenerator)
-- Formatting codes on chat is broke
 - Can't break/place blocks (purely visual)
 - Sometimes Minecraft hangs while updating lighting (light update taking forever)
 - Chunk section sometimes disappear? (and comes back after)
+- Some textures (blocks) are bugged
 
 ## Todo
-- Check around ChatComponent/ChatScreen
 
 ## Things I noticed
 - I think we can comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
