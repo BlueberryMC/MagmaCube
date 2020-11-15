@@ -24,6 +24,13 @@ Based on MC 1.16.4 currently.
 - Sometimes Minecraft hangs while updating lighting (light update taking forever)
 - Chunk section sometimes disappear? (and comes back after)
 - Some textures (blocks) are bugged
+- There are blocks that can't pass through even if it's spectator mode
+- Blocks are disappearing
+- Can't use elytra in air
+- Broken collision with non-solid blocks
+- Some parts of blocks are transparent
+- Does not render hidden blocks (e.g. block hidden under the chest)
+- Broken skins? (renders as alex, or steve even if logged in with valid access token)
 
 ## Todo
 
