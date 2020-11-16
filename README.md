@@ -21,7 +21,7 @@ Based on MC 1.16.4 currently.
 ## Bugs
 | issue | things to check |
 | ---- | ---- |
-| world (chunk) generation is trash | check ChunkGenerator, NoiseBasedChunkGenerator and maths by int (some maths should be performed by double/float) |
+| world (chunk) generation is trash | check ChunkGenerator, NoiseBasedChunkGenerator |
 | Chunk section sometimes disappear? (and comes back after) | |
 | Some textures (blocks) are bugged | |
 | There are blocks that can't pass through even if it's spectator mode | |
@@ -39,7 +39,7 @@ Based on MC 1.16.4 currently.
 | Cannot create a world | visibleChunkMap in ChunkMap |
 
 ## Todo
-- Check around int -> double/float casts
+- ~~Check around int -> double/float casts~~ still happening even if we did this?
 - Check around Line 125 in net.minecraft.client.multiplayer.MultiPlayerGameMode
 
 ## Things I noticed
