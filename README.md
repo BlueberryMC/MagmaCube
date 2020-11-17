@@ -25,7 +25,7 @@ Based on MC 1.16.4 currently.
 | Chunk section sometimes disappear? (and comes back after) | |
 | Some textures (blocks) are bugged | |
 | There are blocks that can't pass through even if it's spectator mode | |
-| Blocks are disappearing | check around block interaction | |
+| Blocks are disappearing | Check around block interaction, almost all invocation of Level#setBlock and PacketListener seems not related |
 | Some specific player animations does not stay (elytra and running) | |
 | Broken collision with non-solid blocks | |
 | Some parts of blocks are transparent | LevelRenderer#renderVoxelShape? |
@@ -39,7 +39,7 @@ Based on MC 1.16.4 currently.
 | Cannot create a world | visibleChunkMap in ChunkMap |
 
 ## Todo
-- ~~Check around int -> double/float casts~~ still happening even if we did this?
+- ~~Check around int -> double/float casts~~ we still have bugs even if we did this?
 - Check around Line 125 in net.minecraft.client.multiplayer.MultiPlayerGameMode
 
 ## Things I noticed
