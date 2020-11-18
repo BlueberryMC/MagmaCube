@@ -35,8 +35,7 @@ Based on MC 1.16.4 currently.
 | server | Some time after loading a world, StackOverflowError will be thrown on IOWorker | |
 
 ## Todo
-- ~~Check around int -> double/float casts~~ we still have bugs even if we did this?
-- Check around Line 125 in net.minecraft.client.multiplayer.MultiPlayerGameMode
+- Check broken maths (like bit operations, missing `~` or type issue)
 
 ## Things I noticed
 - I think we can comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
