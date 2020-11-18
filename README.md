@@ -24,9 +24,10 @@ Based on MC 1.16.4 currently.
 | client | Some blocks shows corrupted textures but works completely fine on item (both gui and item entity) | ModelBlockRenderer? |
 | client | Some specific player animations does not stay (elytra and running) | |
 | client/server | Missing collision checks with non-solid blocks | Block, Shapes, AABB |
-| client | Some parts of blocks are transparent | LevelRenderer#renderShape? |
+| client | Some parts of blocks are transparent when there is carpet, snow on the side of the block | don't know where to check |
 | client | Does not render hidden blocks (e.g. block hidden under the chest) | |
-| client | Broken skins on multiplayer? (renders as alex, or steve. single player works fine) | |
+| client | Can't interact with anvil | BlockGetter#clipWithInteractionOverride, VoxelShape#clip(Vec3, Vec3, BlockPos) |
+| client | Able to place blocks inside of the player | |
 | client | Sometimes Minecraft hangs while updating lighting (light update taking forever) | see below |
 | client | Joining some server causes light update hang | Fix infinite loop in net.minecraft.world.level.lighting.DynamicGraphMinFixedPoint#176 |
 | server | Some chunk section becomes corrupted if chunk section contains some block entity | |
