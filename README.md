@@ -19,24 +19,20 @@ Based on MC 1.16.4 currently.
 - Do not redistribute the jar file, without any exception. It is against the Mojang's ToS.
 
 ## Bugs
-| issue | things to check |
-| ---- | ---- |
-| world (chunk) generation is trash | check ChunkGenerator, NoiseBasedChunkGenerator |
-| Chunk section sometimes disappear? (and comes back after) | |
-| Some textures (blocks) are bugged | |
-| There are blocks that can't pass through even if it's spectator mode | |
-| Blocks are disappearing | Check around block interaction, almost all invocation of Level#setBlock and PacketListener seems not related |
-| Some specific player animations does not stay (elytra and running) | |
-| Broken collision with non-solid blocks | |
-| Some parts of blocks are transparent | LevelRenderer#renderShape? |
-| Does not render hidden blocks (e.g. block hidden under the chest) | |
-| Broken skins on multiplayer? (renders as alex, or steve. single player works fine) | |
-| Can't break/place blocks (purely visual) | see below |
-| Does not render the changed blocks | check MultiPlayerGameMode |
-| Sometimes Minecraft hangs while updating lighting (light update taking forever) | see below |
-| Joining some server causes light update hang | fixed temporarily in net.minecraft.world.level.lighting.DynamicGraphMinFixedPoint#176 |
-| Block update (notify) is messed up | |
-| Cannot create a world | visibleChunkMap in ChunkMap |
+| side | issue | things to check |
+| ---- | ---- | ---- |
+| client | Some blocks shows corrupted textures but works completely fine on item (both gui and item entity) | ModelBlockRenderer? |
+| client | Some specific player animations does not stay (elytra and running) | |
+| client/server | Missing collision checks with non-solid blocks | Block, Shapes, AABB |
+| client | Some parts of blocks are transparent | LevelRenderer#renderShape? |
+| client | Does not render hidden blocks (e.g. block hidden under the chest) | |
+| client | Broken skins on multiplayer? (renders as alex, or steve. single player works fine) | |
+| client | Sometimes Minecraft hangs while updating lighting (light update taking forever) | see below |
+| client | Joining some server causes light update hang | Fix infinite loop in net.minecraft.world.level.lighting.DynamicGraphMinFixedPoint#176 |
+| server | Some chunk section becomes corrupted if chunk section contains some block entity | |
+| client | ArrayIndexOutOfBoundsException when opening enchanting table | |
+| server | Broken Pathfinder | |
+| server | Some time after loading a world, StackOverflowError will be thrown on IOWorker | |
 
 ## Todo
 - ~~Check around int -> double/float casts~~ we still have bugs even if we did this?
