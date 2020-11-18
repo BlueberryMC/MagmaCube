@@ -28,9 +28,9 @@ Based on MC 1.16.4 currently.
 | Blocks are disappearing | Check around block interaction, almost all invocation of Level#setBlock and PacketListener seems not related |
 | Some specific player animations does not stay (elytra and running) | |
 | Broken collision with non-solid blocks | |
-| Some parts of blocks are transparent | LevelRenderer#renderVoxelShape? |
+| Some parts of blocks are transparent | LevelRenderer#renderShape? |
 | Does not render hidden blocks (e.g. block hidden under the chest) | |
-| Broken skins? (renders as alex, or steve even if logged in with valid access token) | |
+| Broken skins on multiplayer? (renders as alex, or steve. single player works fine) | |
 | Can't break/place blocks (purely visual) | see below |
 | Does not render the changed blocks | check MultiPlayerGameMode |
 | Sometimes Minecraft hangs while updating lighting (light update taking forever) | see below |
