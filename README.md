@@ -33,6 +33,7 @@ Based on MC 1.16.4 currently.
 | client | ArrayIndexOutOfBoundsException when opening enchanting table | |
 | server | Broken Pathfinder | |
 | server | Some time after loading a world, StackOverflowError will be thrown on IOWorker | |
+| server | server is very laggy | probably caused by broken Pathfinder? |
 
 ## Todo
 - Check broken maths (like bit operations, missing `~` or type issue)
