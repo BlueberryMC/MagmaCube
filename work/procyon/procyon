@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-#
-# Launcher script for the Procyon Java decompiler
-#
-basedir=`pwd -P`
-procyondir="$basedir/work/procyon"
-CLASSPATH=$procyondir/jcommander.jar:$procyondir/procyon-core.jar:$procyondir/procyon-compilertools.jar:$procyondir/procyon-expressions.jar:$procyondir/procyon-reflection.jar:$procyondir/procyon-decompiler.jar
-java -cp $CLASSPATH com.strobel.decompiler.DecompilerDriver "$@"

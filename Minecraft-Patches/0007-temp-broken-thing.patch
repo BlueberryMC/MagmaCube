@@ -1,0 +1,76 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: acrylic-style <ilyy@outlook.jp>
+Date: Mon, 11 Jan 2021 04:38:06 +0900
+Subject: [PATCH] [temp] broken thing
+
+
+diff --git a/src/main/java/com/mojang/blaze3d/vertex/VertexFormat.java b/src/main/java/com/mojang/blaze3d/vertex/VertexFormat.java
+index 2570106c1f915361152aa0180aa384a338c72d04..07a9feebc088da607220a9b85b7e4cb6cca3cd22 100644
+--- a/src/main/java/com/mojang/blaze3d/vertex/VertexFormat.java
++++ b/src/main/java/com/mojang/blaze3d/vertex/VertexFormat.java
+@@ -75,10 +75,7 @@ public class VertexFormat {
+       if (!RenderSystem.isOnRenderThread()) {
+          RenderSystem.recordRenderCall(this::clearBufferState);
+       } else {
+-         UnmodifiableIterator var1 = this.getElements().iterator();
+-
+-         while(var1.hasNext()) {
+-            VertexFormatElement vertexFormatElement = (VertexFormatElement)var1.next();
++         for (VertexFormatElement vertexFormatElement : this.getElements()) { // MagmaCube - optimize
+             vertexFormatElement.clearBufferState();
+          }
+ 
+diff --git a/src/main/java/net/minecraft/client/main/Main.java b/src/main/java/net/minecraft/client/main/Main.java
+index b824a752469b86b9aaa7ae6195085ed2f7f1c79c..b5f645b3b8bdaab0f7160630c0c82f538e252a9b 100644
+--- a/src/main/java/net/minecraft/client/main/Main.java
++++ b/src/main/java/net/minecraft/client/main/Main.java
+@@ -36,6 +36,7 @@ public class Main {
+ 
+    // MagmaCube start - decompile error
+    public static void main(String[] args) {
++      org.lwjgl.glfw.GLFW.glfwInit();
+       OptionParser optionparser = new OptionParser();
+       optionparser.allowsUnrecognizedOptions();
+       optionparser.accepts("demo");
+diff --git a/src/main/java/net/minecraft/world/entity/ai/Brain.java b/src/main/java/net/minecraft/world/entity/ai/Brain.java
+index 191fd9722133f8a8c470bf4c398a935648b610a0..6839257084cc09d81425e36848a29fae5d4b7e7b 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/Brain.java
++++ b/src/main/java/net/minecraft/world/entity/ai/Brain.java
+@@ -59,8 +59,8 @@ public class Brain<E extends LivingEntity> {
+    }
+ 
+    public static <E extends LivingEntity> Codec<Brain<E>> codec(final Collection<? extends MemoryModuleType<?>> collection, final Collection<? extends SensorType<? extends Sensor<? super E>>> collection2) {
+-      final MutableObject<Codec<Brain<E>>> mutableObject = new MutableObject();
+-      mutableObject.setValue((new MapCodec<Brain<E>>() {
++      final MutableObject<Codec<Brain<E>>> mutableObjectx = new MutableObject(); // MagmaCube - decompile error
++      mutableObjectx.setValue((new MapCodec<Brain<E>>() { // MagmaCube - decompile error
+          public <T> Stream<T> keys(DynamicOps<T> dynamicOps) {
+             return collection.stream().flatMap((memoryModuleType) -> Util.toStream(memoryModuleType.getCodec().map((codec) -> Registry.MEMORY_MODULE_TYPE.getKey(memoryModuleType)))).map((resourceLocation) -> dynamicOps.createString(resourceLocation.toString()));
+          }
+@@ -73,7 +73,7 @@ public class Brain<E extends LivingEntity> {
+                mutableObject.setValue((mutableObject.getValue()).apply2(Builder::add, dataResult2)); // MagmaCube - decompile error
+             });
+             ImmutableList<Brain.MemoryValue<?>> immutableList = (ImmutableList)(mutableObject.getValue()).resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of); // MagmaCube - decompile error
+-            return DataResult.success(new Brain(collection, collection2, immutableList, mutableObject::getValue));
++            return DataResult.success(new Brain<>(collection, collection2, immutableList, mutableObjectx::getValue)); // MagmaCube - decompile error
+          }
+ 
+          private <T, U> DataResult<Brain.MemoryValue<U>> captureRead(MemoryModuleType<U> memoryModuleType, DynamicOps<T> dynamicOps, T object) {
+@@ -85,7 +85,7 @@ public class Brain<E extends LivingEntity> {
+             return recordBuilder;
+          }
+       }).fieldOf("memories").codec());
+-      return (Codec)mutableObject.getValue();
++      return (Codec)mutableObjectx.getValue();
+    }
+ 
+    public Brain(Collection<? extends MemoryModuleType<?>> collection, Collection<? extends SensorType<? extends Sensor<? super E>>> collection2, ImmutableList<Brain.MemoryValue<?>> immutableList, Supplier<Codec<Brain<E>>> supplier) {
+@@ -115,7 +115,7 @@ public class Brain<E extends LivingEntity> {
+    }
+ 
+    public <T> DataResult<T> serializeStart(DynamicOps<T> dynamicOps) {
+-      return ((Codec)this.codec.get()).encodeStart(dynamicOps, this);
++      return this.codec.get().encodeStart(dynamicOps, this); // MagmaCube - decompile error
+    }
+ 
+    private Stream<Brain.MemoryValue<?>> memories() {

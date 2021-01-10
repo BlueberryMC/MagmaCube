@@ -22,6 +22,7 @@ else
   $apply "$basedir/Minecraft-Patches/"*.patch
 fi
 if [ "$?" != "0" ]; then
+  sleep 1s
   echo "  Something did not apply cleanly to Minecraft."
   echo "  Please review above details and finish the apply then"
   echo "  save the changes with rebuildPatches.sh"

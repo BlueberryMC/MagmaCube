@@ -1,0 +1,71 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: acrylic-style <ilyy@outlook.jp>
+Date: Mon, 11 Jan 2021 03:32:09 +0900
+Subject: [PATCH] magmacube > vanilla!
+
+
+diff --git a/src/main/java/net/minecraft/CrashReport.java b/src/main/java/net/minecraft/CrashReport.java
+index 760865f2a44dba163bc760a1d030b769b0a5f534..be7b9f64269553712f5f3bef70989b7e08911e0f 100644
+--- a/src/main/java/net/minecraft/CrashReport.java
++++ b/src/main/java/net/minecraft/CrashReport.java
+@@ -35,6 +35,7 @@ public class CrashReport {
+    }
+ 
+    private void initDetails() {
++      this.systemDetails.setDetail("MagmaCube Version", () -> ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion); // MagmaCube
+       this.systemDetails.setDetail("Minecraft Version", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getName()));
+       this.systemDetails.setDetail("Minecraft Version ID", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getId()));
+       this.systemDetails.setDetail("Operating System", (CrashReportDetail<String>)(() -> System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version")));
+diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
+index 92bb4347a5580feade847e4e1eca95d2010965c1..c16627f8c11309e0c576ca4829138eab3ae74463 100644
+--- a/src/main/java/net/minecraft/DetectedVersion.java
++++ b/src/main/java/net/minecraft/DetectedVersion.java
+@@ -24,6 +24,7 @@ public class DetectedVersion implements GameVersion {
+    private final int packVersion;
+    private final Date buildTime;
+    private final String releaseTarget;
++   @javax.annotation.Nullable public final String magmaCubeVersion; // MagmaCube
+ 
+    private DetectedVersion() {
+       this.id = UUID.randomUUID().toString().replaceAll("-", "");
+@@ -34,6 +35,7 @@ public class DetectedVersion implements GameVersion {
+       this.packVersion = 6;
+       this.buildTime = new Date();
+       this.releaseTarget = "1.16.4";
++      this.magmaCubeVersion = "debug"; // MagmaCube
+    }
+ 
+    private DetectedVersion(JsonObject jsonObject) {
+@@ -45,6 +47,7 @@ public class DetectedVersion implements GameVersion {
+       this.protocolVersion = GsonHelper.getAsInt(jsonObject, "protocol_version");
+       this.packVersion = GsonHelper.getAsInt(jsonObject, "pack_version");
+       this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(jsonObject, "build_time")).toInstant());
++      this.magmaCubeVersion = jsonObject.has("magmacube_version") ? GsonHelper.getAsString(jsonObject, "magmacube_version") : "debug"; // MagmaCube
+    }
+ 
+    public static GameVersion tryDetectVersion() {
+diff --git a/src/main/java/net/minecraft/client/ClientBrandRetriever.java b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
+index 1b2cf23c6f943151d84093a3f837d36cccbeb493..4d80e4054f8436bd8fd1af85a8121a70304a256f 100644
+--- a/src/main/java/net/minecraft/client/ClientBrandRetriever.java
++++ b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
+@@ -2,6 +2,6 @@ package net.minecraft.client;
+ 
+ public class ClientBrandRetriever {
+    public static String getClientModName() {
+-      return "vanilla";
++      return "magmacube"; // MagmaCube > vanilla!
+    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
+index 1ff81105f20e2ee1198567b614f5b24c601c246f..fc9ddc6ef836797a921822c2e61e37c4407e3ea5 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
++++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
+@@ -238,6 +238,7 @@ public class TitleScreen extends Screen {
+             s = s + I18n.get("menu.modded");
+          }
+ 
++         drawString(poseStack, this.font, "MagmaCube " + ((net.minecraft.DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion, 2, this.height - 20, 0xFFFFFF | i6); // MagmaCube
+          drawString(poseStack, this.font, s, 2, this.height - 10, 16777215 | i6);
+          drawString(poseStack, this.font, "Copyright Mojang AB. Do not distribute!", this.copyrightX, this.height - 10, 16777215 | i6);
+          if (i > this.copyrightX && i < this.copyrightX + this.copyrightWidth && i2 > this.height - 10 && i2 < this.height) {

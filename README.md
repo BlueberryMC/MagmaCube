@@ -39,12 +39,16 @@ Based on MC 1.16.4 currently.
 | Cannot create a world | visibleChunkMap in ChunkMap |
 
 ## Todo
-- ~~Check around int -> double/float casts~~ we still have bugs even if we did this?
 - Check around Line 125 in net.minecraft.client.multiplayer.MultiPlayerGameMode
+- rename "Invalid" to "Invalid \[enum name]" in switch in DebugScreenOverlay#getGameInformation
 
 ## Things I noticed
-- I think we can comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
-- We can write Line 258 at `net.minecraft.client.gui.screens.TitleScreen` to display custom title text
+- Comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
+- Write Line 258 at `net.minecraft.client.gui.screens.TitleScreen` to display custom title text
+- Modify player name tag with `PlayerRenderer#renderNameTag`
+- enable debug renders at DebugRenderer
+- PlayerTabOverlay to modify how tab renders on multiplayer
+- what are private final fields on net.minecraft.server.network.TextFilterClient?
 
 ----
 

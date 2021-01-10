@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: acrylic-style <ilyy@outlook.jp>
+Date: Mon, 11 Jan 2021 00:18:37 +0900
+Subject: [PATCH] Add DebugMain class
+
+
+diff --git a/src/main/java/magmacube/DebugMain.java b/src/main/java/magmacube/DebugMain.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..be5bfeed686ea2114a96edb21e12998ed86a3b13
+--- /dev/null
++++ b/src/main/java/magmacube/DebugMain.java
+@@ -0,0 +1,11 @@
++package magmacube;
++
++import net.minecraft.SharedConstants;
++import net.minecraft.client.main.Main;
++
++public class DebugMain {
++    public static void main(String[] args) {
++        SharedConstants.IS_RUNNING_IN_IDE = true;
++        Main.main(args);
++    }
++}

@@ -1,12 +1,28 @@
+# garbages
 .idea/
 *.iml
 dependency-reduced-pom.xml
+
+# minecraft things (compiled files and decompiled files)
 work/Minecraft/
+
+# decompiler (no longer used though)
 work/decompiler/
+
+# minecraft source tree
 /Minecraft/src/*
 /Minecraft/
+
+# maven dirs
 /Minecraft/target/
 target/
 /target/
+
+# test client dir
 work/testClient/
+
+# minecraft logs
 /logs/
+
+# jvm crash log
+hs_err_pid*.log

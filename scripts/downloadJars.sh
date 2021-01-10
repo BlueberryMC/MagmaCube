@@ -1,18 +1,12 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-procyondir="$basedir/work/procyon"
-CLASSPATH=$CLASSPATH:$procyondir/jcommander.jar:$procyondir/procyon-core.jar:$procyondir/procyon-compilertools.jar:$procyondir/procyon-expressions.jar:$procyondir/procyon-reflection.jar:$procyondir/procyon-decompiler.jar
 clientJarUrl="https://launcher.mojang.com/v1/objects/1952d94a0784e7abda230aae6a1e8fc0522dba99/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
 clientMappingUrl="https://launcher.mojang.com/v1/objects/0837de813d1a6b67e23da3c520a84e872c8d2f0e/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
-clientRemapped2JarPath="$basedir"/work/Minecraft/$version/client-remapped2.jar
-decompilerUrl="https://github.com/leibnitz27/cfr/releases/download/0.150/cfr-0.150.jar"
-decompilerPath="$basedir"/work/decompiler/cfr.jar
-decompilerBin="$basedir"/work/decompiler/cfr.jar
+decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.478.18.jar
 decompOutput="$basedir/work/Minecraft/$version/source"
-decompOutput2="$basedir/work/Minecraft/$version/imports"
 decompBin2="$basedir/work/procyon/procyon"
 rm -rf "$basedir/Minecraft/src/main"
 rm -rf "$basedir/work/Minecraft/$version/source"
@@ -31,14 +25,8 @@ if [ $? != 0 ]; then
   echo "Could not download client mapping, please check for errors above, fix it, then run again."
   exit 1
 fi
-echo "Downloading decompiler..."
-curl -L "$decompilerUrl" --output "$decompilerPath"
-if [ $? != 0 ]; then
-  echo "Could not download decompiler, please check for errors above, fix it, then run again."
-  exit 1
-fi
 echo "Applying mapping"
-"$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath"
+"$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output-name="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath"
 echo "Unpacking jar..."
 rm -rf "$basedir/work/Minecraft/$version/unpacked"
 mkdir -p "$basedir/work/Minecraft/$version/unpacked"
@@ -49,15 +37,11 @@ echo "Main-Class: net.minecraft.client.Main" >> "$basedir/work/Minecraft/$versio
 echo "" >> "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
 rm "$basedir/work/Minecraft/$version/unpacked/META-INF/MOJANGCS.RSA"
 rm "$basedir/work/Minecraft/$version/unpacked/META-INF/MOJANGCS.SF"
-echo "Creating jar..."
-jar cf "$clientRemapped2JarPath" "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF" .
 cd "$basedir" || exit 1
 echo "Decompiling the remapped jar..."
 rm -rf "$decompOutput"
-rm -rf "$decompOutput2"
-java -Xmx4G -jar "$decompilerBin" "$clientRemapped2JarPath" --outputdir "$decompOutput2" &
-$decompBin2 -o "$decompOutput" "$clientRemapped2JarPath" &
+mkdir -p "$decompOutput"
+java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput" &
 wait
-$basedir/scripts/importFiles.sh
 $basedir/scripts/postDownload.sh
 echo "  Downloaded the client jar successfully"
