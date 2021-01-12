@@ -318,6 +318,28 @@ index a21d09cec968649392df8a327475020b7a495442..61ccc3e98a45e7daf42d09ca09a5cd55
           }
        }).start();
     }
+diff --git a/src/main/java/net/minecraft/ChatFormatting.java b/src/main/java/net/minecraft/ChatFormatting.java
+index 5cb353e7473ecadd9528b05d87d6817fdfaa289c..5d288fbe435dcb9b49f071270a491164d6d22de4 100644
+--- a/src/main/java/net/minecraft/ChatFormatting.java
++++ b/src/main/java/net/minecraft/ChatFormatting.java
+@@ -35,7 +35,7 @@ public enum ChatFormatting {
+    RESET("RESET", 'r', -1, (Integer)null);
+ 
+    private static final Map<String, ChatFormatting> FORMATTING_BY_NAME = (Map)Arrays.stream(values()).collect(Collectors.toMap((chatFormatting) -> cleanName(chatFormatting.name), (chatFormatting) -> chatFormatting));
+-   private static final Pattern STRIP_FORMATTING_PATTERN = Pattern.compile("(?i)ﾂｧ[0-9A-FK-OR]");
++   private static final Pattern STRIP_FORMATTING_PATTERN = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
+    private final String name;
+    private final char code;
+    private final boolean isFormat;
+@@ -62,7 +62,7 @@ public enum ChatFormatting {
+       this.isFormat = flag;
+       this.id = i;
+       this.color = integer;
+-      this.toString = "ﾂｧ" + c;
++      this.toString = "\u00a7" + c;
+    }
+ 
+    public int getId() {
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
 index 21e729e2f1d89a5e8aa8ce82d3adb7519d8f806d..21a7a6e5d0279928c01364efee8b520a67f8498b 100644
 --- a/src/main/java/net/minecraft/Util.java
@@ -838,6 +860,19 @@ index db8abcd271eaaf6c717cfdbe3459db9b517a3635..913a0304dbc6c48e07328728268985ca
                       this.minecraft.setScreen((Screen)null);
                    }, new TranslatableComponent("multiplayer.texturePrompt.line1"), new TranslatableComponent("multiplayer.texturePrompt.line2"))));
              }
+diff --git a/src/main/java/net/minecraft/client/multiplayer/ServerStatusPinger.java b/src/main/java/net/minecraft/client/multiplayer/ServerStatusPinger.java
+index 21eb0d00c773306d6f5cfc7aeadd50e755e9d44a..be7aeb31fa0ea4fb4d0020107cfb306279fe6579 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/ServerStatusPinger.java
++++ b/src/main/java/net/minecraft/client/multiplayer/ServerStatusPinger.java
+@@ -197,7 +197,7 @@ public class ServerStatusPinger {
+                   if (s == 255) {
+                      String s2 = new String(byteBuf.readBytes(byteBuf.readShort() * 2).array(), StandardCharsets.UTF_16BE);
+                      String[] strings = (String[])Iterables.toArray(ServerStatusPinger.SPLITTER.split(s2), String.class);
+-                     if ("ﾂｧ1".equals(strings[0])) {
++                     if ("\u00a71".equals(strings[0])) {
+                         int i = Mth.getInt(strings[1], 0);
+                         String s3 = strings[2];
+                         String s4 = strings[3];
 diff --git a/src/main/java/net/minecraft/client/renderer/EffectInstance.java b/src/main/java/net/minecraft/client/renderer/EffectInstance.java
 index 9df21b0a3024898a64c359c2ce52ed3c1007f315..842da4d2b78cc2cc58a84ad6f68bba1f9eaa9d05 100644
 --- a/src/main/java/net/minecraft/client/renderer/EffectInstance.java
@@ -2252,6 +2287,37 @@ index 871755edc0f37226f9a4e1577cc617c6abc606a9..b0867baf435be943d9e632cc6515344a
        }
     }
  
+diff --git a/src/main/java/net/minecraft/server/network/LegacyQueryHandler.java b/src/main/java/net/minecraft/server/network/LegacyQueryHandler.java
+index adf216b512867283b9d6a294239c8eda2b2bfaa1..6267078cefa27e8a2f2e4dbc35137584734e6fac 100644
+--- a/src/main/java/net/minecraft/server/network/LegacyQueryHandler.java
++++ b/src/main/java/net/minecraft/server/network/LegacyQueryHandler.java
+@@ -32,7 +32,7 @@ public class LegacyQueryHandler extends ChannelInboundHandlerAdapter {
+             switch(i) {
+             case 0:
+                LOGGER.debug("Ping: (<1.3.x) from {}:{}", inetSocketAddress.getAddress(), inetSocketAddress.getPort());
+-               String s = String.format("%sﾂｧ%dﾂｧ%d", minecraftServer.getMotd(), minecraftServer.getPlayerCount(), minecraftServer.getMaxPlayers());
++               String s = String.format("%s\u00a7%d\u00a7%d", minecraftServer.getMotd(), minecraftServer.getPlayerCount(), minecraftServer.getMaxPlayers());
+                this.sendFlushAndClose(channelHandlerContext, this.createReply(s));
+                break;
+             case 1:
+@@ -41,7 +41,7 @@ public class LegacyQueryHandler extends ChannelInboundHandlerAdapter {
+                }
+ 
+                LOGGER.debug("Ping: (1.4-1.5.x) from {}:{}", inetSocketAddress.getAddress(), inetSocketAddress.getPort());
+-               String s2 = String.format("ﾂｧ1\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftServer.getServerVersion(), minecraftServer.getMotd(), minecraftServer.getPlayerCount(), minecraftServer.getMaxPlayers());
++               String s2 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftServer.getServerVersion(), minecraftServer.getMotd(), minecraftServer.getPlayerCount(), minecraftServer.getMaxPlayers());
+                this.sendFlushAndClose(channelHandlerContext, this.createReply(s2));
+                break;
+             default:
+@@ -58,7 +58,7 @@ public class LegacyQueryHandler extends ChannelInboundHandlerAdapter {
+                }
+ 
+                LOGGER.debug("Ping: (1.6) from {}:{}", inetSocketAddress.getAddress(), inetSocketAddress.getPort());
+-               String s3 = String.format("ﾂｧ1\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftServer.getServerVersion(), minecraftServer.getMotd(), minecraftServer.getPlayerCount(), minecraftServer.getMaxPlayers());
++               String s3 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftServer.getServerVersion(), minecraftServer.getMotd(), minecraftServer.getPlayerCount(), minecraftServer.getMaxPlayers());
+                ByteBuf byteBuf2 = this.createReply(s3);
+ 
+                try {
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 index 734c87961b67cae94fec7cb340ebee3b35e65ebb..c2ce34609f594889dfb431908597fee83627d4c1 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
