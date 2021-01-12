@@ -21,3 +21,38 @@ index 0000000000000000000000000000000000000000..be5bfeed686ea2114a96edb21e12998e
 +        Main.main(args);
 +    }
 +}
+diff --git a/src/main/resources/log4j2-debug.xml b/src/main/resources/log4j2-debug.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000..aea01980678d1a4f74982b0c08f42456d557b124
+--- /dev/null
++++ b/src/main/resources/log4j2-debug.xml
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Configuration status="WARN" packages="com.mojang.util">
++    <Appenders>
++        <Console name="SysOut" target="SYSTEM_OUT">
++            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
++        </Console>
++        <Queue name="ServerGuiConsole">
++            <PatternLayout pattern="[%d{HH:mm:ss} %level]: %msg%n" />
++        </Queue>
++        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
++            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
++            <Policies>
++                <TimeBasedTriggeringPolicy />
++                <OnStartupTriggeringPolicy />
++            </Policies>
++        </RollingRandomAccessFile>
++    </Appenders>
++    <Loggers>
++        <Root level="debug">
++            <filters>
++                <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
++            </filters>
++            <AppenderRef ref="SysOut"/>
++            <AppenderRef ref="File"/>
++            <AppenderRef ref="ServerGuiConsole"/>
++        </Root>
++    </Loggers>
++</Configuration>
+\ No newline at end of file

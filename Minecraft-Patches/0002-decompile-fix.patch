@@ -187,7 +187,7 @@ index fd0292d7631b8444cca738242ffae9da5c2f3faf..7bb0dc4033979bbebb5f9c9531d959ac
  }
 \ No newline at end of file
 diff --git a/src/main/java/com/mojang/blaze3d/vertex/VertexFormatElement.java b/src/main/java/com/mojang/blaze3d/vertex/VertexFormatElement.java
-index f2b288c356f05249f449c11207d5aef0c9dc69a7..751a3235bb15a07b67ab9a6d092ad79995f14a25 100644
+index f2b288c356f05249f449c11207d5aef0c9dc69a7..53aa202668dcae5181e3dea79182f78240ccbb49 100644
 --- a/src/main/java/com/mojang/blaze3d/vertex/VertexFormatElement.java
 +++ b/src/main/java/com/mojang/blaze3d/vertex/VertexFormatElement.java
 @@ -134,12 +134,12 @@ public class VertexFormatElement {
@@ -201,7 +201,7 @@ index f2b288c356f05249f449c11207d5aef0c9dc69a7..751a3235bb15a07b67ab9a6d092ad799
           GlStateManager._glClientActiveTexture(33984);
        }, (i) -> {
 -         GlStateManager._glClientActiveTexture('闢�' + i);
-+         GlStateManager._glClientActiveTexture('\u04c0' + i); // MagmaCube - decompile error
++         GlStateManager._glClientActiveTexture('\u84c0' + i); // MagmaCube - decompile error
           GlStateManager._disableClientState(32888);
           GlStateManager._glClientActiveTexture(33984);
        }),
@@ -595,10 +595,10 @@ index 420642fdf08a6e277303901072c903d0bb51422a..dee8dee1ac31844e6d8ea4a7c97c6632
                 this.settings = worldPreset.create(this.registryHolder, this.settings.seed(), this.settings.generateFeatures(), this.settings.generateBonusChest());
                 if (this.settings.isDebug() && !Screen.hasShiftDown()) {
 diff --git a/src/main/java/net/minecraft/client/main/Main.java b/src/main/java/net/minecraft/client/main/Main.java
-index 4956fea4717b3bd88fa4fddb5bd232b7e301860e..b824a752469b86b9aaa7ae6195085ed2f7f1c79c 100644
+index 4956fea4717b3bd88fa4fddb5bd232b7e301860e..70cdc7f9d116e43ad9b0769291401e6ed09314c7 100644
 --- a/src/main/java/net/minecraft/client/main/Main.java
 +++ b/src/main/java/net/minecraft/client/main/Main.java
-@@ -1,29 +1,197 @@
+@@ -1,29 +1,198 @@
  package net.minecraft.client.main;
  
  import java.io.File;
@@ -639,6 +639,7 @@ index 4956fea4717b3bd88fa4fddb5bd232b7e301860e..b824a752469b86b9aaa7ae6195085ed2
 -      // $FF: Couldn't be decompiled
 +   // MagmaCube start - decompile error
 +   public static void main(String[] args) {
++      if (net.minecraft.SharedConstants.IS_RUNNING_IN_IDE) org.lwjgl.glfw.GLFW.glfwInit(); // MagmaCube - lwjgl debug agent causes glGetError to crash when we didn't call glfwInit
 +      OptionParser optionparser = new OptionParser();
 +      optionparser.allowsUnrecognizedOptions();
 +      optionparser.accepts("demo");
@@ -1115,7 +1116,7 @@ index 2cd0cdd1969b24e96ede84f536821b4a03fae39f..d1fe9e2086235487202fb8598137de17
  
                 });
 diff --git a/src/main/java/net/minecraft/commands/Commands.java b/src/main/java/net/minecraft/commands/Commands.java
-index 74da28fafeaad46fbb06b81f02a5369908746e92..220bdab595b8020e81a69bf046355698f3ded05a 100644
+index 74da28fafeaad46fbb06b81f02a5369908746e92..e3abd92466e682b3393e100426fe47746edb1925 100644
 --- a/src/main/java/net/minecraft/commands/Commands.java
 +++ b/src/main/java/net/minecraft/commands/Commands.java
 @@ -260,7 +260,7 @@ public class Commands {
@@ -1123,7 +1124,7 @@ index 74da28fafeaad46fbb06b81f02a5369908746e92..220bdab595b8020e81a69bf046355698
        for(CommandNode<CommandSourceStack> commandNode3 : commandNode.getChildren()) {
           if (commandNode3.canUse(commandSourceStack)) {
 -            ArgumentBuilder<SharedSuggestionProvider, ?> argumentBuilder = commandNode3.createBuilder();
-+            ArgumentBuilder<CommandSourceStack, ?> argumentBuilder = commandNode3.createBuilder(); // MagmaCube - type
++            ArgumentBuilder<SharedSuggestionProvider, ?> argumentBuilder = (ArgumentBuilder) commandNode3.createBuilder(); // MagmaCube - type
              argumentBuilder.requires((sharedSuggestionProvider) -> true);
              if (argumentBuilder.getCommand() != null) {
                 argumentBuilder.executes((commandContext) -> 0);
@@ -1259,6 +1260,52 @@ index b9e663b20095957e5a39568882183d5920807f6f..4c8bcb25d3f400dc2ed6a91f35b62ba0
        }
     }
  
+diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
+index fd24017206b31a1a26b1a9b02edf470bff97c497..4ee2f6ec182fd735411beb3d56243c544ddce10f 100644
+--- a/src/main/java/net/minecraft/core/BlockPos.java
++++ b/src/main/java/net/minecraft/core/BlockPos.java
+@@ -259,13 +259,15 @@ public class BlockPos extends Vec3i {
+                         this.y = -this.maxY;
+                      }
+ 
+-                     int i = this.x;
+-                     int i2 = this.y;
+-                     int i3 = this.currentDepth - Math.abs(i) - Math.abs(i2);
+-                     if (i3 <= i3) {
+-                        this.zMirror = i3 != 0;
+-                        blockPos = this.cursor.set(i5 + i, i6 + i2, i7 + i3);
++                     // MagmaCube start - decompile error
++                     int ix = this.x;
++                     int i2x = this.y;
++                     int i3x = this.currentDepth - Math.abs(ix) - Math.abs(i2x);
++                     if (i3x <= i3) {
++                        this.zMirror = i3x != 0;
++                        blockPos = this.cursor.set(i5 + ix, i6 + i2x, i7 + i3x);
+                      }
++                     // MagmaCube end - decompile error
+                   }
+ 
+                   return blockPos;
+@@ -315,12 +317,14 @@ public class BlockPos extends Vec3i {
+                if (this.index == i10) {
+                   return (BlockPos)this.endOfData();
+                } else {
+-                  int i = this.index % i7;
+-                  int i2 = this.index / i7;
+-                  int i3 = i2 % i8;
+-                  int i4 = i2 / i8;
++                  // MagmaCube start - decompile error
++                  int iIn = this.index % i7;
++                  int i2In = this.index / i7;
++                  int i3In = i2In % i8;
++                  int i4In = i2In / i8;
+                   ++this.index;
+-                  return this.cursor.set(i + i, i2 + i3, i3 + i4);
++                  return this.cursor.set(i + iIn, i2 + i3In, i3 + i4In);
++                  // MagmaCube end - decompile error
+                }
+             }
+          };
 diff --git a/src/main/java/net/minecraft/core/NonNullList.java b/src/main/java/net/minecraft/core/NonNullList.java
 index 2fbf20ca2c568a0f1c49d9cd44e94b900a1fbf7f..10b0c4c0e5723db4191c4bb4451432f130de758a 100644
 --- a/src/main/java/net/minecraft/core/NonNullList.java
@@ -2179,6 +2226,19 @@ index 7dbf9e6195cfa9f8f6dcd640a763a11fdbcffb9e..e8cb0100ea4effd23efa906a506363a9
        } catch (Exception var6) {
           return "";
        }
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index bc8c08c69f480411b7300bc48dd7dac7e51444c1..3ee14c544636ec8dc454fa37cb8fcd9bf4688d4f 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -1213,7 +1213,7 @@ public class ServerPlayer extends Player implements ContainerListener {
+    }
+ 
+    public void cancelRemoveEntity(Entity entity) {
+-      this.entitiesToRemove.remove(entity.getId());
++      this.entitiesToRemove.remove(Integer.valueOf(entity.getId())); // MagmaCube - decompile error
+    }
+ 
+    protected void updateInvisibilityStatus() {
 diff --git a/src/main/java/net/minecraft/server/level/Ticket.java b/src/main/java/net/minecraft/server/level/Ticket.java
 index 871755edc0f37226f9a4e1577cc617c6abc606a9..b0867baf435be943d9e632cc6515344a414d3118 100644
 --- a/src/main/java/net/minecraft/server/level/Ticket.java
@@ -3952,9 +4012,20 @@ index 2847b0b6757c63714e4237553de52f5f81833b57..1e93184f74ab9393ce0b51334dced468
  
     static {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/Brain.java b/src/main/java/net/minecraft/world/entity/ai/Brain.java
-index b381c4a64b608276d645799802a46cda3c70fefc..191fd9722133f8a8c470bf4c398a935648b610a0 100644
+index b381c4a64b608276d645799802a46cda3c70fefc..6839257084cc09d81425e36848a29fae5d4b7e7b 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/Brain.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/Brain.java
+@@ -59,8 +59,8 @@ public class Brain<E extends LivingEntity> {
+    }
+ 
+    public static <E extends LivingEntity> Codec<Brain<E>> codec(final Collection<? extends MemoryModuleType<?>> collection, final Collection<? extends SensorType<? extends Sensor<? super E>>> collection2) {
+-      final MutableObject<Codec<Brain<E>>> mutableObject = new MutableObject();
+-      mutableObject.setValue((new MapCodec<Brain<E>>() {
++      final MutableObject<Codec<Brain<E>>> mutableObjectx = new MutableObject(); // MagmaCube - decompile error
++      mutableObjectx.setValue((new MapCodec<Brain<E>>() { // MagmaCube - decompile error
+          public <T> Stream<T> keys(DynamicOps<T> dynamicOps) {
+             return collection.stream().flatMap((memoryModuleType) -> Util.toStream(memoryModuleType.getCodec().map((codec) -> Registry.MEMORY_MODULE_TYPE.getKey(memoryModuleType)))).map((resourceLocation) -> dynamicOps.createString(resourceLocation.toString()));
+          }
 @@ -70,14 +70,14 @@ public class Brain<E extends LivingEntity> {
              mapLike.entries().forEach((pair) -> {
                 DataResult<MemoryModuleType<?>> dataResult = Registry.MEMORY_MODULE_TYPE.parse(dynamicOps, pair.getFirst());
@@ -3963,8 +4034,9 @@ index b381c4a64b608276d645799802a46cda3c70fefc..191fd9722133f8a8c470bf4c398a9356
 +               mutableObject.setValue((mutableObject.getValue()).apply2(Builder::add, dataResult2)); // MagmaCube - decompile error
              });
 -            ImmutableList<Brain.MemoryValue<?>> immutableList = (ImmutableList)((DataResult)mutableObject.getValue()).resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of);
+-            return DataResult.success(new Brain(collection, collection2, immutableList, mutableObject::getValue));
 +            ImmutableList<Brain.MemoryValue<?>> immutableList = (ImmutableList)(mutableObject.getValue()).resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of); // MagmaCube - decompile error
-             return DataResult.success(new Brain(collection, collection2, immutableList, mutableObject::getValue));
++            return DataResult.success(new Brain<>(collection, collection2, immutableList, mutableObjectx::getValue)); // MagmaCube - decompile error
           }
  
           private <T, U> DataResult<Brain.MemoryValue<U>> captureRead(MemoryModuleType<U> memoryModuleType, DynamicOps<T> dynamicOps, T object) {
@@ -3973,6 +4045,24 @@ index b381c4a64b608276d645799802a46cda3c70fefc..191fd9722133f8a8c470bf4c398a9356
           }
  
           public <T> RecordBuilder<T> encode(Brain<E> brain, DynamicOps<T> dynamicOps, RecordBuilder<T> recordBuilder) {
+@@ -85,7 +85,7 @@ public class Brain<E extends LivingEntity> {
+             return recordBuilder;
+          }
+       }).fieldOf("memories").codec());
+-      return (Codec)mutableObject.getValue();
++      return (Codec)mutableObjectx.getValue();
+    }
+ 
+    public Brain(Collection<? extends MemoryModuleType<?>> collection, Collection<? extends SensorType<? extends Sensor<? super E>>> collection2, ImmutableList<Brain.MemoryValue<?>> immutableList, Supplier<Codec<Brain<E>>> supplier) {
+@@ -115,7 +115,7 @@ public class Brain<E extends LivingEntity> {
+    }
+ 
+    public <T> DataResult<T> serializeStart(DynamicOps<T> dynamicOps) {
+-      return ((Codec)this.codec.get()).encodeStart(dynamicOps, this);
++      return this.codec.get().encodeStart(dynamicOps, this); // MagmaCube - decompile error
+    }
+ 
+    private Stream<Brain.MemoryValue<?>> memories() {
 @@ -154,7 +154,7 @@ public class Brain<E extends LivingEntity> {
     }
  
