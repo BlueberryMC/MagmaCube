@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..5fe4d080892524f152e09f835982a754ef9b6dcc
+index 0000000000000000000000000000000000000000..98a8c81f7f9b80b4b5141215aab0ee6f50b5cbc8
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,370 @@
@@ -26,7 +26,7 @@ index 0000000000000000000000000000000000000000..5fe4d080892524f152e09f835982a754
 +        <lwjgl.version>3.2.2</lwjgl.version>
 +    </properties>
 +
-+    <artifactId>Minecraft</artifactId>
++    <artifactId>minecraft</artifactId>
 +
 +    <build>
 +        <finalName>Minecraft</finalName>
