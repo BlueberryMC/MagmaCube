@@ -6,8 +6,8 @@ clientMappingUrl="https://launcher.mojang.com/v1/objects/0837de813d1a6b67e23da3c
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
 decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.478.18.jar
+quickunzip="$basedir/work/quickunzip/quickunzip.jar"
 decompOutput="$basedir/work/Minecraft/$version/source"
-decompBin2="$basedir/work/procyon/procyon"
 rm -rf "$basedir/Minecraft/src/main"
 rm -rf "$basedir/work/Minecraft/$version/source"
 mkdir -p "$basedir/work/decompiler"
@@ -31,7 +31,7 @@ echo "Unpacking jar..."
 rm -rf "$basedir/work/Minecraft/$version/unpacked"
 mkdir -p "$basedir/work/Minecraft/$version/unpacked"
 cd "$basedir/work/Minecraft/$version/unpacked" || exit 1
-unzip "$clientRemappedJarPath"
+java -Xmx1G -jar "$quickunzip" -q "$clientRemappedJarPath" "$basedir/work/Minecraft/$version/unpacked/"
 echo "Manifest-Version: 1.0" > "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
 echo "Main-Class: net.minecraft.client.Main" >> "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
 echo "" >> "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
@@ -41,7 +41,6 @@ cd "$basedir" || exit 1
 echo "Decompiling the remapped jar..."
 rm -rf "$decompOutput"
 mkdir -p "$decompOutput"
-java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput" &
-wait
+java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput"
 $basedir/scripts/postDownload.sh
 echo "  Downloaded the client jar successfully"
