@@ -24,6 +24,13 @@ Based on MC 1.16.4 currently.
 - PlayerTabOverlay to modify how tab renders on multiplayer
 - what are private final fields on net.minecraft.server.network.TextFilterClient?
 
+## Available properties, environment variables
+Properties can be set via jvm argument `-Dkey=value`.
+
+| property | environment variables | what |
+| --- | --- | --- |
+| `magmacube.ignorePacketError` | `magmacubeIgnorePacketError` | whether to log `Packet xx was larger than I expected` errors, rather than throwing exception then interrupting connection |
+
 ----
 
 See [here](https://github.com/acrylic-style/MagmaCube/blob/master/CONTRIBUTING.md) for more information about building the project.
