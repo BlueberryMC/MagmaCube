@@ -4406,10 +4406,10 @@ index 7d5ae86c13026c802410bfc9b03da8007bd360fd..5abc7381fbc2913f26d0fea76ad0b3e9
  
     final class DistanceTracker extends SectionTracker {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-index 5556726001a8a2b26e76fdad64e6e55c75af116d..51fb3250b949a82ac8f713b01786eb75c9b77bbe 100644
+index b9a0a178d28b081f0f8f9a407994bd1f9d807ffc..1fc33944ff20c35be8479fa0d6d899460f412851 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-@@ -30,7 +30,8 @@ public class PoiSection {
+@@ -31,7 +31,8 @@ public class PoiSection {
     private boolean isValid;
  
     public static Codec<PoiSection> codec(Runnable runnable) {
@@ -4419,7 +4419,7 @@ index 5556726001a8a2b26e76fdad64e6e55c75af116d..51fb3250b949a82ac8f713b01786eb75
     }
  
     public PoiSection(Runnable runnable) {
-@@ -111,7 +112,7 @@ public class PoiSection {
+@@ -117,7 +118,7 @@ public class PoiSection {
        if (!this.isValid) {
           Short2ObjectMap<PoiRecord> short2ObjectMap = new Short2ObjectOpenHashMap(this.records);
           this.clear();
