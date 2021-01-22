@@ -2134,6 +2134,19 @@ index 8ecde56fe60e09a48cd0369b84d37713b9c1c2d1..f296e2335562f56d68d77d19e13b36ea
           });
           Thread thread = new Thread("Server Shutdown Thread") {
              public void run() {
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 3e0154deff227edd4139385b1ad85aa5293cf489..e1886a4c09b23f8ef1a36b661ba552abc37132e9 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -1223,7 +1223,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+    }
+ 
+    public CompletableFuture<Void> reloadResources(Collection<String> collection) {
+-      CompletableFuture<Void> completableFuture = CompletableFuture.supplyAsync(() -> (ImmutableList)collection.stream().map(this.packRepository::getPack).filter(Objects::nonNull).map(Pack::open).collect(ImmutableList.toImmutableList()), this).thenCompose((immutableList) -> ServerResources.loadResources(immutableList, this.registryHolder, this.isDedicatedServer() ? Commands.CommandSelection.DEDICATED : Commands.CommandSelection.INTEGRATED, this.getFunctionCompilationLevel(), this.executor, this)).thenAcceptAsync((serverResources) -> {
++      CompletableFuture<Void> completableFuture = CompletableFuture.supplyAsync(() -> collection.stream().map(this.packRepository::getPack).filter(Objects::nonNull).map(Pack::open).collect(ImmutableList.toImmutableList()), this).thenCompose((immutableList) -> ServerResources.loadResources(immutableList, this.registryHolder, this.isDedicatedServer() ? Commands.CommandSelection.DEDICATED : Commands.CommandSelection.INTEGRATED, this.getFunctionCompilationLevel(), this.executor, this)).thenAcceptAsync((serverResources) -> {
+          this.resources.close();
+          this.resources = serverResources;
+          this.packRepository.setSelected(collection);
 diff --git a/src/main/java/net/minecraft/server/PlayerAdvancements.java b/src/main/java/net/minecraft/server/PlayerAdvancements.java
 index e369bddfa2db79b994d8b3082a31d1b3d696b1d2..8796290fe0f087e4e83d82f4ca576bd233a532ff 100644
 --- a/src/main/java/net/minecraft/server/PlayerAdvancements.java
