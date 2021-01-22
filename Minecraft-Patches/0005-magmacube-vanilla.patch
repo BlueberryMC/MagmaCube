@@ -17,28 +17,28 @@ index 760865f2a44dba163bc760a1d030b769b0a5f534..be7b9f64269553712f5f3bef70989b7e
        this.systemDetails.setDetail("Minecraft Version ID", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getId()));
        this.systemDetails.setDetail("Operating System", (CrashReportDetail<String>)(() -> System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version")));
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 331d87bdb90a2ed5e15d7a8a270fdc6431e10d93..9fad1e18bb72ca633f040e10de76fd6ed5611e67 100644
+index fd49ed5d777ae0030de70a4650127166435aa5f7..5d021ed19b4d3fc25edaf12356692f5453b08eef 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
-@@ -24,6 +24,7 @@ public class DetectedVersion implements GameVersion {
-    private final int packVersion;
+@@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
+    private final int dataPackVersion;
     private final Date buildTime;
     private final String releaseTarget;
 +   @javax.annotation.Nullable public final String magmaCubeVersion; // MagmaCube
  
     private DetectedVersion() {
        this.id = UUID.randomUUID().toString().replaceAll("-", "");
-@@ -34,6 +35,7 @@ public class DetectedVersion implements GameVersion {
-       this.packVersion = 6;
+@@ -37,6 +38,7 @@ public class DetectedVersion implements GameVersion {
+       this.dataPackVersion = 7;
        this.buildTime = new Date();
-       this.releaseTarget = "1.16.5";
+       this.releaseTarget = "1.17";
 +      this.magmaCubeVersion = "debug"; // MagmaCube
     }
  
     private DetectedVersion(JsonObject jsonObject) {
-@@ -45,6 +47,7 @@ public class DetectedVersion implements GameVersion {
-       this.protocolVersion = GsonHelper.getAsInt(jsonObject, "protocol_version");
-       this.packVersion = GsonHelper.getAsInt(jsonObject, "pack_version");
+@@ -50,6 +52,7 @@ public class DetectedVersion implements GameVersion {
+       this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
+       this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
        this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(jsonObject, "build_time")).toInstant());
 +      this.magmaCubeVersion = jsonObject.has("magmacube_version") ? GsonHelper.getAsString(jsonObject, "magmacube_version") : "debug"; // MagmaCube
     }

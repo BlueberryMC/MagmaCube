@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..b180780585b1a4f8ec6583a4a96e228ae3127939
+index 0000000000000000000000000000000000000000..188f05879c6e182c651847b3ddde36c6519307f2
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,370 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..b180780585b1a4f8ec6583a4a96e228a
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>xyz.acrylicstyle.minecraft</groupId>
-+        <version>1.16.5</version>
++        <version>21w03a</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -94,7 +94,7 @@ index 0000000000000000000000000000000000000000..b180780585b1a4f8ec6583a4a96e228a
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>2.0.27</version>
++            <version>2.1.28</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -134,7 +134,7 @@ index 0000000000000000000000000000000000000000..b180780585b1a4f8ec6583a4a96e228a
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>javabridge</artifactId>
-+            <version>1.0.22</version>
++            <version>1.1.23</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.lwjgl</groupId>

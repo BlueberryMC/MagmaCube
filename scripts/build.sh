@@ -2,9 +2,6 @@
 version=""
 basedir=""
 source ./scripts/functions.sh
-WORLD_VERSION=2586
-PROTOCOL_VERSION=754
-PACK_VERSION=6
 
 datetime=$(date +%Y-%m-%dT%T%:z)
 cd ./Minecraft || exit 1
@@ -20,7 +17,10 @@ echo "  \"release_target\": \"$version\"," >> "$version_json"
 echo "  \"magmacube_version\": \"$commit\"," >> "$version_json"
 echo "  \"world_version\": $WORLD_VERSION," >> "$version_json"
 echo "  \"protocol_version\": $PROTOCOL_VERSION," >> "$version_json"
-echo "  \"pack_version\": $PACK_VERSION," >> "$version_json"
+echo "  \"pack_version\": {" >> "$version_json"
+echo "    \"resource\": $RESOURCE_VERSION," >> "$version_json"
+echo "    \"data\": $DATA_VERSION" >> "$version_json"
+echo "  }," >> "$version_json"
 echo "  \"build_time\": \"$datetime\"," >> "$version_json"
 echo "  \"stable\": false" >> "$version_json"
 echo "}" >> "$version_json"
