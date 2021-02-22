@@ -113,7 +113,7 @@
     "url": "https://launchermeta.mojang.com/v1/packages/1e185d112e2ee017330fb83700b5eaa93fb5cdfd/1.16.json"
   },
   "assets": "1.16",
-  "id": "21w03a-deobf",
+  "id": "21w07a-deobf",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -128,7 +128,7 @@
   },
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2021-01-23T10:00:00+00:00",
-  "time": "2021-01-23T10:00:00+00:00",
+  "releaseTime": "2021-02-22T10:00:00+00:00",
+  "time": "2021-02-22T10:00:00+00:00",
   "type": "debug"
 }

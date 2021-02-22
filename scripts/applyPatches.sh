@@ -6,7 +6,7 @@ apply="$git am --3way --ignore-whitespace"
 windows="$([[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]] && echo "true" || echo "false")"
 mkdir -p "$basedir/Minecraft-Patches"
 echo "Resetting Minecraft..."
-cd "$basedir/Minecraft"
+cd "$basedir/Minecraft" || exit 1
 $git init
 $git remote rm upstream > /dev/null 2>&1
 $git remote add upstream "$basedir/work/Minecraft/$version/source" >/dev/null 2>&1

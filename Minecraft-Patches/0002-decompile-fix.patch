@@ -341,7 +341,7 @@ index 5cb353e7473ecadd9528b05d87d6817fdfaa289c..5d288fbe435dcb9b49f071270a491164
  
     public int getId() {
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index f0d2d02ea6668ada460ae0a9a1d4fcfff0472f2b..8592661cc96b519c920520c0fa5472a08ec59849 100644
+index 5070c7c8dba4a8824499c0007d752a670f132e87..1a042df86e31e15e8ecd9057ec70057779255423 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -21,6 +21,7 @@ import java.nio.file.LinkOption;
@@ -352,7 +352,7 @@ index f0d2d02ea6668ada460ae0a9a1d4fcfff0472f2b..8592661cc96b519c920520c0fa5472a0
  import java.time.Instant;
  import java.util.Arrays;
  import java.util.Iterator;
-@@ -279,7 +280,7 @@ public class Util {
+@@ -294,18 +295,22 @@ public class Util {
     }
  
     public static <K> Strategy<K> identityStrategy() {
@@ -361,7 +361,28 @@ index f0d2d02ea6668ada460ae0a9a1d4fcfff0472f2b..8592661cc96b519c920520c0fa5472a0
     }
  
     public static <V> CompletableFuture<List<V>> sequence(List<? extends CompletableFuture<? extends V>> list) {
-@@ -571,7 +572,7 @@ public class Util {
+-      return (CompletableFuture)list.stream().reduce(CompletableFuture.completedFuture(Lists.newArrayList()), (completableFuture, completableFuture2) -> completableFuture2.thenCombine(completableFuture, (object, list) -> {
+-            List<V> list2 = Lists.newArrayListWithCapacity(list.size() + 1);
+-            list2.addAll(list);
++      // MagmaCube start - decompile error
++      return list.stream().reduce(CompletableFuture.completedFuture(Lists.newArrayList()), (completableFuture, completableFuture2) -> completableFuture2.thenCombine(completableFuture, (object, listx) -> {
++            List<V> list2 = Lists.newArrayListWithCapacity(listx.size() + 1);
++            list2.addAll(listx);
++            // MagmaCube end - decompile error
+             list2.add(object);
+             return list2;
+-         }), (completableFuture, completableFuture2) -> completableFuture.thenCombine(completableFuture2, (list, list2) -> {
+-            List<V> list3 = Lists.newArrayListWithCapacity(list.size() + list2.size());
+-            list3.addAll(list);
++         // MagmaCube start - decompile error
++         }), (completableFuture, completableFuture2) -> completableFuture.thenCombine(completableFuture2, (listx, list2) -> {
++            List<V> list3 = Lists.newArrayListWithCapacity(listx.size() + list2.size());
++            list3.addAll(listx);
++            // MagmaCube end - decompile error
+             list3.addAll(list2);
+             return list3;
+          }));
+@@ -600,7 +605,7 @@ public class Util {
  
        public void openUrl(URL uRL) {
           try {
@@ -433,10 +454,10 @@ index 1b1709ac5bebae9ac8e05016de38133159fa9039..5f22be9d4bc7d099cec9a892695bf292
           options.save();
        });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 88803f5f86db29c088dfe3314d3426f97bc83bf6..8f9e803127d6dac54d99d91c7888ae1bcb3a1302 100644
+index 6e5035339f09817ad56e84cc0d137bd0f12a375d..8b2a257c8e71db31767b90ee7d55005110d5899a 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -1996,9 +1996,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -1998,9 +1998,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
        crashReportCategory.setDetail("GL Caps", RenderSystem::getCapsString);
        crashReportCategory.setDetail("Using VBOs", (CrashReportDetail<String>)(() -> "Yes"));
        crashReportCategory.setDetail("Is Modded", (CrashReportDetail<String>)(() -> {
@@ -451,7 +472,7 @@ index 88803f5f86db29c088dfe3314d3426f97bc83bf6..8f9e803127d6dac54d99d91c7888ae1b
           } else {
              return Minecraft.class.getSigners() == null ? "Very likely; Jar signature invalidated" : "Probably not. Jar signature remains and client brand is untouched.";
           }
-@@ -2016,13 +2018,15 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2018,13 +2020,15 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
           crashReportCategory.setDetail("Resource Packs", (CrashReportDetail<String>)(() -> {
              StringBuilder stringBuilder = new StringBuilder();
  
@@ -470,7 +491,7 @@ index 88803f5f86db29c088dfe3314d3426f97bc83bf6..8f9e803127d6dac54d99d91c7888ae1b
                    stringBuilder.append(" (incompatible)");
                 }
              }
-@@ -2408,4 +2412,4 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2449,4 +2453,4 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
           this.serverResources.close();
        }
     }
@@ -500,16 +521,25 @@ index 427c36cd45eab1707f70613e00632dd190e4eeb2..03d6face49824c0cf468b073451ebbde
        options.mainHand = humanoidArm;
        options.broadcastOptions();
 diff --git a/src/main/java/net/minecraft/client/Options.java b/src/main/java/net/minecraft/client/Options.java
-index 992c59361fe00704eea3738d04beee9495b8d9e2..e631044b45e81364ed1bbd80f92e3a2de5162f08 100644
+index 3731cc09b9eba6ee359cf99647d65c4724e2eb87..2e96a6fad5db6d14c1db543ec5f009d4d01fd218 100644
 --- a/src/main/java/net/minecraft/client/Options.java
 +++ b/src/main/java/net/minecraft/client/Options.java
-@@ -200,7 +200,7 @@ public class Options {
+@@ -269,7 +269,7 @@ public class Options {
+       }
+ 
+       for(SoundSource soundSource : SoundSource.values()) {
+-         this.sourceVolumes.computeFloat(soundSource, (soundSource, f) -> fieldAccess.process("soundCategory_" + soundSource.getName(), f != null ? f : 1.0F));
++         this.sourceVolumes.computeFloat(soundSource, (soundSourcex, f) -> fieldAccess.process("soundCategory_" + soundSourcex.getName(), f != null ? f : 1.0F)); // MagmaCube - decompile error
+       }
+ 
+       for(PlayerModelPart playerModelPart : PlayerModelPart.values()) {
+@@ -298,7 +298,7 @@ public class Options {
                 try {
-                   Iterator<String> iterator = OPTION_SPLITTER.split(sx).iterator();
+                   Iterator<String> iterator = OPTION_SPLITTER.split(s).iterator();
                    compoundTag.putString((String)iterator.next(), (String)iterator.next());
 -               } catch (Exception var3) {
-+               } catch (Exception sx2) { // MagmaCube - decompile error
-                   LOGGER.warn("Skipping bad option: {}", sx);
++               } catch (Exception var4) { // MagmaCube - decompile error
+                   LOGGER.warn("Skipping bad option: {}", s);
                 }
  
 diff --git a/src/main/java/net/minecraft/client/gui/Gui.java b/src/main/java/net/minecraft/client/gui/Gui.java
@@ -706,10 +736,10 @@ index bf807e38cea5619381a2c50a0c8d23f915943f20..65d7c0a6aa17a1b22ae0294c85bbf995
           this.settings = worldPreset.create(this.registryHolder, this.settings.seed(), this.settings.generateFeatures(), this.settings.generateBonusChest());
           createWorldScreen.refreshWorldGenSettingsVisibility();
 diff --git a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
-index 7c6b06e211b3a8cba7bdccfe999d61d047d8b7bb..1e855e0de430b1d83c85c851f16f2fd6dada213e 100644
+index ab53dc8cf1b6dd3dbd266ab25194937d0867b7f1..e774d760a54087a48795968568cf7a9c6a90b6e8 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
-@@ -250,13 +250,15 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.W
+@@ -256,13 +256,15 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.W
                 Component component = new TranslatableComponent(s2, this.summary.getWorldVersionName(), SharedConstants.getCurrentVersion().getName());
                 this.minecraft.setScreen(new BackupConfirmScreen(this.screen, (flag, flag2) -> {
                    if (flag) {
@@ -936,10 +966,10 @@ index 4956fea4717b3bd88fa4fddb5bd232b7e301860e..70cdc7f9d116e43ad9b0769291401e6e
  
     @Nullable
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index b44614571c815240c3fd0ae5739b514608989955..73a5919217c026926c01e8c90f665fb3c049b206 100644
+index 550e912abf75e4a18268682afd8e94826c62fb6c..5e06fe19d1b3ffaa2854a711a601b4eeb78d41fc 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -1439,11 +1439,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1418,11 +1418,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
              } else {
                 this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                       this.minecraft.setScreen((Screen)null);
@@ -956,7 +986,7 @@ index b44614571c815240c3fd0ae5739b514608989955..73a5919217c026926c01e8c90f665fb3
  
                          this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
                          this.downloadCallback(this.minecraft.getClientPackSource().downloadAndSelectResourcePack(s, s2));
-@@ -1451,14 +1453,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1430,14 +1432,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
                          this.send(ServerboundResourcePackPacket.Action.DECLINED);
                          if (flag) {
                             this.connection.disconnect(new TranslatableComponent("multiplayer.requiredTexturePrompt.disconnect"));
@@ -1645,13 +1675,13 @@ index 51d14d0cf26d188f8fbb5292617b9882eebdfcfd..ec52d76e9ca5a334569ae5c4ba33deed
                 throw new IllegalStateException("Duplicate loot table " + resourceLocation);
              }
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index 701d7e0d2a1433b6d919c19965be400183a46714..06a4c04b97ac169d90e7e3b0832ce7543da19be8 100644
+index c0e6bebc4f873fbd3e12d322e316de5036822e46..9eab49c96dd63ee8d32e70d26c4fe425d338e297 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-@@ -69,15 +69,19 @@ public class BlockModelGenerators {
+@@ -70,15 +70,19 @@ public class BlockModelGenerators {
     private final Consumer<Item> skippedAutoModelsOutput;
     private final List<Block> nonOrientableTrapdoor = ImmutableList.of(Blocks.OAK_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.IRON_TRAPDOOR);
-    private final List<Block> mirroredFullBlocks = ImmutableList.of(Blocks.STONE);
+    private final List<Block> mirroredFullBlocks = ImmutableList.of(Blocks.STONE, Blocks.GRIMSTONE);
 -   private final Map<Block, TexturedModel> texturedModels = ImmutableMap.builder().put(Blocks.SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.SANDSTONE)).put(Blocks.RED_SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.RED_SANDSTONE)).put(Blocks.SMOOTH_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.SANDSTONE, "_top"))).put(Blocks.SMOOTH_RED_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.RED_SANDSTONE, "_top"))).put(Blocks.CUT_SANDSTONE, TexturedModel.COLUMN.get(Blocks.SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_SANDSTONE)))).put(Blocks.CUT_RED_SANDSTONE, TexturedModel.COLUMN.get(Blocks.RED_SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_RED_SANDSTONE)))).put(Blocks.QUARTZ_BLOCK, TexturedModel.COLUMN.get(Blocks.QUARTZ_BLOCK)).put(Blocks.SMOOTH_QUARTZ, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_bottom"))).put(Blocks.BLACKSTONE, TexturedModel.COLUMN_WITH_WALL.get(Blocks.BLACKSTONE)).build();
 -   private static final Map<BlockFamily.Variant, BiConsumer<BlockModelGenerators.BlockFamilyProvider, Block>> SHAPE_CONSUMERS = ImmutableMap.builder().put(BlockFamily.Variant.BUTTON, BlockModelGenerators.BlockFamilyProvider::button).put(BlockFamily.Variant.DOOR, (BiConsumer)(object, block) -> ((BlockModelGenerators.BlockFamilyProvider)object).door(block)).put(BlockFamily.Variant.FENCE, BlockModelGenerators.BlockFamilyProvider::fence).put(BlockFamily.Variant.FENCE_GATE, BlockModelGenerators.BlockFamilyProvider::fenceGate).put(BlockFamily.Variant.SIGN, BlockModelGenerators.BlockFamilyProvider::sign).put(BlockFamily.Variant.SLAB, BlockModelGenerators.BlockFamilyProvider::slab).put(BlockFamily.Variant.STAIRS, BlockModelGenerators.BlockFamilyProvider::stairs).put(BlockFamily.Variant.PRESSURE_PLATE, BlockModelGenerators.BlockFamilyProvider::pressurePlate).put(BlockFamily.Variant.TRAPDOOR, (BiConsumer)(object, block) -> ((BlockModelGenerators.BlockFamilyProvider)object).trapdoor(block)).put(BlockFamily.Variant.WALL, BlockModelGenerators.BlockFamilyProvider::wall).build();
 +   // MagmaCube start - decompile error
@@ -1734,7 +1764,7 @@ index b8ec5d93f2be8cc799ba9f5d2e181fb2153ffc12..e1950ce7a29aeaf8e0432e497f306bae
           }
  
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index 187d3dca34a3a5fb4d88ab44a175264cb40741ad..e7502887b5f4ea1db039e55af743e9dcc41b7b90 100644
+index adc88ec1052f383f5505a3b0c0ea0ed05b64b1ec..f7ec61b88ebfd86955a54ee46d36099f92a92881 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 @@ -47,7 +47,8 @@ public class RecipeProvider implements DataProvider {
@@ -1747,7 +1777,7 @@ index 187d3dca34a3a5fb4d88ab44a175264cb40741ad..e7502887b5f4ea1db039e55af743e9dc
  
     public RecipeProvider(DataGenerator dataGenerator) {
        this.generator = dataGenerator;
-@@ -1053,7 +1054,7 @@ public class RecipeProvider implements DataProvider {
+@@ -1110,7 +1111,7 @@ public class RecipeProvider implements DataProvider {
  
     private static void generateRecipes(Consumer<FinishedRecipe> consumer, BlockFamily blockFamily) {
        blockFamily.getShapes().forEach((variant, block) -> {
@@ -2102,10 +2132,10 @@ index 52966ca96e5720b1cb98e9ff88a13260e63e5486..5ce497855584e4e156ab0066b1b78192
              Pair<ResourceLocation, T> pair = (Pair)dataResult.result().get();
              ResourceLocation resourceLocation = (ResourceLocation)pair.getFirst();
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 8ecde56fe60e09a48cd0369b84d37713b9c1c2d1..f296e2335562f56d68d77d19e13b36ea165195df 100644
+index 78b024e0c50727e7e543941351095f9cb4bfd4a4..47662a207b147851fb17c944ce014736e9d73aa5 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
-@@ -152,17 +152,18 @@ public class Main {
+@@ -159,17 +159,18 @@ public class Main {
           levelStorageAccess.saveDataTag(registryHolder, worldData);
           WorldData worldData2 = worldData;
           final DedicatedServer dedicatedServer = MinecraftServer.spin((threadx) -> {
@@ -2135,10 +2165,10 @@ index 8ecde56fe60e09a48cd0369b84d37713b9c1c2d1..f296e2335562f56d68d77d19e13b36ea
           Thread thread = new Thread("Server Shutdown Thread") {
              public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 3e0154deff227edd4139385b1ad85aa5293cf489..e1886a4c09b23f8ef1a36b661ba552abc37132e9 100644
+index 4368e53382030d8cfa50fe55930f54fd2de67785..5a6ae0a6f437e293b4b42a25946e71485170338d 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1223,7 +1223,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1228,7 +1228,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
     }
  
     public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -2174,18 +2204,22 @@ index dcd6570cf4dc15bc068212739504f8d7f20c0a8e..e8d12c56883c0bab5f1a3aa9176eaee2
                    LOGGER.error("Failed to load function {}", resourceLocation, throwable);
                 } else {
 diff --git a/src/main/java/net/minecraft/server/commands/EmoteCommands.java b/src/main/java/net/minecraft/server/commands/EmoteCommands.java
-index 1574fed5a9ac5bc45b7c6ea80aa46a29649ed1f6..67a76847f4a5df94c73abad5721a418c2765d58f 100644
+index 831aa0d2bb2eea47f7f0f381e479bedce16a128c..251f9a3c71863b873c5b9a3c27e11f32ed4f9994 100644
 --- a/src/main/java/net/minecraft/server/commands/EmoteCommands.java
 +++ b/src/main/java/net/minecraft/server/commands/EmoteCommands.java
-@@ -25,7 +25,7 @@ public class EmoteCommands {
+@@ -24,8 +24,10 @@ public class EmoteCommands {
              if (entity instanceof ServerPlayer) {
-                TextFilter textFilter = ((ServerPlayer)entity).getTextFilter();
-                if (textFilter != null) {
--                  textFilter.processStreamMessage(s).thenAcceptAsync((optional) -> optional.ifPresent((s) -> minecraftServer.getPlayerList().broadcastMessage(createMessage(commandContext, s), ChatType.CHAT, entity.getUUID())), minecraftServer);
-+                  textFilter.processStreamMessage(s).thenAcceptAsync((optional) -> optional.ifPresent((s1) -> minecraftServer.getPlayerList().broadcastMessage(createMessage(commandContext, s1), ChatType.CHAT, entity.getUUID())), minecraftServer); // MagmaCube - decompile error
-                   return 1;
-                }
-             }
+                ServerPlayer serverPlayer = (ServerPlayer)entity;
+                serverPlayer.getTextFilter().processStreamMessage(s).thenAcceptAsync((filteredText) -> {
+-                  String s = filteredText.getFiltered();
+-                  Component component = s.isEmpty() ? null : createMessage(commandContext, s);
++                  // MagmaCube start - decompile error
++                  String sx = filteredText.getFiltered();
++                  Component component = sx.isEmpty() ? null : createMessage(commandContext, sx);
++                  // MagmaCube end - decompile error
+                   Component component2 = createMessage(commandContext, filteredText.getRaw());
+                   minecraftServer.getPlayerList().broadcastMessage(component2, (serverPlayer2) -> serverPlayer.shouldFilterMessageTo(serverPlayer2) ? component : component2, ChatType.CHAT, entity.getUUID());
+                }, minecraftServer);
 diff --git a/src/main/java/net/minecraft/server/commands/ForceLoadCommand.java b/src/main/java/net/minecraft/server/commands/ForceLoadCommand.java
 index 52c571a501855690385da1cfa6ed27929d38b64f..ebc61160625186daa2b70331bd3733163eee059f 100644
 --- a/src/main/java/net/minecraft/server/commands/ForceLoadCommand.java
@@ -2254,7 +2288,7 @@ index 5353864e09e179347da20a1a717e008614167f84..53e2e9cbcbc857c382e179fea52a2fac
     }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 2489b4366757c2acc18b9ef50e918d668ab5d40d..6b5df7d112918ff3eb9119a76ca3439e0c16e794 100644
+index 1e7958d4df91b397607754126b77c351d8aa6f15..424aad0ccff7341f2728866c6f2b7d1e49721a69 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -198,16 +198,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -2290,19 +2324,24 @@ index 2489b4366757c2acc18b9ef50e918d668ab5d40d..6b5df7d112918ff3eb9119a76ca3439e
                 } else {
                    return this.scheduleChunkGeneration(chunkHolder, chunkStatus);
                 }
-@@ -490,9 +490,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
-       this.level.getProfiler().incrementCounter((Supplier<String>)(() -> "chunkGenerate " + chunkStatus.getName()));
+@@ -491,12 +491,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+       Executor executor = (runnable) -> this.worldgenMailbox.tell(ChunkTaskPriorityQueueSorter.message(chunkHolder, runnable));
        return completableFuture.thenComposeAsync((either) -> (CompletableFuture)either.map((list) -> {
              try {
--               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuture = chunkStatus.generate(this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list);
-+               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuturex = chunkStatus.generate(this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list); // MagmaCube - decompile error
+-               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuture = chunkStatus.generate(executor, this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list);
++               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuturex = chunkStatus.generate(executor, this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list); // MagmaCube - decompile error
                 this.progressListener.onStatusChange(chunkPos, chunkStatus);
 -               return completableFuture;
+-            } catch (Exception var9) {
+-               var9.getStackTrace();
+-               CrashReport crashReport = CrashReport.forThrowable(var9, "Exception generating new chunk");
 +               return completableFuturex; // MagmaCube - decompile error
-             } catch (Exception var8) {
-                CrashReport crashReport = CrashReport.forThrowable(var8, "Exception generating new chunk");
++            } catch (Exception var8) {
++               CrashReport crashReport = CrashReport.forThrowable(var8, "Exception generating new chunk");
                 CrashReportCategory crashReportCategory = crashReport.addCategory("Chunk to be generated");
-@@ -540,7 +540,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+                crashReportCategory.setDetail("Location", String.format("%d,%d", chunkPos.x, chunkPos.z));
+                crashReportCategory.setDetail("Position hash", ChunkPos.asLong(chunkPos.x, chunkPos.z));
+@@ -542,7 +541,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              if (protoChunk instanceof ImposterProtoChunk) {
                 levelChunk = ((ImposterProtoChunk)protoChunk).getWrapped();
              } else {
@@ -2311,7 +2350,7 @@ index 2489b4366757c2acc18b9ef50e918d668ab5d40d..6b5df7d112918ff3eb9119a76ca3439e
                 chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk));
              }
  
-@@ -652,9 +652,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -654,9 +653,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              ChunkPos chunkPos = chunkHolder.getPos();
              Packet<?>[] packets = new Packet[2];
              this.getPlayers(chunkPos, false).forEach((serverPlayer) -> {
@@ -2326,7 +2365,7 @@ index 2489b4366757c2acc18b9ef50e918d668ab5d40d..6b5df7d112918ff3eb9119a76ca3439e
                 this.updateChunkTracking(serverPlayer, chunkPos, packets, flag, flag2);
              });
           }
-@@ -783,7 +785,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -785,7 +786,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
           }
        }
  
@@ -2335,7 +2374,7 @@ index 2489b4366757c2acc18b9ef50e918d668ab5d40d..6b5df7d112918ff3eb9119a76ca3439e
        int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
        SectionPos sectionPos = serverPlayer.getLastSectionPos();
        SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -817,17 +819,19 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -819,17 +820,19 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
        int i3 = sectionPos.x();
        int i4 = sectionPos.z();
@@ -2359,7 +2398,7 @@ index 2489b4366757c2acc18b9ef50e918d668ab5d40d..6b5df7d112918ff3eb9119a76ca3439e
                 this.updateChunkTracking(serverPlayer, chunkPos, new Packet[2], flag4, flag5);
              }
           }
-@@ -841,7 +845,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -843,7 +846,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
           }
  
@@ -2438,19 +2477,19 @@ index 9b86b4ee9d70d958f936f1e7b383f0da3edaa3ba..54c96a40f007ccdf14e4a2da0838bf1a
  
        return completableFuture;
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index f122c6718b5c943e8ff630e5f7cf70253a96d8b6..f2c8dcd6b3a779d139152d2c468b39012d75f40e 100644
+index ac57c473e291c3b7e24f8f43b7f181961dddecc5..bd265f5d8b15c0a118f6250f5c49bdc6b27fa6d5 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -411,7 +411,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -412,7 +412,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
  
     private void wakeUpAllPlayers() {
-       this.percentageSleepingPlayers = 0.0F;
+       this.sleepStatus.removeAllSleepers();
 -      ((List)this.players.stream().filter(LivingEntity::isSleeping).collect(Collectors.toList())).forEach((serverPlayer) -> serverPlayer.stopSleepInBed(false, false));
 +      (this.players.stream().filter(LivingEntity::isSleeping).collect(Collectors.toList())).forEach((serverPlayer) -> serverPlayer.stopSleepInBed(false, false)); // MagmaCube - decompile error
     }
  
     public void tickChunk(LevelChunk levelChunk, int i) {
-@@ -1199,8 +1199,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1157,8 +1157,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
  
        }
  
@@ -2463,7 +2502,7 @@ index f122c6718b5c943e8ff630e5f7cf70253a96d8b6..f2c8dcd6b3a779d139152d2c468b3901
        Throwable var173 = null;
  
        try {
-@@ -1272,24 +1274,24 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1230,24 +1232,24 @@ public class ServerLevel extends Level implements WorldGenLevel {
        }
  
        Path path5 = path.resolve("block_entities.csv");
@@ -2493,7 +2532,7 @@ index f122c6718b5c943e8ff630e5f7cf70253a96d8b6..f2c8dcd6b3a779d139152d2c468b3901
              }
           }
  
-@@ -1377,7 +1379,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1335,7 +1337,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              object2IntOpenHashMap.addTo(s, 1);
           }
  
@@ -2546,57 +2585,6 @@ index 19c5f3fa798f3158d8ac768aef05b902124812c5..7cd075f69bb3e3fbc421368931b3928a
                 ByteBuf byteBuf2 = this.createReply(s3);
  
                 try {
-diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 0401136195d61ee4d8d04e7fa232e53df237f291..5f9295b8416dc4701f233663712fb52be3fadb0e 100644
---- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-+++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -308,7 +308,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
-       };
-       TextFilter textFilter = this.player.getTextFilter();
-       if (textFilter != null) {
--         ((CompletableFuture)biFunction.apply(textFilter, object)).thenAcceptAsync((optional) -> optional.ifPresent(consumer2), blockableEventLoop);
-+         (biFunction.apply(textFilter, object)).thenAcceptAsync((optional) -> optional.ifPresent(consumer2), blockableEventLoop); // MagmaCube - decompile error
-       } else {
-          blockableEventLoop.execute(() -> consumer2.accept(object));
-       }
-diff --git a/src/main/java/net/minecraft/server/network/TextFilterClient.java b/src/main/java/net/minecraft/server/network/TextFilterClient.java
-index 0485592ea10d72407ba3cd69184f409165007760..dcf82351d30f596f4210125ccb714b1dc61fe2c4 100644
---- a/src/main/java/net/minecraft/server/network/TextFilterClient.java
-+++ b/src/main/java/net/minecraft/server/network/TextFilterClient.java
-@@ -35,14 +35,16 @@ public class TextFilterClient implements AutoCloseable {
-       thread.setName("Chat-Filter-Worker-" + WORKER_COUNT.getAndIncrement());
-       return thread;
-    };
--   private final URL chatEndpoint;
--   private final URL joinEndpoint;
--   private final URL leaveEndpoint;
--   private final String authKey;
--   private final int ruleId;
--   private final String serverId;
--   private final TextFilterClient.IgnoreStrategy chatIgnoreStrategy;
--   private final ExecutorService workerPool;
-+   // MagmaCube start - decompile error
-+   private final URL chatEndpoint = null;
-+   private final URL joinEndpoint = null;
-+   private final URL leaveEndpoint = null;
-+   private final String authKey = null;
-+   private final int ruleId = 0;
-+   private final String serverId = null;
-+   private final TextFilterClient.IgnoreStrategy chatIgnoreStrategy = null;
-+   private final ExecutorService workerPool = null;
-+   // MagmaCube end - decompile error
- 
-    private void processJoinOrLeave(GameProfile gameProfile, URL uRL, Executor executor) {
-       JsonObject jsonObject = new JsonObject();
-@@ -266,7 +268,7 @@ public class TextFilterClient implements AutoCloseable {
- 
-       public CompletableFuture<Optional<List<String>>> processMessageBundle(List<String> list) {
-          List<CompletableFuture<Optional<String>>> list2 = (List)list.stream().map((s) -> TextFilterClient.this.requestMessageProcessing(this.profile, s, TextFilterClient.this.chatIgnoreStrategy, this.streamExecutor)).collect(ImmutableList.toImmutableList());
--         return Util.sequence(list2).thenApply((listx) -> Optional.of(listx.stream().map((optional) -> (String)optional.orElse("")).collect(ImmutableList.toImmutableList()))).exceptionally((throwable) -> Optional.empty());
-+         return (CompletableFuture) Util.sequence(list2).thenApply((listx) -> Optional.of(listx.stream().map((optional) -> (String)optional.orElse("")).collect(ImmutableList.toImmutableList()))).exceptionally((throwable) -> Optional.empty()); // MagmaCube - decompile error
-       }
- 
-       public CompletableFuture<Optional<String>> processStreamMessage(String s) {
 diff --git a/src/main/java/net/minecraft/server/packs/FolderPackResources.java b/src/main/java/net/minecraft/server/packs/FolderPackResources.java
 index ebfd5b0b7cb3613934f226f6b8f49204dacfd229..9b765a802cffdd13a048e2796d302710212aeff6 100644
 --- a/src/main/java/net/minecraft/server/packs/FolderPackResources.java
@@ -2657,7 +2645,7 @@ index fe652d0d61bd53ded40b31b4b8352200ac505ef1..246047a3cc9e252ebe8a2eeb5091893d
                       list.add(gameProfileInfo);
                    }
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index aaff6db0977c845d59ed7453adef751700d00cd0..493bd40b7799dc2926980d7303f1d29a7e479644 100644
+index e0a82096be3209704f0ea1fa1423a3e04459d613..072da7bf09508d5f0719417678f0b7642a8668b3 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -308,7 +308,7 @@ public abstract class PlayerList {
@@ -2825,6 +2813,23 @@ index bfb6bf19adcd45077f25a54b274800567431cac4..9a8debb7370c51568bdbe6db171e6105
        }
     }
  
+diff --git a/src/main/java/net/minecraft/util/DebugBuffer.java b/src/main/java/net/minecraft/util/DebugBuffer.java
+index 86923050386bdb4f11d836ed59f97134288a4730..a5eab83eb832a9b86e5a1d02f2ebb1c2dc82fb70 100644
+--- a/src/main/java/net/minecraft/util/DebugBuffer.java
++++ b/src/main/java/net/minecraft/util/DebugBuffer.java
+@@ -7,8 +7,10 @@ import java.util.concurrent.atomic.AtomicInteger;
+ import java.util.concurrent.atomic.AtomicReferenceArray;
+ 
+ public class DebugBuffer<T> {
+-   private final AtomicReferenceArray<T> data;
+-   private final AtomicInteger index;
++   // MagmaCube start - decompile error
++   private final AtomicReferenceArray<T> data = new AtomicReferenceArray<>((T[]) new Object[1000]);
++   private final AtomicInteger index = new AtomicInteger();
++   // MagmaCube end - decompile error
+ 
+    public void push(T object) {
+       int i = this.data.length();
 diff --git a/src/main/java/net/minecraft/util/DirectoryLock.java b/src/main/java/net/minecraft/util/DirectoryLock.java
 index 9e64c5b3581647ac7e760c5338463b6c23a81225..207516be629c79dba0d2ef529886391fea8a4ef8 100644
 --- a/src/main/java/net/minecraft/util/DirectoryLock.java
@@ -2922,6 +2927,24 @@ index 46a0a9c508a016314d161c83bdfa496e213e2581..6bb8d3210344e8e07eea8750976e1f23
        } else if (i == 0) {
           return Optional.empty();
        } else {
+diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
+index faa4fa9c8c4297ef21f8af593cea22100675509c..a6ae037ea6d350352b8b82da76ed9797f038a17c 100644
+--- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
++++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
+@@ -543,11 +543,11 @@ public class DataFixers {
+       dataFixerBuilder.addFixer(new AddNewChoices(schema130, "Added Glow Squid", References.ENTITY));
+       dataFixerBuilder.addFixer(new AddNewChoices(schema130, "Added Glow Item Frame", References.ENTITY));
+       Schema schema131 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
+-      ImmutableMap<String, String> immutableMap = ImmutableMap.builder().put("minecraft:weathered_copper_block", "minecraft:oxidized_copper_block").put("minecraft:semi_weathered_copper_block", "minecraft:weathered_copper_block").put("minecraft:lightly_weathered_copper_block", "minecraft:exposed_copper_block").put("minecraft:weathered_cut_copper", "minecraft:oxidized_cut_copper").put("minecraft:semi_weathered_cut_copper", "minecraft:weathered_cut_copper").put("minecraft:lightly_weathered_cut_copper", "minecraft:exposed_cut_copper").put("minecraft:weathered_cut_copper_stairs", "minecraft:oxidized_cut_copper_stairs").put("minecraft:semi_weathered_cut_copper_stairs", "minecraft:weathered_cut_copper_stairs").put("minecraft:lightly_weathered_cut_copper_stairs", "minecraft:exposed_cut_copper_stairs").put("minecraft:weathered_cut_copper_slab", "minecraft:oxidized_cut_copper_slab").put("minecraft:semi_weathered_cut_copper_slab", "minecraft:weathered_cut_copper_slab").put("minecraft:lightly_weathered_cut_copper_slab", "minecraft:exposed_cut_copper_slab").put("minecraft:waxed_semi_weathered_copper", "minecraft:waxed_weathered_copper").put("minecraft:waxed_lightly_weathered_copper", "minecraft:waxed_exposed_copper").put("minecraft:waxed_semi_weathered_cut_copper", "minecraft:waxed_weathered_cut_copper").put("minecraft:waxed_lightly_weathered_cut_copper", "minecraft:waxed_exposed_cut_copper").put("minecraft:waxed_semi_weathered_cut_copper_stairs", "minecraft:waxed_weathered_cut_copper_stairs").put("minecraft:waxed_lightly_weathered_cut_copper_stairs", "minecraft:waxed_exposed_cut_copper_stairs").put("minecraft:waxed_semi_weathered_cut_copper_slab", "minecraft:waxed_weathered_cut_copper_slab").put("minecraft:waxed_lightly_weathered_cut_copper_slab", "minecraft:waxed_exposed_cut_copper_slab").build();
++      ImmutableMap<String, String> immutableMap = ImmutableMap.<String, String>builder().put("minecraft:weathered_copper_block", "minecraft:oxidized_copper_block").put("minecraft:semi_weathered_copper_block", "minecraft:weathered_copper_block").put("minecraft:lightly_weathered_copper_block", "minecraft:exposed_copper_block").put("minecraft:weathered_cut_copper", "minecraft:oxidized_cut_copper").put("minecraft:semi_weathered_cut_copper", "minecraft:weathered_cut_copper").put("minecraft:lightly_weathered_cut_copper", "minecraft:exposed_cut_copper").put("minecraft:weathered_cut_copper_stairs", "minecraft:oxidized_cut_copper_stairs").put("minecraft:semi_weathered_cut_copper_stairs", "minecraft:weathered_cut_copper_stairs").put("minecraft:lightly_weathered_cut_copper_stairs", "minecraft:exposed_cut_copper_stairs").put("minecraft:weathered_cut_copper_slab", "minecraft:oxidized_cut_copper_slab").put("minecraft:semi_weathered_cut_copper_slab", "minecraft:weathered_cut_copper_slab").put("minecraft:lightly_weathered_cut_copper_slab", "minecraft:exposed_cut_copper_slab").put("minecraft:waxed_semi_weathered_copper", "minecraft:waxed_weathered_copper").put("minecraft:waxed_lightly_weathered_copper", "minecraft:waxed_exposed_copper").put("minecraft:waxed_semi_weathered_cut_copper", "minecraft:waxed_weathered_cut_copper").put("minecraft:waxed_lightly_weathered_cut_copper", "minecraft:waxed_exposed_cut_copper").put("minecraft:waxed_semi_weathered_cut_copper_stairs", "minecraft:waxed_weathered_cut_copper_stairs").put("minecraft:waxed_lightly_weathered_cut_copper_stairs", "minecraft:waxed_exposed_cut_copper_stairs").put("minecraft:waxed_semi_weathered_cut_copper_slab", "minecraft:waxed_weathered_cut_copper_slab").put("minecraft:waxed_lightly_weathered_cut_copper_slab", "minecraft:waxed_exposed_cut_copper_slab").build(); // MagmaCube - decompile error
+       dataFixerBuilder.addFixer(ItemRenameFix.create(schema131, "Renamed copper block items to new oxidized terms", createRenamer(immutableMap)));
+       dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema131, "Renamed copper blocks to new oxidized terms", createRenamer(immutableMap)));
+       Schema schema132 = dataFixerBuilder.addSchema(2691, SAME_NAMESPACED);
+-      ImmutableMap<String, String> immutableMap2 = ImmutableMap.builder().put("minecraft:waxed_copper", "minecraft:waxed_copper_block").put("minecraft:oxidized_copper_block", "minecraft:oxidized_copper").put("minecraft:weathered_copper_block", "minecraft:weathered_copper").put("minecraft:exposed_copper_block", "minecraft:exposed_copper").build();
++      ImmutableMap<String, String> immutableMap2 = ImmutableMap.<String, String>builder().put("minecraft:waxed_copper", "minecraft:waxed_copper_block").put("minecraft:oxidized_copper_block", "minecraft:oxidized_copper").put("minecraft:weathered_copper_block", "minecraft:weathered_copper").put("minecraft:exposed_copper_block", "minecraft:exposed_copper").build(); // MagmaCube - decompile error
+       dataFixerBuilder.addFixer(ItemRenameFix.create(schema132, "Rename copper item suffixes", createRenamer(immutableMap2)));
+       dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema132, "Rename copper blocks suffixes", createRenamer(immutableMap2)));
+    }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
 index 50ed45f86b78b0010e43f33cc99c55fe1c677b62..c8be39a824d87d04cf5ca31322f84d33ce69258c 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
@@ -4257,11 +4280,28 @@ index 02a0379d97d8b5b94ab3ffa4f32b0747c35ef9ef..6ba8e8f4d627d8feeeda7fcfa558b90f
     }
  
     private static int getInt(String s, int i) {
+diff --git a/src/main/java/net/minecraft/util/datafix/schemas/V1460.java b/src/main/java/net/minecraft/util/datafix/schemas/V1460.java
+index c8ebf7a0f27a3cd9bfb30de0244f86543a6e1810..9f5fb304037e649a8d3a8267f21efe5374a55548 100644
+--- a/src/main/java/net/minecraft/util/datafix/schemas/V1460.java
++++ b/src/main/java/net/minecraft/util/datafix/schemas/V1460.java
+@@ -13,10 +13,10 @@ import java.util.function.Supplier;
+ import net.minecraft.util.datafix.fixes.References;
+ 
+ public class V1460 extends NamespacedSchema {
+-   protected static final Map<String, String> ITEM_TO_BLOCKENTITY = ImmutableMap.builder().putAll(V704.ITEM_TO_BLOCKENTITY).put("minecraft:white_bed", "minecraft:bed").put("minecraft:orange_bed", "minecraft:bed").put("minecraft:magenta_bed", "minecraft:bed").put("minecraft:light_blue_bed", "minecraft:bed").put("minecraft:yellow_bed", "minecraft:bed").put("minecraft:lime_bed", "minecraft:bed").put("minecraft:pink_bed", "minecraft:bed").put("minecraft:gray_bed", "minecraft:bed").put("minecraft:silver_bed", "minecraft:bed").put("minecraft:cyan_bed", "minecraft:bed").put("minecraft:purple_bed", "minecraft:bed").put("minecraft:blue_bed", "minecraft:bed").put("minecraft:brown_bed", "minecraft:bed").put("minecraft:green_bed", "minecraft:bed").put("minecraft:red_bed", "minecraft:bed").put("minecraft:black_bed", "minecraft:bed").put("minecraft:oak_sign", "minecraft:sign").put("minecraft:spruce_sign", "minecraft:sign").put("minecraft:birch_sign", "minecraft:sign").put("minecraft:jungle_sign", "minecraft:sign").put("minecraft:acacia_sign", "minecraft:sign").put("minecraft:dark_oak_sign", "minecraft:sign").put("minecraft:crimson_sign", "minecraft:sign").put("minecraft:warped_sign", "minecraft:sign").put("minecraft:skeleton_skull", "minecraft:skull").put("minecraft:wither_skeleton_skull", "minecraft:skull").put("minecraft:zombie_head", "minecraft:skull").put("minecraft:player_head", "minecraft:skull").put("minecraft:creeper_head", "minecraft:skull").put("minecraft:dragon_head", "minecraft:skull").put("minecraft:barrel", "minecraft:barrel").put("minecraft:conduit", "minecraft:conduit").put("minecraft:smoker", "minecraft:smoker").put("minecraft:blast_furnace", "minecraft:blast_furnace").put("minecraft:lectern", "minecraft:lectern").put("minecraft:bell", "minecraft:bell").put("minecraft:jigsaw", "minecraft:jigsaw").put("minecraft:campfire", "minecraft:campfire").put("minecraft:bee_nest", "minecraft:beehive").put("minecraft:beehive", "minecraft:beehive").put("minecraft:sculk_sensor", "minecraft:sculk_sensor").build();
++   protected static final Map<String, String> ITEM_TO_BLOCKENTITY = ImmutableMap.<String, String>builder().putAll(V704.ITEM_TO_BLOCKENTITY).put("minecraft:white_bed", "minecraft:bed").put("minecraft:orange_bed", "minecraft:bed").put("minecraft:magenta_bed", "minecraft:bed").put("minecraft:light_blue_bed", "minecraft:bed").put("minecraft:yellow_bed", "minecraft:bed").put("minecraft:lime_bed", "minecraft:bed").put("minecraft:pink_bed", "minecraft:bed").put("minecraft:gray_bed", "minecraft:bed").put("minecraft:silver_bed", "minecraft:bed").put("minecraft:cyan_bed", "minecraft:bed").put("minecraft:purple_bed", "minecraft:bed").put("minecraft:blue_bed", "minecraft:bed").put("minecraft:brown_bed", "minecraft:bed").put("minecraft:green_bed", "minecraft:bed").put("minecraft:red_bed", "minecraft:bed").put("minecraft:black_bed", "minecraft:bed").put("minecraft:oak_sign", "minecraft:sign").put("minecraft:spruce_sign", "minecraft:sign").put("minecraft:birch_sign", "minecraft:sign").put("minecraft:jungle_sign", "minecraft:sign").put("minecraft:acacia_sign", "minecraft:sign").put("minecraft:dark_oak_sign", "minecraft:sign").put("minecraft:crimson_sign", "minecraft:sign").put("minecraft:warped_sign", "minecraft:sign").put("minecraft:skeleton_skull", "minecraft:skull").put("minecraft:wither_skeleton_skull", "minecraft:skull").put("minecraft:zombie_head", "minecraft:skull").put("minecraft:player_head", "minecraft:skull").put("minecraft:creeper_head", "minecraft:skull").put("minecraft:dragon_head", "minecraft:skull").put("minecraft:barrel", "minecraft:barrel").put("minecraft:conduit", "minecraft:conduit").put("minecraft:smoker", "minecraft:smoker").put("minecraft:blast_furnace", "minecraft:blast_furnace").put("minecraft:lectern", "minecraft:lectern").put("minecraft:bell", "minecraft:bell").put("minecraft:jigsaw", "minecraft:jigsaw").put("minecraft:campfire", "minecraft:campfire").put("minecraft:bee_nest", "minecraft:beehive").put("minecraft:beehive", "minecraft:beehive").put("minecraft:sculk_sensor", "minecraft:sculk_sensor").build(); // MagmaCube - decompile error
+    protected static final HookFunction ADD_NAMES = new HookFunction() {
+       public <T> T apply(DynamicOps<T> dynamicOps, T object) {
+-         return V99.addNames(new Dynamic(dynamicOps, object), V1460.ITEM_TO_BLOCKENTITY, "minecraft:armor_stand");
++         return V99.addNames(new Dynamic<>(dynamicOps, object), V1460.ITEM_TO_BLOCKENTITY, "minecraft:armor_stand"); // MagmaCube - decompile error
+       }
+    };
+ 
 diff --git a/src/main/java/net/minecraft/util/datafix/schemas/V704.java b/src/main/java/net/minecraft/util/datafix/schemas/V704.java
-index ad5766d3b5405c97701ae08c8061f2bd309a528e..c39de738a48591f9bbea2b8be55db4d700746135 100644
+index b8c441926ec0848976c241f20b0ac6a849fcd7f9..7d6f940521d3e044272c8f8b2bdd1768cf54d04b 100644
 --- a/src/main/java/net/minecraft/util/datafix/schemas/V704.java
 +++ b/src/main/java/net/minecraft/util/datafix/schemas/V704.java
-@@ -91,7 +91,7 @@ public class V704 extends Schema {
+@@ -92,7 +92,7 @@ public class V704 extends Schema {
     });
     protected static final HookFunction ADD_NAMES = new HookFunction() {
        public <T> T apply(DynamicOps<T> dynamicOps, T object) {
@@ -4284,10 +4324,10 @@ index 4ecc60b925bed27d678d8e6be66b6e573494f7ee..c0edcfd1e9928657b7db1769b11b1d80
     };
  
 diff --git a/src/main/java/net/minecraft/util/datafix/schemas/V99.java b/src/main/java/net/minecraft/util/datafix/schemas/V99.java
-index 7de79bd674a0f2845ea8e4f2f328c9f27ada28ed..beff1521b803779ce607462794da43a547b8b6f1 100644
+index d74d6500e5e500e5b1765e3c3c7d1dbd8409b149..bb4779d8b229cba066f5ef48108f05e6b3a63fae 100644
 --- a/src/main/java/net/minecraft/util/datafix/schemas/V99.java
 +++ b/src/main/java/net/minecraft/util/datafix/schemas/V99.java
-@@ -55,7 +55,7 @@ public class V99 extends Schema {
+@@ -54,7 +54,7 @@ public class V99 extends Schema {
     });
     protected static final HookFunction ADD_NAMES = new HookFunction() {
        public <T> T apply(DynamicOps<T> dynamicOps, T object) {
@@ -4296,22 +4336,27 @@ index 7de79bd674a0f2845ea8e4f2f328c9f27ada28ed..beff1521b803779ce607462794da43a5
        }
     };
  
-@@ -207,10 +207,12 @@ public class V99 extends Schema {
+@@ -206,14 +206,16 @@ public class V99 extends Schema {
  
     protected static <T> T addNames(Dynamic<T> dynamic, Map<String, String> map, String s) {
        return (T)dynamic.update("tag", (dynamic2) -> dynamic2.update("BlockEntityTag", (dynamic2x) -> {
--            String s = dynamic.get("id").asString("");
--            String s2 = (String)map.get(NamespacedSchema.ensureNamespaced(s));
+-            String s = (String)dynamic.get("id").asString().result().map(NamespacedSchema::ensureNamespaced).orElse("minecraft:air");
+-            if (!"minecraft:air".equals(s)) {
+-               String s2 = (String)map.get(s);
 +            // MagmaCube start - decompile error
-+            String sx = dynamic.get("id").asString("");
-+            String s2 = (String)map.get(NamespacedSchema.ensureNamespaced(sx));
-             if (s2 == null) {
--               LOGGER.warn("Unable to resolve BlockEntity for ItemStack: {}", s);
-+               LOGGER.warn("Unable to resolve BlockEntity for ItemStack: {}", sx);
++            String sx = (String)dynamic.get("id").asString().result().map(NamespacedSchema::ensureNamespaced).orElse("minecraft:air");
++            if (!"minecraft:air".equals(sx)) {
++               String s2 = (String)map.get(sx);
 +               // MagmaCube end - decompile error
-                return dynamic2x;
-             } else {
-                return dynamic2x.set("id", dynamic.createString(s2));
+                if (s2 != null) {
+                   return dynamic2x.set("id", dynamic.createString(s2));
+                }
+ 
+-               LOGGER.warn("Unable to resolve BlockEntity for ItemStack: {}", s);
++               LOGGER.warn("Unable to resolve BlockEntity for ItemStack: {}", sx); // MagmaCube - decompile error
+             }
+ 
+             return dynamic2x;
 diff --git a/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java b/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
 index 8e4f8cb8bd09cd49abdecb368b0b0ad13e6a7792..3d614ce714d02036787fa79a52af20200f6cd81d 100644
 --- a/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
@@ -4384,7 +4429,7 @@ index 022a0338631b8194d17e1416306b95b893877f53..7e6d69ca7670a55e09b9f05dc52408a6
           while(var31.hasNext()) {
              ChunkStorage chunkStorage2 = (ChunkStorage)var31.next();
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 17d6780876abf0bdd6f9e9cd309b43908fde732e..b9d182a2214d742b74e9d58aae5678dca2958e6c 100644
+index 77f21128a5ae234dcf35f0578263df981f5e1c57..96ba0b72dfc669f60661bdc36462a798779aa236 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -1033,7 +1033,7 @@ public abstract class Mob extends LivingEntity {
@@ -4724,10 +4769,10 @@ index 8ef4228bc9fa5836a313b1a5fb0db22451551d18..aaf542541cc2c94c5d85f8aaed32a395
     protected Optional<LivingEntity> getNearestHostile(LivingEntity livingEntity) {
        return this.getVisibleEntities(livingEntity).flatMap((list) -> list.stream().filter(this::isHostile).filter((livingEntity2) -> this.isClose(livingEntity, livingEntity2)).min(Comparator.comparingDouble(livingEntity::distanceToSqr)));
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
-index f69e5bde1c25b393b534d715edeac4ab374443d2..e05f44878cee5deaabe643f40b5e6ed2c3b81281 100644
+index 0bae4f07da4d64d283a857037744deb3dd3133e7..c887ba1bb986333cf5e5399a59296f55251fdb09 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
-@@ -168,7 +168,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -166,7 +166,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
     }
  
     public void ensureLoadedAndValid(LevelReader levelReader, BlockPos blockPos, int i) {
@@ -4737,7 +4782,7 @@ index f69e5bde1c25b393b534d715edeac4ab374443d2..e05f44878cee5deaabe643f40b5e6ed2
  
     final class DistanceTracker extends SectionTracker {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-index 6857ece83b966a8000e0897639da6f3240d8c445..0f8f5777bed4fbb574a7400ad2d2235be4798955 100644
+index 3db6bfcfa94fec0e84ed191a4795654063aefe7b..fbd33bc21575ed4a921eaf1e28da3e01708e2d9a 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 @@ -30,7 +30,8 @@ public class PoiSection {
@@ -4773,10 +4818,10 @@ index ebbebb1f566855d5f7cf0813db7e6bd8d76a2617..c33feae55770c0354a645182362c6bd2
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index fd451598310af2cc37f2efaf0e49d845566d2d1a..d89050f26e79445ecdbfc910ff025bdb354731c0 100644
+index e25204464131e06a51d729495e61ab88f1deb761..7e6a6b413434f1025aeb03f8dbf001883da02afc 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-@@ -134,9 +134,11 @@ public class Fox extends Animal {
+@@ -136,9 +136,11 @@ public class Fox extends Animal {
        this.goalSelector.addGoal(1, new Fox.FaceplantGoal());
        this.goalSelector.addGoal(2, new Fox.FoxPanicGoal(2.2D));
        this.goalSelector.addGoal(3, new Fox.FoxBreedGoal(1.0D));
@@ -4791,7 +4836,7 @@ index fd451598310af2cc37f2efaf0e49d845566d2d1a..d89050f26e79445ecdbfc910ff025bdb
        this.goalSelector.addGoal(5, new Fox.StalkPreyGoal());
        this.goalSelector.addGoal(6, new Fox.FoxPounceGoal());
        this.goalSelector.addGoal(6, new Fox.SeekShelterGoal(1.25D));
-@@ -313,8 +315,10 @@ public class Fox extends Animal {
+@@ -315,8 +317,10 @@ public class Fox extends Animal {
  
     private List<UUID> getTrustedUUIDs() {
        List<UUID> list = Lists.newArrayList();
@@ -4805,10 +4850,10 @@ index fd451598310af2cc37f2efaf0e49d845566d2d1a..d89050f26e79445ecdbfc910ff025bdb
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/IronGolem.java b/src/main/java/net/minecraft/world/entity/animal/IronGolem.java
-index f7d366109250f7be9481c4385ffb8c51bfd51f9d..5ace79f99d5282d2e27b41c29cdc70af61df1b44 100644
+index 8c4aa942e1e954a1e59833d9cc8be5541c0ad38b..ac4b51eaf590daa53a33e8a0fc27bb53a23a41db 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/IronGolem.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/IronGolem.java
-@@ -75,8 +75,8 @@ public class IronGolem extends AbstractGolem implements NeutralMob {
+@@ -76,8 +76,8 @@ public class IronGolem extends AbstractGolem implements NeutralMob {
        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
        this.targetSelector.addGoal(1, new DefendVillageTargetGoal(this));
        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
@@ -4835,7 +4880,7 @@ index 801f643c39539061c88640bf3086bc664b0a98d7..d787c7bf95f84860b4f9e9c84b2d100b
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Wolf.java b/src/main/java/net/minecraft/world/entity/animal/Wolf.java
-index 67edfa66f0e48e54dcb5c6d9474416f8c0dedfc1..027e18c4e9942b437c31affb45780998c2201021 100644
+index e4161da65c7020d42d10ac60deee0a3fd13719dd..b86c9b1da0637500cace004369437e8c2c4c7bbc 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Wolf.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Wolf.java
 @@ -100,10 +100,12 @@ public class Wolf extends TamableAnimal implements NeutralMob {
@@ -4950,10 +4995,10 @@ index 059cb828ce623dc5c35cc7a5d70aaefa642333e7..77d6ea3a85d4970ea6bc9faaebee550e
  
     public boolean isCharging() {
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Phantom.java b/src/main/java/net/minecraft/world/entity/monster/Phantom.java
-index c9099d54ba75898960b085b614ccfb652cfd5796..04029116ce3dc8e6936326845b37e43e10700317 100644
+index 800353faaeee4b7e535669da04e3393eba34304a..d4addbf93af2fabc0fdc6adebc039163403e0d57 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Phantom.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Phantom.java
-@@ -211,7 +211,7 @@ public class Phantom extends FlyingMob implements Enemy {
+@@ -220,7 +220,7 @@ public class Phantom extends FlyingMob implements Enemy {
              this.nextScanTick = 60;
              List<Player> list = Phantom.this.level.getNearbyPlayers(this.attackTargeting, Phantom.this, Phantom.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
              if (!list.isEmpty()) {
@@ -5199,7 +5244,7 @@ index c5046a108c47ac35aa011140fbb1cb31b2783f36..02646e455895cfa31d771d48fadc7af4
  
     protected Brain.Provider<Villager> brainProvider() {
 diff --git a/src/main/java/net/minecraft/world/entity/npc/VillagerTrades.java b/src/main/java/net/minecraft/world/entity/npc/VillagerTrades.java
-index bd40d74e5a3e128d9214c8f892f2596c826c966a..a0318fc1a9fd766cd680cfef6b00da652148dc57 100644
+index f1d098f58fb060d0f3924f97cf509fe6a86ea94e..c86a37c7d75d6d7f4086a2b755f4a973d720247a 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/VillagerTrades.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/VillagerTrades.java
 @@ -47,10 +47,12 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -5218,10 +5263,10 @@ index bd40d74e5a3e128d9214c8f892f2596c826c966a..a0318fc1a9fd766cd680cfef6b00da65
        hashMap.put(VillagerProfession.CLERIC, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.ROTTEN_FLESH, 32, 16, 2), new VillagerTrades.ItemsForEmeralds(Items.REDSTONE, 1, 2, 1)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.GOLD_INGOT, 3, 12, 10), new VillagerTrades.ItemsForEmeralds(Items.LAPIS_LAZULI, 1, 1, 5)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.RABBIT_FOOT, 2, 12, 20), new VillagerTrades.ItemsForEmeralds(Blocks.GLOWSTONE, 4, 1, 12, 10)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.SCUTE, 4, 12, 30), new VillagerTrades.EmeraldForItems(Items.GLASS_BOTTLE, 9, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.ENDER_PEARL, 5, 1, 15)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.NETHER_WART, 22, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.EXPERIENCE_BOTTLE, 3, 1, 30)})));
        hashMap.put(VillagerProfession.ARMORER, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.LAVA_BUCKET, 1, 12, 20), new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 20), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 14, 3, 15, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 8, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 8, 3, 30, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 16, 3, 30, 0.2F)})));
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 553a386d51d1405de5d5dd5a555d92c6e9d2f169..738d8ea6796a61a64d8d74abebe8e68592e420b5 100644
+index c62f3ad74796c3d5732aa2544c79b244f56dfc3d..74e6c3c55ba5f8271f7617c9275039d1ffcdab0a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -111,7 +111,8 @@ import net.minecraft.world.scores.Team;
+@@ -112,7 +112,8 @@ import net.minecraft.world.scores.Team;
  
  public abstract class Player extends LivingEntity {
     public static final EntityDimensions STANDING_DIMENSIONS = EntityDimensions.scalable(0.6F, 1.8F);
@@ -5246,7 +5291,7 @@ index 8ef2825c57e01b5d82fb1833ddc72aa8d7b5f128..57e9a9eb815dbdb6a462e357f3af7315
           Activity activity = activityTransition.getActivity();
           this.schedule.getAllTimelinesExceptFor(activity).forEach((timeline) -> timeline.addKeyframe(activityTransition.getTime(), 0.0F));
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 116f711047c161418f66324146c32969d46bcc90..72847a9dc6ef9805918c9b9fa77fd2055bbc169b 100644
+index f17dfa2544fa592132b60987e4e2db7787ac9b74..0c46388b79efa243dc1d960d35366589ecefc37d 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 @@ -162,7 +162,7 @@ public abstract class AbstractMinecart extends Entity {
@@ -5377,7 +5422,7 @@ index ab4eaafc8cc1c56c9baf402eb7162e74b46e32c5..0b8b7d4b099bc5bb9132a70946cda1f9
  
     public void assignFrom(GameRules gameRules, @Nullable MinecraftServer minecraftServer) {
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 14f0e84ff1d79cb9d1a09bfe1cefb7224b893d07..b1cd9ca9333758d27479ab9df00f3113a63b54ff 100644
+index 11887325b74c8378700f9ae315df583244aa4805..10b332250fd56ed9717570c01e047c16872d545a 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 @@ -75,10 +75,11 @@ public final class NaturalSpawner {
@@ -5409,7 +5454,7 @@ index 57b18a1ed61d9764059ff7c0d6c0cca4f46cae6d..b7d91584c75fbdcdd11dd3d3a021d598
  
     public String toString() {
 diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
-index 82543294b0b0bf7479f6183e4c50c5ba2659f552..90b04ec7363d2f1bced15f5a6938c3d922a6ae94 100644
+index 7b0d60b7000d6f9efcae3cc031a580ea96fa0502..2962109be3036df225d9ce2f93ccaf8f8803faa1 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Biome.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Biome.java
 @@ -54,7 +54,8 @@ import org.apache.logging.log4j.Logger;
@@ -5422,7 +5467,7 @@ index 82543294b0b0bf7479f6183e4c50c5ba2659f552..90b04ec7363d2f1bced15f5a6938c3d9
     public static final Codec<Biome> NETWORK_CODEC;
     public static final Codec<Supplier<Biome>> CODEC = RegistryFileCodec.create(Registry.BIOME_REGISTRY, DIRECT_CODEC);
     public static final Codec<List<Supplier<Biome>>> LIST_CODEC = RegistryFileCodec.homogeneousList(Registry.BIOME_REGISTRY, DIRECT_CODEC);
-@@ -184,7 +185,7 @@ public final class Biome {
+@@ -188,7 +189,7 @@ public final class Biome {
        for(int i2 = 0; i2 < i; ++i2) {
           int i3 = 0;
           if (structureFeatureManager.shouldGenerateFeatures()) {
@@ -5431,7 +5476,7 @@ index 82543294b0b0bf7479f6183e4c50c5ba2659f552..90b04ec7363d2f1bced15f5a6938c3d9
                 worldgenRandom.setFeatureSeed(l, i3, i2);
                 int i4 = SectionPos.blockToSectionCoord(blockPos.getX());
                 int i5 = SectionPos.blockToSectionCoord(blockPos.getZ());
-@@ -205,7 +206,7 @@ public final class Biome {
+@@ -209,7 +210,7 @@ public final class Biome {
           }
  
           if (list.size() > i2) {
@@ -5440,7 +5485,7 @@ index 82543294b0b0bf7479f6183e4c50c5ba2659f552..90b04ec7363d2f1bced15f5a6938c3d9
                 ConfiguredFeature<?, ?> configuredFeature = (ConfiguredFeature)supplier.get();
                 worldgenRandom.setFeatureSeed(l, i3, i2);
  
-@@ -313,7 +314,6 @@ public final class Biome {
+@@ -317,7 +318,6 @@ public final class Biome {
     }
  
     static {
@@ -5494,7 +5539,7 @@ index 884cefdb38ba9597a12d2b6351b9b3bd463aad02..7c9f9b787c52532311b743e6a467cea3
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/block/CandleBlock.java b/src/main/java/net/minecraft/world/level/block/CandleBlock.java
-index 5135d14bed2f236e5c2a86c0c7b7748460d2ed1b..e5e74db1744a6872e878c9eff1a95124d827c204 100644
+index 77df87a0663a1888f5184b49bb1bbec6b120577d..d30f211f351e25853fab97faa008da778aad4902 100644
 --- a/src/main/java/net/minecraft/world/level/block/CandleBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CandleBlock.java
 @@ -130,7 +130,7 @@ public class CandleBlock extends AbstractCandleBlock implements SimpleWaterlogge
@@ -5669,6 +5714,19 @@ index 42eb0f389518deac6a88dd6744ee25471a87501e..e68255e6b110870b22781e42f0da7797
        if (blockEntityTicker == null) {
           this.removeBlockEntityTicker(blockEntity.getBlockPos());
        } else {
+diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
+index aff94a838b5f69366f29b5282cf5625cd5ad4b22..83797049b45f2cccae406a6a9e290ff03062a107 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
++++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
+@@ -33,7 +33,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+    public void acquire() {
+       if (this.traces != null) {
+          Thread thread = Thread.currentThread();
+-         this.traces.push((T)Pair.of(thread, thread.getStackTrace()));
++         this.traces.push(Pair.of(thread, thread.getStackTrace())); // MagmaCube - decompile error
+       }
+ 
+       ThreadingDetector.checkAndLock(this.lock, this.traces, "PalettedContainer");
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 index 31d5e3c7879807e5592183525e7610de220da174..e46850b49eadfc1fd0e5f42c12a93beaa1a73bff 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
@@ -5683,7 +5741,7 @@ index 31d5e3c7879807e5592183525e7610de220da174..e46850b49eadfc1fd0e5f42c12a93bea
           DataLayer dataLayer2 = levelLightEngine.getLayerListener(LightLayer.SKY).getDataLayerData(SectionPos.of(chunkPos, i2));
           if (levelChunkSection != LevelChunk.EMPTY_SECTION || dataLayer != null || dataLayer2 != null) {
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index a478a9ff25d3476459243a6bb5e054448180e8e2..3840e0030903c9bccb8f2c4e64bbf725c24c23bf 100644
+index 720309ec303b6ebecffc95e94f38850a81c08e37..ecf1589600c07af4b870220e3525067c27b7974f 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 @@ -41,7 +41,8 @@ public class DimensionType {
@@ -5705,10 +5763,10 @@ index a478a9ff25d3476459243a6bb5e054448180e8e2..3840e0030903c9bccb8f2c4e64bbf725
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java b/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java
-index f075dbc991f4c9cdd576bfcc141080eede535ba0..705db1b06e113c24a70c1f5dca4409d5a3cb80b0 100644
+index 1dd8f538ae26c5e9a9bf0c4f685a4ec272f790be..9a802d5099e649d02dc4e61b8174e45fe7ffeccd 100644
 --- a/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java
-@@ -109,7 +109,7 @@ public class EntitySectionStorage<T extends EntityAccess> {
+@@ -104,7 +104,7 @@ public class EntitySectionStorage<T extends EntityAccess> {
  
     public LongSet getAllChunksWithExistingSections() {
        LongSet longSet = new LongOpenHashSet();
@@ -5734,7 +5792,7 @@ index 18ecab2e2e9a09ca57eb12e33c31adee2284f0d4..b7f16a3e9053b8faceebf3a8acd1c6fd
  
     }
 diff --git a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
-index 77d4a7871597d3a12e9d4bd65a6d4d313cdba9ca..12a0bfc784a7453d05daa36a92014def3a9f8458 100644
+index 4126fac6cca5597dd7bd5cad6af6199e83217d3b..c6bdb1ed1f1ceba8fb94489c314f40f6bdf86391 100644
 --- a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 +++ b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 @@ -222,7 +222,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
@@ -5800,29 +5858,8 @@ index e2a905ddab5b5f68787f8d19e816bd2a7f5405a2..c55d047d90f491294bf7db6dc16fbae3
  
     public GeodeBlockSettings(BlockStateProvider blockStateProvider, BlockStateProvider blockStateProvider2, BlockStateProvider blockStateProvider3, BlockStateProvider blockStateProvider4, BlockStateProvider blockStateProvider5, List<BlockState> list) {
        this.fillingProvider = blockStateProvider;
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-index c9e4573af125baaea426543d0db7cccd748b764f..98e6b6ed83df6d6ea57b2b427022fe3eec0daa7e 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-@@ -418,11 +418,13 @@ public final class NoiseBasedChunkGenerator extends ChunkGenerator {
-                      }
- 
-                      for(JigsawJunction jigsawJunction : poolElementStructurePiece.getJunctions()) {
--                        int i3 = jigsawJunction.getSourceX();
--                        int i4 = jigsawJunction.getSourceZ();
--                        if (i3 > i3 - 12 && i4 > i4 - 12 && i3 < i3 + 15 + 12 && i4 < i4 + 15 + 12) {
-+                        // MagmaCube start - decompile error
-+                        int i3x = jigsawJunction.getSourceX();
-+                        int i4x = jigsawJunction.getSourceZ();
-+                        if (i3x > i3x - 12 && i4x > i4x - 12 && i3x < i3x + 15 + 12 && i4x < i4x + 15 + 12) {
-                            objectList2.add(jigsawJunction);
-                         }
-+                        // MagmaCube end - decompile error
-                      }
-                   } else {
-                      objectList.add(structurePiece);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 18ce9a2a280095fd4a80204058793921266aec09..402f7013df75a5857f0dcea74097a9068d2149df 100644
+index 6d66a5742bd833dc474e58faee316d83e7eb1b22..e5318b371e4b73cc5538018fb33e73dad5962315 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -18,7 +18,8 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -5831,20 +5868,20 @@ index 18ce9a2a280095fd4a80204058793921266aec09..402f7013df75a5857f0dcea74097a906
  public final class NoiseGeneratorSettings {
 -   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC;
 +   // MagmaCube - decompile error
-+   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration)).apply(instance, NoiseGeneratorSettings::new));
++   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("grimstone_enabled").forGetter(NoiseGeneratorSettings::isGrimstoneEnabled)).apply(instance, NoiseGeneratorSettings::new));
     public static final Codec<Supplier<NoiseGeneratorSettings>> CODEC = RegistryFileCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, DIRECT_CODEC);
     private final StructureSettings structureSettings;
     private final NoiseSettings noiseSettings;
-@@ -109,7 +110,6 @@ public final class NoiseGeneratorSettings {
+@@ -127,7 +128,6 @@ public final class NoiseGeneratorSettings {
     }
  
     static {
--      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration)).apply(instance, NoiseGeneratorSettings::new));
-       register(AMPLIFIED, overworld(new StructureSettings(true), true, AMPLIFIED.location()));
-       register(NETHER, nether(new StructureSettings(false), Blocks.NETHERRACK.defaultBlockState(), Blocks.LAVA.defaultBlockState(), NETHER.location()));
-       register(END, end(new StructureSettings(false), Blocks.END_STONE.defaultBlockState(), Blocks.AIR.defaultBlockState(), END.location(), true, true));
+-      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("grimstone_enabled").forGetter(NoiseGeneratorSettings::isGrimstoneEnabled)).apply(instance, NoiseGeneratorSettings::new));
+       register(AMPLIFIED, overworld(new StructureSettings(true), true));
+       register(NETHER, netherLikePreset(new StructureSettings(false), Blocks.NETHERRACK.defaultBlockState(), Blocks.LAVA.defaultBlockState(), false));
+       register(END, endLikePreset(new StructureSettings(false), Blocks.END_STONE.defaultBlockState(), Blocks.AIR.defaultBlockState(), true, true, false));
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
-index db8144d377096cb18504095f52d5e11f288b4c62..f9a716773a9a6f9e01909d9046c127143c2a1045 100644
+index 01a54d54c04c474880ba2c1a00166b72cf42b9f9..dbf024a76ad32200e28f6c940a9c2a48858dae90 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
 @@ -8,7 +8,8 @@ import java.util.function.Function;
@@ -5886,7 +5923,7 @@ index 6ac73abd2407082d9fdcb23a2d0544830bd89c7c..d82888bf743d8fcc11eea6e4d8074787
     private final long seed;
     private final boolean generateFeatures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
-index 968e7f33eb1a7c369cae12025af8088f063eeadc..62ea759fd0c3f0cd4fbc4f8eb55e88c314534385 100644
+index b82ef4d0184a664cb85bdc5ad7204a9b854dcaf0..e9a5ea44226067f3ff787a07c8c020b8a3254f8d 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
 @@ -3,6 +3,7 @@ package net.minecraft.world.level.levelgen.feature;
@@ -5897,7 +5934,7 @@ index 968e7f33eb1a7c369cae12025af8088f063eeadc..62ea759fd0c3f0cd4fbc4f8eb55e88c3
  import com.mojang.serialization.Codec;
  import com.mojang.serialization.codecs.RecordCodecBuilder;
  import java.util.Collections;
-@@ -148,7 +149,21 @@ public class SpikeFeature extends Feature<SpikeConfiguration> {
+@@ -151,7 +152,21 @@ public class SpikeFeature extends Feature<SpikeConfiguration> {
        }
  
        public List<SpikeFeature.EndSpike> load(Long l) {
@@ -5922,12 +5959,12 @@ index 968e7f33eb1a7c369cae12025af8088f063eeadc..62ea759fd0c3f0cd4fbc4f8eb55e88c3
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index 2bdbef14ff5486c3ebc5f4ad8b1e9d1fea576a72..25813bbdc07dcbb356ed9226ed018ff51de17b03 100644
+index 3226d7c23670d3e7fb96af287babd58eaa4fd299..e47c7410b8d79d2c3c0f673c0af9f05c23bdfed0 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-@@ -70,7 +70,8 @@ public abstract class StructureFeature<C extends FeatureConfiguration> {
+@@ -71,7 +71,8 @@ public abstract class StructureFeature<C extends FeatureConfiguration> {
     public static final StructureFeature<JigsawConfiguration> BASTION_REMNANT = register("Bastion_Remnant", new BastionFeature(JigsawConfiguration.CODEC), GenerationStep.Decoration.SURFACE_STRUCTURES);
-    public static final List<StructureFeature<?>> NOISE_AFFECTING_FEATURES = ImmutableList.of(PILLAGER_OUTPOST, VILLAGE, NETHER_FOSSIL);
+    public static final List<StructureFeature<?>> NOISE_AFFECTING_FEATURES = ImmutableList.of(PILLAGER_OUTPOST, VILLAGE, NETHER_FOSSIL, STRONGHOLD);
     private static final ResourceLocation JIGSAW_RENAME = new ResourceLocation("jigsaw");
 -   private static final Map<ResourceLocation, ResourceLocation> RENAMES = ImmutableMap.builder().put(new ResourceLocation("nvi"), JIGSAW_RENAME).put(new ResourceLocation("pcp"), JIGSAW_RENAME).put(new ResourceLocation("bastionremnant"), JIGSAW_RENAME).put(new ResourceLocation("runtime"), JIGSAW_RENAME).build();
 +   // MagmaCube - decompile error
@@ -5978,10 +6015,10 @@ index 131dafca69f2abdd3e61cc1b523278a6cfd532c9..6ba39ffa04da2410d10ebdde51d5ebf6
     private final int separation;
     private final int salt;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-index ddc8344e6a687a2d0918fd5b9e12c19878a45077..17e63815b16b27b633f6116ccb4707ebc4d9a5dd 100644
+index 0fa33670015ebbf992658e97c360a5e8f08e6278..cf55f6de3fe8a2fd14916651d5a514979af92b8e 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-@@ -176,12 +176,14 @@ public class JigsawPlacement {
+@@ -177,12 +177,14 @@ public class JigsawPlacement {
                                if (!boundingBox2.isInside(structureBlockInfox.pos.relative(JigsawBlock.getFrontFacing(structureBlockInfox.state)))) {
                                   return 0;
                                } else {
@@ -6074,7 +6111,7 @@ index c743d7d857620dc9de9ebec3d04dd0e56541129f..5cf63f6328c94cd0788073cfda660e19
        protected static final int GRIDROOM_TOP_CONNECT_INDEX = getRoomIndex(2, 2, 0);
        protected static final int GRIDROOM_LEFTWING_CONNECT_INDEX = getRoomIndex(0, 1, 0);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
-index 250c7e91812008ba17ef98bbeec06fbfc2c2e9dd..7b5eb5b81cae06e8e1aec4c9b42df49e9039340e 100644
+index ef420100e9bd18e938fcd9cb0e2276434ed665ec..84f3a8084a03a6a3bab619deeefaddff5368794a 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 @@ -41,7 +41,8 @@ public abstract class StructurePiece {
