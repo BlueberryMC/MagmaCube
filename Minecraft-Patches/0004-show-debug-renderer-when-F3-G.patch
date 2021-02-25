@@ -5,10 +5,10 @@ Subject: [PATCH] show debug renderer when F3+G
 
 
 diff --git a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
-index 8ca366f8c357edaa0bfd04195affd5da9af28482..8fc43ce6900994ddcba1da67e9e64afb10f53890 100644
+index 7bc6518a6caabed85d340342febd93652abf0092..93b723daad84174ad8822d0516f5136dd5737a16 100644
 --- a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
-@@ -96,6 +96,28 @@ public class DebugRenderer {
+@@ -93,6 +93,27 @@ public class DebugRenderer {
     public void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, double d, double d2, double d3) {
        if (this.renderChunkborder && !Minecraft.getInstance().showOnlyReducedInfo()) {
           this.chunkBorderRenderer.render(poseStack, bufferSource, d, d2, d3);
@@ -20,7 +20,6 @@ index 8ca366f8c357edaa0bfd04195affd5da9af28482..8fc43ce6900994ddcba1da67e9e64afb
 +            this.heightMapRenderer.render(poseStack, bufferSource, d, d2, d3);
 +            this.collisionBoxRenderer.render(poseStack, bufferSource, d, d2, d3);
 +            this.neighborsUpdateRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.caveRenderer.render(poseStack, bufferSource, d, d2, d3);
 +            this.structureRenderer.render(poseStack, bufferSource, d, d2, d3);
 +            this.lightDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
 +            this.worldGenAttemptRenderer.render(poseStack, bufferSource, d, d2, d3);

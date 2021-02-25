@@ -543,10 +543,10 @@ index 3731cc09b9eba6ee359cf99647d65c4724e2eb87..2e96a6fad5db6d14c1db543ec5f009d4
                 }
  
 diff --git a/src/main/java/net/minecraft/client/gui/Gui.java b/src/main/java/net/minecraft/client/gui/Gui.java
-index 174b8a51f8c44baa4ab4ee7e31f571448011ced5..d9c5d24755d756a368c73b69ab930fcd2a21b7b0 100644
+index c2311b8c9788a6768e42147e92f390dbcbd36181..7c83ce43ebeef5007f18cf64c391aec508573201 100644
 --- a/src/main/java/net/minecraft/client/gui/Gui.java
 +++ b/src/main/java/net/minecraft/client/gui/Gui.java
-@@ -1186,7 +1186,7 @@ public class Gui extends GuiComponent {
+@@ -1190,7 +1190,7 @@ public class Gui extends GuiComponent {
     public void handleChat(ChatType chatType, Component component, UUID uuid) {
        if (!this.minecraft.isBlocked(uuid)) {
           if (!this.minecraft.options.hideMatchedNames || !this.minecraft.isBlocked(this.guessChatUUID(component))) {
@@ -966,10 +966,19 @@ index 4956fea4717b3bd88fa4fddb5bd232b7e301860e..70cdc7f9d116e43ad9b0769291401e6e
  
     @Nullable
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 550e912abf75e4a18268682afd8e94826c62fb6c..5e06fe19d1b3ffaa2854a711a601b4eeb78d41fc 100644
+index 1f53fb79b17cb0f59f140eb78aa05d694918ba04..3453c2f2848929d90b2bea2c0012ecbca605ce32 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -1418,11 +1418,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -509,7 +509,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
+ 
+    public void handleRemoveEntity(ClientboundRemoveEntitiesPacket clientboundRemoveEntitiesPacket) {
+       PacketUtils.ensureRunningOnSameThread(clientboundRemoveEntitiesPacket, this, this.minecraft);
+-      clientboundRemoveEntitiesPacket.getEntityIds().forEach((i) -> this.level.removeEntity(i, Entity.RemovalReason.DISCARDED));
++      clientboundRemoveEntitiesPacket.getEntityIds().forEach((java.util.function.IntConsumer) (i) -> this.level.removeEntity(i, Entity.RemovalReason.DISCARDED)); // MagmaCube - decompile error
+    }
+ 
+    public void handleMovePlayer(ClientboundPlayerPositionPacket clientboundPlayerPositionPacket) {
+@@ -1464,11 +1464,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
              } else {
                 this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                       this.minecraft.setScreen((Screen)null);
@@ -986,7 +995,7 @@ index 550e912abf75e4a18268682afd8e94826c62fb6c..5e06fe19d1b3ffaa2854a711a601b4ee
  
                          this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
                          this.downloadCallback(this.minecraft.getClientPackSource().downloadAndSelectResourcePack(s, s2));
-@@ -1430,14 +1432,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1476,14 +1478,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
                          this.send(ServerboundResourcePackPacket.Action.DECLINED);
                          if (flag) {
                             this.connection.disconnect(new TranslatableComponent("multiplayer.requiredTexturePrompt.disconnect"));
@@ -1517,10 +1526,10 @@ index 2fbf20ca2c568a0f1c49d9cd44e94b900a1fbf7f..10b0c4c0e5723db4191c4bb4451432f1
  
     @SafeVarargs
 diff --git a/src/main/java/net/minecraft/core/Registry.java b/src/main/java/net/minecraft/core/Registry.java
-index af11c712c413c05a58e057ba2bd036e7eb312678..ed782dde15c1f08dab4a0b0d9e42585ea95ffd1e 100644
+index 2deba148a9b3914bf041db1270e94709ee3840bb..6d29e32d0599b38022bde9a3c635f9dd72fe1eed 100644
 --- a/src/main/java/net/minecraft/core/Registry.java
 +++ b/src/main/java/net/minecraft/core/Registry.java
-@@ -259,8 +259,8 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -262,8 +262,8 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     private static <T, R extends WritableRegistry<T>> R internalRegister(ResourceKey<? extends Registry<T>> resourceKey, R writableRegistry, Supplier<T> supplier, Lifecycle lifecycle) {
        ResourceLocation resourceLocation = resourceKey.location();
        LOADERS.put(resourceLocation, supplier);
@@ -1531,7 +1540,7 @@ index af11c712c413c05a58e057ba2bd036e7eb312678..ed782dde15c1f08dab4a0b0d9e42585e
     }
  
     protected Registry(ResourceKey<? extends Registry<T>> resourceKey, Lifecycle lifecycle) {
-@@ -277,13 +277,15 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -280,13 +280,15 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     }
  
     public <U> DataResult<Pair<T, U>> decode(DynamicOps<U> dynamicOps, U object) {
@@ -1551,7 +1560,7 @@ index af11c712c413c05a58e057ba2bd036e7eb312678..ed782dde15c1f08dab4a0b0d9e42585e
     }
  
     public <U> DataResult<U> encode(T object, DynamicOps<U> dynamicOps, U object2) {
-@@ -305,6 +307,7 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -308,6 +310,7 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     public abstract Optional<ResourceKey<T>> getResourceKey(T var1);
  
     public abstract int getId(@Nullable T var1);
@@ -1559,7 +1568,7 @@ index af11c712c413c05a58e057ba2bd036e7eb312678..ed782dde15c1f08dab4a0b0d9e42585e
  
     @Nullable
     public abstract T get(@Nullable ResourceKey<T> var1);
-@@ -348,11 +351,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -351,11 +354,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     }
  
     public static <V, T extends V> T register(Registry<V> registry, ResourceLocation resourceLocation, T object) {
@@ -1675,17 +1684,19 @@ index 51d14d0cf26d188f8fbb5292617b9882eebdfcfd..ec52d76e9ca5a334569ae5c4ba33deed
                 throw new IllegalStateException("Duplicate loot table " + resourceLocation);
              }
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index c0e6bebc4f873fbd3e12d322e316de5036822e46..9eab49c96dd63ee8d32e70d26c4fe425d338e297 100644
+index 1133d3245f5c5f060a20ff3c539944cda1841e20..38ee93405b1c8f932b25a1b8fec18ba323ec208c 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-@@ -70,15 +70,19 @@ public class BlockModelGenerators {
+@@ -69,16 +69,20 @@ public class BlockModelGenerators {
+    private final BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput;
     private final Consumer<Item> skippedAutoModelsOutput;
     private final List<Block> nonOrientableTrapdoor = ImmutableList.of(Blocks.OAK_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.IRON_TRAPDOOR);
-    private final List<Block> mirroredFullBlocks = ImmutableList.of(Blocks.STONE, Blocks.GRIMSTONE);
--   private final Map<Block, TexturedModel> texturedModels = ImmutableMap.builder().put(Blocks.SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.SANDSTONE)).put(Blocks.RED_SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.RED_SANDSTONE)).put(Blocks.SMOOTH_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.SANDSTONE, "_top"))).put(Blocks.SMOOTH_RED_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.RED_SANDSTONE, "_top"))).put(Blocks.CUT_SANDSTONE, TexturedModel.COLUMN.get(Blocks.SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_SANDSTONE)))).put(Blocks.CUT_RED_SANDSTONE, TexturedModel.COLUMN.get(Blocks.RED_SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_RED_SANDSTONE)))).put(Blocks.QUARTZ_BLOCK, TexturedModel.COLUMN.get(Blocks.QUARTZ_BLOCK)).put(Blocks.SMOOTH_QUARTZ, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_bottom"))).put(Blocks.BLACKSTONE, TexturedModel.COLUMN_WITH_WALL.get(Blocks.BLACKSTONE)).build();
+-   private final Map<Block, BlockModelGenerators.MirroredModelFactory> mirroredModels = ImmutableMap.builder().put(Blocks.STONE, ModelTemplates.CUBE_MIRRORED_ALL::create).put(Blocks.COBBLED_DEEPSLATE, ModelTemplates.CUBE_MIRRORED_ALL::create).put(Blocks.DEEPSLATE, ModelTemplates.CUBE_COLUMN_MIRRORED::create).build();
+-   private final Map<Block, TexturedModel> texturedModels = ImmutableMap.builder().put(Blocks.SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.SANDSTONE)).put(Blocks.RED_SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.RED_SANDSTONE)).put(Blocks.SMOOTH_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.SANDSTONE, "_top"))).put(Blocks.SMOOTH_RED_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.RED_SANDSTONE, "_top"))).put(Blocks.CUT_SANDSTONE, TexturedModel.COLUMN.get(Blocks.SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_SANDSTONE)))).put(Blocks.CUT_RED_SANDSTONE, TexturedModel.COLUMN.get(Blocks.RED_SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_RED_SANDSTONE)))).put(Blocks.QUARTZ_BLOCK, TexturedModel.COLUMN.get(Blocks.QUARTZ_BLOCK)).put(Blocks.SMOOTH_QUARTZ, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_bottom"))).put(Blocks.BLACKSTONE, TexturedModel.COLUMN_WITH_WALL.get(Blocks.BLACKSTONE)).put(Blocks.DEEPSLATE, TexturedModel.COLUMN_WITH_WALL.get(Blocks.DEEPSLATE)).build();
 -   private static final Map<BlockFamily.Variant, BiConsumer<BlockModelGenerators.BlockFamilyProvider, Block>> SHAPE_CONSUMERS = ImmutableMap.builder().put(BlockFamily.Variant.BUTTON, BlockModelGenerators.BlockFamilyProvider::button).put(BlockFamily.Variant.DOOR, (BiConsumer)(object, block) -> ((BlockModelGenerators.BlockFamilyProvider)object).door(block)).put(BlockFamily.Variant.FENCE, BlockModelGenerators.BlockFamilyProvider::fence).put(BlockFamily.Variant.FENCE_GATE, BlockModelGenerators.BlockFamilyProvider::fenceGate).put(BlockFamily.Variant.SIGN, BlockModelGenerators.BlockFamilyProvider::sign).put(BlockFamily.Variant.SLAB, BlockModelGenerators.BlockFamilyProvider::slab).put(BlockFamily.Variant.STAIRS, BlockModelGenerators.BlockFamilyProvider::stairs).put(BlockFamily.Variant.PRESSURE_PLATE, BlockModelGenerators.BlockFamilyProvider::pressurePlate).put(BlockFamily.Variant.TRAPDOOR, (BiConsumer)(object, block) -> ((BlockModelGenerators.BlockFamilyProvider)object).trapdoor(block)).put(BlockFamily.Variant.WALL, BlockModelGenerators.BlockFamilyProvider::wall).build();
 +   // MagmaCube start - decompile error
-+   private final Map<Block, TexturedModel> texturedModels = (Map) ImmutableMap.builder().put(Blocks.SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.SANDSTONE)).put(Blocks.RED_SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.RED_SANDSTONE)).put(Blocks.SMOOTH_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.SANDSTONE, "_top"))).put(Blocks.SMOOTH_RED_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.RED_SANDSTONE, "_top"))).put(Blocks.CUT_SANDSTONE, TexturedModel.COLUMN.get(Blocks.SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_SANDSTONE)))).put(Blocks.CUT_RED_SANDSTONE, TexturedModel.COLUMN.get(Blocks.RED_SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_RED_SANDSTONE)))).put(Blocks.QUARTZ_BLOCK, TexturedModel.COLUMN.get(Blocks.QUARTZ_BLOCK)).put(Blocks.SMOOTH_QUARTZ, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_bottom"))).put(Blocks.BLACKSTONE, TexturedModel.COLUMN_WITH_WALL.get(Blocks.BLACKSTONE)).build();
++   private final Map<Block, BlockModelGenerators.MirroredModelFactory> mirroredModels = ImmutableMap.<Block, BlockModelGenerators.MirroredModelFactory>builder().put(Blocks.STONE, ModelTemplates.CUBE_MIRRORED_ALL::create).put(Blocks.COBBLED_DEEPSLATE, ModelTemplates.CUBE_MIRRORED_ALL::create).put(Blocks.DEEPSLATE, ModelTemplates.CUBE_COLUMN_MIRRORED::create).build();
++   private final Map<Block, TexturedModel> texturedModels = ImmutableMap.<Block, TexturedModel>builder().put(Blocks.SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.SANDSTONE)).put(Blocks.RED_SANDSTONE, TexturedModel.TOP_BOTTOM_WITH_WALL.get(Blocks.RED_SANDSTONE)).put(Blocks.SMOOTH_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.SANDSTONE, "_top"))).put(Blocks.SMOOTH_RED_SANDSTONE, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.RED_SANDSTONE, "_top"))).put(Blocks.CUT_SANDSTONE, TexturedModel.COLUMN.get(Blocks.SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_SANDSTONE)))).put(Blocks.CUT_RED_SANDSTONE, TexturedModel.COLUMN.get(Blocks.RED_SANDSTONE).updateTextures((textureMapping) -> textureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.CUT_RED_SANDSTONE)))).put(Blocks.QUARTZ_BLOCK, TexturedModel.COLUMN.get(Blocks.QUARTZ_BLOCK)).put(Blocks.SMOOTH_QUARTZ, TexturedModel.createAllSame(TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_bottom"))).put(Blocks.BLACKSTONE, TexturedModel.COLUMN_WITH_WALL.get(Blocks.BLACKSTONE)).put(Blocks.DEEPSLATE, TexturedModel.COLUMN_WITH_WALL.get(Blocks.DEEPSLATE)).build();
 +   private static final Map<BlockFamily.Variant, BiConsumer<BlockModelGenerators.BlockFamilyProvider, Block>> SHAPE_CONSUMERS = ImmutableMap.<BlockFamily.Variant, BiConsumer<BlockModelGenerators.BlockFamilyProvider, Block>>builder().put(BlockFamily.Variant.BUTTON, BlockModelGenerators.BlockFamilyProvider::button).put(BlockFamily.Variant.DOOR, (object, block) -> ((BlockModelGenerators.BlockFamilyProvider)object).door(block)).put(BlockFamily.Variant.FENCE, BlockModelGenerators.BlockFamilyProvider::fence).put(BlockFamily.Variant.FENCE_GATE, BlockModelGenerators.BlockFamilyProvider::fenceGate).put(BlockFamily.Variant.SIGN, BlockModelGenerators.BlockFamilyProvider::sign).put(BlockFamily.Variant.SLAB, BlockModelGenerators.BlockFamilyProvider::slab).put(BlockFamily.Variant.STAIRS, BlockModelGenerators.BlockFamilyProvider::stairs).put(BlockFamily.Variant.PRESSURE_PLATE, BlockModelGenerators.BlockFamilyProvider::pressurePlate).put(BlockFamily.Variant.TRAPDOOR, (object, block) -> ((BlockModelGenerators.BlockFamilyProvider)object).trapdoor(block)).put(BlockFamily.Variant.WALL, BlockModelGenerators.BlockFamilyProvider::wall).build();
 +   // MagmaCube end - decompile error
     public static final Map<BooleanProperty, Function<ResourceLocation, Variant>> MULTIFACE_GENERATOR = Util.make(Maps.newHashMap(), (hashMap) -> {
@@ -1764,7 +1775,7 @@ index b8ec5d93f2be8cc799ba9f5d2e181fb2153ffc12..e1950ce7a29aeaf8e0432e497f306bae
           }
  
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index adc88ec1052f383f5505a3b0c0ea0ed05b64b1ec..f7ec61b88ebfd86955a54ee46d36099f92a92881 100644
+index 4746b791e8c0b4163669262858ce3ff90a86a1ac..85e9ae2790869b0e4a94e9710caf71065307512e 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 @@ -47,7 +47,8 @@ public class RecipeProvider implements DataProvider {
@@ -1777,7 +1788,7 @@ index adc88ec1052f383f5505a3b0c0ea0ed05b64b1ec..f7ec61b88ebfd86955a54ee46d36099f
  
     public RecipeProvider(DataGenerator dataGenerator) {
        this.generator = dataGenerator;
-@@ -1110,7 +1111,7 @@ public class RecipeProvider implements DataProvider {
+@@ -1111,7 +1112,7 @@ public class RecipeProvider implements DataProvider {
  
     private static void generateRecipes(Consumer<FinishedRecipe> consumer, BlockFamily blockFamily) {
        blockFamily.getShapes().forEach((variant, block) -> {
@@ -2079,6 +2090,71 @@ index 31cf6ae773e3bf54aef9a74163668147bc947717..6a2f953f5f22ac58e8e8bf822135ef1c
              }
  
              if (this.hasElementSeparator()) {
+diff --git a/src/main/java/net/minecraft/network/ConnectionProtocol.java b/src/main/java/net/minecraft/network/ConnectionProtocol.java
+index ef47262f7009140d023b7b9a7b9debc35bb5de8c..f28a0bc0ac2d6e5c71c12a2ee4b367b23d1a36f9 100644
+--- a/src/main/java/net/minecraft/network/ConnectionProtocol.java
++++ b/src/main/java/net/minecraft/network/ConnectionProtocol.java
+@@ -174,10 +174,12 @@ import net.minecraft.network.protocol.status.ServerboundStatusRequestPacket;
+ import org.apache.logging.log4j.LogManager;
+ 
+ public enum ConnectionProtocol {
+-   HANDSHAKING(-1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientIntentionPacket.class, ClientIntentionPacket::new))),
+-   PLAY(0, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientboundAddEntityPacket.class, ClientboundAddEntityPacket::new).addPacket(ClientboundAddExperienceOrbPacket.class, ClientboundAddExperienceOrbPacket::new).addPacket(ClientboundAddMobPacket.class, ClientboundAddMobPacket::new).addPacket(ClientboundAddPaintingPacket.class, ClientboundAddPaintingPacket::new).addPacket(ClientboundAddPlayerPacket.class, ClientboundAddPlayerPacket::new).addPacket(ClientboundAddVibrationSignalPacket.class, ClientboundAddVibrationSignalPacket::new).addPacket(ClientboundAnimatePacket.class, ClientboundAnimatePacket::new).addPacket(ClientboundAwardStatsPacket.class, ClientboundAwardStatsPacket::new).addPacket(ClientboundBlockBreakAckPacket.class, ClientboundBlockBreakAckPacket::new).addPacket(ClientboundBlockDestructionPacket.class, ClientboundBlockDestructionPacket::new).addPacket(ClientboundBlockEntityDataPacket.class, ClientboundBlockEntityDataPacket::new).addPacket(ClientboundBlockEventPacket.class, ClientboundBlockEventPacket::new).addPacket(ClientboundBlockUpdatePacket.class, ClientboundBlockUpdatePacket::new).addPacket(ClientboundBossEventPacket.class, ClientboundBossEventPacket::new).addPacket(ClientboundChangeDifficultyPacket.class, ClientboundChangeDifficultyPacket::new).addPacket(ClientboundChatPacket.class, ClientboundChatPacket::new).addPacket(ClientboundClearTitlesPacket.class, ClientboundClearTitlesPacket::new).addPacket(ClientboundCommandSuggestionsPacket.class, ClientboundCommandSuggestionsPacket::new).addPacket(ClientboundCommandsPacket.class, ClientboundCommandsPacket::new).addPacket(ClientboundContainerAckPacket.class, ClientboundContainerAckPacket::new).addPacket(ClientboundContainerClosePacket.class, ClientboundContainerClosePacket::new).addPacket(ClientboundContainerSetContentPacket.class, ClientboundContainerSetContentPacket::new).addPacket(ClientboundContainerSetDataPacket.class, ClientboundContainerSetDataPacket::new).addPacket(ClientboundContainerSetSlotPacket.class, ClientboundContainerSetSlotPacket::new).addPacket(ClientboundCooldownPacket.class, ClientboundCooldownPacket::new).addPacket(ClientboundCustomPayloadPacket.class, ClientboundCustomPayloadPacket::new).addPacket(ClientboundCustomSoundPacket.class, ClientboundCustomSoundPacket::new).addPacket(ClientboundDisconnectPacket.class, ClientboundDisconnectPacket::new).addPacket(ClientboundEntityEventPacket.class, ClientboundEntityEventPacket::new).addPacket(ClientboundExplodePacket.class, ClientboundExplodePacket::new).addPacket(ClientboundForgetLevelChunkPacket.class, ClientboundForgetLevelChunkPacket::new).addPacket(ClientboundGameEventPacket.class, ClientboundGameEventPacket::new).addPacket(ClientboundHorseScreenOpenPacket.class, ClientboundHorseScreenOpenPacket::new).addPacket(ClientboundInitializeBorderPacket.class, ClientboundInitializeBorderPacket::new).addPacket(ClientboundKeepAlivePacket.class, ClientboundKeepAlivePacket::new).addPacket(ClientboundLevelChunkPacket.class, ClientboundLevelChunkPacket::new).addPacket(ClientboundLevelEventPacket.class, ClientboundLevelEventPacket::new).addPacket(ClientboundLevelParticlesPacket.class, ClientboundLevelParticlesPacket::new).addPacket(ClientboundLightUpdatePacket.class, ClientboundLightUpdatePacket::new).addPacket(ClientboundLoginPacket.class, ClientboundLoginPacket::new).addPacket(ClientboundMapItemDataPacket.class, ClientboundMapItemDataPacket::new).addPacket(ClientboundMerchantOffersPacket.class, ClientboundMerchantOffersPacket::new).addPacket(ClientboundMoveEntityPacket.Pos.class, ClientboundMoveEntityPacket.Pos::read).addPacket(ClientboundMoveEntityPacket.PosRot.class, ClientboundMoveEntityPacket.PosRot::read).addPacket(ClientboundMoveEntityPacket.Rot.class, ClientboundMoveEntityPacket.Rot::read).addPacket(ClientboundMoveVehiclePacket.class, ClientboundMoveVehiclePacket::new).addPacket(ClientboundOpenBookPacket.class, ClientboundOpenBookPacket::new).addPacket(ClientboundOpenScreenPacket.class, ClientboundOpenScreenPacket::new).addPacket(ClientboundOpenSignEditorPacket.class, ClientboundOpenSignEditorPacket::new).addPacket(ClientboundPlaceGhostRecipePacket.class, ClientboundPlaceGhostRecipePacket::new).addPacket(ClientboundPlayerAbilitiesPacket.class, ClientboundPlayerAbilitiesPacket::new).addPacket(ClientboundPlayerCombatEndPacket.class, ClientboundPlayerCombatEndPacket::new).addPacket(ClientboundPlayerCombatEnterPacket.class, ClientboundPlayerCombatEnterPacket::new).addPacket(ClientboundPlayerCombatKillPacket.class, ClientboundPlayerCombatKillPacket::new).addPacket(ClientboundPlayerInfoPacket.class, ClientboundPlayerInfoPacket::new).addPacket(ClientboundPlayerLookAtPacket.class, ClientboundPlayerLookAtPacket::new).addPacket(ClientboundPlayerPositionPacket.class, ClientboundPlayerPositionPacket::new).addPacket(ClientboundRecipePacket.class, ClientboundRecipePacket::new).addPacket(ClientboundRemoveEntitiesPacket.class, ClientboundRemoveEntitiesPacket::new).addPacket(ClientboundRemoveMobEffectPacket.class, ClientboundRemoveMobEffectPacket::new).addPacket(ClientboundResourcePackPacket.class, ClientboundResourcePackPacket::new).addPacket(ClientboundRespawnPacket.class, ClientboundRespawnPacket::new).addPacket(ClientboundRotateHeadPacket.class, ClientboundRotateHeadPacket::new).addPacket(ClientboundSectionBlocksUpdatePacket.class, ClientboundSectionBlocksUpdatePacket::new).addPacket(ClientboundSelectAdvancementsTabPacket.class, ClientboundSelectAdvancementsTabPacket::new).addPacket(ClientboundSetActionBarTextPacket.class, ClientboundSetActionBarTextPacket::new).addPacket(ClientboundSetBorderCenterPacket.class, ClientboundSetBorderCenterPacket::new).addPacket(ClientboundSetBorderLerpSizePacket.class, ClientboundSetBorderLerpSizePacket::new).addPacket(ClientboundSetBorderSizePacket.class, ClientboundSetBorderSizePacket::new).addPacket(ClientboundSetBorderWarningDelayPacket.class, ClientboundSetBorderWarningDelayPacket::new).addPacket(ClientboundSetBorderWarningDistancePacket.class, ClientboundSetBorderWarningDistancePacket::new).addPacket(ClientboundSetCameraPacket.class, ClientboundSetCameraPacket::new).addPacket(ClientboundSetCarriedItemPacket.class, ClientboundSetCarriedItemPacket::new).addPacket(ClientboundSetChunkCacheCenterPacket.class, ClientboundSetChunkCacheCenterPacket::new).addPacket(ClientboundSetChunkCacheRadiusPacket.class, ClientboundSetChunkCacheRadiusPacket::new).addPacket(ClientboundSetDefaultSpawnPositionPacket.class, ClientboundSetDefaultSpawnPositionPacket::new).addPacket(ClientboundSetDisplayObjectivePacket.class, ClientboundSetDisplayObjectivePacket::new).addPacket(ClientboundSetEntityDataPacket.class, ClientboundSetEntityDataPacket::new).addPacket(ClientboundSetEntityLinkPacket.class, ClientboundSetEntityLinkPacket::new).addPacket(ClientboundSetEntityMotionPacket.class, ClientboundSetEntityMotionPacket::new).addPacket(ClientboundSetEquipmentPacket.class, ClientboundSetEquipmentPacket::new).addPacket(ClientboundSetExperiencePacket.class, ClientboundSetExperiencePacket::new).addPacket(ClientboundSetHealthPacket.class, ClientboundSetHealthPacket::new).addPacket(ClientboundSetObjectivePacket.class, ClientboundSetObjectivePacket::new).addPacket(ClientboundSetPassengersPacket.class, ClientboundSetPassengersPacket::new).addPacket(ClientboundSetPlayerTeamPacket.class, ClientboundSetPlayerTeamPacket::new).addPacket(ClientboundSetScorePacket.class, ClientboundSetScorePacket::new).addPacket(ClientboundSetSubtitleTextPacket.class, ClientboundSetSubtitleTextPacket::new).addPacket(ClientboundSetTimePacket.class, ClientboundSetTimePacket::new).addPacket(ClientboundSetTitleTextPacket.class, ClientboundSetTitleTextPacket::new).addPacket(ClientboundSetTitlesAnimationPacket.class, ClientboundSetTitlesAnimationPacket::new).addPacket(ClientboundSoundEntityPacket.class, ClientboundSoundEntityPacket::new).addPacket(ClientboundSoundPacket.class, ClientboundSoundPacket::new).addPacket(ClientboundStopSoundPacket.class, ClientboundStopSoundPacket::new).addPacket(ClientboundTabListPacket.class, ClientboundTabListPacket::new).addPacket(ClientboundTagQueryPacket.class, ClientboundTagQueryPacket::new).addPacket(ClientboundTakeItemEntityPacket.class, ClientboundTakeItemEntityPacket::new).addPacket(ClientboundTeleportEntityPacket.class, ClientboundTeleportEntityPacket::new).addPacket(ClientboundUpdateAdvancementsPacket.class, ClientboundUpdateAdvancementsPacket::new).addPacket(ClientboundUpdateAttributesPacket.class, ClientboundUpdateAttributesPacket::new).addPacket(ClientboundUpdateMobEffectPacket.class, ClientboundUpdateMobEffectPacket::new).addPacket(ClientboundUpdateRecipesPacket.class, ClientboundUpdateRecipesPacket::new).addPacket(ClientboundUpdateTagsPacket.class, ClientboundUpdateTagsPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ServerboundAcceptTeleportationPacket.class, ServerboundAcceptTeleportationPacket::new).addPacket(ServerboundBlockEntityTagQuery.class, ServerboundBlockEntityTagQuery::new).addPacket(ServerboundChangeDifficultyPacket.class, ServerboundChangeDifficultyPacket::new).addPacket(ServerboundChatPacket.class, ServerboundChatPacket::new).addPacket(ServerboundClientCommandPacket.class, ServerboundClientCommandPacket::new).addPacket(ServerboundClientInformationPacket.class, ServerboundClientInformationPacket::new).addPacket(ServerboundCommandSuggestionPacket.class, ServerboundCommandSuggestionPacket::new).addPacket(ServerboundContainerAckPacket.class, ServerboundContainerAckPacket::new).addPacket(ServerboundContainerButtonClickPacket.class, ServerboundContainerButtonClickPacket::new).addPacket(ServerboundContainerClickPacket.class, ServerboundContainerClickPacket::new).addPacket(ServerboundContainerClosePacket.class, ServerboundContainerClosePacket::new).addPacket(ServerboundCustomPayloadPacket.class, ServerboundCustomPayloadPacket::new).addPacket(ServerboundEditBookPacket.class, ServerboundEditBookPacket::new).addPacket(ServerboundEntityTagQuery.class, ServerboundEntityTagQuery::new).addPacket(ServerboundInteractPacket.class, ServerboundInteractPacket::new).addPacket(ServerboundJigsawGeneratePacket.class, ServerboundJigsawGeneratePacket::new).addPacket(ServerboundKeepAlivePacket.class, ServerboundKeepAlivePacket::new).addPacket(ServerboundLockDifficultyPacket.class, ServerboundLockDifficultyPacket::new).addPacket(ServerboundMovePlayerPacket.Pos.class, ServerboundMovePlayerPacket.Pos::read).addPacket(ServerboundMovePlayerPacket.PosRot.class, ServerboundMovePlayerPacket.PosRot::read).addPacket(ServerboundMovePlayerPacket.Rot.class, ServerboundMovePlayerPacket.Rot::read).addPacket(ServerboundMovePlayerPacket.StatusOnly.class, ServerboundMovePlayerPacket.StatusOnly::read).addPacket(ServerboundMoveVehiclePacket.class, ServerboundMoveVehiclePacket::new).addPacket(ServerboundPaddleBoatPacket.class, ServerboundPaddleBoatPacket::new).addPacket(ServerboundPickItemPacket.class, ServerboundPickItemPacket::new).addPacket(ServerboundPlaceRecipePacket.class, ServerboundPlaceRecipePacket::new).addPacket(ServerboundPlayerAbilitiesPacket.class, ServerboundPlayerAbilitiesPacket::new).addPacket(ServerboundPlayerActionPacket.class, ServerboundPlayerActionPacket::new).addPacket(ServerboundPlayerCommandPacket.class, ServerboundPlayerCommandPacket::new).addPacket(ServerboundPlayerInputPacket.class, ServerboundPlayerInputPacket::new).addPacket(ServerboundRecipeBookChangeSettingsPacket.class, ServerboundRecipeBookChangeSettingsPacket::new).addPacket(ServerboundRecipeBookSeenRecipePacket.class, ServerboundRecipeBookSeenRecipePacket::new).addPacket(ServerboundRenameItemPacket.class, ServerboundRenameItemPacket::new).addPacket(ServerboundResourcePackPacket.class, ServerboundResourcePackPacket::new).addPacket(ServerboundSeenAdvancementsPacket.class, ServerboundSeenAdvancementsPacket::new).addPacket(ServerboundSelectTradePacket.class, ServerboundSelectTradePacket::new).addPacket(ServerboundSetBeaconPacket.class, ServerboundSetBeaconPacket::new).addPacket(ServerboundSetCarriedItemPacket.class, ServerboundSetCarriedItemPacket::new).addPacket(ServerboundSetCommandBlockPacket.class, ServerboundSetCommandBlockPacket::new).addPacket(ServerboundSetCommandMinecartPacket.class, ServerboundSetCommandMinecartPacket::new).addPacket(ServerboundSetCreativeModeSlotPacket.class, ServerboundSetCreativeModeSlotPacket::new).addPacket(ServerboundSetJigsawBlockPacket.class, ServerboundSetJigsawBlockPacket::new).addPacket(ServerboundSetStructureBlockPacket.class, ServerboundSetStructureBlockPacket::new).addPacket(ServerboundSignUpdatePacket.class, ServerboundSignUpdatePacket::new).addPacket(ServerboundSwingPacket.class, ServerboundSwingPacket::new).addPacket(ServerboundTeleportToEntityPacket.class, ServerboundTeleportToEntityPacket::new).addPacket(ServerboundUseItemOnPacket.class, ServerboundUseItemOnPacket::new).addPacket(ServerboundUseItemPacket.class, ServerboundUseItemPacket::new))),
+-   STATUS(1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ServerboundStatusRequestPacket.class, ServerboundStatusRequestPacket::new).addPacket(ServerboundPingRequestPacket.class, ServerboundPingRequestPacket::new)).addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientboundStatusResponsePacket.class, ClientboundStatusResponsePacket::new).addPacket(ClientboundPongResponsePacket.class, ClientboundPongResponsePacket::new))),
+-   LOGIN(2, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientboundLoginDisconnectPacket.class, ClientboundLoginDisconnectPacket::new).addPacket(ClientboundHelloPacket.class, ClientboundHelloPacket::new).addPacket(ClientboundGameProfilePacket.class, ClientboundGameProfilePacket::new).addPacket(ClientboundLoginCompressionPacket.class, ClientboundLoginCompressionPacket::new).addPacket(ClientboundCustomQueryPacket.class, ClientboundCustomQueryPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ServerboundHelloPacket.class, ServerboundHelloPacket::new).addPacket(ServerboundKeyPacket.class, ServerboundKeyPacket::new).addPacket(ServerboundCustomQueryPacket.class, ServerboundCustomQueryPacket::new)));
++   // MagmaCube start - type
++   HANDSHAKING(-1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<net.minecraft.network.protocol.handshake.ServerHandshakePacketListener>()).addPacket(ClientIntentionPacket.class, ClientIntentionPacket::new))),
++   PLAY(0, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet<net.minecraft.network.protocol.game.ClientGamePacketListener>()).addPacket(ClientboundAddEntityPacket.class, ClientboundAddEntityPacket::new).addPacket(ClientboundAddExperienceOrbPacket.class, ClientboundAddExperienceOrbPacket::new).addPacket(ClientboundAddMobPacket.class, ClientboundAddMobPacket::new).addPacket(ClientboundAddPaintingPacket.class, ClientboundAddPaintingPacket::new).addPacket(ClientboundAddPlayerPacket.class, ClientboundAddPlayerPacket::new).addPacket(ClientboundAddVibrationSignalPacket.class, ClientboundAddVibrationSignalPacket::new).addPacket(ClientboundAnimatePacket.class, ClientboundAnimatePacket::new).addPacket(ClientboundAwardStatsPacket.class, ClientboundAwardStatsPacket::new).addPacket(ClientboundBlockBreakAckPacket.class, ClientboundBlockBreakAckPacket::new).addPacket(ClientboundBlockDestructionPacket.class, ClientboundBlockDestructionPacket::new).addPacket(ClientboundBlockEntityDataPacket.class, ClientboundBlockEntityDataPacket::new).addPacket(ClientboundBlockEventPacket.class, ClientboundBlockEventPacket::new).addPacket(ClientboundBlockUpdatePacket.class, ClientboundBlockUpdatePacket::new).addPacket(ClientboundBossEventPacket.class, ClientboundBossEventPacket::new).addPacket(ClientboundChangeDifficultyPacket.class, ClientboundChangeDifficultyPacket::new).addPacket(ClientboundChatPacket.class, ClientboundChatPacket::new).addPacket(ClientboundClearTitlesPacket.class, ClientboundClearTitlesPacket::new).addPacket(ClientboundCommandSuggestionsPacket.class, ClientboundCommandSuggestionsPacket::new).addPacket(ClientboundCommandsPacket.class, ClientboundCommandsPacket::new).addPacket(ClientboundContainerAckPacket.class, ClientboundContainerAckPacket::new).addPacket(ClientboundContainerClosePacket.class, ClientboundContainerClosePacket::new).addPacket(ClientboundContainerSetContentPacket.class, ClientboundContainerSetContentPacket::new).addPacket(ClientboundContainerSetDataPacket.class, ClientboundContainerSetDataPacket::new).addPacket(ClientboundContainerSetSlotPacket.class, ClientboundContainerSetSlotPacket::new).addPacket(ClientboundCooldownPacket.class, ClientboundCooldownPacket::new).addPacket(ClientboundCustomPayloadPacket.class, ClientboundCustomPayloadPacket::new).addPacket(ClientboundCustomSoundPacket.class, ClientboundCustomSoundPacket::new).addPacket(ClientboundDisconnectPacket.class, ClientboundDisconnectPacket::new).addPacket(ClientboundEntityEventPacket.class, ClientboundEntityEventPacket::new).addPacket(ClientboundExplodePacket.class, ClientboundExplodePacket::new).addPacket(ClientboundForgetLevelChunkPacket.class, ClientboundForgetLevelChunkPacket::new).addPacket(ClientboundGameEventPacket.class, ClientboundGameEventPacket::new).addPacket(ClientboundHorseScreenOpenPacket.class, ClientboundHorseScreenOpenPacket::new).addPacket(ClientboundInitializeBorderPacket.class, ClientboundInitializeBorderPacket::new).addPacket(ClientboundKeepAlivePacket.class, ClientboundKeepAlivePacket::new).addPacket(ClientboundLevelChunkPacket.class, ClientboundLevelChunkPacket::new).addPacket(ClientboundLevelEventPacket.class, ClientboundLevelEventPacket::new).addPacket(ClientboundLevelParticlesPacket.class, ClientboundLevelParticlesPacket::new).addPacket(ClientboundLightUpdatePacket.class, ClientboundLightUpdatePacket::new).addPacket(ClientboundLoginPacket.class, ClientboundLoginPacket::new).addPacket(ClientboundMapItemDataPacket.class, ClientboundMapItemDataPacket::new).addPacket(ClientboundMerchantOffersPacket.class, ClientboundMerchantOffersPacket::new).addPacket(ClientboundMoveEntityPacket.Pos.class, ClientboundMoveEntityPacket.Pos::read).addPacket(ClientboundMoveEntityPacket.PosRot.class, ClientboundMoveEntityPacket.PosRot::read).addPacket(ClientboundMoveEntityPacket.Rot.class, ClientboundMoveEntityPacket.Rot::read).addPacket(ClientboundMoveVehiclePacket.class, ClientboundMoveVehiclePacket::new).addPacket(ClientboundOpenBookPacket.class, ClientboundOpenBookPacket::new).addPacket(ClientboundOpenScreenPacket.class, ClientboundOpenScreenPacket::new).addPacket(ClientboundOpenSignEditorPacket.class, ClientboundOpenSignEditorPacket::new).addPacket(ClientboundPlaceGhostRecipePacket.class, ClientboundPlaceGhostRecipePacket::new).addPacket(ClientboundPlayerAbilitiesPacket.class, ClientboundPlayerAbilitiesPacket::new).addPacket(ClientboundPlayerCombatEndPacket.class, ClientboundPlayerCombatEndPacket::new).addPacket(ClientboundPlayerCombatEnterPacket.class, ClientboundPlayerCombatEnterPacket::new).addPacket(ClientboundPlayerCombatKillPacket.class, ClientboundPlayerCombatKillPacket::new).addPacket(ClientboundPlayerInfoPacket.class, ClientboundPlayerInfoPacket::new).addPacket(ClientboundPlayerLookAtPacket.class, ClientboundPlayerLookAtPacket::new).addPacket(ClientboundPlayerPositionPacket.class, ClientboundPlayerPositionPacket::new).addPacket(ClientboundRecipePacket.class, ClientboundRecipePacket::new).addPacket(ClientboundRemoveEntitiesPacket.class, ClientboundRemoveEntitiesPacket::new).addPacket(ClientboundRemoveMobEffectPacket.class, ClientboundRemoveMobEffectPacket::new).addPacket(ClientboundResourcePackPacket.class, ClientboundResourcePackPacket::new).addPacket(ClientboundRespawnPacket.class, ClientboundRespawnPacket::new).addPacket(ClientboundRotateHeadPacket.class, ClientboundRotateHeadPacket::new).addPacket(ClientboundSectionBlocksUpdatePacket.class, ClientboundSectionBlocksUpdatePacket::new).addPacket(ClientboundSelectAdvancementsTabPacket.class, ClientboundSelectAdvancementsTabPacket::new).addPacket(ClientboundSetActionBarTextPacket.class, ClientboundSetActionBarTextPacket::new).addPacket(ClientboundSetBorderCenterPacket.class, ClientboundSetBorderCenterPacket::new).addPacket(ClientboundSetBorderLerpSizePacket.class, ClientboundSetBorderLerpSizePacket::new).addPacket(ClientboundSetBorderSizePacket.class, ClientboundSetBorderSizePacket::new).addPacket(ClientboundSetBorderWarningDelayPacket.class, ClientboundSetBorderWarningDelayPacket::new).addPacket(ClientboundSetBorderWarningDistancePacket.class, ClientboundSetBorderWarningDistancePacket::new).addPacket(ClientboundSetCameraPacket.class, ClientboundSetCameraPacket::new).addPacket(ClientboundSetCarriedItemPacket.class, ClientboundSetCarriedItemPacket::new).addPacket(ClientboundSetChunkCacheCenterPacket.class, ClientboundSetChunkCacheCenterPacket::new).addPacket(ClientboundSetChunkCacheRadiusPacket.class, ClientboundSetChunkCacheRadiusPacket::new).addPacket(ClientboundSetDefaultSpawnPositionPacket.class, ClientboundSetDefaultSpawnPositionPacket::new).addPacket(ClientboundSetDisplayObjectivePacket.class, ClientboundSetDisplayObjectivePacket::new).addPacket(ClientboundSetEntityDataPacket.class, ClientboundSetEntityDataPacket::new).addPacket(ClientboundSetEntityLinkPacket.class, ClientboundSetEntityLinkPacket::new).addPacket(ClientboundSetEntityMotionPacket.class, ClientboundSetEntityMotionPacket::new).addPacket(ClientboundSetEquipmentPacket.class, ClientboundSetEquipmentPacket::new).addPacket(ClientboundSetExperiencePacket.class, ClientboundSetExperiencePacket::new).addPacket(ClientboundSetHealthPacket.class, ClientboundSetHealthPacket::new).addPacket(ClientboundSetObjectivePacket.class, ClientboundSetObjectivePacket::new).addPacket(ClientboundSetPassengersPacket.class, ClientboundSetPassengersPacket::new).addPacket(ClientboundSetPlayerTeamPacket.class, ClientboundSetPlayerTeamPacket::new).addPacket(ClientboundSetScorePacket.class, ClientboundSetScorePacket::new).addPacket(ClientboundSetSubtitleTextPacket.class, ClientboundSetSubtitleTextPacket::new).addPacket(ClientboundSetTimePacket.class, ClientboundSetTimePacket::new).addPacket(ClientboundSetTitleTextPacket.class, ClientboundSetTitleTextPacket::new).addPacket(ClientboundSetTitlesAnimationPacket.class, ClientboundSetTitlesAnimationPacket::new).addPacket(ClientboundSoundEntityPacket.class, ClientboundSoundEntityPacket::new).addPacket(ClientboundSoundPacket.class, ClientboundSoundPacket::new).addPacket(ClientboundStopSoundPacket.class, ClientboundStopSoundPacket::new).addPacket(ClientboundTabListPacket.class, ClientboundTabListPacket::new).addPacket(ClientboundTagQueryPacket.class, ClientboundTagQueryPacket::new).addPacket(ClientboundTakeItemEntityPacket.class, ClientboundTakeItemEntityPacket::new).addPacket(ClientboundTeleportEntityPacket.class, ClientboundTeleportEntityPacket::new).addPacket(ClientboundUpdateAdvancementsPacket.class, ClientboundUpdateAdvancementsPacket::new).addPacket(ClientboundUpdateAttributesPacket.class, ClientboundUpdateAttributesPacket::new).addPacket(ClientboundUpdateMobEffectPacket.class, ClientboundUpdateMobEffectPacket::new).addPacket(ClientboundUpdateRecipesPacket.class, ClientboundUpdateRecipesPacket::new).addPacket(ClientboundUpdateTagsPacket.class, ClientboundUpdateTagsPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<net.minecraft.network.protocol.game.ServerGamePacketListener>()).addPacket(ServerboundAcceptTeleportationPacket.class, ServerboundAcceptTeleportationPacket::new).addPacket(ServerboundBlockEntityTagQuery.class, ServerboundBlockEntityTagQuery::new).addPacket(ServerboundChangeDifficultyPacket.class, ServerboundChangeDifficultyPacket::new).addPacket(ServerboundChatPacket.class, ServerboundChatPacket::new).addPacket(ServerboundClientCommandPacket.class, ServerboundClientCommandPacket::new).addPacket(ServerboundClientInformationPacket.class, ServerboundClientInformationPacket::new).addPacket(ServerboundCommandSuggestionPacket.class, ServerboundCommandSuggestionPacket::new).addPacket(ServerboundContainerAckPacket.class, ServerboundContainerAckPacket::new).addPacket(ServerboundContainerButtonClickPacket.class, ServerboundContainerButtonClickPacket::new).addPacket(ServerboundContainerClickPacket.class, ServerboundContainerClickPacket::new).addPacket(ServerboundContainerClosePacket.class, ServerboundContainerClosePacket::new).addPacket(ServerboundCustomPayloadPacket.class, ServerboundCustomPayloadPacket::new).addPacket(ServerboundEditBookPacket.class, ServerboundEditBookPacket::new).addPacket(ServerboundEntityTagQuery.class, ServerboundEntityTagQuery::new).addPacket(ServerboundInteractPacket.class, ServerboundInteractPacket::new).addPacket(ServerboundJigsawGeneratePacket.class, ServerboundJigsawGeneratePacket::new).addPacket(ServerboundKeepAlivePacket.class, ServerboundKeepAlivePacket::new).addPacket(ServerboundLockDifficultyPacket.class, ServerboundLockDifficultyPacket::new).addPacket(ServerboundMovePlayerPacket.Pos.class, ServerboundMovePlayerPacket.Pos::read).addPacket(ServerboundMovePlayerPacket.PosRot.class, ServerboundMovePlayerPacket.PosRot::read).addPacket(ServerboundMovePlayerPacket.Rot.class, ServerboundMovePlayerPacket.Rot::read).addPacket(ServerboundMovePlayerPacket.StatusOnly.class, ServerboundMovePlayerPacket.StatusOnly::read).addPacket(ServerboundMoveVehiclePacket.class, ServerboundMoveVehiclePacket::new).addPacket(ServerboundPaddleBoatPacket.class, ServerboundPaddleBoatPacket::new).addPacket(ServerboundPickItemPacket.class, ServerboundPickItemPacket::new).addPacket(ServerboundPlaceRecipePacket.class, ServerboundPlaceRecipePacket::new).addPacket(ServerboundPlayerAbilitiesPacket.class, ServerboundPlayerAbilitiesPacket::new).addPacket(ServerboundPlayerActionPacket.class, ServerboundPlayerActionPacket::new).addPacket(ServerboundPlayerCommandPacket.class, ServerboundPlayerCommandPacket::new).addPacket(ServerboundPlayerInputPacket.class, ServerboundPlayerInputPacket::new).addPacket(ServerboundRecipeBookChangeSettingsPacket.class, ServerboundRecipeBookChangeSettingsPacket::new).addPacket(ServerboundRecipeBookSeenRecipePacket.class, ServerboundRecipeBookSeenRecipePacket::new).addPacket(ServerboundRenameItemPacket.class, ServerboundRenameItemPacket::new).addPacket(ServerboundResourcePackPacket.class, ServerboundResourcePackPacket::new).addPacket(ServerboundSeenAdvancementsPacket.class, ServerboundSeenAdvancementsPacket::new).addPacket(ServerboundSelectTradePacket.class, ServerboundSelectTradePacket::new).addPacket(ServerboundSetBeaconPacket.class, ServerboundSetBeaconPacket::new).addPacket(ServerboundSetCarriedItemPacket.class, ServerboundSetCarriedItemPacket::new).addPacket(ServerboundSetCommandBlockPacket.class, ServerboundSetCommandBlockPacket::new).addPacket(ServerboundSetCommandMinecartPacket.class, ServerboundSetCommandMinecartPacket::new).addPacket(ServerboundSetCreativeModeSlotPacket.class, ServerboundSetCreativeModeSlotPacket::new).addPacket(ServerboundSetJigsawBlockPacket.class, ServerboundSetJigsawBlockPacket::new).addPacket(ServerboundSetStructureBlockPacket.class, ServerboundSetStructureBlockPacket::new).addPacket(ServerboundSignUpdatePacket.class, ServerboundSignUpdatePacket::new).addPacket(ServerboundSwingPacket.class, ServerboundSwingPacket::new).addPacket(ServerboundTeleportToEntityPacket.class, ServerboundTeleportToEntityPacket::new).addPacket(ServerboundUseItemOnPacket.class, ServerboundUseItemOnPacket::new).addPacket(ServerboundUseItemPacket.class, ServerboundUseItemPacket::new))),
++   STATUS(1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<net.minecraft.network.protocol.status.ServerStatusPacketListener>()).addPacket(ServerboundStatusRequestPacket.class, ServerboundStatusRequestPacket::new).addPacket(ServerboundPingRequestPacket.class, ServerboundPingRequestPacket::new)).addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet<net.minecraft.network.protocol.status.ClientStatusPacketListener>()).addPacket(ClientboundStatusResponsePacket.class, ClientboundStatusResponsePacket::new).addPacket(ClientboundPongResponsePacket.class, ClientboundPongResponsePacket::new))),
++   LOGIN(2, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet<net.minecraft.network.protocol.login.ClientLoginPacketListener>()).addPacket(ClientboundLoginDisconnectPacket.class, ClientboundLoginDisconnectPacket::new).addPacket(ClientboundHelloPacket.class, ClientboundHelloPacket::new).addPacket(ClientboundGameProfilePacket.class, ClientboundGameProfilePacket::new).addPacket(ClientboundLoginCompressionPacket.class, ClientboundLoginCompressionPacket::new).addPacket(ClientboundCustomQueryPacket.class, ClientboundCustomQueryPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<net.minecraft.network.protocol.login.ServerLoginPacketListener>()).addPacket(ServerboundHelloPacket.class, ServerboundHelloPacket::new).addPacket(ServerboundKeyPacket.class, ServerboundKeyPacket::new).addPacket(ServerboundCustomQueryPacket.class, ServerboundCustomQueryPacket::new)));
++   // MagmaCube end - type
+ 
+    private static final ConnectionProtocol[] LOOKUP = new ConnectionProtocol[4];
+    private static final Map<Class<? extends Packet<?>>, ConnectionProtocol> PROTOCOL_BY_PACKET = Maps.newHashMap();
+diff --git a/src/main/java/net/minecraft/network/FriendlyByteBuf.java b/src/main/java/net/minecraft/network/FriendlyByteBuf.java
+index 323729d2063217e5d97c36cfd17ae68108fb45dd..a16986991bb1cc226d1207b00a60681c19687f0e 100644
+--- a/src/main/java/net/minecraft/network/FriendlyByteBuf.java
++++ b/src/main/java/net/minecraft/network/FriendlyByteBuf.java
+@@ -120,7 +120,7 @@ public class FriendlyByteBuf extends ByteBuf {
+ 
+    public void writeIntIdList(IntList intList) {
+       this.writeVarInt(intList.size());
+-      intList.forEach(this::writeVarInt);
++      intList.forEach((java.util.function.IntConsumer) this::writeVarInt); // MagmaCube - decompile error
+    }
+ 
+    public <K, V, M extends Map<K, V>> M readMap(IntFunction<M> intFunction, Function<FriendlyByteBuf, K> function, Function<FriendlyByteBuf, V> function2) {
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
+index 34bd1c017865496a0aaaff82f756253a5e3e1020..673e80ed5a4421ff304040c60994c953eaa73024 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
+@@ -31,7 +31,7 @@ public class ClientboundUpdateAttributesPacket implements Packet<ClientGamePacke
+          ResourceLocation resourceLocation = friendlyByteBufx.readResourceLocation();
+          Attribute attribute = Registry.ATTRIBUTE.get(resourceLocation);
+          double d = friendlyByteBufx.readDouble();
+-         List<AttributeModifier> list = friendlyByteBufx.readList((friendlyByteBuf) -> new AttributeModifier(friendlyByteBuf.readUUID(), "Unknown synced attribute modifier", friendlyByteBuf.readDouble(), AttributeModifier.Operation.fromValue(friendlyByteBuf.readByte())));
++         List<AttributeModifier> list = friendlyByteBufx.readList((friendlyByteBufxx) -> new AttributeModifier(friendlyByteBufxx.readUUID(), "Unknown synced attribute modifier", friendlyByteBufxx.readDouble(), AttributeModifier.Operation.fromValue(friendlyByteBufxx.readByte()))); // MagmaCube - decompile error
+          return new ClientboundUpdateAttributesPacket.AttributeSnapshot(attribute, d, list);
+       });
+    }
+@@ -41,11 +41,13 @@ public class ClientboundUpdateAttributesPacket implements Packet<ClientGamePacke
+       friendlyByteBuf.writeCollection(this.attributes, (friendlyByteBufx, attributeSnapshot) -> {
+          friendlyByteBufx.writeResourceLocation(Registry.ATTRIBUTE.getKey(attributeSnapshot.getAttribute()));
+          friendlyByteBufx.writeDouble(attributeSnapshot.getBase());
+-         friendlyByteBufx.writeCollection(attributeSnapshot.getModifiers(), (friendlyByteBuf, attributeModifier) -> {
+-            friendlyByteBuf.writeUUID(attributeModifier.getId());
+-            friendlyByteBuf.writeDouble(attributeModifier.getAmount());
+-            friendlyByteBuf.writeByte(attributeModifier.getOperation().toValue());
++         // MagmaCube start - decompile error
++         friendlyByteBufx.writeCollection(attributeSnapshot.getModifiers(), (friendlyByteBufxx, attributeModifier) -> {
++            friendlyByteBufxx.writeUUID(attributeModifier.getId());
++            friendlyByteBufxx.writeDouble(attributeModifier.getAmount());
++            friendlyByteBufxx.writeByte(attributeModifier.getOperation().toValue());
+          });
++         // MagmaCube end - decompile error
+       });
+    }
+ 
 diff --git a/src/main/java/net/minecraft/resources/RegistryFileCodec.java b/src/main/java/net/minecraft/resources/RegistryFileCodec.java
 index 2957286aa9e7c266d678c13744fe2d781958bf44..3a7e9ccff0af8df062fb3ddf9543f2761de66aaa 100644
 --- a/src/main/java/net/minecraft/resources/RegistryFileCodec.java
@@ -2645,10 +2721,10 @@ index fe652d0d61bd53ded40b31b4b8352200ac505ef1..246047a3cc9e252ebe8a2eeb5091893d
                       list.add(gameProfileInfo);
                    }
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index e0a82096be3209704f0ea1fa1423a3e04459d613..072da7bf09508d5f0719417678f0b7642a8668b3 100644
+index 57aa1d4ee11490f800fdf0a83de491d7942cf31a..7a061e71eea8ca3b9e4293f7d8d000de4d4a57a6 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -308,7 +308,7 @@ public abstract class PlayerList {
+@@ -313,7 +313,7 @@ public abstract class PlayerList {
           if (entity.hasExactlyOnePlayerPassenger()) {
              LOGGER.debug("Removing player mount");
              serverPlayer.stopRiding();
@@ -2729,19 +2805,6 @@ index 7f5b3624ef8ae8e507343e5b9a8f4eeba90a66a6..4be608516a0b968a0ab0044dd71a0c3c
     }
  
     boolean contains(T var1);
-diff --git a/src/main/java/net/minecraft/tags/TagCollection.java b/src/main/java/net/minecraft/tags/TagCollection.java
-index b7d918953af609231e8f443ed6425405f18bb382..df7e830fa8a8bcf5975e4d1200ac400635b17c90 100644
---- a/src/main/java/net/minecraft/tags/TagCollection.java
-+++ b/src/main/java/net/minecraft/tags/TagCollection.java
-@@ -116,7 +116,7 @@ public interface TagCollection<T> {
-          for(Entry<ResourceLocation, IntList> entry : this.tags.entrySet()) {
-             friendlyByteBuf.writeResourceLocation((ResourceLocation)entry.getKey());
-             friendlyByteBuf.writeVarInt(((IntList)entry.getValue()).size());
--            ((IntList)entry.getValue()).forEach(friendlyByteBuf::writeVarInt);
-+            ((IntList)entry.getValue()).forEach((java.util.function.Consumer<? super Integer>) friendlyByteBuf::writeVarInt); // MagmaCube - decompile error
-          }
- 
-       }
 diff --git a/src/main/java/net/minecraft/tags/TagContainer.java b/src/main/java/net/minecraft/tags/TagContainer.java
 index c15fd81363a161e9b5beef73976d3743b0c1fa44..500efd6ececff44ba6726b99f79f73fd58e18c02 100644
 --- a/src/main/java/net/minecraft/tags/TagContainer.java
@@ -2800,6 +2863,20 @@ index e4b97a5b0f20570f4279befc04dfaa331cc9b264..b2673fc2c20beb12879fec7f9f06d0ab
        Multimap<ResourceLocation, ResourceLocation> multimap = HashMultimap.create();
        map.forEach((resourceLocation, builder) -> builder.visitRequiredDependencies((resourceLocation2) -> addDependencyIfNotCyclic(multimap, resourceLocation, resourceLocation2)));
        map.forEach((resourceLocation, builder) -> builder.visitOptionalDependencies((resourceLocation2) -> addDependencyIfNotCyclic(multimap, resourceLocation, resourceLocation2)));
+diff --git a/src/main/java/net/minecraft/util/ClampedNormalFloat.java b/src/main/java/net/minecraft/util/ClampedNormalFloat.java
+index bf158aaf635d1f558334fece18e79f0924444061..e467ea5491ef6d90e08e2cbc6c9ceb0927b97c7c 100644
+--- a/src/main/java/net/minecraft/util/ClampedNormalFloat.java
++++ b/src/main/java/net/minecraft/util/ClampedNormalFloat.java
+@@ -8,7 +8,8 @@ import java.util.Random;
+ import java.util.function.Function;
+ 
+ public class ClampedNormalFloat extends FloatProvider {
+-   public static final Codec<ClampedNormalFloat> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("mean").forGetter((clampedNormalFloat) -> clampedNormalFloat.mean), Codec.FLOAT.fieldOf("deviation").forGetter((clampedNormalFloat) -> clampedNormalFloat.deviation), Codec.FLOAT.fieldOf("min").forGetter((clampedNormalFloat) -> clampedNormalFloat.min), Codec.FLOAT.fieldOf("max").forGetter((clampedNormalFloat) -> clampedNormalFloat.max)).apply(instance, ClampedNormalFloat::new)).comapFlatMap((clampedNormalFloat) -> clampedNormalFloat.max < clampedNormalFloat.min ? DataResult.error("Max must be larger than min: [" + clampedNormalFloat.min + ", " + clampedNormalFloat.max + "]") : DataResult.success(clampedNormalFloat), Function.identity());
++   // MagmaCube - decompile error
++   public static final Codec<ClampedNormalFloat> CODEC = RecordCodecBuilder.<ClampedNormalFloat>create((instance) -> instance.group(Codec.FLOAT.fieldOf("mean").forGetter((clampedNormalFloat) -> clampedNormalFloat.mean), Codec.FLOAT.fieldOf("deviation").forGetter((clampedNormalFloat) -> clampedNormalFloat.deviation), Codec.FLOAT.fieldOf("min").forGetter((clampedNormalFloat) -> clampedNormalFloat.min), Codec.FLOAT.fieldOf("max").forGetter((clampedNormalFloat) -> clampedNormalFloat.max)).apply(instance, ClampedNormalFloat::new)).comapFlatMap((clampedNormalFloat) -> clampedNormalFloat.max < clampedNormalFloat.min ? DataResult.error("Max must be larger than min: [" + clampedNormalFloat.min + ", " + clampedNormalFloat.max + "]") : DataResult.success(clampedNormalFloat), Function.identity());
+    private float mean;
+    private float deviation;
+    private float min;
 diff --git a/src/main/java/net/minecraft/util/ClassInstanceMultiMap.java b/src/main/java/net/minecraft/util/ClassInstanceMultiMap.java
 index bfb6bf19adcd45077f25a54b274800567431cac4..9a8debb7370c51568bdbe6db171e610520e27f5f 100644
 --- a/src/main/java/net/minecraft/util/ClassInstanceMultiMap.java
@@ -2813,6 +2890,19 @@ index bfb6bf19adcd45077f25a54b274800567431cac4..9a8debb7370c51568bdbe6db171e6105
        }
     }
  
+diff --git a/src/main/java/net/minecraft/util/ConstantFloat.java b/src/main/java/net/minecraft/util/ConstantFloat.java
+index 11a4b66b9075838e5320d6e2fca639458e6f302e..552f3df29b8d333b279a938f03ccd210119422e2 100644
+--- a/src/main/java/net/minecraft/util/ConstantFloat.java
++++ b/src/main/java/net/minecraft/util/ConstantFloat.java
+@@ -7,7 +7,7 @@ import java.util.Random;
+ 
+ public class ConstantFloat extends FloatProvider {
+    public static ConstantFloat ZERO = of(0.0F);
+-   public static final Codec<ConstantFloat> CODEC = Codec.either(Codec.FLOAT, RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("value").forGetter((constantFloat) -> constantFloat.value)).apply(instance, ConstantFloat::new))).xmap((either) -> (ConstantFloat)either.map(ConstantFloat::of, (constantFloat) -> constantFloat), (constantFloat) -> Either.left(constantFloat.value));
++   public static final Codec<ConstantFloat> CODEC = Codec.either(Codec.FLOAT, RecordCodecBuilder.<ConstantFloat>create((instance) -> instance.group(Codec.FLOAT.fieldOf("value").forGetter((constantFloat) -> constantFloat.value)).apply(instance, ConstantFloat::new))).xmap((either) -> (ConstantFloat)either.map(ConstantFloat::of, (constantFloat) -> constantFloat), (constantFloat) -> Either.left(constantFloat.value)); // MagmaCube - decompile error
+    private float value;
+ 
+    public static ConstantFloat of(float f) {
 diff --git a/src/main/java/net/minecraft/util/DebugBuffer.java b/src/main/java/net/minecraft/util/DebugBuffer.java
 index 86923050386bdb4f11d836ed59f97134288a4730..a5eab83eb832a9b86e5a1d02f2ebb1c2dc82fb70 100644
 --- a/src/main/java/net/minecraft/util/DebugBuffer.java
@@ -2886,17 +2976,31 @@ index bf11a39f89e40455d1f9515499e0d6f72fd2ac6e..40ce1531926882bd82448966b0e20859
        return fromStringResolver(Enum::ordinal, (i) -> enums[i], function);
     }
  
-diff --git a/src/main/java/net/minecraft/util/UniformFloat.java b/src/main/java/net/minecraft/util/UniformFloat.java
-index 07beb10baa28d5787979e976329746f99ddfd714..8158438095413bd529ec4eb334efd81858edab45 100644
---- a/src/main/java/net/minecraft/util/UniformFloat.java
-+++ b/src/main/java/net/minecraft/util/UniformFloat.java
-@@ -9,7 +9,8 @@ import java.util.Random;
+diff --git a/src/main/java/net/minecraft/util/TrapezoidFloat.java b/src/main/java/net/minecraft/util/TrapezoidFloat.java
+index 5ca7aa6098a365af96ae65221adf2ac8d3ea2c4e..5af901ff60f50bb1ca8cfa65fee1120b372b8df1 100644
+--- a/src/main/java/net/minecraft/util/TrapezoidFloat.java
++++ b/src/main/java/net/minecraft/util/TrapezoidFloat.java
+@@ -8,7 +8,8 @@ import java.util.Random;
  import java.util.function.Function;
  
- public class UniformFloat {
--   public static final Codec<UniformFloat> CODEC = Codec.either(Codec.FLOAT, RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("base").forGetter((uniformFloat) -> uniformFloat.baseValue), Codec.FLOAT.fieldOf("spread").forGetter((uniformFloat) -> uniformFloat.spread)).apply(instance, UniformFloat::new)).comapFlatMap((uniformFloat) -> uniformFloat.spread < 0.0F ? DataResult.error("Spread must be non-negative, got: " + uniformFloat.spread) : DataResult.success(uniformFloat), Function.identity())).xmap((either) -> (UniformFloat)either.map(UniformFloat::fixed, (uniformFloat) -> uniformFloat), (uniformFloat) -> uniformFloat.spread == 0.0F ? Either.left(uniformFloat.baseValue) : Either.right(uniformFloat));
+ public class TrapezoidFloat extends FloatProvider {
+-   public static final Codec<TrapezoidFloat> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("min").forGetter((trapezoidFloat) -> trapezoidFloat.min), Codec.FLOAT.fieldOf("max").forGetter((trapezoidFloat) -> trapezoidFloat.max), Codec.FLOAT.fieldOf("plateau").forGetter((trapezoidFloat) -> trapezoidFloat.plateau)).apply(instance, TrapezoidFloat::new)).comapFlatMap((trapezoidFloat) -> {
 +   // MagmaCube - decompile error
-+   public static final Codec<UniformFloat> CODEC = Codec.either(Codec.FLOAT, RecordCodecBuilder.<UniformFloat>create((instance) -> instance.group(Codec.FLOAT.fieldOf("base").forGetter((uniformFloat) -> uniformFloat.baseValue), Codec.FLOAT.fieldOf("spread").forGetter((uniformFloat) -> uniformFloat.spread)).apply(instance, UniformFloat::new)).comapFlatMap((uniformFloat) -> uniformFloat.spread < 0.0F ? DataResult.error("Spread must be non-negative, got: " + uniformFloat.spread) : DataResult.success(uniformFloat), Function.identity())).xmap((either) -> (UniformFloat)either.map(UniformFloat::fixed, (uniformFloat) -> uniformFloat), (uniformFloat) -> uniformFloat.spread == 0.0F ? Either.left(uniformFloat.baseValue) : Either.right(uniformFloat));
++   public static final Codec<TrapezoidFloat> CODEC = RecordCodecBuilder.<TrapezoidFloat>create((instance) -> instance.group(Codec.FLOAT.fieldOf("min").forGetter((trapezoidFloat) -> trapezoidFloat.min), Codec.FLOAT.fieldOf("max").forGetter((trapezoidFloat) -> trapezoidFloat.max), Codec.FLOAT.fieldOf("plateau").forGetter((trapezoidFloat) -> trapezoidFloat.plateau)).apply(instance, TrapezoidFloat::new)).comapFlatMap((trapezoidFloat) -> {
+       if (trapezoidFloat.max < trapezoidFloat.min) {
+          return DataResult.error("Max must be larger than min: [" + trapezoidFloat.min + ", " + trapezoidFloat.max + "]");
+       } else {
+diff --git a/src/main/java/net/minecraft/util/UniformFloat.java b/src/main/java/net/minecraft/util/UniformFloat.java
+index 0f72096503928bdbcdd4ae117705e1ce0c94e7f5..fe65c2893a38824edc94fa2e8ccf879db7348274 100644
+--- a/src/main/java/net/minecraft/util/UniformFloat.java
++++ b/src/main/java/net/minecraft/util/UniformFloat.java
+@@ -8,7 +8,8 @@ import java.util.Random;
+ import java.util.function.Function;
+ 
+ public class UniformFloat extends FloatProvider {
+-   public static final Codec<UniformFloat> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("base").forGetter((uniformFloat) -> uniformFloat.baseValue), Codec.FLOAT.fieldOf("spread").forGetter((uniformFloat) -> uniformFloat.spread)).apply(instance, UniformFloat::new)).comapFlatMap((uniformFloat) -> uniformFloat.spread < 0.0F ? DataResult.error("Spread must be non-negative, got: " + uniformFloat.spread) : DataResult.success(uniformFloat), Function.identity());
++   // MagmaCube - decompile error
++   public static final Codec<UniformFloat> CODEC = RecordCodecBuilder.<UniformFloat>create((instance) -> instance.group(Codec.FLOAT.fieldOf("base").forGetter((uniformFloat) -> uniformFloat.baseValue), Codec.FLOAT.fieldOf("spread").forGetter((uniformFloat) -> uniformFloat.spread)).apply(instance, UniformFloat::new)).comapFlatMap((uniformFloat) -> uniformFloat.spread < 0.0F ? DataResult.error("Spread must be non-negative, got: " + uniformFloat.spread) : DataResult.success(uniformFloat), Function.identity());
     private final float baseValue;
     private final float spread;
  
@@ -2928,10 +3032,10 @@ index 46a0a9c508a016314d161c83bdfa496e213e2581..6bb8d3210344e8e07eea8750976e1f23
           return Optional.empty();
        } else {
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index faa4fa9c8c4297ef21f8af593cea22100675509c..a6ae037ea6d350352b8b82da76ed9797f038a17c 100644
+index 238b60fde317105797fd7e9e8c032c48a1df1f7c..ecd73cbd31a6cec24fdbb2ce95bd62348aa7bc75 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-@@ -543,11 +543,11 @@ public class DataFixers {
+@@ -543,15 +543,16 @@ public class DataFixers {
        dataFixerBuilder.addFixer(new AddNewChoices(schema130, "Added Glow Squid", References.ENTITY));
        dataFixerBuilder.addFixer(new AddNewChoices(schema130, "Added Glow Item Frame", References.ENTITY));
        Schema schema131 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
@@ -2944,6 +3048,12 @@ index faa4fa9c8c4297ef21f8af593cea22100675509c..a6ae037ea6d350352b8b82da76ed9797
 +      ImmutableMap<String, String> immutableMap2 = ImmutableMap.<String, String>builder().put("minecraft:waxed_copper", "minecraft:waxed_copper_block").put("minecraft:oxidized_copper_block", "minecraft:oxidized_copper").put("minecraft:weathered_copper_block", "minecraft:weathered_copper").put("minecraft:exposed_copper_block", "minecraft:exposed_copper").build(); // MagmaCube - decompile error
        dataFixerBuilder.addFixer(ItemRenameFix.create(schema132, "Rename copper item suffixes", createRenamer(immutableMap2)));
        dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema132, "Rename copper blocks suffixes", createRenamer(immutableMap2)));
+       Schema schema133 = dataFixerBuilder.addSchema(2696, SAME_NAMESPACED);
+-      ImmutableMap<String, String> immutableMap3 = ImmutableMap.builder().put("minecraft:grimstone", "minecraft:deepslate").put("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab").put("minecraft:grimstone_stairs", "minecraft:cobbled_deepslate_stairs").put("minecraft:grimstone_wall", "minecraft:cobbled_deepslate_wall").put("minecraft:polished_grimstone", "minecraft:polished_deepslate").put("minecraft:polished_grimstone_slab", "minecraft:polished_deepslate_slab").put("minecraft:polished_grimstone_stairs", "minecraft:polished_deepslate_stairs").put("minecraft:polished_grimstone_wall", "minecraft:polished_deepslate_wall").put("minecraft:grimstone_tiles", "minecraft:deepslate_tiles").put("minecraft:grimstone_tile_slab", "minecraft:deepslate_tile_slab").put("minecraft:grimstone_tile_stairs", "minecraft:deepslate_tile_stairs").put("minecraft:grimstone_tile_wall", "minecraft:deepslate_tile_wall").put("minecraft:grimstone_bricks", "minecraft:deepslate_bricks").put("minecraft:grimstone_brick_slab", "minecraft:deepslate_brick_slab").put("minecraft:grimstone_brick_stairs", "minecraft:deepslate_brick_stairs").put("minecraft:grimstone_brick_wall", "minecraft:deepslate_brick_wall").put("minecraft:chiseled_grimstone", "minecraft:chiseled_deepslate").build();
++      // MagmaCube - decompile error
++      ImmutableMap<String, String> immutableMap3 = ImmutableMap.<String, String>builder().put("minecraft:grimstone", "minecraft:deepslate").put("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab").put("minecraft:grimstone_stairs", "minecraft:cobbled_deepslate_stairs").put("minecraft:grimstone_wall", "minecraft:cobbled_deepslate_wall").put("minecraft:polished_grimstone", "minecraft:polished_deepslate").put("minecraft:polished_grimstone_slab", "minecraft:polished_deepslate_slab").put("minecraft:polished_grimstone_stairs", "minecraft:polished_deepslate_stairs").put("minecraft:polished_grimstone_wall", "minecraft:polished_deepslate_wall").put("minecraft:grimstone_tiles", "minecraft:deepslate_tiles").put("minecraft:grimstone_tile_slab", "minecraft:deepslate_tile_slab").put("minecraft:grimstone_tile_stairs", "minecraft:deepslate_tile_stairs").put("minecraft:grimstone_tile_wall", "minecraft:deepslate_tile_wall").put("minecraft:grimstone_bricks", "minecraft:deepslate_bricks").put("minecraft:grimstone_brick_slab", "minecraft:deepslate_brick_slab").put("minecraft:grimstone_brick_stairs", "minecraft:deepslate_brick_stairs").put("minecraft:grimstone_brick_wall", "minecraft:deepslate_brick_wall").put("minecraft:chiseled_grimstone", "minecraft:chiseled_deepslate").build();
+       dataFixerBuilder.addFixer(ItemRenameFix.create(schema133, "Renamed grimstone block items to deepslate", createRenamer(immutableMap3)));
+       dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema133, "Renamed grimstone blocks to deepslate", createRenamer(immutableMap3)));
     }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
 index 50ed45f86b78b0010e43f33cc99c55fe1c677b62..c8be39a824d87d04cf5ca31322f84d33ce69258c 100644
@@ -5728,7 +5838,7 @@ index aff94a838b5f69366f29b5282cf5625cd5ad4b22..83797049b45f2cccae406a6a9e290ff0
  
        ThreadingDetector.checkAndLock(this.lock, this.traces, "PalettedContainer");
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
-index 31d5e3c7879807e5592183525e7610de220da174..e46850b49eadfc1fd0e5f42c12a93beaa1a73bff 100644
+index f38c2e09f509e8735e825c397447e387a79a196e..3240523c6c08eeefba51d4511d1f2c202a63751f 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 @@ -236,7 +236,7 @@ public class ChunkSerializer {
@@ -5859,7 +5969,7 @@ index e2a905ddab5b5f68787f8d19e816bd2a7f5405a2..c55d047d90f491294bf7db6dc16fbae3
     public GeodeBlockSettings(BlockStateProvider blockStateProvider, BlockStateProvider blockStateProvider2, BlockStateProvider blockStateProvider3, BlockStateProvider blockStateProvider4, BlockStateProvider blockStateProvider5, List<BlockState> list) {
        this.fillingProvider = blockStateProvider;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 6d66a5742bd833dc474e58faee316d83e7eb1b22..e5318b371e4b73cc5538018fb33e73dad5962315 100644
+index b75ef7cc72d657b446a6cf6c2818544d8204acd5..5afa89e85294a761dea2bc234fa8ea3f540c044d 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -18,7 +18,8 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -5868,7 +5978,7 @@ index 6d66a5742bd833dc474e58faee316d83e7eb1b22..e5318b371e4b73cc5538018fb33e73da
  public final class NoiseGeneratorSettings {
 -   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC;
 +   // MagmaCube - decompile error
-+   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("grimstone_enabled").forGetter(NoiseGeneratorSettings::isGrimstoneEnabled)).apply(instance, NoiseGeneratorSettings::new));
++   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
     public static final Codec<Supplier<NoiseGeneratorSettings>> CODEC = RegistryFileCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, DIRECT_CODEC);
     private final StructureSettings structureSettings;
     private final NoiseSettings noiseSettings;
@@ -5876,7 +5986,7 @@ index 6d66a5742bd833dc474e58faee316d83e7eb1b22..e5318b371e4b73cc5538018fb33e73da
     }
  
     static {
--      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("grimstone_enabled").forGetter(NoiseGeneratorSettings::isGrimstoneEnabled)).apply(instance, NoiseGeneratorSettings::new));
+-      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
        register(AMPLIFIED, overworld(new StructureSettings(true), true));
        register(NETHER, netherLikePreset(new StructureSettings(false), Blocks.NETHERRACK.defaultBlockState(), Blocks.LAVA.defaultBlockState(), false));
        register(END, endLikePreset(new StructureSettings(false), Blocks.END_STONE.defaultBlockState(), Blocks.AIR.defaultBlockState(), true, true, false));
@@ -5959,7 +6069,7 @@ index b82ef4d0184a664cb85bdc5ad7204a9b854dcaf0..e9a5ea44226067f3ff787a07c8c020b8
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index 3226d7c23670d3e7fb96af287babd58eaa4fd299..e47c7410b8d79d2c3c0f673c0af9f05c23bdfed0 100644
+index 1e19a1fd269dfdca983ce5299160fccf0ab180fa..2af40b81277351accf3bdef28dc3c3eef457ac90 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 @@ -71,7 +71,8 @@ public abstract class StructureFeature<C extends FeatureConfiguration> {
