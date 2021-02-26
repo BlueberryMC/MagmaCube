@@ -112,7 +112,7 @@
     "totalSize": 341866312,
     "url": "https://launchermeta.mojang.com/v1/packages/0305fa3b64cb3e7c32cab0d3458eb4d948ebf18f/1.17.json"
   },
-  "assets": "1.16",
+  "assets": "1.17",
   "id": "21w08b-deobf",
   "logging": {
     "client": {
