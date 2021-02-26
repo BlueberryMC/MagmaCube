@@ -14,15 +14,12 @@ Based on MC 21w03a (snapshot for 1.17) currently.
 - Do not redistribute the jar file, without any exception. It is against the Mojang's ToS.
 
 ## Bugs
-- No issues so far :)
+- Progress of Furnace screen is not moving (it's just visual bug)
 
 ## Things I noticed
-- Comment out (or modify the condition on Line 453) Line 454 on `net.minecraft.client.renderer.GameRenderer` to completely disable nausea effect
-- Write Line 258 at `net.minecraft.client.gui.screens.TitleScreen` to display custom title text
 - Modify player name tag with `PlayerRenderer#renderNameTag`
-- enable debug renders at DebugRenderer
+- enable debug renderers at DebugRenderer
 - PlayerTabOverlay to modify how tab renders on multiplayer
-- what are private final fields on net.minecraft.server.network.TextFilterClient?
 
 ## Available properties, environment variables
 Properties can be set via jvm argument `-Dkey=value`.
