@@ -6,7 +6,7 @@
 
     <groupId>xyz.acrylicstyle.minecraft</groupId>
     <artifactId>minecraft-parent</artifactId>
-    <version>21w08a</version>
+    <version>21w08b</version>
     <modules>
         <module>Minecraft</module>
     </modules>
