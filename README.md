@@ -14,7 +14,7 @@ Based on MC 21w03a (snapshot for 1.17) currently.
 - Do not redistribute the jar file, without any exception. It is against the Mojang's ToS.
 
 ## Bugs
-- Progress of Furnace screen is not moving (it's just visual bug)
+- ~~Progress of Furnace screen is not moving (it's just visual bug)~~
 
 ## Things I noticed
 - Modify player name tag with `PlayerRenderer#renderNameTag`

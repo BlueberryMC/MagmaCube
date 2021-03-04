@@ -5434,6 +5434,28 @@ index f17dfa2544fa592132b60987e4e2db7787ac9b74..0c46388b79efa243dc1d960d35366589
                 livingEntity.setPose(pose2);
                 break;
              }
+diff --git a/src/main/java/net/minecraft/world/inventory/DataSlot.java b/src/main/java/net/minecraft/world/inventory/DataSlot.java
+index 3308d5a6a5ac1abf206d3289393f2f703bdba38b..f644c898325a15cf50d91dc111b5652e61a0239f 100644
+--- a/src/main/java/net/minecraft/world/inventory/DataSlot.java
++++ b/src/main/java/net/minecraft/world/inventory/DataSlot.java
+@@ -10,7 +10,7 @@ public abstract class DataSlot {
+          }
+ 
+          public void set(int ix) {
+-            containerData.set(i, i);
++            containerData.set(i, ix); // MagmaCube - decompile error
+          }
+       };
+    }
+@@ -22,7 +22,7 @@ public abstract class DataSlot {
+          }
+ 
+          public void set(int ix) {
+-            ints[i] = i;
++            ints[i] = ix; // MagmaCube - decompile error
+          }
+       };
+    }
 diff --git a/src/main/java/net/minecraft/world/inventory/RecipeBookMenu.java b/src/main/java/net/minecraft/world/inventory/RecipeBookMenu.java
 index 48a92d2d5cfe50cacb52871aad238934c3229e7b..14ac9085732248b5c210b2fe55fea5011edea847 100644
 --- a/src/main/java/net/minecraft/world/inventory/RecipeBookMenu.java
@@ -6494,7 +6516,7 @@ index 4753aa9c607648b3381cef0c55dca7fd6e6facdc..40b83f114e1b00c7399323d06a6688dd
     }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index da370dbb067365ed349e519937d2bfc4761727ce..5a3b9e159e8d9c138679ff3265854a8e1883eaca 100644
+index da370dbb067365ed349e519937d2bfc4761727ce..55d34b579d781e2772ae69dbc92eca2ad8a3803a 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 @@ -96,12 +96,14 @@ public class LevelStorageSource {
@@ -6517,6 +6539,33 @@ index da370dbb067365ed349e519937d2bfc4761727ce..5a3b9e159e8d9c138679ff3265854a8e
           return WorldGenSettings.makeDefault(registry, registry2, registry3);
        }), dataResult.lifecycle());
     }
+@@ -348,9 +350,9 @@ public class LevelStorageSource {
+             try {
+                Files.walkFileTree(this.levelPath, new SimpleFileVisitor<Path>() {
+                   public FileVisitResult visitFile(Path pathx, BasicFileAttributes basicFileAttributes) throws IOException {
+-                     if (!path.equals(path)) {
++                     if (!pathx.equals(path)) { // MagmaCube - decompile error
+                         LevelStorageSource.LOGGER.debug("Deleting {}", path);
+-                        Files.delete(path);
++                        Files.delete(pathx); // MagmaCube - decompile error
+                      }
+ 
+                      return FileVisitResult.CONTINUE;
+@@ -360,12 +362,12 @@ public class LevelStorageSource {
+                      if (iOException != null) {
+                         throw iOException;
+                      } else {
+-                        if (path.equals(LevelStorageAccess.this.levelPath)) {
++                        if (pathx.equals(LevelStorageAccess.this.levelPath)) { // MagmaCube - decompile error
+                            LevelStorageAccess.this.lock.close();
+                            Files.deleteIfExists(path);
+                         }
+ 
+-                        Files.delete(path);
++                        Files.delete(pathx); // MagmaCube - decompile error
+                         return FileVisitResult.CONTINUE;
+                      }
+                   }
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java b/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java
 index 98f253eedda03f3eade9b0be4fef7bc2d24096d3..6e2fcc312f0ab1b2f39a5358668e22dde55227fe 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java
