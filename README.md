@@ -4,7 +4,7 @@
 
 A Minecraft that you can patch your own patches into the Minecraft.
 
-Based on MC 21w03a (snapshot for 1.17) currently.
+Based on MC 21w08b (snapshot for 1.17) currently.
 
 ## Goal
 - Make it editable easily by everyone who wants to code Minecraft
@@ -30,4 +30,4 @@ Properties can be set via jvm argument `-Dkey=value`.
 
 ----
 
-See [here](https://github.com/acrylic-style/MagmaCube/blob/master/CONTRIBUTING.md) for more information about building the project.
+See [here](https://github.com/BlueberryMC/MagmaCube/blob/master/CONTRIBUTING.md) for more information about building the project.
