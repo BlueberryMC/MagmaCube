@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/CrashReport.java b/src/main/java/net/minecraft/CrashReport.java
-index 760865f2a44dba163bc760a1d030b769b0a5f534..be7b9f64269553712f5f3bef70989b7e08911e0f 100644
+index 67b27413f6167ffa0cd2d530c954aeb55b4cba3a..f5432c828930a23fbd5657a978c1c5db39a0a4ca 100644
 --- a/src/main/java/net/minecraft/CrashReport.java
 +++ b/src/main/java/net/minecraft/CrashReport.java
 @@ -35,6 +35,7 @@ public class CrashReport {
@@ -17,7 +17,7 @@ index 760865f2a44dba163bc760a1d030b769b0a5f534..be7b9f64269553712f5f3bef70989b7e
        this.systemDetails.setDetail("Minecraft Version ID", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getId()));
        this.systemDetails.setDetail("Operating System", (CrashReportDetail<String>)(() -> System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version")));
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index fd49ed5d777ae0030de70a4650127166435aa5f7..5d021ed19b4d3fc25edaf12356692f5453b08eef 100644
+index 2636e5f8bca8f677970c14baa46cc67970c5c07f..8a5bf16e50979c59ac09999d1d232af1745c33bf 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
@@ -35,12 +35,12 @@ index fd49ed5d777ae0030de70a4650127166435aa5f7..5d021ed19b4d3fc25edaf12356692f54
 +      this.magmaCubeVersion = "debug"; // MagmaCube
     }
  
-    private DetectedVersion(JsonObject jsonObject) {
+    private DetectedVersion(JsonObject json) {
 @@ -50,6 +52,7 @@ public class DetectedVersion implements GameVersion {
        this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
        this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
-       this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(jsonObject, "build_time")).toInstant());
-+      this.magmaCubeVersion = jsonObject.has("magmacube_version") ? GsonHelper.getAsString(jsonObject, "magmacube_version") : "debug"; // MagmaCube
+       this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(json, "build_time")).toInstant());
++      this.magmaCubeVersion = json.has("magmacube_version") ? GsonHelper.getAsString(json, "magmacube_version") : "debug";
     }
  
     public static GameVersion tryDetectVersion() {

@@ -13,6 +13,10 @@ rm -rf "$basedir/work/Minecraft/$version/source"
 mkdir -p "$basedir/work/decompiler"
 mkdir -p "$basedir/Minecraft/src/main/java"
 mkdir -p "$decompOutput"
+git submodule update --init
+cd "$basedir/work/mappings" || exit 1
+echo "Checked out: mappings: $(git log --oneline HEAD -1)"
+cd "$basedir" || exit 1
 echo "Downloading client jar..."
 curl $clientJarUrl --output "$clientJarPath"
 if [ $? != 0 ]; then
@@ -27,6 +31,10 @@ if [ $? != 0 ]; then
 fi
 echo "Applying mapping"
 "$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output-name="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath"
+java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.2.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$version.pr"
+java -Xmx2G -jar "$basedir/work/AccessTransformers/accesstransformers-3.0.1-fatjar.jar" --inJar "$clientRemappedJarPath.2" --outJar "$clientRemappedJarPath" --atFile "$basedir/work/mappings/mappings/$version.at"
+echo "Deleting intermediate jar"
+rm "$clientRemappedJarPath.2"
 echo "Unpacking jar..."
 rm -rf "$basedir/work/Minecraft/$version/unpacked"
 mkdir -p "$basedir/work/Minecraft/$version/unpacked"

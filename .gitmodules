@@ -1,0 +1,3 @@
+[submodule "work/mappings"]
+	path = work/mappings
+	url = https://github.com/BlueberryMC/mappings

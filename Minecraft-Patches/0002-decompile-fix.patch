@@ -454,7 +454,7 @@ index 1b1709ac5bebae9ac8e05016de38133159fa9039..5f22be9d4bc7d099cec9a892695bf292
           options.save();
        });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 6e5035339f09817ad56e84cc0d137bd0f12a375d..8b2a257c8e71db31767b90ee7d55005110d5899a 100644
+index 24e6e955966656616105a0706943beac24d5ccd0..04a9e96b2fad65968ecda49c59bdb27cafd66950 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
 @@ -1998,9 +1998,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
@@ -499,7 +499,7 @@ index 6e5035339f09817ad56e84cc0d137bd0f12a375d..8b2a257c8e71db31767b90ee7d550051
 \ No newline at end of file
 +}
 diff --git a/src/main/java/net/minecraft/client/Option.java b/src/main/java/net/minecraft/client/Option.java
-index 427c36cd45eab1707f70613e00632dd190e4eeb2..03d6face49824c0cf468b073451ebbde184feaa6 100644
+index b9cce8e14ead132dc0e68629f5d13298a31e88a1..7581d74b61a7ce42cc83326ab3c81b8497246e56 100644
 --- a/src/main/java/net/minecraft/client/Option.java
 +++ b/src/main/java/net/minecraft/client/Option.java
 @@ -155,7 +155,7 @@ public abstract class Option {
@@ -760,7 +760,7 @@ index ab53dc8cf1b6dd3dbd266ab25194937d0867b7f1..e774d760a54087a48795968568cf7a9c
                    }
  
 diff --git a/src/main/java/net/minecraft/client/main/Main.java b/src/main/java/net/minecraft/client/main/Main.java
-index 4956fea4717b3bd88fa4fddb5bd232b7e301860e..70cdc7f9d116e43ad9b0769291401e6ed09314c7 100644
+index f3efbf2ea86a0640be4f3a41f325bef2fb5e200c..70cdc7f9d116e43ad9b0769291401e6ed09314c7 100644
 --- a/src/main/java/net/minecraft/client/main/Main.java
 +++ b/src/main/java/net/minecraft/client/main/Main.java
 @@ -1,29 +1,198 @@
@@ -800,10 +800,9 @@ index 4956fea4717b3bd88fa4fddb5bd232b7e301860e..70cdc7f9d116e43ad9b0769291401e6e
  public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
  
--   public static void main(String[] strings) {
--      // $FF: Couldn't be decompiled
 +   // MagmaCube start - decompile error
-+   public static void main(String[] args) {
+    public static void main(String[] args) {
+-      // $FF: Couldn't be decompiled
 +      if (net.minecraft.SharedConstants.IS_RUNNING_IN_IDE) org.lwjgl.glfw.GLFW.glfwInit(); // MagmaCube - lwjgl debug agent causes glGetError to crash when we didn't call glfwInit
 +      OptionParser optionparser = new OptionParser();
 +      optionparser.allowsUnrecognizedOptions();
@@ -2208,7 +2207,7 @@ index 52966ca96e5720b1cb98e9ff88a13260e63e5486..5ce497855584e4e156ab0066b1b78192
              Pair<ResourceLocation, T> pair = (Pair)dataResult.result().get();
              ResourceLocation resourceLocation = (ResourceLocation)pair.getFirst();
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 78b024e0c50727e7e543941351095f9cb4bfd4a4..47662a207b147851fb17c944ce014736e9d73aa5 100644
+index ea06ff62c50b0c513e5eaf6013867e4303a8ba95..623a111065b651312b6ca06ecd5cefb0f0fa094a 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -159,17 +159,18 @@ public class Main {
@@ -5586,7 +5585,7 @@ index 57b18a1ed61d9764059ff7c0d6c0cca4f46cae6d..b7d91584c75fbdcdd11dd3d3a021d598
  
     public String toString() {
 diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
-index 7b0d60b7000d6f9efcae3cc031a580ea96fa0502..2962109be3036df225d9ce2f93ccaf8f8803faa1 100644
+index 0c9a44ffd802af357bd7825e0e1c7dea679c24f5..8677b47bf4e81cf89bf4fb08b2f364546a1242fb 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Biome.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Biome.java
 @@ -54,7 +54,8 @@ import org.apache.logging.log4j.Logger;
