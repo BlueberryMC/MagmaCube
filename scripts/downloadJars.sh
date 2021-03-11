@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/c8ae0a1a8b18841e009b8dcdf21ec014f5787410/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/7840a9b8d9aeb480b16962c40a2ca3758893f00e/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/3cade11677a20fbd46c83edc8d90f7df465b3ff5/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/5f15280e2823d988faa4c3b83db33d11f82f6afd/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
 decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.478.18.jar
 quickunzip="$basedir/work/quickunzip/quickunzip.jar"
 decompOutput="$basedir/work/Minecraft/$version/source"
+# Remove files that was used previously
 rm -rf "$basedir/Minecraft/src/main"
 rm -rf "$basedir/work/Minecraft/$version/source"
 mkdir -p "$basedir/work/decompiler"
 mkdir -p "$basedir/Minecraft/src/main/java"
 mkdir -p "$decompOutput"
-git submodule update --init
+# Check mappings
 cd "$basedir/work/mappings" || exit 1
 echo "Checked out: mappings: $(git log --oneline HEAD -1)"
 cd "$basedir" || exit 1
+# Download files
 echo "Downloading client jar..."
 curl $clientJarUrl --output "$clientJarPath"
 if [ $? != 0 ]; then

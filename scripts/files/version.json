@@ -113,7 +113,7 @@
     "url": "https://launchermeta.mojang.com/v1/packages/0305fa3b64cb3e7c32cab0d3458eb4d948ebf18f/1.17.json"
   },
   "assets": "1.17",
-  "id": "21w08b-deobf",
+  "id": "magmacube-21w10a",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",

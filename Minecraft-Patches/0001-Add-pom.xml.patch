@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..969099edff052fc27901b68718c5832c90ccccad
+index 0000000000000000000000000000000000000000..6c796f4c6dca90025f74eccf02b468cf12eddf51
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,370 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..969099edff052fc27901b68718c5832c
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>xyz.acrylicstyle.minecraft</groupId>
-+        <version>21w08b</version>
++        <version>21w10a</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
