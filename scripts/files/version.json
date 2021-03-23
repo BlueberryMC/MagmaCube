@@ -113,7 +113,7 @@
     "url": "https://launchermeta.mojang.com/v1/packages/0305fa3b64cb3e7c32cab0d3458eb4d948ebf18f/1.17.json"
   },
   "assets": "1.17",
-  "id": "magmacube-21w10a",
+  "id": "magmacube-21w11a",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -128,7 +128,7 @@
   },
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2021-02-26T10:00:00+00:00",
-  "time": "2021-02-26T10:00:00+00:00",
+  "releaseTime": "2021-03-23T01:00:00+00:00",
+  "time": "2021-03-23T01:00:00+00:00",
   "type": "snapshot"
 }

@@ -17,7 +17,7 @@ index 67b27413f6167ffa0cd2d530c954aeb55b4cba3a..f5432c828930a23fbd5657a978c1c5db
        this.systemDetails.setDetail("Minecraft Version ID", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getId()));
        this.systemDetails.setDetail("Operating System", (CrashReportDetail<String>)(() -> System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version")));
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 1d7486fb2afb691c98020193615a0e08c980a817..c8eced61851a7053771e90e8cf4db987ad8851e3 100644
+index cc041fb1aaf92ae6041e42eab4370ddaf60cfe69..35d2488fa1377f9af59b00395c2cfd6b807f7313 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
@@ -58,10 +58,10 @@ index 1b2cf23c6f943151d84093a3f837d36cccbeb493..4d80e4054f8436bd8fd1af85a8121a70
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index fe570640a8803f60e7f9e42c0531d185a000b52a..1c336a94e8620766a16ca1ba5aa74d279b76ece6 100644
+index 2166a078922d384e1f5220581421172329983fb0..4fb4101c1b213122def21b69d89251cb0c31e2a5 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -242,6 +242,7 @@ public class TitleScreen extends Screen {
+@@ -241,6 +241,7 @@ public class TitleScreen extends Screen {
              s = s + I18n.get("menu.modded");
           }
  

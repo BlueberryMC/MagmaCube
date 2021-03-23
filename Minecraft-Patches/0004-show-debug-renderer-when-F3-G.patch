@@ -5,10 +5,10 @@ Subject: [PATCH] show debug renderer when F3+G
 
 
 diff --git a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
-index 7bc6518a6caabed85d340342febd93652abf0092..93b723daad84174ad8822d0516f5136dd5737a16 100644
+index d08085c2c5e81f9186cad0dc2c70d35fcf65551a..ce7b7a5d049efb50acab06106446ca2191d61c49 100644
 --- a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
-@@ -93,6 +93,27 @@ public class DebugRenderer {
+@@ -94,6 +94,27 @@ public class DebugRenderer {
     public void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, double d, double d2, double d3) {
        if (this.renderChunkborder && !Minecraft.getInstance().showOnlyReducedInfo()) {
           this.chunkBorderRenderer.render(poseStack, bufferSource, d, d2, d3);

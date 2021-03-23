@@ -329,10 +329,10 @@ index 5cb353e7473ecadd9528b05d87d6817fdfaa289c..5d288fbe435dcb9b49f071270a491164
  
     public int getId() {
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 5070c7c8dba4a8824499c0007d752a670f132e87..1a042df86e31e15e8ecd9057ec70057779255423 100644
+index c8646fd2665cf4f5c3f5a2bfb340d3d9177f9438..a02e07e1d8781262070cf9821bcbffa662995d58 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
-@@ -21,6 +21,7 @@ import java.nio.file.LinkOption;
+@@ -23,6 +23,7 @@ import java.nio.file.LinkOption;
  import java.nio.file.Path;
  import java.security.AccessController;
  import java.security.PrivilegedActionException;
@@ -340,7 +340,7 @@ index 5070c7c8dba4a8824499c0007d752a670f132e87..1a042df86e31e15e8ecd9057ec700577
  import java.time.Instant;
  import java.util.Arrays;
  import java.util.Iterator;
-@@ -294,18 +295,22 @@ public class Util {
+@@ -298,18 +299,22 @@ public class Util {
     }
  
     public static <K> Strategy<K> identityStrategy() {
@@ -370,7 +370,7 @@ index 5070c7c8dba4a8824499c0007d752a670f132e87..1a042df86e31e15e8ecd9057ec700577
              list3.addAll(list2);
              return list3;
           }));
-@@ -600,7 +605,7 @@ public class Util {
+@@ -632,7 +637,7 @@ public class Util {
  
        public void openUrl(URL uRL) {
           try {
@@ -442,10 +442,10 @@ index 1b1709ac5bebae9ac8e05016de38133159fa9039..5f22be9d4bc7d099cec9a892695bf292
           options.save();
        });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 990589a4f31a9d8f7585a12c8da3a8b465fd1622..d40f3d7db01a86f50f6628d3f3aa197d58a52066 100644
+index 3b8879552c96022cb7715c3d04a8638883f502b4..034919fa04bd81d8a7971c857ab8626432ebdae5 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -2009,9 +2009,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2031,9 +2031,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
        crashReportCategory.setDetail("GL Caps", RenderSystem::getCapsString);
        crashReportCategory.setDetail("Using VBOs", (CrashReportDetail<String>)(() -> "Yes"));
        crashReportCategory.setDetail("Is Modded", (CrashReportDetail<String>)(() -> {
@@ -460,7 +460,7 @@ index 990589a4f31a9d8f7585a12c8da3a8b465fd1622..d40f3d7db01a86f50f6628d3f3aa197d
           } else {
              return Minecraft.class.getSigners() == null ? "Very likely; Jar signature invalidated" : "Probably not. Jar signature remains and client brand is untouched.";
           }
-@@ -2029,13 +2031,15 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2051,13 +2053,15 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
           crashReportCategory.setDetail("Resource Packs", (CrashReportDetail<String>)(() -> {
              StringBuilder stringBuilder = new StringBuilder();
  
@@ -479,7 +479,7 @@ index 990589a4f31a9d8f7585a12c8da3a8b465fd1622..d40f3d7db01a86f50f6628d3f3aa197d
                    stringBuilder.append(" (incompatible)");
                 }
              }
-@@ -2460,4 +2464,4 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2482,4 +2486,4 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
           this.serverResources.close();
        }
     }
@@ -533,10 +533,10 @@ index 3731cc09b9eba6ee359cf99647d65c4724e2eb87..2e96a6fad5db6d14c1db543ec5f009d4
                 }
  
 diff --git a/src/main/java/net/minecraft/client/gui/Gui.java b/src/main/java/net/minecraft/client/gui/Gui.java
-index 1cc7d751406afca0daae42d936fb8bba45511614..8e39664407226575b5bbae8a3a27a2c4ff4ae131 100644
+index 32c9d1c3a687aeeb8ee9c882957dd5b11e7f7ee6..c934c9500473fa8a2a66c0ab53d13bac9d5d5f35 100644
 --- a/src/main/java/net/minecraft/client/gui/Gui.java
 +++ b/src/main/java/net/minecraft/client/gui/Gui.java
-@@ -1189,7 +1189,7 @@ public class Gui extends GuiComponent {
+@@ -1196,7 +1196,7 @@ public class Gui extends GuiComponent {
     public void handleChat(ChatType chatType, Component component, UUID uuid) {
        if (!this.minecraft.isBlocked(uuid)) {
           if (!this.minecraft.options.hideMatchedNames || !this.minecraft.isBlocked(this.guessChatUUID(component))) {
@@ -726,7 +726,7 @@ index bf807e38cea5619381a2c50a0c8d23f915943f20..65d7c0a6aa17a1b22ae0294c85bbf995
           this.settings = worldPreset.create(this.registryHolder, this.settings.seed(), this.settings.generateFeatures(), this.settings.generateBonusChest());
           createWorldScreen.refreshWorldGenSettingsVisibility();
 diff --git a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
-index 352c061b0c580869cf2f0410761228256c654114..e22037ca0972333d2b28583e35cefbc8659af73b 100644
+index abaf3e5379224a2f0212df31bdda5cee8e1258e6..39e2288a7536cbf21dbe65c7bf2009e315c03a6c 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 @@ -259,13 +259,15 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.W
@@ -1021,7 +1021,7 @@ index 5165d697c80b0b004ec16139cf993e3164d6ed3d..528c53de5fcc3f2c2e8dc780e1af81f8
                          String s3 = strings[2];
                          String s4 = strings[3];
 diff --git a/src/main/java/net/minecraft/client/renderer/EffectInstance.java b/src/main/java/net/minecraft/client/renderer/EffectInstance.java
-index d700de5491e86ec941c29a3ce4e0fc558ce7d4de..c7031e6d7323e049bdfd6a3f9905f9934f2587a0 100644
+index f6e85fc494e06b930d86a4c500b56ff1ef513b64..bd579774f1c95ff007aca796f017edf7ebcffa4e 100644
 --- a/src/main/java/net/minecraft/client/renderer/EffectInstance.java
 +++ b/src/main/java/net/minecraft/client/renderer/EffectInstance.java
 @@ -246,7 +246,7 @@ public class EffectInstance implements Effect, AutoCloseable {
@@ -1042,8 +1042,44 @@ index d700de5491e86ec941c29a3ce4e0fc558ce7d4de..c7031e6d7323e049bdfd6a3f9905f993
              RenderSystem.enableTexture();
              int i2 = intSupplier.getAsInt();
              if (i2 != -1) {
+diff --git a/src/main/java/net/minecraft/client/renderer/RenderType.java b/src/main/java/net/minecraft/client/renderer/RenderType.java
+index c1b925e023fb70efd201055ba24e8fd736ff189a..30aca758db11f4a6012e29d034c0e026e617740a 100644
+--- a/src/main/java/net/minecraft/client/renderer/RenderType.java
++++ b/src/main/java/net/minecraft/client/renderer/RenderType.java
+@@ -34,11 +34,11 @@ public abstract class RenderType extends RenderStateShard {
+       RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_CUTOUT_SHADER).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(NO_TRANSPARENCY).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(true);
+       return create("entity_cutout", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, compositeState);
+    }));
+-   private static final BiFunction<ResourceLocation, Boolean, RenderType> ENTITY_CUTOUT_NO_CULL = Util.memoize((BiFunction)((resourceLocation, flag) -> {
++   private static final BiFunction<ResourceLocation, Boolean, RenderType> ENTITY_CUTOUT_NO_CULL = Util.memoize(((resourceLocation, flag) -> { // MagmaCube - decompile error
+       RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_CUTOUT_NO_CULL_SHADER).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(NO_TRANSPARENCY).setCullState(NO_CULL).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(flag);
+       return create("entity_cutout_no_cull", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, compositeState);
+    }));
+-   private static final BiFunction<ResourceLocation, Boolean, RenderType> ENTITY_CUTOUT_NO_CULL_Z_OFFSET = Util.memoize((BiFunction)((resourceLocation, flag) -> {
++   private static final BiFunction<ResourceLocation, Boolean, RenderType> ENTITY_CUTOUT_NO_CULL_Z_OFFSET = Util.memoize(((resourceLocation, flag) -> { // MagmaCube - decompile error
+       RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_CUTOUT_NO_CULL_Z_OFFSET_SHADER).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(NO_TRANSPARENCY).setCullState(NO_CULL).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).setLayeringState(VIEW_OFFSET_Z_LAYERING).createCompositeState(flag);
+       return create("entity_cutout_no_cull_z_offset", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, compositeState);
+    }));
+@@ -50,7 +50,7 @@ public abstract class RenderType extends RenderStateShard {
+       RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(true);
+       return create("entity_translucent_cull", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, compositeState);
+    }));
+-   private static final BiFunction<ResourceLocation, Boolean, RenderType> ENTITY_TRANSLUCENT = Util.memoize((BiFunction)((resourceLocation, flag) -> {
++   private static final BiFunction<ResourceLocation, Boolean, RenderType> ENTITY_TRANSLUCENT = Util.memoize(((resourceLocation, flag) -> { // MagmaCube - decompile error
+       RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setCullState(NO_CULL).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(flag);
+       return create("entity_translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, compositeState);
+    }));
+@@ -58,7 +58,7 @@ public abstract class RenderType extends RenderStateShard {
+       RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_SMOOTH_CUTOUT_SHADER).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setCullState(NO_CULL).setLightmapState(LIGHTMAP).createCompositeState(true);
+       return create("entity_smooth_cutout", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, compositeState);
+    }));
+-   private static final BiFunction<ResourceLocation, Boolean, RenderType> BEACON_BEAM = Util.memoize((BiFunction)((resourceLocation, flag) -> {
++   private static final BiFunction<ResourceLocation, Boolean, RenderType> BEACON_BEAM = Util.memoize(((resourceLocation, flag) -> { // MagmaCube - decompile error
+       RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_BEACON_BEAM_SHADER).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(flag ? TRANSLUCENT_TRANSPARENCY : NO_TRANSPARENCY).setWriteMaskState(flag ? COLOR_WRITE : COLOR_DEPTH_WRITE).createCompositeState(false);
+       return create("beacon_beam", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256, false, true, compositeState);
+    }));
 diff --git a/src/main/java/net/minecraft/client/renderer/ShaderInstance.java b/src/main/java/net/minecraft/client/renderer/ShaderInstance.java
-index cc65abb0325bf6e22bd26b57b02e56e398132e13..19420cdcb08342d0aa68943d4c4735d0ed0a188b 100644
+index 166c1e772f40b5ea16cb64f4ebe71e92d640b19a..d53e7b5280c45497a0f76265c4091d7326c95749 100644
 --- a/src/main/java/net/minecraft/client/renderer/ShaderInstance.java
 +++ b/src/main/java/net/minecraft/client/renderer/ShaderInstance.java
 @@ -330,7 +330,7 @@ public class ShaderInstance implements Shader, AutoCloseable {
@@ -1478,10 +1514,10 @@ index b9e663b20095957e5a39568882183d5920807f6f..4c8bcb25d3f400dc2ed6a91f35b62ba0
     }
  
 diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
-index 7408c4ab8e25b7174e12ce69adf1487bd4402a57..2c1c67205b85ee450e7768fe4dadf9d297f15ee2 100644
+index bb07b9cae5f8035ef516f7630b32a29be6113a92..86ec0df933f7d6acf3abb1412ffbf8e48a90e174 100644
 --- a/src/main/java/net/minecraft/core/BlockPos.java
 +++ b/src/main/java/net/minecraft/core/BlockPos.java
-@@ -263,13 +263,15 @@ public class BlockPos extends Vec3i {
+@@ -267,13 +267,15 @@ public class BlockPos extends Vec3i {
                          this.y = -this.maxY;
                       }
  
@@ -1503,7 +1539,7 @@ index 7408c4ab8e25b7174e12ce69adf1487bd4402a57..2c1c67205b85ee450e7768fe4dadf9d2
                    }
  
                    return blockPos;
-@@ -319,12 +321,14 @@ public class BlockPos extends Vec3i {
+@@ -323,12 +325,14 @@ public class BlockPos extends Vec3i {
                 if (this.index == i10) {
                    return (BlockPos)this.endOfData();
                 } else {
@@ -1594,7 +1630,7 @@ index 2deba148a9b3914bf041db1270e94709ee3840bb..6d29e32d0599b38022bde9a3c635f9dd
  
     static {
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index 1dd005f3de190f8b94afbee975e9cecad33dd21f..70278f29abd5eedcd3e63ec72e37f78e6dfa4180 100644
+index 31b529fc4283a2375e07fc7d17ed3ae64d910536..c348564f0b0405f6cc1a4dc1c2011c5f970b9269 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
 @@ -60,7 +60,7 @@ public abstract class RegistryAccess {
@@ -1695,7 +1731,7 @@ index 51d14d0cf26d188f8fbb5292617b9882eebdfcfd..ec52d76e9ca5a334569ae5c4ba33deed
                 throw new IllegalStateException("Duplicate loot table " + resourceLocation);
              }
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index 29aa585bfbf574a12767a725baa3989da89ef6b2..43339daf5f1715d9708123778f1f9a9168abf9a9 100644
+index d0ed8008c592da324d14d8a67a657a73998d7eb8..a20d846d54040e3dc383c5d9d31e8aa584d5ee0c 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 @@ -69,22 +69,26 @@ public class BlockModelGenerators {
@@ -1792,10 +1828,10 @@ index b8ec5d93f2be8cc799ba9f5d2e181fb2153ffc12..e1950ce7a29aeaf8e0432e497f306bae
           }
  
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index 21eb7a91a96b0fa53ceb5611f9c43d0ec2e5bc26..2a8836407bc7fab6b8be31369fb4aad7d628bfd0 100644
+index a2ae443cfc47b81b866194797c562ae3ec761785..63fc15ef64f4a1fa81e7bfa09d37885e8eb8decc 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-@@ -47,7 +47,8 @@ public class RecipeProvider implements DataProvider {
+@@ -49,7 +49,8 @@ public class RecipeProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
@@ -1805,6 +1841,16 @@ index 21eb7a91a96b0fa53ceb5611f9c43d0ec2e5bc26..2a8836407bc7fab6b8be31369fb4aad7
  
     public RecipeProvider(DataGenerator dataGenerator) {
        this.generator = dataGenerator;
+@@ -1133,7 +1134,8 @@ public class RecipeProvider implements DataProvider {
+    }
+ 
+    private static void waxRecipes(Consumer<FinishedRecipe> consumer) {
+-      ((BiMap)HoneycombItem.WAXABLES.get()).forEach((block, block2) -> ShapelessRecipeBuilder.shapeless(block2).requires(block).requires(Items.HONEYCOMB).unlockedBy(getHasName(block), has(block)).save(consumer, getFromName(block2, Items.HONEYCOMB)));
++      // MagmaCube - decompile error
++      (HoneycombItem.WAXABLES.get()).forEach((block, block2) -> ShapelessRecipeBuilder.shapeless(block2).requires(block).requires(Items.HONEYCOMB).unlockedBy(getHasName(block), has(block)).save(consumer, getFromName(block2, Items.HONEYCOMB)));
+    }
+ 
+    private static void generateRecipes(Consumer<FinishedRecipe> consumer, BlockFamily blockFamily) {
 diff --git a/src/main/java/net/minecraft/gametest/framework/GameTestAssertPosException.java b/src/main/java/net/minecraft/gametest/framework/GameTestAssertPosException.java
 index 03335978d1bd9744a828bf7a0504f31e592142c9..9759bb0ec323e86dcd7872da24d098cb7712f6f8 100644
 --- a/src/main/java/net/minecraft/gametest/framework/GameTestAssertPosException.java
@@ -2194,15 +2240,15 @@ index 2957286aa9e7c266d678c13744fe2d781958bf44..3a7e9ccff0af8df062fb3ddf9543f276
  
     public String toString() {
 diff --git a/src/main/java/net/minecraft/resources/RegistryReadOps.java b/src/main/java/net/minecraft/resources/RegistryReadOps.java
-index 52966ca96e5720b1cb98e9ff88a13260e63e5486..5ce497855584e4e156ab0066b1b7819276afb10b 100644
+index 756d30f0cf389279dbbc5831a5ab0f3455a28bba..f92d13479d4752a5504f54213347fbb3ec61f7ac 100644
 --- a/src/main/java/net/minecraft/resources/RegistryReadOps.java
 +++ b/src/main/java/net/minecraft/resources/RegistryReadOps.java
 @@ -60,7 +60,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
        this.resources = resourceAccess;
-       this.registryHolder = registryHolder;
+       this.registryAccess = registryAccess;
        this.readCache = identityHashMap;
--      this.jsonOps = dynamicOps == JsonOps.INSTANCE ? this : new RegistryReadOps(JsonOps.INSTANCE, resourceAccess, registryHolder, identityHashMap);
-+      this.jsonOps = dynamicOps == JsonOps.INSTANCE ? (RegistryReadOps<JsonElement>) this : new RegistryReadOps(JsonOps.INSTANCE, resourceAccess, registryHolder, identityHashMap); // MagmaCube - decompile error
+-      this.jsonOps = dynamicOps == JsonOps.INSTANCE ? this : new RegistryReadOps(JsonOps.INSTANCE, resourceAccess, registryAccess, identityHashMap);
++      this.jsonOps = dynamicOps == JsonOps.INSTANCE ? (RegistryReadOps<JsonElement>) this : new RegistryReadOps(JsonOps.INSTANCE, resourceAccess, registryAccess, identityHashMap);
     }
  
     protected <E> DataResult<Pair<Supplier<E>, T>> decodeElement(T object, ResourceKey<? extends Registry<E>> resourceKey, Codec<E> codec, boolean flag) {
@@ -2216,7 +2262,7 @@ index 52966ca96e5720b1cb98e9ff88a13260e63e5486..5ce497855584e4e156ab0066b1b78192
              Pair<ResourceLocation, T> pair = (Pair)dataResult.result().get();
              ResourceLocation resourceLocation = (ResourceLocation)pair.getFirst();
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index ea06ff62c50b0c513e5eaf6013867e4303a8ba95..623a111065b651312b6ca06ecd5cefb0f0fa094a 100644
+index 45402a175b3c06fad2519a73a6569d882cd5e34e..51abc03ae42c4277cefaba330d8d8bc46bb7424c 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -159,17 +159,18 @@ public class Main {
@@ -2249,10 +2295,10 @@ index ea06ff62c50b0c513e5eaf6013867e4303a8ba95..623a111065b651312b6ca06ecd5cefb0
           Thread thread = new Thread("Server Shutdown Thread") {
              public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 4368e53382030d8cfa50fe55930f54fd2de67785..5a6ae0a6f437e293b4b42a25946e71485170338d 100644
+index 069d5494ec226b2f7f60818d2df2af28568f6fbf..871d2ab5d85214541505d7f5713d3573c072c76b 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1228,7 +1228,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1229,7 +1229,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
     }
  
     public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -2561,7 +2607,7 @@ index 9b86b4ee9d70d958f936f1e7b383f0da3edaa3ba..54c96a40f007ccdf14e4a2da0838bf1a
  
        return completableFuture;
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index c1d669fb69727ffadb60d0526ec40bd60fbc7e14..79d7d8be3eb90c8a5c41182d46a40ddb0459702b 100644
+index 3fd3ce994ac22ad1e3076555adea430261e59a99..6d5a427e0e48653d62b65503aca94ab57d742797 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -412,7 +412,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -2573,7 +2619,7 @@ index c1d669fb69727ffadb60d0526ec40bd60fbc7e14..79d7d8be3eb90c8a5c41182d46a40ddb
     }
  
     public void tickChunk(LevelChunk levelChunk, int i) {
-@@ -1157,8 +1157,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1144,8 +1144,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
  
        }
  
@@ -2586,7 +2632,7 @@ index c1d669fb69727ffadb60d0526ec40bd60fbc7e14..79d7d8be3eb90c8a5c41182d46a40ddb
        Throwable var173 = null;
  
        try {
-@@ -1230,24 +1232,24 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1217,24 +1219,24 @@ public class ServerLevel extends Level implements WorldGenLevel {
        }
  
        Path path5 = path.resolve("block_entities.csv");
@@ -2616,7 +2662,7 @@ index c1d669fb69727ffadb60d0526ec40bd60fbc7e14..79d7d8be3eb90c8a5c41182d46a40ddb
              }
           }
  
-@@ -1335,7 +1337,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1322,7 +1324,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              object2IntOpenHashMap.addTo(s, 1);
           }
  
@@ -3040,10 +3086,10 @@ index 46a0a9c508a016314d161c83bdfa496e213e2581..6bb8d3210344e8e07eea8750976e1f23
           return Optional.empty();
        } else {
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index 238b60fde317105797fd7e9e8c032c48a1df1f7c..ecd73cbd31a6cec24fdbb2ce95bd62348aa7bc75 100644
+index 14e3bc4be847bc9aacbbe734952703b819c3b4cf..f92e2928091fb6a753787a9754b1e56721027135 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-@@ -543,15 +543,16 @@ public class DataFixers {
+@@ -545,15 +545,16 @@ public class DataFixers {
        dataFixerBuilder.addFixer(new AddNewChoices(schema130, "Added Glow Squid", References.ENTITY));
        dataFixerBuilder.addFixer(new AddNewChoices(schema130, "Added Glow Item Frame", References.ENTITY));
        Schema schema131 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
@@ -3062,7 +3108,7 @@ index 238b60fde317105797fd7e9e8c032c48a1df1f7c..ecd73cbd31a6cec24fdbb2ce95bd6234
 +      ImmutableMap<String, String> immutableMap3 = ImmutableMap.<String, String>builder().put("minecraft:grimstone", "minecraft:deepslate").put("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab").put("minecraft:grimstone_stairs", "minecraft:cobbled_deepslate_stairs").put("minecraft:grimstone_wall", "minecraft:cobbled_deepslate_wall").put("minecraft:polished_grimstone", "minecraft:polished_deepslate").put("minecraft:polished_grimstone_slab", "minecraft:polished_deepslate_slab").put("minecraft:polished_grimstone_stairs", "minecraft:polished_deepslate_stairs").put("minecraft:polished_grimstone_wall", "minecraft:polished_deepslate_wall").put("minecraft:grimstone_tiles", "minecraft:deepslate_tiles").put("minecraft:grimstone_tile_slab", "minecraft:deepslate_tile_slab").put("minecraft:grimstone_tile_stairs", "minecraft:deepslate_tile_stairs").put("minecraft:grimstone_tile_wall", "minecraft:deepslate_tile_wall").put("minecraft:grimstone_bricks", "minecraft:deepslate_bricks").put("minecraft:grimstone_brick_slab", "minecraft:deepslate_brick_slab").put("minecraft:grimstone_brick_stairs", "minecraft:deepslate_brick_stairs").put("minecraft:grimstone_brick_wall", "minecraft:deepslate_brick_wall").put("minecraft:chiseled_grimstone", "minecraft:chiseled_deepslate").build();
        dataFixerBuilder.addFixer(ItemRenameFix.create(schema133, "Renamed grimstone block items to deepslate", createRenamer(immutableMap3)));
        dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema133, "Renamed grimstone blocks to deepslate", createRenamer(immutableMap3)));
-    }
+       Schema schema134 = dataFixerBuilder.addSchema(2700, SAME_NAMESPACED);
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
 index 50ed45f86b78b0010e43f33cc99c55fe1c677b62..c8be39a824d87d04cf5ca31322f84d33ce69258c 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
@@ -4476,10 +4522,10 @@ index d74d6500e5e500e5b1765e3c3c7d1dbd8409b149..bb4779d8b229cba066f5ef48108f05e6
  
              return dynamic2x;
 diff --git a/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java b/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
-index 8e4f8cb8bd09cd49abdecb368b0b0ad13e6a7792..3d614ce714d02036787fa79a52af20200f6cd81d 100644
+index 3b128b629a9d4baefd71f190d2fcfbc908ea7195..fbf89ffb554f9c26c6103bb861f538cbf1745a41 100644
 --- a/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
 +++ b/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
-@@ -40,7 +40,7 @@ public class FilledProfileResults implements ProfileResults {
+@@ -39,7 +39,7 @@ public class FilledProfileResults implements ProfileResults {
        }
     };
     private static final Splitter SPLITTER = Splitter.on('\u001e');
@@ -4488,7 +4534,7 @@ index 8e4f8cb8bd09cd49abdecb368b0b0ad13e6a7792..3d614ce714d02036787fa79a52af2020
     private final Map<String, ? extends ProfilerPathEntry> entries;
     private final long startTimeNano;
     private final int startTimeTicks;
-@@ -121,7 +121,7 @@ public class FilledProfileResults implements ProfileResults {
+@@ -120,7 +120,7 @@ public class FilledProfileResults implements ProfileResults {
           Object2LongMap<String> object2LongMap = profilerPathEntry.getCounters();
           if (!object2LongMap.isEmpty()) {
              List<String> list = SPLITTER.splitToList(s);
@@ -4498,7 +4544,7 @@ index 8e4f8cb8bd09cd49abdecb368b0b0ad13e6a7792..3d614ce714d02036787fa79a52af2020
  
        });
 diff --git a/src/main/java/net/minecraft/util/profiling/SingleTickProfiler.java b/src/main/java/net/minecraft/util/profiling/SingleTickProfiler.java
-index 7d9a1485ebd8fc10a12a4a8eadc25754441eedbb..1bff1d3326b575f3295093cad79a66c1a47c4a39 100644
+index 3e439cc4c8f593f4c142e1c3bc7b512fdb552d9d..8cf07acb441fa28d3f89c1a23627b2db1ecbcdf2 100644
 --- a/src/main/java/net/minecraft/util/profiling/SingleTickProfiler.java
 +++ b/src/main/java/net/minecraft/util/profiling/SingleTickProfiler.java
 @@ -10,10 +10,10 @@ import org.apache.logging.log4j.Logger;
@@ -4887,10 +4933,10 @@ index 8ef4228bc9fa5836a313b1a5fb0db22451551d18..aaf542541cc2c94c5d85f8aaed32a395
     protected Optional<LivingEntity> getNearestHostile(LivingEntity livingEntity) {
        return this.getVisibleEntities(livingEntity).flatMap((list) -> list.stream().filter(this::isHostile).filter((livingEntity2) -> this.isClose(livingEntity, livingEntity2)).min(Comparator.comparingDouble(livingEntity::distanceToSqr)));
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
-index 0bae4f07da4d64d283a857037744deb3dd3133e7..c887ba1bb986333cf5e5399a59296f55251fdb09 100644
+index e09c97f298196d766a6ab403e8b2b7badbbb17ce..3cca68629055b58079c300e2e926e2b348adbe19 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
-@@ -166,7 +166,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -170,7 +170,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
     }
  
     public void ensureLoadedAndValid(LevelReader levelReader, BlockPos blockPos, int i) {
@@ -4936,7 +4982,7 @@ index ebbebb1f566855d5f7cf0813db7e6bd8d76a2617..c33feae55770c0354a645182362c6bd2
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index e25204464131e06a51d729495e61ab88f1deb761..7e6a6b413434f1025aeb03f8dbf001883da02afc 100644
+index 46ea6c97e6425745b6b93b0cbb77ba3e2119ae9f..cbf62e1f943e1b05437b68af8f9baee4dfc27c5f 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
 @@ -136,9 +136,11 @@ public class Fox extends Animal {
@@ -5409,7 +5455,7 @@ index 8ef2825c57e01b5d82fb1833ddc72aa8d7b5f128..57e9a9eb815dbdb6a462e357f3af7315
           Activity activity = activityTransition.getActivity();
           this.schedule.getAllTimelinesExceptFor(activity).forEach((timeline) -> timeline.addKeyframe(activityTransition.getTime(), 0.0F));
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index f17dfa2544fa592132b60987e4e2db7787ac9b74..0c46388b79efa243dc1d960d35366589ecefc37d 100644
+index 863f01c4cb443f5a6e16a4979fd6dce5a111ab33..6d9593bac0921cf691f6a78fd43126d8041e12db 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 @@ -162,7 +162,7 @@ public abstract class AbstractMinecart extends Entity {
@@ -5477,6 +5523,42 @@ index 48a92d2d5cfe50cacb52871aad238934c3229e7b..14ac9085732248b5c210b2fe55fea501
     }
  
     public abstract void fillCraftSlotsStackedContents(StackedContents var1);
+diff --git a/src/main/java/net/minecraft/world/item/AxeItem.java b/src/main/java/net/minecraft/world/item/AxeItem.java
+index ea2b43e6da901fee47a90d312f0c54e3db1c4073..40695d8a6d91edab3efb8cd3d61839669c505b16 100644
+--- a/src/main/java/net/minecraft/world/item/AxeItem.java
++++ b/src/main/java/net/minecraft/world/item/AxeItem.java
+@@ -41,7 +41,7 @@ public class AxeItem extends DiggerItem {
+       BlockState blockState = level.getBlockState(blockPos);
+       Optional<BlockState> optional = this.getStripped(blockState);
+       Optional<BlockState> optional2 = WeatheringCopper.getPrevious(blockState);
+-      Optional<BlockState> optional3 = Optional.ofNullable(((BiMap)HoneycombItem.WAX_OFF_BY_BLOCK.get()).get(blockState.getBlock())).map((block) -> block.withPropertiesOf(blockState));
++      Optional<BlockState> optional3 = Optional.ofNullable((HoneycombItem.WAX_OFF_BY_BLOCK.get()).get(blockState.getBlock())).map((block) -> block.withPropertiesOf(blockState)); // MagmaCube - decompile error
+       Optional<BlockState> optional4 = Optional.empty();
+       if (optional.isPresent()) {
+          level.playSound(player, blockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+diff --git a/src/main/java/net/minecraft/world/item/HoneycombItem.java b/src/main/java/net/minecraft/world/item/HoneycombItem.java
+index 6d8fd3f1fa2de8b31b469a1ec2aa4bdf5e78841f..86930bffcbd4b6f95cfab37b4d421b597d1e11e0 100644
+--- a/src/main/java/net/minecraft/world/item/HoneycombItem.java
++++ b/src/main/java/net/minecraft/world/item/HoneycombItem.java
+@@ -15,7 +15,8 @@ import net.minecraft.world.level.block.Blocks;
+ import net.minecraft.world.level.block.state.BlockState;
+ 
+ public class HoneycombItem extends Item {
+-   public static final Supplier<BiMap<Block, Block>> WAXABLES = Suppliers.memoize(() -> ImmutableBiMap.builder().put(Blocks.COPPER_BLOCK, Blocks.WAXED_COPPER_BLOCK).put(Blocks.EXPOSED_COPPER, Blocks.WAXED_EXPOSED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.WAXED_WEATHERED_COPPER).put(Blocks.CUT_COPPER, Blocks.WAXED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WAXED_EXPOSED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.WAXED_WEATHERED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.WAXED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.WAXED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS).build());
++   // MagmaCube - decompile error
++   public static final Supplier<BiMap<Block, Block>> WAXABLES = Suppliers.memoize(() -> ImmutableBiMap.<Block, Block>builder().put(Blocks.COPPER_BLOCK, Blocks.WAXED_COPPER_BLOCK).put(Blocks.EXPOSED_COPPER, Blocks.WAXED_EXPOSED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.WAXED_WEATHERED_COPPER).put(Blocks.CUT_COPPER, Blocks.WAXED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WAXED_EXPOSED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.WAXED_WEATHERED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.WAXED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.WAXED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS).build());
+    public static final Supplier<BiMap<Block, Block>> WAX_OFF_BY_BLOCK = Suppliers.memoize(() -> ((BiMap)WAXABLES.get()).inverse());
+ 
+    public HoneycombItem(Item.Properties properties) {
+@@ -36,6 +37,6 @@ public class HoneycombItem extends Item {
+    }
+ 
+    public static Optional<BlockState> getWaxed(BlockState blockState) {
+-      return Optional.ofNullable(((BiMap)WAXABLES.get()).get(blockState.getBlock())).map((block) -> block.withPropertiesOf(blockState));
++      return Optional.ofNullable((WAXABLES.get()).get(blockState.getBlock())).map((block) -> block.withPropertiesOf(blockState)); // MagmaCube - decompile error
+    }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
 index 063fff5d96e670b0b9845392ca99c03508e8df75..fd8c4d1db390f21a48f02a6b313be919c2036151 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
@@ -5748,6 +5830,34 @@ index 78a5e56021294556317a3d86a47bb25f462a70db..0639540a520e8834c049a12f968daec3
              switch(redstoneSide) {
              case UP:
                 this.spawnParticlesAlongLine(level, random, blockPos, COLORS[i], direction, Direction.UP, -0.5F, 0.5F);
+diff --git a/src/main/java/net/minecraft/world/level/block/WeatheringCopper.java b/src/main/java/net/minecraft/world/level/block/WeatheringCopper.java
+index f147001d84a92ac3393c298f2bf3cfe6eb9ba4cd..6f90f4dce102e9520ece8a47f8f1f1611327ddac 100644
+--- a/src/main/java/net/minecraft/world/level/block/WeatheringCopper.java
++++ b/src/main/java/net/minecraft/world/level/block/WeatheringCopper.java
+@@ -8,11 +8,12 @@ import java.util.function.Supplier;
+ import net.minecraft.world.level.block.state.BlockState;
+ 
+ public interface WeatheringCopper extends ChangeOverTimeBlock<WeatheringCopper.WeatherState> {
+-   Supplier<BiMap<Block, Block>> NEXT_BY_BLOCK = Suppliers.memoize(() -> ImmutableBiMap.builder().put(Blocks.COPPER_BLOCK, Blocks.EXPOSED_COPPER).put(Blocks.EXPOSED_COPPER, Blocks.WEATHERED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.OXIDIZED_COPPER).put(Blocks.CUT_COPPER, Blocks.EXPOSED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WEATHERED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.OXIDIZED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.EXPOSED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WEATHERED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.OXIDIZED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.EXPOSED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WEATHERED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.OXIDIZED_CUT_COPPER_STAIRS).build());
++   // MagmaCube - decompile error
++   Supplier<BiMap<Block, Block>> NEXT_BY_BLOCK = Suppliers.memoize(() -> ImmutableBiMap.<Block, Block>builder().put(Blocks.COPPER_BLOCK, Blocks.EXPOSED_COPPER).put(Blocks.EXPOSED_COPPER, Blocks.WEATHERED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.OXIDIZED_COPPER).put(Blocks.CUT_COPPER, Blocks.EXPOSED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WEATHERED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.OXIDIZED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.EXPOSED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WEATHERED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.OXIDIZED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.EXPOSED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WEATHERED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.OXIDIZED_CUT_COPPER_STAIRS).build());
+    Supplier<BiMap<Block, Block>> PREVIOUS_BY_BLOCK = Suppliers.memoize(() -> ((BiMap)NEXT_BY_BLOCK.get()).inverse());
+ 
+    static Optional<Block> getPrevious(Block block) {
+-      return Optional.ofNullable(((BiMap)PREVIOUS_BY_BLOCK.get()).get(block));
++      return Optional.ofNullable((PREVIOUS_BY_BLOCK.get()).get(block)); // MagmaCube - decompile error
+    }
+ 
+    static Block getFirst(Block block) {
+@@ -30,7 +31,7 @@ public interface WeatheringCopper extends ChangeOverTimeBlock<WeatheringCopper.W
+    }
+ 
+    static Optional<Block> getNext(Block block) {
+-      return Optional.ofNullable(((BiMap)NEXT_BY_BLOCK.get()).get(block));
++      return Optional.ofNullable((NEXT_BY_BLOCK.get()).get(block)); // MagmaCube - decompile error
+    }
+ 
+    static BlockState getFirst(BlockState blockState) {
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/StructureBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/StructureBlockEntity.java
 index 7c742c82ca2cb09c582172a220e3dd58d92a8c2c..85fb0bb286130b8adbcd62f1d9d4d66d93d3fb63 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/StructureBlockEntity.java
@@ -5888,7 +5998,7 @@ index aff94a838b5f69366f29b5282cf5625cd5ad4b22..83797049b45f2cccae406a6a9e290ff0
  
        ThreadingDetector.checkAndLock(this.lock, this.traces, "PalettedContainer");
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
-index f38c2e09f509e8735e825c397447e387a79a196e..3240523c6c08eeefba51d4511d1f2c202a63751f 100644
+index 001875b6cdfb5df255d8564daf238f3d4f9f1e3e..d6ad400175607a89217332d14f9b4d286f69189f 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 @@ -236,7 +236,7 @@ public class ChunkSerializer {
@@ -6119,10 +6229,10 @@ index b82ef4d0184a664cb85bdc5ad7204a9b854dcaf0..e9a5ea44226067f3ff787a07c8c020b8
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index 1f48cef0eb17bf279b125fe620910dfad61ba7fe..c684a936dfe823366d8d87272cdac395f4374c1a 100644
+index e86dcdc76f93c0afb6eddcc62bef9175b6c6d7f2..f107b126ee8abc112fab42e727b380ce794655a1 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-@@ -72,7 +72,8 @@ public abstract class StructureFeature<C extends FeatureConfiguration> {
+@@ -73,7 +73,8 @@ public abstract class StructureFeature<C extends FeatureConfiguration> {
     public static final StructureFeature<JigsawConfiguration> BASTION_REMNANT = register("Bastion_Remnant", new BastionFeature(JigsawConfiguration.CODEC), GenerationStep.Decoration.SURFACE_STRUCTURES);
     public static final List<StructureFeature<?>> NOISE_AFFECTING_FEATURES = ImmutableList.of(PILLAGER_OUTPOST, VILLAGE, NETHER_FOSSIL, STRONGHOLD);
     private static final ResourceLocation JIGSAW_RENAME = new ResourceLocation("jigsaw");
@@ -6235,12 +6345,12 @@ index 4bca8fff0fac933dad33929b725ed83e0f716711..a9393a97b6a8f60fa0de796380b3b00a
              int i3 = i2 % 8;
              int i4 = i2 / 8;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
-index 04a5c13a5668e23d01b109d9c6f464f95f7cefac..4425c0faefe0a96cc3c295c3ba91c99b97143997 100644
+index 1beadd0d2a84d656b70a3549c7e9f2ea4e946c04..8653febda7a192822029ebf6c747715798c7c8cf 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
-@@ -39,7 +39,8 @@ import org.apache.logging.log4j.Logger;
+@@ -37,7 +37,8 @@ import org.apache.logging.log4j.Logger;
  
- public class FlatLevelGeneratorSettings implements LevelHeightAccessor {
+ public class FlatLevelGeneratorSettings {
     private static final Logger LOGGER = LogManager.getLogger();
 -   public static final Codec<FlatLevelGeneratorSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.biomes), StructureSettings.CODEC.fieldOf("structures").forGetter(FlatLevelGeneratorSettings::structureSettings), FlatLayerInfo.CODEC.listOf().fieldOf("layers").forGetter(FlatLevelGeneratorSettings::getLayersInfo), Codec.BOOL.fieldOf("lakes").orElse(false).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.addLakes), Codec.BOOL.fieldOf("features").orElse(false).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.decoration), Biome.CODEC.optionalFieldOf("biome").orElseGet(Optional::empty).forGetter((flatLevelGeneratorSettings) -> Optional.of(flatLevelGeneratorSettings.biome))).apply(instance, FlatLevelGeneratorSettings::new)).comapFlatMap(FlatLevelGeneratorSettings::validateHeight, Function.identity()).stable();
 +   // MagmaCube - decompile error
@@ -6248,7 +6358,7 @@ index 04a5c13a5668e23d01b109d9c6f464f95f7cefac..4425c0faefe0a96cc3c295c3ba91c99b
     private static final Map<StructureFeature<?>, ConfiguredStructureFeature<?, ?>> STRUCTURE_FEATURES = Util.make(Maps.newHashMap(), (hashMap) -> {
        hashMap.put(StructureFeature.MINESHAFT, StructureFeatures.MINESHAFT);
        hashMap.put(StructureFeature.VILLAGE, StructureFeatures.VILLAGE_PLAINS);
-@@ -151,7 +152,7 @@ public class FlatLevelGeneratorSettings implements LevelHeightAccessor {
+@@ -149,7 +150,7 @@ public class FlatLevelGeneratorSettings {
  
           for(int i = 0; i < list.size(); ++i) {
              if (i != GenerationStep.Decoration.UNDERGROUND_STRUCTURES.ordinal() && i != GenerationStep.Decoration.SURFACE_STRUCTURES.ordinal()) {
@@ -6258,7 +6368,7 @@ index 04a5c13a5668e23d01b109d9c6f464f95f7cefac..4425c0faefe0a96cc3c295c3ba91c99b
                 }
              }
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java b/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
-index c743d7d857620dc9de9ebec3d04dd0e56541129f..5cf63f6328c94cd0788073cfda660e190f39be83 100644
+index a87ff85515296bd08bfa3e6bbde48506fad904ba..1412192ae21e6bc33c5afd44789ebf03691600c9 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
 @@ -1344,7 +1344,7 @@ public class OceanMonumentPieces {
@@ -6271,10 +6381,10 @@ index c743d7d857620dc9de9ebec3d04dd0e56541129f..5cf63f6328c94cd0788073cfda660e19
        protected static final int GRIDROOM_TOP_CONNECT_INDEX = getRoomIndex(2, 2, 0);
        protected static final int GRIDROOM_LEFTWING_CONNECT_INDEX = getRoomIndex(0, 1, 0);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
-index ef27dba98f6140e2b38f5ba70c00f6b2b66f54b2..230be48e4317e0189b4040151bb05fde54ade6f9 100644
+index 99a8a184fcbb5204bf9869178a14171fae2b8f56..b1d0ea09b6cb87f08f5ec8d3e29c73ed94de2d74 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
-@@ -45,7 +45,8 @@ public abstract class StructurePiece {
+@@ -46,7 +46,8 @@ public abstract class StructurePiece {
     private Rotation rotation;
     protected int genDepth;
     private final StructurePieceType type;
