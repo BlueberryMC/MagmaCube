@@ -24,4 +24,5 @@ cd "$basedir/work/Minecraft/$version/source/" || exit 1
 $git init
 $git add src
 $git commit -m "Vanilla $ $(date +%Y-%m-%dT%T%:z)" --author="Vanilla <auto@mated.null>"
+$git checkout -b master
 $git status

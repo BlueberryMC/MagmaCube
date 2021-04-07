@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/CrashReport.java b/src/main/java/net/minecraft/CrashReport.java
-index 67b27413f6167ffa0cd2d530c954aeb55b4cba3a..f5432c828930a23fbd5657a978c1c5db39a0a4ca 100644
+index 48c63fba1df3ba2e7f624c0e19766fd204bbdae1..438e17a37dd26a5c70f455e03953edf499fec5be 100644
 --- a/src/main/java/net/minecraft/CrashReport.java
 +++ b/src/main/java/net/minecraft/CrashReport.java
 @@ -35,6 +35,7 @@ public class CrashReport {
@@ -17,7 +17,7 @@ index 67b27413f6167ffa0cd2d530c954aeb55b4cba3a..f5432c828930a23fbd5657a978c1c5db
        this.systemDetails.setDetail("Minecraft Version ID", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getId()));
        this.systemDetails.setDetail("Operating System", (CrashReportDetail<String>)(() -> System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version")));
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index cc041fb1aaf92ae6041e42eab4370ddaf60cfe69..35d2488fa1377f9af59b00395c2cfd6b807f7313 100644
+index 742a2b554e1fba9fb5f3d031208b3495fa7dbeaf..5c5c4905d5b4ba3bab763dfe3aeb35a87e19ec4a 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
@@ -45,12 +45,12 @@ index cc041fb1aaf92ae6041e42eab4370ddaf60cfe69..35d2488fa1377f9af59b00395c2cfd6b
  
     public static GameVersion tryDetectVersion() {
 diff --git a/src/main/java/net/minecraft/client/ClientBrandRetriever.java b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
-index 1b2cf23c6f943151d84093a3f837d36cccbeb493..4d80e4054f8436bd8fd1af85a8121a70304a256f 100644
+index f2ee5a65d22f6eead934dc833ad679e078d6991e..3dfa9e25c0ab623f4e6ba69e5036b834e77d2b06 100644
 --- a/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 +++ b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
-@@ -2,6 +2,6 @@ package net.minecraft.client;
+@@ -7,6 +7,6 @@ public class ClientBrandRetriever {
  
- public class ClientBrandRetriever {
+    @DontObfuscate
     public static String getClientModName() {
 -      return "vanilla";
 +      return "magmacube"; // MagmaCube > vanilla!
@@ -58,10 +58,10 @@ index 1b2cf23c6f943151d84093a3f837d36cccbeb493..4d80e4054f8436bd8fd1af85a8121a70
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 2166a078922d384e1f5220581421172329983fb0..4fb4101c1b213122def21b69d89251cb0c31e2a5 100644
+index 4417425e796ff1fe2e634d65d0df379740c6f837..020c21e26be3ee0a4092c11f6b76d61daa599a54 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -241,6 +241,7 @@ public class TitleScreen extends Screen {
+@@ -243,6 +243,7 @@ public class TitleScreen extends Screen {
              s = s + I18n.get("menu.modded");
           }
  

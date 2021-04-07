@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/07ad8b23e33d195fd897133c9c0e35d7fa1593eb/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/507be109a1902b7c3b30c1e900299344c7c0bee6/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/e8f9be9094ea120eabed0030f997c51da6853793/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/be3ba1ca24543ecd73f240c36a3aa61916fa4d0c/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
-decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.478.18.jar
+decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.498.4.jar # zml2008/ForgeFlower:fix-exceptions
 quickunzip="$basedir/work/quickunzip/quickunzip.jar"
 decompOutput="$basedir/work/Minecraft/$version/source"
 # Remove files that was used previously
