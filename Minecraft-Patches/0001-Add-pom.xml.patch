@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..d91e7d92cf3b52d96454f278c7c024d3
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>xyz.acrylicstyle.minecraft</groupId>
-+        <version>21w11a</version>
++        <version>21w13a</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
