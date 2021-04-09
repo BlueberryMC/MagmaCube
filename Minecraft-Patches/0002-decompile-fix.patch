@@ -536,7 +536,7 @@ index 9bc1ce6b9d718fd3568d2d92915dabcd4951046a..6d97758a0d40796feb94103aebcd43d4
                 i2 = StatsScreen.this.stats.getValue(statType2, item2);
              }
 diff --git a/src/main/java/net/minecraft/client/gui/screens/inventory/CommandBlockEditScreen.java b/src/main/java/net/minecraft/client/gui/screens/inventory/CommandBlockEditScreen.java
-index 4e606841fefe84448ebf617f3eb91bab4f18de20..bd52b4715e30aeb948f97cbc90076ee56bfa91fc 100644
+index a9b17ff2f151268265c275f7203f82b1e979e1f8..5e108e1842380d97253ae4010f883fa80ddf98a4 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/inventory/CommandBlockEditScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/inventory/CommandBlockEditScreen.java
 @@ -31,7 +31,7 @@ public class CommandBlockEditScreen extends AbstractCommandBlockEditScreen {
@@ -657,10 +657,10 @@ index a3e79fff1700fb13dc8818ca71f9f7a5e2edd080..ea6704848a45d9cc260a1ab12b36077c
                    }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 5bdfa0d3bb774b0070f2fe8994e9fe8a2710a1c0..2f5c574ad0a1a6b086917c06b50356771ba59e5b 100644
+index 5c8a214c569ee3de765f26445cef3c3383894f98..677d2e4e5bc4413a96f463286981b076b7e93e1c 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -507,7 +507,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -508,7 +508,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
  
     public void handleRemoveEntity(ClientboundRemoveEntitiesPacket clientboundRemoveEntitiesPacket) {
        PacketUtils.ensureRunningOnSameThread(clientboundRemoveEntitiesPacket, this, this.minecraft);
@@ -669,7 +669,7 @@ index 5bdfa0d3bb774b0070f2fe8994e9fe8a2710a1c0..2f5c574ad0a1a6b086917c06b5035677
     }
  
     public void handleMovePlayer(ClientboundPlayerPositionPacket clientboundPlayerPositionPacket) {
-@@ -1444,11 +1444,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1445,11 +1445,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
              } else {
                 this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                       this.minecraft.setScreen((Screen)null);
@@ -686,7 +686,7 @@ index 5bdfa0d3bb774b0070f2fe8994e9fe8a2710a1c0..2f5c574ad0a1a6b086917c06b5035677
  
                          this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
                          this.downloadCallback(this.minecraft.getClientPackSource().downloadAndSelectResourcePack(s, s2));
-@@ -1456,14 +1458,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1457,14 +1459,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
                          this.send(ServerboundResourcePackPacket.Action.DECLINED);
                          if (flag) {
                             this.connection.disconnect(new TranslatableComponent("multiplayer.requiredTexturePrompt.disconnect"));
@@ -1266,10 +1266,10 @@ index 2fbf20ca2c568a0f1c49d9cd44e94b900a1fbf7f..10b0c4c0e5723db4191c4bb4451432f1
  
     @SafeVarargs
 diff --git a/src/main/java/net/minecraft/core/Registry.java b/src/main/java/net/minecraft/core/Registry.java
-index 29e6840ed511885ed8f27568472e360946a6766b..75ee54502e97e1eeb35ea2f5ee53a4f090b12019 100644
+index 9f20e31144df67a2f20a54bce6862ae2719e1098..b55207b4d98d9433b9d11c938fa775e09b44027c 100644
 --- a/src/main/java/net/minecraft/core/Registry.java
 +++ b/src/main/java/net/minecraft/core/Registry.java
-@@ -269,8 +269,8 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -270,8 +270,8 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     private static <T, R extends WritableRegistry<T>> R internalRegister(ResourceKey<? extends Registry<T>> resourceKey, R writableRegistry, Supplier<T> supplier, Lifecycle lifecycle) {
        ResourceLocation resourceLocation = resourceKey.location();
        LOADERS.put(resourceLocation, supplier);
@@ -1280,7 +1280,7 @@ index 29e6840ed511885ed8f27568472e360946a6766b..75ee54502e97e1eeb35ea2f5ee53a4f0
     }
  
     protected Registry(ResourceKey<? extends Registry<T>> resourceKey, Lifecycle lifecycle) {
-@@ -287,13 +287,15 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -289,13 +289,15 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     }
  
     public <U> DataResult<Pair<T, U>> decode(DynamicOps<U> dynamicOps, U object) {
@@ -1300,7 +1300,7 @@ index 29e6840ed511885ed8f27568472e360946a6766b..75ee54502e97e1eeb35ea2f5ee53a4f0
     }
  
     public <U> DataResult<U> encode(T object, DynamicOps<U> dynamicOps, U object2) {
-@@ -315,6 +317,7 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -317,6 +319,7 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     public abstract Optional<ResourceKey<T>> getResourceKey(T var1);
  
     public abstract int getId(@Nullable T var1);
@@ -1308,7 +1308,7 @@ index 29e6840ed511885ed8f27568472e360946a6766b..75ee54502e97e1eeb35ea2f5ee53a4f0
  
     @Nullable
     public abstract T get(@Nullable ResourceKey<T> var1);
-@@ -363,11 +366,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -365,11 +368,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
     }
  
     public static <V, T extends V> T register(Registry<V> registry, ResourceLocation resourceLocation, T object) {
@@ -1424,7 +1424,7 @@ index 51d14d0cf26d188f8fbb5292617b9882eebdfcfd..ec52d76e9ca5a334569ae5c4ba33deed
                 throw new IllegalStateException("Duplicate loot table " + resourceLocation);
              }
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index 9dae1a1511fa7e8fda63b2130386c4d539a63de7..bb1145fd7819d5d2c869109ccb2ffd8563880642 100644
+index 2026c99e71a2e4063706aa8c97d0bb089befc3d8..10545798129a8cf4b52f56226f6ed6b5aaac9f84 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 @@ -69,22 +69,26 @@ public class BlockModelGenerators {
@@ -1521,12 +1521,12 @@ index b8ec5d93f2be8cc799ba9f5d2e181fb2153ffc12..e1950ce7a29aeaf8e0432e497f306bae
           }
  
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index 6ea1fa242e7cabd642429ecd1a1c864abef51336..6e8de6ac43ca8fd1ccda91a5ac76526d076a5f8c 100644
+index b662dc9ef94791ecd0887e1db16fa3c40f03a4a9..a145e43000fd53e072d37aca69664dc17f287a5c 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-@@ -49,7 +49,8 @@ public class RecipeProvider implements DataProvider {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+@@ -59,7 +59,8 @@ public class RecipeProvider implements DataProvider {
+    private static final ImmutableList<ItemLike> REDSTONE_SMELTABLES = ImmutableList.of(Items.REDSTONE_ORE, Items.DEEPSLATE_REDSTONE_ORE);
+    private static final ImmutableList<ItemLike> EMERALD_SMELTABLES = ImmutableList.of(Items.EMERALD_ORE, Items.DEEPSLATE_EMERALD_ORE);
     private final DataGenerator generator;
 -   private static final Map<BlockFamily.Variant, BiFunction<ItemLike, ItemLike, RecipeBuilder>> shapeBuilders = ImmutableMap.builder().put(BlockFamily.Variant.BUTTON, (BiFunction)(itemLike, itemLike2) -> buttonBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.CHISELED, (BiFunction)(itemLike, itemLike2) -> chiseledBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.DOOR, (BiFunction)(itemLike, itemLike2) -> doorBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.FENCE, (BiFunction)(itemLike, itemLike2) -> fenceBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.FENCE_GATE, (BiFunction)(itemLike, itemLike2) -> fenceGateBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.SIGN, (BiFunction)(itemLike, itemLike2) -> signBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.SLAB, (BiFunction)(itemLike, itemLike2) -> slabBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.STAIRS, (BiFunction)(itemLike, itemLike2) -> stairBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.PRESSURE_PLATE, (BiFunction)(itemLike, itemLike2) -> pressurePlateBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.POLISHED, (BiFunction)(itemLike, itemLike2) -> polishedBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.TRAPDOOR, (BiFunction)(itemLike, itemLike2) -> trapdoorBuilder(itemLike, Ingredient.of(itemLike2))).put(BlockFamily.Variant.WALL, (BiFunction)(itemLike, itemLike2) -> wallBuilder(itemLike, Ingredient.of(itemLike2))).build();
 +   // MagmaCube - decompile error
@@ -1534,7 +1534,7 @@ index 6ea1fa242e7cabd642429ecd1a1c864abef51336..6e8de6ac43ca8fd1ccda91a5ac76526d
  
     public RecipeProvider(DataGenerator dataGenerator) {
        this.generator = dataGenerator;
-@@ -1137,7 +1138,8 @@ public class RecipeProvider implements DataProvider {
+@@ -1164,7 +1165,8 @@ public class RecipeProvider implements DataProvider {
     }
  
     private static void waxRecipes(Consumer<FinishedRecipe> consumer) {
@@ -1886,10 +1886,10 @@ index 6e2330b400eedfee2b99faf652e91164526d1d09..2703fd443164092771a24eebf5389858
              Pair<ResourceLocation, T> pair = (Pair)dataResult.result().get();
              ResourceLocation resourceLocation = (ResourceLocation)pair.getFirst();
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 29d19da0f0bd18b62f05d27c174a02fda86c8b67..4c2ff07c8b28a01ce8dba9cf274af2a1758dbaf7 100644
+index ecf2b57631966717e0ea5a220aaae6d544b831ed..7a02e697f901c2477b76c579a0cf50a05a3fbd46 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
-@@ -161,17 +161,18 @@ public class Main {
+@@ -163,17 +163,18 @@ public class Main {
           levelStorageAccess.saveDataTag(registryHolder, worldData);
           WorldData worldData2 = worldData;
           final DedicatedServer dedicatedServer = MinecraftServer.spin((threadx) -> {
@@ -4537,7 +4537,7 @@ index 66baab8a82aab6052e6a8f26b2c5292325eb65d9..7e4e849f94f7807accac25346396a2ac
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index a99b1020f3e649f7c1e1618a9e28dabc7157895c..489f9819c8837358a12f58bc75b5549c7fabb944 100644
+index 63d16956e2a2a5c437849ce8a18930aa08646813..53dc99d73cb09fc9d0b554ea844090da9b8828f6 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
 @@ -144,9 +144,11 @@ public class Fox extends Animal {
@@ -5119,16 +5119,16 @@ index ea2b43e6da901fee47a90d312f0c54e3db1c4073..40695d8a6d91edab3efb8cd3d6183966
        if (optional.isPresent()) {
           level.playSound(player, blockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 diff --git a/src/main/java/net/minecraft/world/item/HoneycombItem.java b/src/main/java/net/minecraft/world/item/HoneycombItem.java
-index 6d8fd3f1fa2de8b31b469a1ec2aa4bdf5e78841f..86930bffcbd4b6f95cfab37b4d421b597d1e11e0 100644
+index 5be2afe5379ff2ca7336b7c4ecb036ed1eb147c9..a7933d2692d495826ea8cc2df5efb1075801d2c6 100644
 --- a/src/main/java/net/minecraft/world/item/HoneycombItem.java
 +++ b/src/main/java/net/minecraft/world/item/HoneycombItem.java
 @@ -15,7 +15,8 @@ import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.state.BlockState;
  
  public class HoneycombItem extends Item {
--   public static final Supplier<BiMap<Block, Block>> WAXABLES = Suppliers.memoize(() -> ImmutableBiMap.builder().put(Blocks.COPPER_BLOCK, Blocks.WAXED_COPPER_BLOCK).put(Blocks.EXPOSED_COPPER, Blocks.WAXED_EXPOSED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.WAXED_WEATHERED_COPPER).put(Blocks.CUT_COPPER, Blocks.WAXED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WAXED_EXPOSED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.WAXED_WEATHERED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.WAXED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.WAXED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS).build());
+-   public static final Supplier<BiMap<Block, Block>> WAXABLES = Suppliers.memoize(() -> ImmutableBiMap.builder().put(Blocks.COPPER_BLOCK, Blocks.WAXED_COPPER_BLOCK).put(Blocks.EXPOSED_COPPER, Blocks.WAXED_EXPOSED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.WAXED_WEATHERED_COPPER).put(Blocks.OXIDIZED_COPPER, Blocks.WAXED_OXIDIZED_COPPER).put(Blocks.CUT_COPPER, Blocks.WAXED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WAXED_EXPOSED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.WAXED_WEATHERED_CUT_COPPER).put(Blocks.OXIDIZED_CUT_COPPER, Blocks.WAXED_OXIDIZED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.WAXED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB).put(Blocks.OXIDIZED_CUT_COPPER_SLAB, Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.WAXED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS).put(Blocks.OXIDIZED_CUT_COPPER_STAIRS, Blocks.WAXED_OXIDIZED_CUT_COPPER_STAIRS).build());
 +   // MagmaCube - decompile error
-+   public static final Supplier<BiMap<Block, Block>> WAXABLES = Suppliers.memoize(() -> ImmutableBiMap.<Block, Block>builder().put(Blocks.COPPER_BLOCK, Blocks.WAXED_COPPER_BLOCK).put(Blocks.EXPOSED_COPPER, Blocks.WAXED_EXPOSED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.WAXED_WEATHERED_COPPER).put(Blocks.CUT_COPPER, Blocks.WAXED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WAXED_EXPOSED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.WAXED_WEATHERED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.WAXED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.WAXED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS).build());
++   public static final Supplier<BiMap<Block, Block>> WAXABLES = Suppliers.memoize(() -> ImmutableBiMap.<Block, Block>builder().put(Blocks.COPPER_BLOCK, Blocks.WAXED_COPPER_BLOCK).put(Blocks.EXPOSED_COPPER, Blocks.WAXED_EXPOSED_COPPER).put(Blocks.WEATHERED_COPPER, Blocks.WAXED_WEATHERED_COPPER).put(Blocks.OXIDIZED_COPPER, Blocks.WAXED_OXIDIZED_COPPER).put(Blocks.CUT_COPPER, Blocks.WAXED_CUT_COPPER).put(Blocks.EXPOSED_CUT_COPPER, Blocks.WAXED_EXPOSED_CUT_COPPER).put(Blocks.WEATHERED_CUT_COPPER, Blocks.WAXED_WEATHERED_CUT_COPPER).put(Blocks.OXIDIZED_CUT_COPPER, Blocks.WAXED_OXIDIZED_CUT_COPPER).put(Blocks.CUT_COPPER_SLAB, Blocks.WAXED_CUT_COPPER_SLAB).put(Blocks.EXPOSED_CUT_COPPER_SLAB, Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB).put(Blocks.WEATHERED_CUT_COPPER_SLAB, Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB).put(Blocks.OXIDIZED_CUT_COPPER_SLAB, Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB).put(Blocks.CUT_COPPER_STAIRS, Blocks.WAXED_CUT_COPPER_STAIRS).put(Blocks.EXPOSED_CUT_COPPER_STAIRS, Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS).put(Blocks.WEATHERED_CUT_COPPER_STAIRS, Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS).put(Blocks.OXIDIZED_CUT_COPPER_STAIRS, Blocks.WAXED_OXIDIZED_CUT_COPPER_STAIRS).build());
     public static final Supplier<BiMap<Block, Block>> WAX_OFF_BY_BLOCK = Suppliers.memoize(() -> ((BiMap)WAXABLES.get()).inverse());
  
     public HoneycombItem(Item.Properties properties) {
@@ -5253,7 +5253,7 @@ index 57b18a1ed61d9764059ff7c0d6c0cca4f46cae6d..b7d91584c75fbdcdd11dd3d3a021d598
  
     public String toString() {
 diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
-index 3c799dbe34c1fcbe70a94dcb973484755e1a6078..f417f2d0702346dba2867f2aafa644cdcbf99d91 100644
+index c9a9ecf94c88b1cdf5d222a1e8158e881e753efd..1b3ca59516a00e99480b08d3f71271cbabf2e5ca 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Biome.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Biome.java
 @@ -54,7 +54,8 @@ import org.apache.logging.log4j.Logger;
@@ -5578,26 +5578,26 @@ index d6e44442af662f5b436b5b2ce8c24d7a8bba41ad..b0095a7bed3e313dac93a3eb60eb6ee8
           DataLayer dataLayer2 = levelLightEngine.getLayerListener(LightLayer.SKY).getDataLayerData(SectionPos.of(chunkPos, i2));
           if (levelChunkSection != LevelChunk.EMPTY_SECTION || dataLayer != null || dataLayer2 != null) {
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index a59037e2e23a1ffeab07ebb353a91926a47959ea..dfd9f366ebd953541e4f8a09d7ec20ebe9f9b0d3 100644
+index fe4d1cfd9683ce9fb466f54438a2e1329eb3fe25..cf0d81f142ca24758a043f793dfbb1b717a7e8ae 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-@@ -41,7 +41,8 @@ public class DimensionType {
+@@ -42,7 +42,8 @@ public class DimensionType {
     public static final ResourceLocation OVERWORLD_EFFECTS = new ResourceLocation("overworld");
     public static final ResourceLocation NETHER_EFFECTS = new ResourceLocation("the_nether");
     public static final ResourceLocation END_EFFECTS = new ResourceLocation("the_end");
 -   public static final Codec<DimensionType> DIRECT_CODEC;
 +   // MagmaCube - decompile error
-+   public static final Codec<DimensionType> DIRECT_CODEC = RecordCodecBuilder.<DimensionType>create((instance) -> instance.group(Codec.LONG.optionalFieldOf("fixed_time").xmap((optional) -> (OptionalLong)optional.map(OptionalLong::of).orElseGet(OptionalLong::empty), (optionalLong) -> optionalLong.isPresent() ? Optional.of(optionalLong.getAsLong()) : Optional.empty()).forGetter((dimensionType) -> dimensionType.fixedTime), Codec.BOOL.fieldOf("has_skylight").forGetter(DimensionType::hasSkyLight), Codec.BOOL.fieldOf("has_ceiling").forGetter(DimensionType::hasCeiling), Codec.BOOL.fieldOf("ultrawarm").forGetter(DimensionType::ultraWarm), Codec.BOOL.fieldOf("natural").forGetter(DimensionType::natural), Codec.doubleRange((double)1.0E-5F, 3.0E7D).fieldOf("coordinate_scale").forGetter(DimensionType::coordinateScale), Codec.BOOL.fieldOf("piglin_safe").forGetter(DimensionType::piglinSafe), Codec.BOOL.fieldOf("bed_works").forGetter(DimensionType::bedWorks), Codec.BOOL.fieldOf("respawn_anchor_works").forGetter(DimensionType::respawnAnchorWorks), Codec.BOOL.fieldOf("has_raids").forGetter(DimensionType::hasRaids), Codec.intRange(MIN_Y, MAX_Y).fieldOf("min_y").forGetter(DimensionType::minY), Codec.intRange(0, Y_SIZE).fieldOf("height").forGetter(DimensionType::height), Codec.intRange(0, Y_SIZE).fieldOf("logical_height").forGetter(DimensionType::logicalHeight), ResourceLocation.CODEC.fieldOf("infiniburn").forGetter((dimensionType) -> dimensionType.infiniburn), ResourceLocation.CODEC.fieldOf("effects").orElse(OVERWORLD_EFFECTS).forGetter((dimensionType) -> dimensionType.effectsLocation), Codec.FLOAT.fieldOf("ambient_light").forGetter((dimensionType) -> dimensionType.ambientLight)).apply(instance, DimensionType::new)).comapFlatMap(DimensionType::guardY, Function.identity());
++   public static final Codec<DimensionType> DIRECT_CODEC = RecordCodecBuilder.<DimensionType>create((instance) -> instance.group(Codec.LONG.optionalFieldOf("fixed_time").xmap((optional) -> (OptionalLong)optional.map(OptionalLong::of).orElseGet(OptionalLong::empty), (optionalLong) -> optionalLong.isPresent() ? Optional.of(optionalLong.getAsLong()) : Optional.empty()).forGetter((dimensionType) -> dimensionType.fixedTime), Codec.BOOL.fieldOf("has_skylight").forGetter(DimensionType::hasSkyLight), Codec.BOOL.fieldOf("has_ceiling").forGetter(DimensionType::hasCeiling), Codec.BOOL.fieldOf("ultrawarm").forGetter(DimensionType::ultraWarm), Codec.BOOL.fieldOf("natural").forGetter(DimensionType::natural), Codec.doubleRange((double)1.0E-5F, 3.0E7D).fieldOf("coordinate_scale").forGetter(DimensionType::coordinateScale), Codec.BOOL.fieldOf("piglin_safe").forGetter(DimensionType::piglinSafe), Codec.BOOL.fieldOf("bed_works").forGetter(DimensionType::bedWorks), Codec.BOOL.fieldOf("respawn_anchor_works").forGetter(DimensionType::respawnAnchorWorks), Codec.BOOL.fieldOf("has_raids").forGetter(DimensionType::hasRaids), Codec.intRange(MIN_Y, MAX_Y).fieldOf("min_y").forGetter(DimensionType::minY), Codec.intRange(16, Y_SIZE).fieldOf("height").forGetter(DimensionType::height), Codec.intRange(0, Y_SIZE).fieldOf("logical_height").forGetter(DimensionType::logicalHeight), ResourceLocation.CODEC.fieldOf("infiniburn").forGetter((dimensionType) -> dimensionType.infiniburn), ResourceLocation.CODEC.fieldOf("effects").orElse(OVERWORLD_EFFECTS).forGetter((dimensionType) -> dimensionType.effectsLocation), Codec.FLOAT.fieldOf("ambient_light").forGetter((dimensionType) -> dimensionType.ambientLight)).apply(instance, DimensionType::new)).comapFlatMap(DimensionType::guardY, Function.identity());
     private static final int MOON_PHASES = 8;
     public static final float[] MOON_BRIGHTNESS_PER_PHASE = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
     public static final ResourceKey<DimensionType> OVERWORLD_LOCATION = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("overworld"));
-@@ -288,8 +289,4 @@ public class DimensionType {
+@@ -291,8 +292,4 @@ public class DimensionType {
           return this.hasSkylight == dimensionType.hasSkylight && this.hasCeiling == dimensionType.hasCeiling && this.ultraWarm == dimensionType.ultraWarm && this.natural == dimensionType.natural && this.coordinateScale == dimensionType.coordinateScale && this.createDragonFight == dimensionType.createDragonFight && this.piglinSafe == dimensionType.piglinSafe && this.bedWorks == dimensionType.bedWorks && this.respawnAnchorWorks == dimensionType.respawnAnchorWorks && this.hasRaids == dimensionType.hasRaids && this.minY == dimensionType.minY && this.height == dimensionType.height && this.logicalHeight == dimensionType.logicalHeight && Float.compare(dimensionType.ambientLight, this.ambientLight) == 0 && this.fixedTime.equals(dimensionType.fixedTime) && this.biomeZoomer.equals(dimensionType.biomeZoomer) && this.infiniburn.equals(dimensionType.infiniburn) && this.effectsLocation.equals(dimensionType.effectsLocation);
        }
     }
 -
 -   static {
--      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.LONG.optionalFieldOf("fixed_time").xmap((optional) -> (OptionalLong)optional.map(OptionalLong::of).orElseGet(OptionalLong::empty), (optionalLong) -> optionalLong.isPresent() ? Optional.of(optionalLong.getAsLong()) : Optional.empty()).forGetter((dimensionType) -> dimensionType.fixedTime), Codec.BOOL.fieldOf("has_skylight").forGetter(DimensionType::hasSkyLight), Codec.BOOL.fieldOf("has_ceiling").forGetter(DimensionType::hasCeiling), Codec.BOOL.fieldOf("ultrawarm").forGetter(DimensionType::ultraWarm), Codec.BOOL.fieldOf("natural").forGetter(DimensionType::natural), Codec.doubleRange((double)1.0E-5F, 3.0E7D).fieldOf("coordinate_scale").forGetter(DimensionType::coordinateScale), Codec.BOOL.fieldOf("piglin_safe").forGetter(DimensionType::piglinSafe), Codec.BOOL.fieldOf("bed_works").forGetter(DimensionType::bedWorks), Codec.BOOL.fieldOf("respawn_anchor_works").forGetter(DimensionType::respawnAnchorWorks), Codec.BOOL.fieldOf("has_raids").forGetter(DimensionType::hasRaids), Codec.intRange(MIN_Y, MAX_Y).fieldOf("min_y").forGetter(DimensionType::minY), Codec.intRange(0, Y_SIZE).fieldOf("height").forGetter(DimensionType::height), Codec.intRange(0, Y_SIZE).fieldOf("logical_height").forGetter(DimensionType::logicalHeight), ResourceLocation.CODEC.fieldOf("infiniburn").forGetter((dimensionType) -> dimensionType.infiniburn), ResourceLocation.CODEC.fieldOf("effects").orElse(OVERWORLD_EFFECTS).forGetter((dimensionType) -> dimensionType.effectsLocation), Codec.FLOAT.fieldOf("ambient_light").forGetter((dimensionType) -> dimensionType.ambientLight)).apply(instance, DimensionType::new)).comapFlatMap(DimensionType::guardY, Function.identity());
+-      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.LONG.optionalFieldOf("fixed_time").xmap((optional) -> (OptionalLong)optional.map(OptionalLong::of).orElseGet(OptionalLong::empty), (optionalLong) -> optionalLong.isPresent() ? Optional.of(optionalLong.getAsLong()) : Optional.empty()).forGetter((dimensionType) -> dimensionType.fixedTime), Codec.BOOL.fieldOf("has_skylight").forGetter(DimensionType::hasSkyLight), Codec.BOOL.fieldOf("has_ceiling").forGetter(DimensionType::hasCeiling), Codec.BOOL.fieldOf("ultrawarm").forGetter(DimensionType::ultraWarm), Codec.BOOL.fieldOf("natural").forGetter(DimensionType::natural), Codec.doubleRange((double)1.0E-5F, 3.0E7D).fieldOf("coordinate_scale").forGetter(DimensionType::coordinateScale), Codec.BOOL.fieldOf("piglin_safe").forGetter(DimensionType::piglinSafe), Codec.BOOL.fieldOf("bed_works").forGetter(DimensionType::bedWorks), Codec.BOOL.fieldOf("respawn_anchor_works").forGetter(DimensionType::respawnAnchorWorks), Codec.BOOL.fieldOf("has_raids").forGetter(DimensionType::hasRaids), Codec.intRange(MIN_Y, MAX_Y).fieldOf("min_y").forGetter(DimensionType::minY), Codec.intRange(16, Y_SIZE).fieldOf("height").forGetter(DimensionType::height), Codec.intRange(0, Y_SIZE).fieldOf("logical_height").forGetter(DimensionType::logicalHeight), ResourceLocation.CODEC.fieldOf("infiniburn").forGetter((dimensionType) -> dimensionType.infiniburn), ResourceLocation.CODEC.fieldOf("effects").orElse(OVERWORLD_EFFECTS).forGetter((dimensionType) -> dimensionType.effectsLocation), Codec.FLOAT.fieldOf("ambient_light").forGetter((dimensionType) -> dimensionType.ambientLight)).apply(instance, DimensionType::new)).comapFlatMap(DimensionType::guardY, Function.identity());
 -   }
  }
 \ No newline at end of file
@@ -5698,7 +5698,7 @@ index e2a905ddab5b5f68787f8d19e816bd2a7f5405a2..c55d047d90f491294bf7db6dc16fbae3
     public GeodeBlockSettings(BlockStateProvider blockStateProvider, BlockStateProvider blockStateProvider2, BlockStateProvider blockStateProvider3, BlockStateProvider blockStateProvider4, BlockStateProvider blockStateProvider5, List<BlockState> list) {
        this.fillingProvider = blockStateProvider;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index b76cd0cd10a0f98d548b749d83c2bd896922b28f..5e77dd6d6ca0cce2a58e28e9a57c601a1671f2ad 100644
+index 4f08bd88e16a3b8404d65a87e1c70753269e8f76..f022804fdb2486c4425bbef44e7dcebdfb09491d 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -18,7 +18,8 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -5707,15 +5707,15 @@ index b76cd0cd10a0f98d548b749d83c2bd896922b28f..5e77dd6d6ca0cce2a58e28e9a57c601a
  public final class NoiseGeneratorSettings {
 -   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC;
 +   // MagmaCube - decompile error
-+   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
++   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.INT.fieldOf("min_surface_level").forGetter(NoiseGeneratorSettings::getMinSurfaceLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
     public static final Codec<Supplier<NoiseGeneratorSettings>> CODEC = RegistryFileCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, DIRECT_CODEC);
     private final StructureSettings structureSettings;
     private final NoiseSettings noiseSettings;
-@@ -127,7 +128,6 @@ public final class NoiseGeneratorSettings {
+@@ -133,7 +134,6 @@ public final class NoiseGeneratorSettings {
     }
  
     static {
--      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
+-      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.INT.fieldOf("min_surface_level").forGetter(NoiseGeneratorSettings::getMinSurfaceLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
        register(AMPLIFIED, overworld(new StructureSettings(true), true));
        register(NETHER, netherLikePreset(new StructureSettings(false), Blocks.NETHERRACK.defaultBlockState(), Blocks.LAVA.defaultBlockState(), false));
        register(END, endLikePreset(new StructureSettings(false), Blocks.END_STONE.defaultBlockState(), Blocks.AIR.defaultBlockState(), true, true, false));
@@ -6133,7 +6133,7 @@ index 058eacafe03fdc17dea17c3ea7c73d570dcb9a57..32d62fe7b0abf67495d3213d56596c7e
  
     public float distanceTo(Node node) {
 diff --git a/src/main/java/net/minecraft/world/level/portal/PortalForcer.java b/src/main/java/net/minecraft/world/level/portal/PortalForcer.java
-index d8b7f7a17fcb3576d0145b8d98ae662404b1a762..e95594c92fb9a6720bfe83ce8f079b5896bab865 100644
+index 81993f152534d59817af0a43f2bc10b7f62200cb..9dbc3e2f74749f97a0f16db481f98af9a9d8cf7c 100644
 --- a/src/main/java/net/minecraft/world/level/portal/PortalForcer.java
 +++ b/src/main/java/net/minecraft/world/level/portal/PortalForcer.java
 @@ -43,12 +43,14 @@ public class PortalForcer {

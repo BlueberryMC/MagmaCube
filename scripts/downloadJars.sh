@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/507be109a1902b7c3b30c1e900299344c7c0bee6/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/4af7eb4770d3e708d287db3bf023d4bbc60465b0/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/be3ba1ca24543ecd73f240c36a3aa61916fa4d0c/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/559d6456faf79734c7663513d5d27368a5288daf/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
 decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.498.4.jar # zml2008/ForgeFlower:fix-exceptions
