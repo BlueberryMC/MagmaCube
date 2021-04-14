@@ -657,7 +657,7 @@ index a3e79fff1700fb13dc8818ca71f9f7a5e2edd080..ea6704848a45d9cc260a1ab12b36077c
                    }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 5c8a214c569ee3de765f26445cef3c3383894f98..677d2e4e5bc4413a96f463286981b076b7e93e1c 100644
+index 8a1227470916c32a57a98d66cc2820b41143e4c2..7b13121bf0ecaebeaced468e4f7b97e6bb10d5f9 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 @@ -508,7 +508,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
@@ -707,7 +707,7 @@ index 5c8a214c569ee3de765f26445cef3c3383894f98..677d2e4e5bc4413a96f463286981b076
                       }
 +                     // MagmaCube end - decompile error
  
-                   }, flag ? new TranslatableComponent("multiplayer.requiredTexturePrompt.line1") : new TranslatableComponent("multiplayer.texturePrompt.line1"), (Component)(flag ? (new TranslatableComponent("multiplayer.requiredTexturePrompt.line2")).withStyle(new ChatFormatting[]{ChatFormatting.YELLOW, ChatFormatting.BOLD}) : new TranslatableComponent("multiplayer.texturePrompt.line2")), (Component)(flag ? new TranslatableComponent("gui.proceed") : CommonComponents.GUI_YES), (Component)(flag ? new TranslatableComponent("menu.disconnect") : CommonComponents.GUI_NO))));
+                   }, flag ? new TranslatableComponent("multiplayer.requiredTexturePrompt.line1") : new TranslatableComponent("multiplayer.texturePrompt.line1"), preparePackPrompt((Component)(flag ? (new TranslatableComponent("multiplayer.requiredTexturePrompt.line2")).withStyle(new ChatFormatting[]{ChatFormatting.YELLOW, ChatFormatting.BOLD}) : new TranslatableComponent("multiplayer.texturePrompt.line2")), clientboundResourcePackPacket.getPrompt()), flag ? CommonComponents.GUI_PROCEED : CommonComponents.GUI_YES, (Component)(flag ? new TranslatableComponent("menu.disconnect") : CommonComponents.GUI_NO))));
              }
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ServerStatusPinger.java b/src/main/java/net/minecraft/client/multiplayer/ServerStatusPinger.java
 index 5165d697c80b0b004ec16139cf993e3164d6ed3d..528c53de5fcc3f2c2e8dc780e1af81f8cb695c1c 100644
@@ -911,7 +911,7 @@ index b1dd0f16ef410eee4e5d83484375d6b10827208c..7ad26608282fae880ccdf6bc82225fa9
           return (EntityRenderer)this.renderers.get(entity.getType());
        }
 diff --git a/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java b/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java
-index 38b916df0634f2adbf7554539c534c12607dbecc..c268f52b94db51d858ae9b3fe0aec81b11a3e272 100644
+index 10d53367bf200fab6ddf579469cde49a7574e9d9..93233d1e9857a391a6963c2f2a22bf26cda515e2 100644
 --- a/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java
 +++ b/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java
 @@ -19,7 +19,7 @@ public class EntityRenderers {
@@ -1424,7 +1424,7 @@ index 51d14d0cf26d188f8fbb5292617b9882eebdfcfd..ec52d76e9ca5a334569ae5c4ba33deed
                 throw new IllegalStateException("Duplicate loot table " + resourceLocation);
              }
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index 2026c99e71a2e4063706aa8c97d0bb089befc3d8..10545798129a8cf4b52f56226f6ed6b5aaac9f84 100644
+index 1705a34ad0296e5a2c55b0fae54d6c8aa049d431..7fca32372e78baa5cd3eafaea2c5e9d2e1862a92 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 @@ -69,22 +69,26 @@ public class BlockModelGenerators {
@@ -1521,7 +1521,7 @@ index b8ec5d93f2be8cc799ba9f5d2e181fb2153ffc12..e1950ce7a29aeaf8e0432e497f306bae
           }
  
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index b662dc9ef94791ecd0887e1db16fa3c40f03a4a9..a145e43000fd53e072d37aca69664dc17f287a5c 100644
+index eabfc0d662d364120ea1080638e4e3ab3487ecec..49317b47edb30c80b5511c354fa08085e67f219e 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 @@ -59,7 +59,8 @@ public class RecipeProvider implements DataProvider {
@@ -1534,7 +1534,7 @@ index b662dc9ef94791ecd0887e1db16fa3c40f03a4a9..a145e43000fd53e072d37aca69664dc1
  
     public RecipeProvider(DataGenerator dataGenerator) {
        this.generator = dataGenerator;
-@@ -1164,7 +1165,8 @@ public class RecipeProvider implements DataProvider {
+@@ -1172,7 +1173,8 @@ public class RecipeProvider implements DataProvider {
     }
  
     private static void waxRecipes(Consumer<FinishedRecipe> consumer) {
@@ -1802,6 +1802,20 @@ index 84547191c69f82b690cbf334d1ce197d81b108f6..a48a8502949b1c957a48d70307cb01da
     }
  
     public <K, V, M extends Map<K, V>> M readMap(IntFunction<M> intFunction, Function<FriendlyByteBuf, K> function, Function<FriendlyByteBuf, V> function2) {
+diff --git a/src/main/java/net/minecraft/network/chat/NbtComponent.java b/src/main/java/net/minecraft/network/chat/NbtComponent.java
+index d6a93786c80604ae1dd91733b6b2ff0615c2e4bb..f82dd5ae5da7929e6375fcbb507c3b1e1dd530a8 100644
+--- a/src/main/java/net/minecraft/network/chat/NbtComponent.java
++++ b/src/main/java/net/minecraft/network/chat/NbtComponent.java
+@@ -85,7 +85,8 @@ public abstract class NbtComponent extends BaseComponent implements ContextAware
+                }
+             }).reduce((mutableComponent, mutableComponent2) -> mutableComponent.append(component).append(mutableComponent2)).orElseGet(() -> new TextComponent(""));
+          } else {
+-            return (MutableComponent)ComponentUtils.updateForEntity(commandSourceStack, this.separator, entity, i).map((mutableComponent) -> (MutableComponent)stream.map((s) -> new TextComponent(s)).reduce((mutableComponent2, mutableComponent3) -> mutableComponent2.append(mutableComponent).append(mutableComponent3)).orElseGet(() -> new TextComponent(""))).orElseGet(() -> new TextComponent((String)stream.collect(Collectors.joining(", "))));
++            // MagmaCube - decompile error
++            return (MutableComponent)ComponentUtils.updateForEntity(commandSourceStack, this.separator, entity, i).map((mutableComponent) -> (MutableComponent)stream.<MutableComponent>map((s) -> new TextComponent(s)).reduce((mutableComponent2, mutableComponent3) -> mutableComponent2.append(mutableComponent).append(mutableComponent3)).orElseGet(() -> new TextComponent(""))).orElseGet(() -> new TextComponent((String)stream.collect(Collectors.joining(", "))));
+          }
+       } else {
+          return new TextComponent("");
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
 index 34bd1c017865496a0aaaff82f756253a5e3e1020..673e80ed5a4421ff304040c60994c953eaa73024 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
@@ -1886,7 +1900,7 @@ index 6e2330b400eedfee2b99faf652e91164526d1d09..2703fd443164092771a24eebf5389858
              Pair<ResourceLocation, T> pair = (Pair)dataResult.result().get();
              ResourceLocation resourceLocation = (ResourceLocation)pair.getFirst();
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index ecf2b57631966717e0ea5a220aaae6d544b831ed..7a02e697f901c2477b76c579a0cf50a05a3fbd46 100644
+index 4c4c4264ef60ba951bdd2366d3ca34c0c4fc398d..d7e51db719161c9ee1aa67bd42449284f7d69604 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -163,17 +163,18 @@ public class Main {
@@ -1919,7 +1933,7 @@ index ecf2b57631966717e0ea5a220aaae6d544b831ed..7a02e697f901c2477b76c579a0cf50a0
           Thread thread = new Thread("Server Shutdown Thread") {
              public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 34fd2807853289962568ec6fd4c6de4a4458b70f..a5aad8dee0fbe0b701a1ff5c82005a35c5c5be2b 100644
+index 73e2f0ed95fb0b7f61ed2a9fdc494f021a9ecd7e..f69284dea5a2ae9d68b14cbb631e74f3e81e995b 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1264,7 +1264,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -2042,7 +2056,7 @@ index 5353864e09e179347da20a1a717e008614167f84..53e2e9cbcbc857c382e179fea52a2fac
     }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 1c4aedf826671df487b7e4ab617c1e94dc0c0981..c0af52869f372b97c9926c012630ef33e54fa932 100644
+index 9c83f3b98a6a63719fddb7580a1bfcba171387cc..6bdf3fafaeb30b5aeda5b33139f98b8930af615a 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -209,16 +209,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -2408,7 +2422,7 @@ index 0d54426afb6d3ac8717cea49417b7536bad6396e..84667a8bb56e05f72ed6f624985fe0cc
                       list.add(gameProfileInfo);
                    }
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 34970b0e748fa938bbb89edb31f3e11b4e00395f..67e6329e8c03132e249e758a63be3130f7dc7e37 100644
+index 87ed0a87c98c259d9169cede8ba3dac747007a54..7c019d2291e1d2e3fa26a696aa69daf8bd65ca5d 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -315,7 +315,7 @@ public abstract class PlayerList {
@@ -2646,10 +2660,10 @@ index a93daca3e2d8fdc89d716ba85605774ecdb66515..ce118aa31b76f5f5eb40cab5b87c63da
           return Optional.empty();
        } else {
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index 9a033bbe391874eaf4fecda4849752e3bb93e081..58a261919e06498d5095ae99dd742bb2b13c7536 100644
+index 91d8a5b5cbe041b417b4b549e18038f799be98c9..8b5fc0bbc9e5ebcdff217f72af1295bbd3463320 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-@@ -549,15 +549,18 @@ public class DataFixers {
+@@ -550,15 +550,18 @@ public class DataFixers {
        dataFixerBuilder.addFixer(new AddNewChoices(schema131, "Added Glow Squid", References.ENTITY));
        dataFixerBuilder.addFixer(new AddNewChoices(schema131, "Added Glow Item Frame", References.ENTITY));
        Schema schema132 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
@@ -4031,11 +4045,39 @@ index dae91eef8dd089d72eee52357e3b40f5ce00da75..10572f0c05e723833be8ae34587bb3d9
        } else if (i == 0) {
           return Optional.empty();
        } else {
+diff --git a/src/main/java/net/minecraft/util/valueproviders/BiasedToBottomInt.java b/src/main/java/net/minecraft/util/valueproviders/BiasedToBottomInt.java
+index d96bdf68f5fea5d8155e0a9630a244f38a0e23c5..b9dac7704f9633689b077717cd823faf62582897 100644
+--- a/src/main/java/net/minecraft/util/valueproviders/BiasedToBottomInt.java
++++ b/src/main/java/net/minecraft/util/valueproviders/BiasedToBottomInt.java
+@@ -7,7 +7,8 @@ import java.util.Random;
+ import java.util.function.Function;
+ 
+ public class BiasedToBottomInt extends IntProvider {
+-   public static final Codec<BiasedToBottomInt> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.INT.fieldOf("min_inclusive").forGetter((biasedToBottomInt) -> biasedToBottomInt.minInclusive), Codec.INT.fieldOf("max_inclusive").forGetter((biasedToBottomInt) -> biasedToBottomInt.maxInclusive)).apply(instance, BiasedToBottomInt::new)).comapFlatMap((biasedToBottomInt) -> biasedToBottomInt.maxInclusive < biasedToBottomInt.minInclusive ? DataResult.error("Max must be at least min, min_inclusive: " + biasedToBottomInt.minInclusive + ", max_inclusive: " + biasedToBottomInt.maxInclusive) : DataResult.success(biasedToBottomInt), Function.identity());
++   // MagmaCube - decompile error
++   public static final Codec<BiasedToBottomInt> CODEC = RecordCodecBuilder.<BiasedToBottomInt>create((instance) -> instance.group(Codec.INT.fieldOf("min_inclusive").forGetter((biasedToBottomInt) -> biasedToBottomInt.minInclusive), Codec.INT.fieldOf("max_inclusive").forGetter((biasedToBottomInt) -> biasedToBottomInt.maxInclusive)).apply(instance, BiasedToBottomInt::new)).comapFlatMap((biasedToBottomInt) -> biasedToBottomInt.maxInclusive < biasedToBottomInt.minInclusive ? DataResult.error("Max must be at least min, min_inclusive: " + biasedToBottomInt.minInclusive + ", max_inclusive: " + biasedToBottomInt.maxInclusive) : DataResult.success(biasedToBottomInt), Function.identity());
+    private final int minInclusive;
+    private final int maxInclusive;
+ 
+diff --git a/src/main/java/net/minecraft/util/valueproviders/ClampedInt.java b/src/main/java/net/minecraft/util/valueproviders/ClampedInt.java
+index 90d33376bc3135fb92c0a70660f6a9d5ca345869..5b3e4b6eed037d1865382716a7ede74648497caa 100644
+--- a/src/main/java/net/minecraft/util/valueproviders/ClampedInt.java
++++ b/src/main/java/net/minecraft/util/valueproviders/ClampedInt.java
+@@ -8,7 +8,8 @@ import java.util.function.Function;
+ import net.minecraft.util.Mth;
+ 
+ public class ClampedInt extends IntProvider {
+-   public static final Codec<ClampedInt> CODEC = RecordCodecBuilder.create((instance) -> instance.group(IntProvider.CODEC.fieldOf("source").forGetter((clampedInt) -> clampedInt.source), Codec.INT.fieldOf("min_inclusive").forGetter((clampedInt) -> clampedInt.minInclusive), Codec.INT.fieldOf("max_inclusive").forGetter((clampedInt) -> clampedInt.maxInclusive)).apply(instance, ClampedInt::new)).comapFlatMap((clampedInt) -> clampedInt.maxInclusive < clampedInt.minInclusive ? DataResult.error("Max must be at least min, min_inclusive: " + clampedInt.minInclusive + ", max_inclusive: " + clampedInt.maxInclusive) : DataResult.success(clampedInt), Function.identity());
++   // MagmaCube - decompile error
++   public static final Codec<ClampedInt> CODEC = RecordCodecBuilder.<ClampedInt>create((instance) -> instance.group(IntProvider.CODEC.fieldOf("source").forGetter((clampedInt) -> clampedInt.source), Codec.INT.fieldOf("min_inclusive").forGetter((clampedInt) -> clampedInt.minInclusive), Codec.INT.fieldOf("max_inclusive").forGetter((clampedInt) -> clampedInt.maxInclusive)).apply(instance, ClampedInt::new)).comapFlatMap((clampedInt) -> clampedInt.maxInclusive < clampedInt.minInclusive ? DataResult.error("Max must be at least min, min_inclusive: " + clampedInt.minInclusive + ", max_inclusive: " + clampedInt.maxInclusive) : DataResult.success(clampedInt), Function.identity());
+    private final IntProvider source;
+    private int minInclusive;
+    private int maxInclusive;
 diff --git a/src/main/java/net/minecraft/util/valueproviders/ClampedNormalFloat.java b/src/main/java/net/minecraft/util/valueproviders/ClampedNormalFloat.java
-index b3655d9758f8698d2262138c97faca25bef50a96..e76296179dc79645c252c89cb80b14c86e4aba29 100644
+index 84f8db925858fb325e4fd5a60ab81a4f3d87bf85..38453f3faae8dbc3f413fa29453a1fd03480f62d 100644
 --- a/src/main/java/net/minecraft/util/valueproviders/ClampedNormalFloat.java
 +++ b/src/main/java/net/minecraft/util/valueproviders/ClampedNormalFloat.java
-@@ -9,7 +9,8 @@ import java.util.function.Function;
+@@ -8,7 +8,8 @@ import java.util.function.Function;
  import net.minecraft.util.Mth;
  
  public class ClampedNormalFloat extends FloatProvider {
@@ -4046,7 +4088,7 @@ index b3655d9758f8698d2262138c97faca25bef50a96..e76296179dc79645c252c89cb80b14c8
     private float deviation;
     private float min;
 diff --git a/src/main/java/net/minecraft/util/valueproviders/ConstantFloat.java b/src/main/java/net/minecraft/util/valueproviders/ConstantFloat.java
-index ca35bd3bd2e908e19403816880ec6d0bf5a3362f..6e4f8ac926e1406483889560064cebca999ca8cb 100644
+index 715071ff179cf4e233c7d05740c204b1ee767922..c994dcc130ae99d888b0d19f010d503fbcf729cc 100644
 --- a/src/main/java/net/minecraft/util/valueproviders/ConstantFloat.java
 +++ b/src/main/java/net/minecraft/util/valueproviders/ConstantFloat.java
 @@ -7,7 +7,8 @@ import java.util.Random;
@@ -4060,7 +4102,7 @@ index ca35bd3bd2e908e19403816880ec6d0bf5a3362f..6e4f8ac926e1406483889560064cebca
  
     public static ConstantFloat of(float f) {
 diff --git a/src/main/java/net/minecraft/util/valueproviders/ConstantInt.java b/src/main/java/net/minecraft/util/valueproviders/ConstantInt.java
-index 64bd76604b2804a7a72d7ee2b1b9593655ec6a07..c09c4d2fb7f655d8c5df2e0da4ee2861d0f991c0 100644
+index d5ba6a8b80bbc1248f92f63a3851c66e30d2e1f2..e7fe8563f12dd9ba6f7bd909287aaba388a9bf21 100644
 --- a/src/main/java/net/minecraft/util/valueproviders/ConstantInt.java
 +++ b/src/main/java/net/minecraft/util/valueproviders/ConstantInt.java
 @@ -7,7 +7,8 @@ import java.util.Random;
@@ -4074,10 +4116,10 @@ index 64bd76604b2804a7a72d7ee2b1b9593655ec6a07..c09c4d2fb7f655d8c5df2e0da4ee2861
  
     public static ConstantInt of(int i) {
 diff --git a/src/main/java/net/minecraft/util/valueproviders/TrapezoidFloat.java b/src/main/java/net/minecraft/util/valueproviders/TrapezoidFloat.java
-index 567e4bdc031604a57cfa2b5dba45241e33d4ff55..fc5d4c05f04474927fe027fcefe2b824a57c3d0f 100644
+index 3f05e292e71a1bea642d5ba46ea6c49796bc6952..b899829a414d7980be57eee628550cc813178805 100644
 --- a/src/main/java/net/minecraft/util/valueproviders/TrapezoidFloat.java
 +++ b/src/main/java/net/minecraft/util/valueproviders/TrapezoidFloat.java
-@@ -8,7 +8,8 @@ import java.util.Random;
+@@ -7,7 +7,8 @@ import java.util.Random;
  import java.util.function.Function;
  
  public class TrapezoidFloat extends FloatProvider {
@@ -4088,10 +4130,10 @@ index 567e4bdc031604a57cfa2b5dba45241e33d4ff55..fc5d4c05f04474927fe027fcefe2b824
           return DataResult.error("Max must be larger than min: [" + trapezoidFloat.min + ", " + trapezoidFloat.max + "]");
        } else {
 diff --git a/src/main/java/net/minecraft/util/valueproviders/UniformFloat.java b/src/main/java/net/minecraft/util/valueproviders/UniformFloat.java
-index 0b617a53da62dbb05d1c38cbd9fbb3cc16780472..165cc290d8fc0c239030c13d9a25a06ec86092ef 100644
+index 22a649d3e14a0544f8d4f90bcd862fa668173493..91ce79cb8d4c0fd97f1c665b52e9d2cc8799f48c 100644
 --- a/src/main/java/net/minecraft/util/valueproviders/UniformFloat.java
 +++ b/src/main/java/net/minecraft/util/valueproviders/UniformFloat.java
-@@ -9,7 +9,8 @@ import java.util.function.Function;
+@@ -8,7 +8,8 @@ import java.util.function.Function;
  import net.minecraft.util.Mth;
  
  public class UniformFloat extends FloatProvider {
@@ -4102,10 +4144,10 @@ index 0b617a53da62dbb05d1c38cbd9fbb3cc16780472..165cc290d8fc0c239030c13d9a25a06e
     private final float maxExclusive;
  
 diff --git a/src/main/java/net/minecraft/util/valueproviders/UniformInt.java b/src/main/java/net/minecraft/util/valueproviders/UniformInt.java
-index 3716cedf730bc817cb0bc9caef82d24422554b0f..395eaab9745498af05dfb2697585654cea2ee00c 100644
+index c4e7d78a6d83e085f2ef48e4e1823f9cadaf722a..687d1516bc7d98dce2e47dea4ab35acb8e92f012 100644
 --- a/src/main/java/net/minecraft/util/valueproviders/UniformInt.java
 +++ b/src/main/java/net/minecraft/util/valueproviders/UniformInt.java
-@@ -9,7 +9,8 @@ import java.util.function.Function;
+@@ -8,7 +8,8 @@ import java.util.function.Function;
  import net.minecraft.util.Mth;
  
  public class UniformInt extends IntProvider {
@@ -4275,24 +4317,23 @@ index e2f85f042e2d10a9edeee1447619069691f55e53..2d3c27bb5578bd4af0afa6074476b82b
     public static AttributeSupplier getSupplier(EntityType<? extends LivingEntity> entityType) {
        return (AttributeSupplier)SUPPLIERS.get(entityType);
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalMakeLove.java b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalMakeLove.java
-index 9241ddaffb1fd4af8b718522a1116a8b68e20146..87ecad6bef528fa59cd1ecb964ee6bc7394f35db 100644
+index 729a95284a114a0cbcbbcc5ce63c6f0e4cdd87b4..dc64a91a5d5ce7f4230245a43d270230cdfa9c8c 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalMakeLove.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalMakeLove.java
-@@ -77,6 +77,7 @@ public class AnimalMakeLove extends Behavior<Animal> {
+@@ -77,6 +77,6 @@ public class AnimalMakeLove extends Behavior<Animal> {
     }
  
     private Optional<? extends Animal> findValidBreedPartner(Animal animal) {
--      return ((List)animal.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).get()).stream().filter((livingEntity) -> livingEntity.getType() == this.partnerType).map((livingEntity) -> (Animal)livingEntity).filter(animal::canMate).findFirst();
-+      // MagmaCube - decompile error
-+      return (animal.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).get()).stream().filter((livingEntity) -> livingEntity.getType() == this.partnerType).map((livingEntity) -> (Animal)livingEntity).filter(animal::canMate).findFirst();
+-      return ((List)animal.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).get()).stream().filter((livingEntity) -> livingEntity.getType() == this.partnerType).map((livingEntity) -> (Animal)livingEntity).filter(animal::canMate).findFirst();
++      return (animal.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).get()).stream().filter((livingEntity) -> livingEntity.getType() == this.partnerType).map((livingEntity) -> (Animal)livingEntity).filter(animal::canMate).findFirst(); // MagmaCube - decompile error
     }
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWith.java b/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWith.java
-index ce908d1f375919274a521de9e7c73b62351a99f2..59e684d53d3357a4a2e53510f9aa3d401f07f512 100644
+index 84b3f8d869acb84f0bf0543159ade674dfd79633..6c352f8ef5ecdaab1367c2785f62d8ffd2a2fc61 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWith.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWith.java
-@@ -49,12 +49,12 @@ public class InteractWith<E extends LivingEntity, T extends LivingEntity> extend
+@@ -49,12 +49,15 @@ public class InteractWith<E extends LivingEntity, T extends LivingEntity> extend
     }
  
     private boolean isTargetValid(LivingEntity livingEntity) {
@@ -4302,22 +4343,25 @@ index ce908d1f375919274a521de9e7c73b62351a99f2..59e684d53d3357a4a2e53510f9aa3d40
  
     protected void start(ServerLevel serverLevel, E livingEntity, long l) {
        Brain<?> brain = livingEntity.getBrain();
--      brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).ifPresent((list) -> list.stream().filter((livingEntityx) -> this.type.equals(livingEntityx.getType())).map((livingEntityx) -> livingEntityx).filter((livingEntity2) -> livingEntity2.distanceToSqr(livingEntity) <= (double)this.interactionRangeSqr).filter(this.targetFilter).findFirst().ifPresent((livingEntityx) -> {
-+      brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).ifPresent((list) -> list.stream().filter((livingEntityx) -> this.type.equals(livingEntityx.getType())).map((livingEntityx) -> (T) livingEntityx).filter((livingEntity2) -> livingEntity2.distanceToSqr(livingEntity) <= (double)this.interactionRangeSqr).filter(this.targetFilter).findFirst().ifPresent((livingEntityx) -> { // MagmaCube - decompile error
+-      brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).ifPresent((list) -> list.stream().filter((livingEntityx) -> this.type.equals(livingEntityx.getType())).map((livingEntityx) -> livingEntityx).filter((livingEntity2) -> livingEntity2.distanceToSqr(livingEntity) <= (double)this.interactionRangeSqr).filter(this.targetFilter).findFirst().ifPresent((livingEntityx) -> {
++      // MagmaCube start - decompile error
++      brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).ifPresent((list) -> list.stream().filter((livingEntityx) -> this.type.equals(livingEntityx.getType())).map((livingEntityx) -> livingEntityx).filter((livingEntity2) -> livingEntity2.distanceToSqr(livingEntity) <= (double)this.interactionRangeSqr).filter((Predicate) this.targetFilter).findFirst().ifPresent((livingEntityxx) -> {
++            LivingEntity livingEntityx = (LivingEntity) livingEntityxx;
++            // MagmaCube end - decompile error
              brain.setMemory(this.memory, (T)livingEntityx);
              brain.setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(livingEntityx, true));
              brain.setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityTracker(livingEntityx, false), this.speedModifier, this.maxDist));
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java b/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
-index a8e35f195ce3bbe02f8c2c578c4643ca605cb3fd..15be7519e64133d81c5583d656abcd170ff49a29 100644
+index 5ce9f507dd19388b2e36032eb8fb88a98c109b5d..0697bcac4ad18dbcb250d116f63c279fe41cca85 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
 @@ -114,7 +114,8 @@ public class InteractWithDoor extends Behavior<LivingEntity> {
  
     private static boolean areOtherMobsComingThroughDoor(ServerLevel serverLevel, LivingEntity livingEntity, BlockPos blockPos) {
        Brain<?> brain = livingEntity.getBrain();
--      return !brain.hasMemoryValue(MemoryModuleType.LIVING_ENTITIES) ? false : ((List)brain.getMemory(MemoryModuleType.LIVING_ENTITIES).get()).stream().filter((livingEntity2) -> livingEntity2.getType() == livingEntity.getType()).filter((livingEntityx) -> blockPos.closerThan(livingEntityx.position(), 2.0D)).anyMatch((livingEntityx) -> isMobComingThroughDoor(serverLevel, livingEntityx, blockPos));
+-      return !brain.hasMemoryValue(MemoryModuleType.NEAREST_LIVING_ENTITIES) ? false : ((List)brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).get()).stream().filter((livingEntity2) -> livingEntity2.getType() == livingEntity.getType()).filter((livingEntityx) -> blockPos.closerThan(livingEntityx.position(), 2.0D)).anyMatch((livingEntityx) -> isMobComingThroughDoor(serverLevel, livingEntityx, blockPos));
 +      // MagmaCube - decompile error
-+      return !brain.hasMemoryValue(MemoryModuleType.LIVING_ENTITIES) ? false : (brain.getMemory(MemoryModuleType.LIVING_ENTITIES).get()).stream().filter((livingEntity2) -> livingEntity2.getType() == livingEntity.getType()).filter((livingEntityx) -> blockPos.closerThan(livingEntityx.position(), 2.0D)).anyMatch((livingEntityx) -> isMobComingThroughDoor(serverLevel, livingEntityx, blockPos));
++      return !brain.hasMemoryValue(MemoryModuleType.NEAREST_LIVING_ENTITIES) ? false : (brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).get()).stream().filter((livingEntity2) -> livingEntity2.getType() == livingEntity.getType()).filter((livingEntityx) -> blockPos.closerThan(livingEntityx.position(), 2.0D)).anyMatch((livingEntityx) -> isMobComingThroughDoor(serverLevel, livingEntityx, blockPos));
     }
  
     private static boolean isMobComingThroughDoor(ServerLevel serverLevel, LivingEntity livingEntity, BlockPos blockPos) {
@@ -4358,16 +4402,16 @@ index 808a6c5c7fda0e1cfdb5f7b8f8e16e12ecaff3cd..3aea92b50229cd6b44dc7a256a1ddb37
           }
        };
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/SocializeAtBell.java b/src/main/java/net/minecraft/world/entity/ai/behavior/SocializeAtBell.java
-index 401f6856e5228e04578ae9ff62d07277ff3cd012..b66c2d7f1d8fab7a08db82b7b4b27dd1040a3a51 100644
+index 631f78476d6c091d2def1661aff3cc4db0662c08..7a8a603b6714a105b541ef14b3b526789c0be9b5 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/behavior/SocializeAtBell.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/behavior/SocializeAtBell.java
 @@ -22,7 +22,8 @@ public class SocializeAtBell extends Behavior<LivingEntity> {
     protected boolean checkExtraStartConditions(ServerLevel serverLevel, LivingEntity livingEntity) {
        Brain<?> brain = livingEntity.getBrain();
        Optional<GlobalPos> optional = brain.getMemory(MemoryModuleType.MEETING_POINT);
--      return serverLevel.getRandom().nextInt(100) == 0 && optional.isPresent() && serverLevel.dimension() == ((GlobalPos)optional.get()).dimension() && ((GlobalPos)optional.get()).pos().closerThan(livingEntity.position(), 4.0D) && ((List)brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).get()).stream().anyMatch((livingEntityx) -> EntityType.VILLAGER.equals(livingEntityx.getType()));
+-      return serverLevel.getRandom().nextInt(100) == 0 && optional.isPresent() && serverLevel.dimension() == ((GlobalPos)optional.get()).dimension() && ((GlobalPos)optional.get()).pos().closerThan(livingEntity.position(), 4.0D) && ((List)brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).get()).stream().anyMatch((livingEntityx) -> EntityType.VILLAGER.equals(livingEntityx.getType()));
 +      // MagmaCube - decompile error
-+      return serverLevel.getRandom().nextInt(100) == 0 && optional.isPresent() && serverLevel.dimension() == ((GlobalPos)optional.get()).dimension() && ((GlobalPos)optional.get()).pos().closerThan(livingEntity.position(), 4.0D) && (brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).get()).stream().anyMatch((livingEntityx) -> EntityType.VILLAGER.equals(livingEntityx.getType()));
++      return serverLevel.getRandom().nextInt(100) == 0 && optional.isPresent() && serverLevel.dimension() == ((GlobalPos)optional.get()).dimension() && ((GlobalPos)optional.get()).pos().closerThan(livingEntity.position(), 4.0D) && (brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).get()).stream().anyMatch((livingEntityx) -> EntityType.VILLAGER.equals(livingEntityx.getType()));
     }
  
     protected void start(ServerLevel serverLevel, LivingEntity livingEntity, long l) {
@@ -4405,12 +4449,12 @@ index 7228d7e58fb0002d42a9ae1ad02ef633555adfb4..5a9942175a463fd7c49e2fb0c10e1229
        });
     }
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/GolemSensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/GolemSensor.java
-index 5fc3568f258fa7a4bf6a470dcc71e5176eb1c669..eeb44d6fc3e8a4e357f0af1d1d3deb5043192b36 100644
+index cdef387734c25700d17dadd2017772f1ba45ef16..54aea67a9b3c7e15637b54f06dd387b2099ada18 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/GolemSensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/GolemSensor.java
 @@ -32,7 +32,7 @@ public class GolemSensor extends Sensor<LivingEntity> {
     public static void checkForNearbyGolem(LivingEntity livingEntity) {
-       Optional<List<LivingEntity>> optional = livingEntity.getBrain().getMemory(MemoryModuleType.LIVING_ENTITIES);
+       Optional<List<LivingEntity>> optional = livingEntity.getBrain().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES);
        if (optional.isPresent()) {
 -         boolean flag = ((List)optional.get()).stream().anyMatch((livingEntityx) -> livingEntityx.getType().equals(EntityType.IRON_GOLEM));
 +         boolean flag = (optional.get()).stream().anyMatch((livingEntityx) -> livingEntityx.getType().equals(EntityType.IRON_GOLEM)); // MagmaCube - decompile error
@@ -4418,49 +4462,49 @@ index 5fc3568f258fa7a4bf6a470dcc71e5176eb1c669..eeb44d6fc3e8a4e357f0af1d1d3deb50
              golemDetected(livingEntity);
           }
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/HoglinSpecificSensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/HoglinSpecificSensor.java
-index 16a07f64f999835a1d1a13ebe700320610dd3d8f..b9343c2714d12327facbd0694fe0c197ddb77bdf 100644
+index 356a6b0b072dd14310957389a2422663267775e8..64c53d226ef22957d993490a061229e1a15f34d6 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/HoglinSpecificSensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/HoglinSpecificSensor.java
 @@ -26,7 +26,7 @@ public class HoglinSpecificSensor extends Sensor<Hoglin> {
        int i = 0;
        List<Hoglin> list = Lists.newArrayList();
  
--      for(LivingEntity livingEntity : (List)brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(Lists.newArrayList())) {
-+      for(LivingEntity livingEntity : brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(Lists.newArrayList())) { // MagmaCube - decompile error
+-      for(LivingEntity livingEntity : (List)brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(Lists.newArrayList())) {
++      for(LivingEntity livingEntity : brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(Lists.newArrayList())) { // MagmaCube - decompile error
           if (livingEntity instanceof Piglin && !livingEntity.isBaby()) {
              ++i;
              if (!optional.isPresent()) {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinBruteSpecificSensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinBruteSpecificSensor.java
-index f629b5ffea094dd5b1e99d00c2b9306ee981a42f..1b74af1e9ed58b3fa227e7911d12a4ffe846fa09 100644
+index f2b84eb74b9f25eda2ae10e44fa33bf28fecb540..3a83d333470bdbb0e6218ad268bd35eb1614a9b8 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinBruteSpecificSensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinBruteSpecificSensor.java
 @@ -25,14 +25,14 @@ public class PiglinBruteSpecificSensor extends Sensor<LivingEntity> {
        Optional<Mob> optional = Optional.empty();
        List<AbstractPiglin> list = Lists.newArrayList();
  
--      for(LivingEntity livingEntity2 : (List)brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) {
-+      for(LivingEntity livingEntity2 : brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
+-      for(LivingEntity livingEntity2 : (List)brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) {
++      for(LivingEntity livingEntity2 : brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
           if (livingEntity2 instanceof WitherSkeleton || livingEntity2 instanceof WitherBoss) {
              optional = Optional.of((Mob)livingEntity2);
              break;
           }
        }
  
--      for(LivingEntity livingEntity3 : (List)brain.getMemory(MemoryModuleType.LIVING_ENTITIES).orElse(ImmutableList.of())) {
-+      for(LivingEntity livingEntity3 : brain.getMemory(MemoryModuleType.LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
+-      for(LivingEntity livingEntity3 : (List)brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).orElse(ImmutableList.of())) {
++      for(LivingEntity livingEntity3 : brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
           if (livingEntity3 instanceof AbstractPiglin && ((AbstractPiglin)livingEntity3).isAdult()) {
              list.add((AbstractPiglin)livingEntity3);
           }
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinSpecificSensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinSpecificSensor.java
-index 81b77ee9757883b2137470c962e42af19eb8e962..11c30e258df871f53a6269ff2d6b8940a80c4ae7 100644
+index 57bbf9e3d5c8a1a959cec3d8a4391f903fcdd62e..78384348f0d4270f2eeb09b7dce11ad21da70f04 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinSpecificSensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/PiglinSpecificSensor.java
 @@ -45,7 +45,7 @@ public class PiglinSpecificSensor extends Sensor<LivingEntity> {
        List<AbstractPiglin> list = Lists.newArrayList();
        List<AbstractPiglin> list2 = Lists.newArrayList();
  
--      for(LivingEntity livingEntity2 : (List)brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) {
-+      for(LivingEntity livingEntity2 : brain.getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
+-      for(LivingEntity livingEntity2 : (List)brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) {
++      for(LivingEntity livingEntity2 : brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
           if (livingEntity2 instanceof Hoglin) {
              Hoglin hoglin = (Hoglin)livingEntity2;
              if (hoglin.isBaby() && !optional3.isPresent()) {
@@ -4468,8 +4512,8 @@ index 81b77ee9757883b2137470c962e42af19eb8e962..11c30e258df871f53a6269ff2d6b8940
           }
        }
  
--      for(LivingEntity livingEntity3 : (List)brain.getMemory(MemoryModuleType.LIVING_ENTITIES).orElse(ImmutableList.of())) {
-+      for(LivingEntity livingEntity3 : brain.getMemory(MemoryModuleType.LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
+-      for(LivingEntity livingEntity3 : (List)brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).orElse(ImmutableList.of())) {
++      for(LivingEntity livingEntity3 : brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).orElse(ImmutableList.of())) { // MagmaCube - decompile error
           if (livingEntity3 instanceof AbstractPiglin && ((AbstractPiglin)livingEntity3).isAdult()) {
              list2.add((AbstractPiglin)livingEntity3);
           }
@@ -4620,20 +4664,20 @@ index e43436bf0ec10bf6f7b2489daf79c5d60192c190..9310108e52cc0294597cc712b0f616d2
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
-index 1237e502b4b5973e3025a8de580ddace17973a55..4ebb3b60a8e1f07e0ce6b0fd3976cf0e6fc117f4 100644
+index 6ea2c98911a3db41da1c1b6a3c930fe6e1df44f2..c161f8c712c67067ea74da2b785888229bbd80f7 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
 @@ -65,7 +65,8 @@ public class Axolotl extends Animal implements Bucketable {
     public static final int TOTAL_PLAYDEAD_TIME = 200;
     public static final Predicate<LivingEntity> NOT_PLAYING_DEAD_SELECTOR = (livingEntity) -> livingEntity.getType() == EntityType.AXOLOTL && !((Axolotl)livingEntity).isPlayingDead();
     protected static final ImmutableList<? extends SensorType<? extends Sensor<? super Axolotl>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_ADULT, SensorType.HURT_BY, SensorType.AXOLOTL_ATTACKABLES, SensorType.AXOLOTL_TEMPTATIONS);
--   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT, new MemoryModuleType[]{MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, MemoryModuleType.IS_TEMPTED, MemoryModuleType.HAS_HUNTING_COOLDOWN});
+-   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT, new MemoryModuleType[]{MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, MemoryModuleType.IS_TEMPTED, MemoryModuleType.HAS_HUNTING_COOLDOWN});
 +   // MagmaCube - decompile error
-+   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.<MemoryModuleType<?>>of(MemoryModuleType.BREED_TARGET, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT, new MemoryModuleType[]{MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, MemoryModuleType.IS_TEMPTED, MemoryModuleType.HAS_HUNTING_COOLDOWN});
++   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.<MemoryModuleType<?>>of(MemoryModuleType.BREED_TARGET, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT, new MemoryModuleType[]{MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, MemoryModuleType.IS_TEMPTED, MemoryModuleType.HAS_HUNTING_COOLDOWN});
     private static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(Axolotl.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_PLAYING_DEAD = SynchedEntityData.defineId(Axolotl.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Axolotl.class, EntityDataSerializers.BOOLEAN);
-@@ -384,7 +385,7 @@ public class Axolotl extends Animal implements Bucketable {
+@@ -390,7 +391,7 @@ public class Axolotl extends Animal implements Bucketable {
     }
  
     public Brain<Axolotl> getBrain() {
@@ -4670,10 +4714,10 @@ index 329b213eb3dbf332f3f6361ef21d5803c83d91ce..19ccd7a0300663453e0b337faecd6cdb
  
     public static void updateActivity(Axolotl axolotl) {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-index d74a6905b7ce77ee0ef2553dd4ec866251fd6830..138e936a7b558217611a6dd32173dc7008f54227 100644
+index de1d968ce44dbb589389022a7caa81e3156db635..5c5d7b9eaa35ed33eb0151a68ffb5100eb8217b7 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-@@ -92,7 +92,7 @@ public class Goat extends Animal {
+@@ -113,7 +113,7 @@ public class Goat extends Animal {
     }
  
     public Brain<Goat> getBrain() {
@@ -4683,19 +4727,31 @@ index d74a6905b7ce77ee0ef2553dd4ec866251fd6830..138e936a7b558217611a6dd32173dc70
  
     protected void customServerAiStep() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java b/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java
-index 64de82b1c7990a73b9c5772c6378176411068d41..112e44e05c4d27527c5df52e3d33740a5913035c 100644
+index ae6a3f82ca1ffbe6f56b0b7a9d251d08fcd553d3..ba275291e105a86c1174a3d50cfc8c5afacbc3eb 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java
-@@ -55,7 +55,8 @@ public class GoatAi {
+@@ -76,15 +76,18 @@ public class GoatAi {
     }
  
     private static void initIdleActivity(Brain<Goat> brain) {
--      brain.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(0, new AnimalMakeLove(EntityType.GOAT, 1.0F)), Pair.of(1, new FollowTemptation((livingEntity) -> 1.25F)), Pair.of(2, new BabyFollowAdult(ADULT_FOLLOW_RANGE, 1.25F)), Pair.of(3, new RunOne(ImmutableList.of(Pair.of(new RandomStroll(1.0F), 2), Pair.of(new SetWalkTargetFromLookTarget(1.0F, 3), 2), Pair.of(new DoNothing(30, 60), 1))))));
+-      brain.addActivityWithConditions(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(0, new AnimalMakeLove(EntityType.GOAT, 1.0F)), Pair.of(1, new FollowTemptation((livingEntity) -> 1.25F)), Pair.of(2, new BabyFollowAdult(ADULT_FOLLOW_RANGE, 1.25F)), Pair.of(3, new RunOne(ImmutableList.of(Pair.of(new RandomStroll(1.0F), 2), Pair.of(new SetWalkTargetFromLookTarget(1.0F, 3), 2), Pair.of(new DoNothing(30, 60), 1))))), ImmutableSet.of(Pair.of(MemoryModuleType.RAM_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.LONG_JUMP_MID_JUMP, MemoryStatus.VALUE_ABSENT)));
 +      // MagmaCube - decompile error
-+      brain.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(0, new AnimalMakeLove(EntityType.GOAT, 1.0F)), Pair.of(1, new FollowTemptation((livingEntity) -> 1.25F)), Pair.of(2, new BabyFollowAdult<>(ADULT_FOLLOW_RANGE, 1.25F)), Pair.of(3, new RunOne<>(ImmutableList.of(Pair.of(new RandomStroll(1.0F), 2), Pair.of(new SetWalkTargetFromLookTarget(1.0F, 3), 2), Pair.of(new DoNothing(30, 60), 1))))));
++      brain.addActivityWithConditions(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(0, new AnimalMakeLove(EntityType.GOAT, 1.0F)), Pair.of(1, new FollowTemptation((livingEntity) -> 1.25F)), Pair.of(2, new BabyFollowAdult<>(ADULT_FOLLOW_RANGE, 1.25F)), Pair.of(3, new RunOne<>(ImmutableList.of(Pair.of(new RandomStroll(1.0F), 2), Pair.of(new SetWalkTargetFromLookTarget(1.0F, 3), 2), Pair.of(new DoNothing(30, 60), 1))))), ImmutableSet.of(Pair.of(MemoryModuleType.RAM_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.LONG_JUMP_MID_JUMP, MemoryStatus.VALUE_ABSENT)));
     }
  
     private static void initLongJumpActivity(Brain<Goat> brain) {
+-      brain.addActivityWithConditions(Activity.LONG_JUMP, ImmutableList.of(Pair.of(0, new LongJumpMidJump(TIME_BETWEEN_LONG_JUMPS, SoundEvents.GOAT_STEP)), Pair.of(1, new LongJumpToRandomPos(TIME_BETWEEN_LONG_JUMPS, 5, 5, 1.5F, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_LONG_JUMP : SoundEvents.GOAT_LONG_JUMP))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.LONG_JUMP_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
++      // MagmaCube - decompile error
++      brain.addActivityWithConditions(Activity.LONG_JUMP, ImmutableList.of(Pair.of(0, new LongJumpMidJump(TIME_BETWEEN_LONG_JUMPS, SoundEvents.GOAT_STEP)), Pair.of(1, new LongJumpToRandomPos<>(TIME_BETWEEN_LONG_JUMPS, 5, 5, 1.5F, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_LONG_JUMP : SoundEvents.GOAT_LONG_JUMP))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.LONG_JUMP_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
+    }
+ 
+    private static void initRamActivity(Brain<Goat> brain) {
+-      brain.addActivityWithConditions(Activity.RAM, ImmutableList.of(Pair.of(0, new RamTarget(TIME_BETWEEN_RAMS, RAM_TARGET_CONDITIONS, (goat) -> goat.isBaby() ? 1 : 2, 3.0F, (goat) -> goat.isBaby() ? 1.0F : 2.5F, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_RAM_IMPACT : SoundEvents.GOAT_RAM_IMPACT)), Pair.of(1, new PrepareRamNearestTarget(TIME_BETWEEN_RAMS.getMinValue(), 4, 7, 1.25F, RAM_TARGET_CONDITIONS, 20, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_PREPARE_RAM : SoundEvents.GOAT_PREPARE_RAM))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
++      // MagmaCube - decompile error
++      brain.addActivityWithConditions(Activity.RAM, ImmutableList.of(Pair.of(0, new RamTarget<>(TIME_BETWEEN_RAMS, RAM_TARGET_CONDITIONS, (goat) -> goat.isBaby() ? 1 : 2, 3.0F, (goat) -> goat.isBaby() ? 1.0F : 2.5F, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_RAM_IMPACT : SoundEvents.GOAT_RAM_IMPACT)), Pair.of(1, new PrepareRamNearestTarget<>(TIME_BETWEEN_RAMS.getMinValue(), 4, 7, 1.25F, RAM_TARGET_CONDITIONS, 20, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_PREPARE_RAM : SoundEvents.GOAT_PREPARE_RAM))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
+    }
+ 
+    public static void updateActivity(Goat goat) {
 diff --git a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
 index b0164f548e7e7fcadba61b9c217f85b9d1d284f3..c223f4aea64a3dd12ecc39460274e880da297a92 100644
 --- a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
@@ -4778,18 +4834,10 @@ index 0f6d91565c03e9e66f53c2d15981d6cdba2e8b78..97c36c46bb0b31ec99af62c9d2188196
  
     public void remove(Entity.RemovalReason removalReason) {
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Zoglin.java b/src/main/java/net/minecraft/world/entity/monster/Zoglin.java
-index e892b0030343f470a88389b2c4389294206b2760..96b305cb37e7305393effcd5cb6ccf639359dd89 100644
+index 91d72831c80c8ac35b04aa03382094cef665c21b..d06c6449ceba2b0ad0bb30c4d5c77d4f90323e12 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Zoglin.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Zoglin.java
-@@ -25,6 +25,7 @@ import net.minecraft.world.entity.MobType;
- import net.minecraft.world.entity.ai.Brain;
- import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
- import net.minecraft.world.entity.ai.attributes.Attributes;
-+import net.minecraft.world.entity.ai.behavior.Behavior;
- import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
- import net.minecraft.world.entity.ai.behavior.DoNothing;
- import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
-@@ -89,15 +90,15 @@ public class Zoglin extends Monster implements Enemy, HoglinBase {
+@@ -89,15 +89,15 @@ public class Zoglin extends Monster implements Enemy, HoglinBase {
     }
  
     private static void initIdleActivity(Brain<Zoglin> brain) {
@@ -4803,12 +4851,12 @@ index e892b0030343f470a88389b2c4389294206b2760..96b305cb37e7305393effcd5cb6ccf63
     }
  
     private Optional<? extends LivingEntity> findNearestValidAttackTarget() {
--      return ((List)this.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())).stream().filter(Zoglin::isTargetable).findFirst();
-+      return this.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of()).stream().filter(Zoglin::isTargetable).findFirst(); // MagmaCube - decompile error
+-      return ((List)this.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())).stream().filter(Zoglin::isTargetable).findFirst();
++      return (this.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())).stream().filter(Zoglin::isTargetable).findFirst(); // MagmaCube - decompile error
     }
  
     private static boolean isTargetable(LivingEntity livingEntity) {
-@@ -174,7 +175,7 @@ public class Zoglin extends Monster implements Enemy, HoglinBase {
+@@ -174,7 +174,7 @@ public class Zoglin extends Monster implements Enemy, HoglinBase {
     }
  
     public Brain<Zoglin> getBrain() {
@@ -4831,16 +4879,16 @@ index 3aa8bb8c99c7f24985bbd2c8e4dc7e865a6bcf08..d6ed6b9838d9ba7ac984a6ad8c2fefa4
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
-index da1e2bc6c1dd0e72b60a3e82780d736a834e71f5..12d90769fa82e15f0db15c719da3a596b8cd8e7d 100644
+index 8375ac504384e03ca43a1bd9f5e7748b797de885..822b44b19da1ba9a6e492b7bbf1ca8ac687d985e 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
 @@ -60,7 +60,8 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
     private int timeInOverworld;
     private boolean cannotBeHunted;
     protected static final ImmutableList<? extends SensorType<? extends Sensor<? super Hoglin>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ADULT, SensorType.HOGLIN_SPECIFIC_SENSOR);
--   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, new MemoryModuleType[]{MemoryModuleType.AVOID_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.PACIFIED});
+-   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, new MemoryModuleType[]{MemoryModuleType.AVOID_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.PACIFIED});
 +   // MagmaCube - decompile error
-+   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = (ImmutableList) ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, new MemoryModuleType[]{MemoryModuleType.AVOID_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.PACIFIED});
++   protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.<MemoryModuleType<?>>of(MemoryModuleType.BREED_TARGET, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, new MemoryModuleType[]{MemoryModuleType.AVOID_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.PACIFIED});
  
     public Hoglin(EntityType<? extends Hoglin> entityType, Level level) {
        super(entityType, level);
@@ -4877,7 +4925,7 @@ index 5273def20cca668fe06913b908498ebd709b015f..b08fa82bbfc325397eb1c26842add37c
  
     private static RunOne<Hoglin> createIdleMovementBehaviors() {
 diff --git a/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java b/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java
-index 0894703aafc215032187d54bf315c01caa7d7b7d..619a9ed5d1bffb370d19c14ddec73717a9c60f01 100644
+index 222de916872a3e93b18fad7ced7819a035eb58b6..b66cd815f11be3e1f1a0ed1c6fe14e671a6d3261 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java
 @@ -191,7 +191,7 @@ public class Piglin extends AbstractPiglin implements CrossbowAttackMob, Invento
@@ -4933,7 +4981,7 @@ index d908f77c38be997513f5f1b59f833676ae1bf739..0925c29ea2af74778919f6fc95a92975
  
     private static RunOne<Piglin> createIdleLookBehaviors() {
 diff --git a/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinBrute.java b/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinBrute.java
-index 884d5fcfa7705f03aafe9b1514586d5e757cce5f..ae46fa36609478616c5fc2578598cde405e9a745 100644
+index 579802c3b9d23318eaea92f04bda082b1d3faa4f..36ec134039722a6051725871eddd2b0dcafe3be6 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinBrute.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinBrute.java
 @@ -64,7 +64,7 @@ public class PiglinBrute extends AbstractPiglin {
@@ -4969,12 +5017,12 @@ index 881c28278239bfdce010c99046134ec6d9f96962..18af55fde9547d0be02e3f3ea6effe73
  
     private static RunOne<PiglinBrute> createIdleLookBehaviors() {
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index a59b6265a7d7d4c4f7b1dfcec00a0740fcd3c7be..8bd1564efa736d350ae64337fd5d8d7b2d28c9ed 100644
+index 78a75e45105719df8de4978911ed2d38736f40c1..98f4c159e3da6b65315f58799b23fb2b16b5226c 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
 @@ -116,7 +116,7 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
     private boolean assignProfessionWhenSpawned;
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, new MemoryModuleType[]{MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_DETECTED_RECENTLY});
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, new MemoryModuleType[]{MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_DETECTED_RECENTLY});
     private static final ImmutableList<SensorType<? extends Sensor<? super Villager>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES, SensorType.VILLAGER_BABIES, SensorType.SECONDARY_POIS, SensorType.GOLEM_DETECTED);
 -   public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<Villager, PoiType>> POI_MEMORIES = ImmutableMap.of(MemoryModuleType.HOME, (BiPredicate)(villager, poiType) -> poiType == PoiType.HOME, MemoryModuleType.JOB_SITE, (BiPredicate)(villager, poiType) -> villager.getVillagerData().getProfession().getJobPoiType() == poiType, MemoryModuleType.POTENTIAL_JOB_SITE, (BiPredicate)(villager, poiType) -> PoiType.ALL_JOBS.test(poiType), MemoryModuleType.MEETING_POINT, (BiPredicate)(villager, poiType) -> poiType == PoiType.MEETING);
 +   public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<Villager, PoiType>> POI_MEMORIES = ImmutableMap.of(MemoryModuleType.HOME, (villager, poiType) -> poiType == PoiType.HOME, MemoryModuleType.JOB_SITE, (villager, poiType) -> villager.getVillagerData().getProfession().getJobPoiType() == poiType, MemoryModuleType.POTENTIAL_JOB_SITE, (villager, poiType) -> PoiType.ALL_JOBS.test(poiType), MemoryModuleType.MEETING_POINT, (villager, poiType) -> poiType == PoiType.MEETING); // MagmaCube - decompile error
@@ -5578,7 +5626,7 @@ index d6e44442af662f5b436b5b2ce8c24d7a8bba41ad..b0095a7bed3e313dac93a3eb60eb6ee8
           DataLayer dataLayer2 = levelLightEngine.getLayerListener(LightLayer.SKY).getDataLayerData(SectionPos.of(chunkPos, i2));
           if (levelChunkSection != LevelChunk.EMPTY_SECTION || dataLayer != null || dataLayer2 != null) {
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index fe4d1cfd9683ce9fb466f54438a2e1329eb3fe25..cf0d81f142ca24758a043f793dfbb1b717a7e8ae 100644
+index 3748a9afe8cb543522e25b0018278e5559961836..194b9ab26042a1d766e9bf453eb5e5d1d798e3ce 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 @@ -42,7 +42,8 @@ public class DimensionType {
@@ -5683,22 +5731,8 @@ index 85683fb9a8b468de35995b0d80ffdfb27a87199a..d9e950dfeb9c616a91367764cb8e7110
     }
  }
 \ No newline at end of file
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/GeodeBlockSettings.java b/src/main/java/net/minecraft/world/level/levelgen/GeodeBlockSettings.java
-index e2a905ddab5b5f68787f8d19e816bd2a7f5405a2..c55d047d90f491294bf7db6dc16fbae3408a9a88 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/GeodeBlockSettings.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/GeodeBlockSettings.java
-@@ -14,7 +14,8 @@ public class GeodeBlockSettings {
-    public final BlockStateProvider middleLayerProvider;
-    public final BlockStateProvider outerLayerProvider;
-    public final List<BlockState> innerPlacements;
--   public static final Codec<GeodeBlockSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(BlockStateProvider.CODEC.fieldOf("filling_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.fillingProvider), BlockStateProvider.CODEC.fieldOf("inner_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.innerLayerProvider), BlockStateProvider.CODEC.fieldOf("alternate_inner_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.alternateInnerLayerProvider), BlockStateProvider.CODEC.fieldOf("middle_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.middleLayerProvider), BlockStateProvider.CODEC.fieldOf("outer_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.outerLayerProvider), BlockState.CODEC.listOf().fieldOf("inner_placements").forGetter((geodeBlockSettings) -> new ArrayList(geodeBlockSettings.innerPlacements))).apply(instance, GeodeBlockSettings::new));
-+   // MagmaCube - decompile error
-+   public static final Codec<GeodeBlockSettings> CODEC = RecordCodecBuilder.<GeodeBlockSettings>create((instance) -> instance.group(BlockStateProvider.CODEC.fieldOf("filling_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.fillingProvider), BlockStateProvider.CODEC.fieldOf("inner_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.innerLayerProvider), BlockStateProvider.CODEC.fieldOf("alternate_inner_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.alternateInnerLayerProvider), BlockStateProvider.CODEC.fieldOf("middle_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.middleLayerProvider), BlockStateProvider.CODEC.fieldOf("outer_layer_provider").forGetter((geodeBlockSettings) -> geodeBlockSettings.outerLayerProvider), BlockState.CODEC.listOf().fieldOf("inner_placements").forGetter((geodeBlockSettings) -> new ArrayList<>(geodeBlockSettings.innerPlacements))).apply(instance, GeodeBlockSettings::new));
- 
-    public GeodeBlockSettings(BlockStateProvider blockStateProvider, BlockStateProvider blockStateProvider2, BlockStateProvider blockStateProvider3, BlockStateProvider blockStateProvider4, BlockStateProvider blockStateProvider5, List<BlockState> list) {
-       this.fillingProvider = blockStateProvider;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 4f08bd88e16a3b8404d65a87e1c70753269e8f76..f022804fdb2486c4425bbef44e7dcebdfb09491d 100644
+index fc9997ad469df8bb770e7f26790aefb10940d2c0..f2714b2a229f8915705639a5ce7b40c57ae1f727 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -18,7 +18,8 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -5803,16 +5837,16 @@ index eea8527b4b67131844f4a547468da3a7b34b4355..3a54720b94c797ef4140752de92c849e
     public final boolean requiresBlockBelow;
     public final int rockCount;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/StructureFeatureConfiguration.java b/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/StructureFeatureConfiguration.java
-index 131dafca69f2abdd3e61cc1b523278a6cfd532c9..6ba39ffa04da2410d10ebdde51d5ebf6ce19af15 100644
+index 1d2aab0f82a790ca98ce3655b91160b4192b6dcc..7cb352ff514d505e1d3c3a0fdadc15dcd19215bf 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/StructureFeatureConfiguration.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/StructureFeatureConfiguration.java
-@@ -6,7 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
- import java.util.function.Function;
+@@ -7,7 +7,8 @@ import java.util.function.Function;
+ import net.minecraft.util.ExtraCodecs;
  
  public class StructureFeatureConfiguration {
--   public static final Codec<StructureFeatureConfiguration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(0, 4096).fieldOf("spacing").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing), Codec.intRange(0, 4096).fieldOf("separation").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.separation), Codec.intRange(0, Integer.MAX_VALUE).fieldOf("salt").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.salt)).apply(instance, StructureFeatureConfiguration::new)).comapFlatMap((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing <= structureFeatureConfiguration.separation ? DataResult.error("Spacing has to be smaller than separation") : DataResult.success(structureFeatureConfiguration), Function.identity());
+-   public static final Codec<StructureFeatureConfiguration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(0, 4096).fieldOf("spacing").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing), Codec.intRange(0, 4096).fieldOf("separation").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.separation), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("salt").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.salt)).apply(instance, StructureFeatureConfiguration::new)).comapFlatMap((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing <= structureFeatureConfiguration.separation ? DataResult.error("Spacing has to be smaller than separation") : DataResult.success(structureFeatureConfiguration), Function.identity());
 +   // MagmaCube - decompile error
-+   public static final Codec<StructureFeatureConfiguration> CODEC = RecordCodecBuilder.<StructureFeatureConfiguration>create((instance) -> instance.group(Codec.intRange(0, 4096).fieldOf("spacing").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing), Codec.intRange(0, 4096).fieldOf("separation").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.separation), Codec.intRange(0, Integer.MAX_VALUE).fieldOf("salt").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.salt)).apply(instance, StructureFeatureConfiguration::new)).comapFlatMap((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing <= structureFeatureConfiguration.separation ? DataResult.error("Spacing has to be smaller than separation") : DataResult.success(structureFeatureConfiguration), Function.identity());
++   public static final Codec<StructureFeatureConfiguration> CODEC = RecordCodecBuilder.<StructureFeatureConfiguration>create((instance) -> instance.group(Codec.intRange(0, 4096).fieldOf("spacing").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing), Codec.intRange(0, 4096).fieldOf("separation").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.separation), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("salt").forGetter((structureFeatureConfiguration) -> structureFeatureConfiguration.salt)).apply(instance, StructureFeatureConfiguration::new)).comapFlatMap((structureFeatureConfiguration) -> structureFeatureConfiguration.spacing <= structureFeatureConfiguration.separation ? DataResult.error("Spacing has to be smaller than separation") : DataResult.success(structureFeatureConfiguration), Function.identity());
     private final int spacing;
     private final int separation;
     private final int salt;
@@ -5918,22 +5952,8 @@ index 1beadd0d2a84d656b70a3549c7e9f2ea4e946c04..8653febda7a192822029ebf6c7477157
                    builder.addFeature(i, supplier);
                 }
              }
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/heightproviders/BiasedToBottomHeight.java b/src/main/java/net/minecraft/world/level/levelgen/heightproviders/BiasedToBottomHeight.java
-index 26192a280ce4e70de812dd3fad96b5a6ee5ef9ae..4a0799666f8ac53306975f0c1f80d0f93348dc08 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/heightproviders/BiasedToBottomHeight.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/heightproviders/BiasedToBottomHeight.java
-@@ -12,7 +12,8 @@ import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
- 
- public class BiasedToBottomHeight extends HeightProvider {
--   public static final Codec<BiasedToBottomHeight> CODEC = RecordCodecBuilder.create((instance) -> instance.group(VerticalAnchor.CODEC.fieldOf("min_inclusive").forGetter((biasedToBottomHeight) -> biasedToBottomHeight.minInclusive), VerticalAnchor.CODEC.fieldOf("max_inclusive").forGetter((biasedToBottomHeight) -> biasedToBottomHeight.maxInclusive), Codec.intRange(1, Integer.MAX_VALUE).optionalFieldOf("inner", 1).forGetter((biasedToBottomHeight) -> biasedToBottomHeight.inner)).apply(instance, BiasedToBottomHeight::new)).comapFlatMap(DataResult::success, Function.identity());
-+   // MagmaCube - decompile error
-+   public static final Codec<BiasedToBottomHeight> CODEC = RecordCodecBuilder.<BiasedToBottomHeight>create((instance) -> instance.group(VerticalAnchor.CODEC.fieldOf("min_inclusive").forGetter((biasedToBottomHeight) -> biasedToBottomHeight.minInclusive), VerticalAnchor.CODEC.fieldOf("max_inclusive").forGetter((biasedToBottomHeight) -> biasedToBottomHeight.maxInclusive), Codec.intRange(1, Integer.MAX_VALUE).optionalFieldOf("inner", 1).forGetter((biasedToBottomHeight) -> biasedToBottomHeight.inner)).apply(instance, BiasedToBottomHeight::new)).comapFlatMap(DataResult::success, Function.identity());
-    private static final Logger LOGGER = LogManager.getLogger();
-    private final VerticalAnchor minInclusive;
-    private final VerticalAnchor maxInclusive;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/heightproviders/ConstantHeight.java b/src/main/java/net/minecraft/world/level/levelgen/heightproviders/ConstantHeight.java
-index f6ecb3ae97b6a31b2a6fbd85a525c55829657f15..3a43eed84d6180c9ee2615c38d07c433bd776cb6 100644
+index 670613a86bb1fe88412c71b4f91186f1719a745f..60b7c6fa85fc29524d77fe849d0cc5d70a9ad3b3 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/heightproviders/ConstantHeight.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/heightproviders/ConstantHeight.java
 @@ -9,7 +9,8 @@ import net.minecraft.world.level.levelgen.WorldGenerationContext;
@@ -5946,20 +5966,6 @@ index f6ecb3ae97b6a31b2a6fbd85a525c55829657f15..3a43eed84d6180c9ee2615c38d07c433
     private final VerticalAnchor value;
  
     public static ConstantHeight of(VerticalAnchor verticalAnchor) {
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/heightproviders/UniformHeight.java b/src/main/java/net/minecraft/world/level/levelgen/heightproviders/UniformHeight.java
-index da9b061ffd1348441d6b386b4a6c3708156b9aab..ad6ef6e1965934b4b8271d25463d908bee7f4b84 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/heightproviders/UniformHeight.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/heightproviders/UniformHeight.java
-@@ -13,7 +13,8 @@ import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
- 
- public class UniformHeight extends HeightProvider {
--   public static final Codec<UniformHeight> CODEC = RecordCodecBuilder.create((instance) -> instance.group(VerticalAnchor.CODEC.fieldOf("min_inclusive").forGetter((uniformHeight) -> uniformHeight.minInclusive), VerticalAnchor.CODEC.fieldOf("max_inclusive").forGetter((uniformHeight) -> uniformHeight.maxInclusive)).apply(instance, UniformHeight::new)).comapFlatMap(DataResult::success, Function.identity());
-+   // MagmaCube - decompile error
-+   public static final Codec<UniformHeight> CODEC = RecordCodecBuilder.<UniformHeight>create((instance) -> instance.group(VerticalAnchor.CODEC.fieldOf("min_inclusive").forGetter((uniformHeight) -> uniformHeight.minInclusive), VerticalAnchor.CODEC.fieldOf("max_inclusive").forGetter((uniformHeight) -> uniformHeight.maxInclusive)).apply(instance, UniformHeight::new)).comapFlatMap(DataResult::success, Function.identity());
-    private static final Logger LOGGER = LogManager.getLogger();
-    private final VerticalAnchor minInclusive;
-    private final VerticalAnchor maxInclusive;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java b/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
 index 5c54ac6047ef00c9e46c05540d622b822f59340e..8f6023ab3a01aab8c887ea39deb4f8e614353a22 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
