@@ -373,7 +373,7 @@ index 1557bd730c4f7b1ca5a0ab3770d61766639bc457..2895ce15725debc8e4164a620d496ee6
           options.save();
        });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 61beae2652bb207c942ae71eda036a5b522466fb..8de9e84ae7ea8af1a5746df169dd409f07730b09 100644
+index e00d7907dacfeab933605ec145821606ca81b59c..20e8acb3c16873c25e557bb4239b32ead640d80c 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
 @@ -2042,9 +2042,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
@@ -633,7 +633,7 @@ index bf807e38cea5619381a2c50a0c8d23f915943f20..65d7c0a6aa17a1b22ae0294c85bbf995
           this.settings = worldPreset.create(this.registryHolder, this.settings.seed(), this.settings.generateFeatures(), this.settings.generateBonusChest());
           createWorldScreen.refreshWorldGenSettingsVisibility();
 diff --git a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
-index a3e79fff1700fb13dc8818ca71f9f7a5e2edd080..ea6704848a45d9cc260a1ab12b36077c9dc78c92 100644
+index bf437ba5b8eae74715bdf6d45e86e3865868f565..cfd885dfcb9d2126a5dbf876e4c8dbfaef5bc176 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 @@ -267,13 +267,15 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.W
@@ -657,7 +657,7 @@ index a3e79fff1700fb13dc8818ca71f9f7a5e2edd080..ea6704848a45d9cc260a1ab12b36077c
                    }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 8a1227470916c32a57a98d66cc2820b41143e4c2..7b13121bf0ecaebeaced468e4f7b97e6bb10d5f9 100644
+index 15970b050b3dc822c7bb4d6c109e5891a30aba86..de13e69c530c95cad4e8579339709c01fa0c87e7 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 @@ -508,7 +508,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
@@ -685,7 +685,7 @@ index 8a1227470916c32a57a98d66cc2820b41143e4c2..7b13121bf0ecaebeaced468e4f7b97e6
 +                        // MagmaCube end - decompile error
  
                          this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
-                         this.downloadCallback(this.minecraft.getClientPackSource().downloadAndSelectResourcePack(s, s2));
+                         this.downloadCallback(this.minecraft.getClientPackSource().downloadAndSelectResourcePack(s, s2, true));
 @@ -1457,14 +1459,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
                          this.send(ServerboundResourcePackPacket.Action.DECLINED);
                          if (flag) {
@@ -745,7 +745,7 @@ index ec59f878b6c155bc538b264f331766a09ec51d68..aa0639bce84edb67426aefea15fb348e
              int i2 = intSupplier.getAsInt();
              if (i2 != -1) {
 diff --git a/src/main/java/net/minecraft/client/renderer/RenderType.java b/src/main/java/net/minecraft/client/renderer/RenderType.java
-index e121fc63751f9338e63b2d2b1bd4ecfb6a4bc5d4..6fc237af8e8b8e1864d1199656001c02c3357eb4 100644
+index 0d857c52fddf914cf6f53d8e3632cee029d38191..66dcd10d3a255e3b7cd8e3b586c19ecf61efb2a4 100644
 --- a/src/main/java/net/minecraft/client/renderer/RenderType.java
 +++ b/src/main/java/net/minecraft/client/renderer/RenderType.java
 @@ -40,11 +40,11 @@ public abstract class RenderType extends RenderStateShard {
@@ -957,6 +957,23 @@ index cda4b1b757ac07e5dae9f9e279f15d3f9e708583..fee241c7a36ccc56e5fd1123ef228e4e
     private final int mipLevel;
     private final Set<Stitcher.Holder> texturesToBeStitched = Sets.newHashSetWithExpectedSize(256);
     private final List<Stitcher.Region> storage = Lists.newArrayListWithCapacity(256);
+diff --git a/src/main/java/net/minecraft/client/resources/ClientPackSource.java b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
+index 36dce8ea2c7bc3bf886534a8a34b89bf97d73dd2..7db2fd49c1f0ac4d8b2233d026f5bfb0852729e7 100644
+--- a/src/main/java/net/minecraft/client/resources/ClientPackSource.java
++++ b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
+@@ -143,8 +143,10 @@ public class ClientPackSource implements RepositorySource {
+                LOGGER.warn("Pack application failed: {}, deleting file {}", throwable.getMessage(), file);
+                deleteQuietly(file);
+                Minecraft minecraft = Minecraft.getInstance();
+-               minecraft.execute(() -> minecraft.setScreen(new ConfirmScreen((flag) -> {
+-                     if (flag) {
++               // MagmaCube start - decompile error
++               minecraft.execute(() -> minecraft.setScreen(new ConfirmScreen((flagx) -> {
++                     if (flagx) {
++                        // MagmaCube end - decompile error
+                         minecraft.setScreen((Screen)null);
+                      } else {
+                         ClientPacketListener clientPacketListener = minecraft.getConnection();
 diff --git a/src/main/java/net/minecraft/client/resources/model/ModelBakery.java b/src/main/java/net/minecraft/client/resources/model/ModelBakery.java
 index 93b40d70d25714fdd6cb72ed49cca73d9a51d7e6..5a4b0885de423eb900b7cfc91fe14eb4ed42408d 100644
 --- a/src/main/java/net/minecraft/client/resources/model/ModelBakery.java
@@ -1424,7 +1441,7 @@ index 51d14d0cf26d188f8fbb5292617b9882eebdfcfd..ec52d76e9ca5a334569ae5c4ba33deed
                 throw new IllegalStateException("Duplicate loot table " + resourceLocation);
              }
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index 1705a34ad0296e5a2c55b0fae54d6c8aa049d431..7fca32372e78baa5cd3eafaea2c5e9d2e1862a92 100644
+index b6ca3ec5ddb5952df22ec7ebecc57b5e5cb5a41a..95461255f12291f305399884227e4f2e17d2c3ef 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 @@ -69,22 +69,26 @@ public class BlockModelGenerators {
@@ -1521,10 +1538,10 @@ index b8ec5d93f2be8cc799ba9f5d2e181fb2153ffc12..e1950ce7a29aeaf8e0432e497f306bae
           }
  
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index eabfc0d662d364120ea1080638e4e3ab3487ecec..49317b47edb30c80b5511c354fa08085e67f219e 100644
+index 31029e69432fcc5022e05c41021eebd195996b01..3629f705e13f6562ec23b60794b6a93c3050496c 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-@@ -59,7 +59,8 @@ public class RecipeProvider implements DataProvider {
+@@ -60,7 +60,8 @@ public class RecipeProvider implements DataProvider {
     private static final ImmutableList<ItemLike> REDSTONE_SMELTABLES = ImmutableList.of(Items.REDSTONE_ORE, Items.DEEPSLATE_REDSTONE_ORE);
     private static final ImmutableList<ItemLike> EMERALD_SMELTABLES = ImmutableList.of(Items.EMERALD_ORE, Items.DEEPSLATE_EMERALD_ORE);
     private final DataGenerator generator;
@@ -1534,13 +1551,13 @@ index eabfc0d662d364120ea1080638e4e3ab3487ecec..49317b47edb30c80b5511c354fa08085
  
     public RecipeProvider(DataGenerator dataGenerator) {
        this.generator = dataGenerator;
-@@ -1172,7 +1173,8 @@ public class RecipeProvider implements DataProvider {
+@@ -1181,7 +1182,8 @@ public class RecipeProvider implements DataProvider {
     }
  
     private static void waxRecipes(Consumer<FinishedRecipe> consumer) {
--      ((BiMap)HoneycombItem.WAXABLES.get()).forEach((block, block2) -> ShapelessRecipeBuilder.shapeless(block2).requires(block).requires(Items.HONEYCOMB).unlockedBy(getHasName(block), has(block)).save(consumer, getFromName(block2, Items.HONEYCOMB)));
+-      ((BiMap)HoneycombItem.WAXABLES.get()).forEach((block, block2) -> ShapelessRecipeBuilder.shapeless(block2).requires(block).requires(Items.HONEYCOMB).unlockedBy(getHasName(block), has(block)).save(consumer, getConversionRecipeName(block2, Items.HONEYCOMB)));
 +      // MagmaCube - decompile error
-+      (HoneycombItem.WAXABLES.get()).forEach((block, block2) -> ShapelessRecipeBuilder.shapeless(block2).requires(block).requires(Items.HONEYCOMB).unlockedBy(getHasName(block), has(block)).save(consumer, getFromName(block2, Items.HONEYCOMB)));
++      (HoneycombItem.WAXABLES.get()).forEach((block, block2) -> ShapelessRecipeBuilder.shapeless(block2).requires(block).requires(Items.HONEYCOMB).unlockedBy(getHasName(block), has(block)).save(consumer, getConversionRecipeName(block2, Items.HONEYCOMB)));
     }
  
     private static void generateRecipes(Consumer<FinishedRecipe> consumer, BlockFamily blockFamily) {
@@ -2448,10 +2465,10 @@ index 2ebb897b30ccc733b4c4c0ffb31a0d1d332c3f86..d6a001161aa96696dc6d757cc9e56b52
              }
           } catch (Throwable var15) {
 diff --git a/src/main/java/net/minecraft/stats/ServerStatsCounter.java b/src/main/java/net/minecraft/stats/ServerStatsCounter.java
-index 560da6b6e23ded5a33fefa25ff34bac6f895f56e..762bde37a7a56c9b7fe2cc8f3890f1380cfe04bc 100644
+index f37f61f300f63449ca583866c4d33073ff8581bd..ab93d72ea0ec08b9c7eb59a3808a15e6896d7915 100644
 --- a/src/main/java/net/minecraft/stats/ServerStatsCounter.java
 +++ b/src/main/java/net/minecraft/stats/ServerStatsCounter.java
-@@ -98,15 +98,16 @@ public class ServerStatsCounter extends StatsCounter {
+@@ -96,15 +96,16 @@ public class ServerStatsCounter extends StatsCounter {
                    for(String s2 : compoundTag2.getAllKeys()) {
                       if (compoundTag2.contains(s2, 10)) {
                          Util.ifElse(Registry.STAT_TYPE.getOptional(new ResourceLocation(s2)), (statType) -> {
@@ -2474,7 +2491,7 @@ index 560da6b6e23ded5a33fefa25ff34bac6f895f56e..762bde37a7a56c9b7fe2cc8f3890f138
  
                          }, () -> LOGGER.warn("Invalid statistic type in {}: Don't know what {} is", this.file, s2));
                       }
-@@ -172,14 +173,14 @@ public class ServerStatsCounter extends StatsCounter {
+@@ -170,14 +171,14 @@ public class ServerStatsCounter extends StatsCounter {
           ((JsonObject)map.computeIfAbsent(stat.getType(), (statType) -> new JsonObject())).addProperty(getKey(stat).toString(), entry.getIntValue());
        }
  
@@ -2660,7 +2677,7 @@ index a93daca3e2d8fdc89d716ba85605774ecdb66515..ce118aa31b76f5f5eb40cab5b87c63da
           return Optional.empty();
        } else {
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index 91d8a5b5cbe041b417b4b549e18038f799be98c9..8b5fc0bbc9e5ebcdff217f72af1295bbd3463320 100644
+index df5b20696f124530fe85e3a7096c65b25f9bfa5a..7f275121bd3bb194bf32dd5f81c710e8df50631b 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
 @@ -550,15 +550,18 @@ public class DataFixers {
@@ -3823,19 +3840,19 @@ index 2d373ac0a50b72adc6ccf816dff2e74eaa6d4dbf..09db24dca24ccc3eef7a5fdec02018fe
                             s3 = (String)CUSTOM_MAP.get(s);
                             break;
                          }
-diff --git a/src/main/java/net/minecraft/util/datafix/fixes/SwimStatsRenameFix.java b/src/main/java/net/minecraft/util/datafix/fixes/SwimStatsRenameFix.java
-index b195a7e40d3e818101e4b0e64468d47439f2ae63..08ee08e9bc2256ba5f307645ee7554f7a39d0235 100644
---- a/src/main/java/net/minecraft/util/datafix/fixes/SwimStatsRenameFix.java
-+++ b/src/main/java/net/minecraft/util/datafix/fixes/SwimStatsRenameFix.java
-@@ -18,7 +18,7 @@ public class SwimStatsRenameFix extends DataFix {
+diff --git a/src/main/java/net/minecraft/util/datafix/fixes/StatsRenameFix.java b/src/main/java/net/minecraft/util/datafix/fixes/StatsRenameFix.java
+index 6a3f8b5c0a7cb702939574b8d2a187b9cda74fb8..9a626158fdf95fa01cfd6e63826ccc0ef2c19dec 100644
+--- a/src/main/java/net/minecraft/util/datafix/fixes/StatsRenameFix.java
++++ b/src/main/java/net/minecraft/util/datafix/fixes/StatsRenameFix.java
+@@ -25,7 +25,7 @@ public class StatsRenameFix extends DataFix {
        OpticFinder<?> opticFinder = type2.findField("stats");
        OpticFinder<?> opticFinder2 = opticFinder.type().findField("minecraft:custom");
        OpticFinder<String> opticFinder3 = NamespacedSchema.namespacedString().finder();
--      return this.fixTypeEverywhereTyped("SwimStatsRenameFix", type2, type, (typed) -> typed.updateTyped(opticFinder, (typedx) -> typedx.updateTyped(opticFinder2, (typed) -> typed.update(opticFinder3, (s) -> {
-+      return this.fixTypeEverywhereTyped("SwimStatsRenameFix", type2, type, (typed) -> typed.updateTyped(opticFinder, (typedx) -> typedx.updateTyped(opticFinder2, (typedxx) -> typedxx.update(opticFinder3, (s) -> { // MagmaCube - decompile error
-                   if (s.equals("minecraft:swim_one_cm")) {
-                      return "minecraft:walk_on_water_one_cm";
-                   } else {
+-      return this.fixTypeEverywhereTyped(this.name, type2, type, (typed) -> typed.updateTyped(opticFinder, (typedx) -> typedx.updateTyped(opticFinder2, (typed) -> typed.update(opticFinder3, (s) -> {
++      return this.fixTypeEverywhereTyped(this.name, type2, type, (typed) -> typed.updateTyped(opticFinder, (typedx) -> typedx.updateTyped(opticFinder2, (typedxx) -> typedxx.update(opticFinder3, (s) -> { // MagmaCube - decompile error (what the hell is this weird indent...)
+                   for(Entry<String, String> entry : this.renames.entrySet()) {
+                      if (s.equals(entry.getKey())) {
+                         return (String)entry.getValue();
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java b/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java
 index b3d9ffd4d6591d72cd3a457af2b396ecf942d253..5f807d8e27bc25a61e670865575f1fb3cc6b137a 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java
@@ -4664,7 +4681,7 @@ index e43436bf0ec10bf6f7b2489daf79c5d60192c190..9310108e52cc0294597cc712b0f616d2
     }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
-index 6ea2c98911a3db41da1c1b6a3c930fe6e1df44f2..c161f8c712c67067ea74da2b785888229bbd80f7 100644
+index d55a7705f8e581dea6b7a12565aacd550e6d9ef3..66b9adf6eabfa9b68731790e57884ee19f0dbffb 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
 @@ -65,7 +65,8 @@ public class Axolotl extends Animal implements Bucketable {
@@ -5058,7 +5075,7 @@ index 9ef4930086311377bda7cb3ca67c9fcbe2ccecaa..a195e8700dfab3babd88f685d2885540
        hashMap.put(VillagerProfession.CLERIC, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.ROTTEN_FLESH, 32, 16, 2), new VillagerTrades.ItemsForEmeralds(Items.REDSTONE, 1, 2, 1)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.GOLD_INGOT, 3, 12, 10), new VillagerTrades.ItemsForEmeralds(Items.LAPIS_LAZULI, 1, 1, 5)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.RABBIT_FOOT, 2, 12, 20), new VillagerTrades.ItemsForEmeralds(Blocks.GLOWSTONE, 4, 1, 12, 10)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.SCUTE, 4, 12, 30), new VillagerTrades.EmeraldForItems(Items.GLASS_BOTTLE, 9, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.ENDER_PEARL, 5, 1, 15)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.NETHER_WART, 22, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.EXPERIENCE_BOTTLE, 3, 1, 30)})));
        hashMap.put(VillagerProfession.ARMORER, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.LAVA_BUCKET, 1, 12, 20), new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 20), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 14, 3, 15, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 8, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 8, 3, 30, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 16, 3, 30, 0.2F)})));
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 68e460103091d2cb610f240c5c1e86752a6c0810..e1f8759ad65cb2164eca783e4c301302f4fe296e 100644
+index b6078d6ee26bb1a32fb65d2f6cccc0a4be49e02f..6e347a6e43f42b1bdb7aa0208f8bf97bf3c73e8a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -122,7 +122,7 @@ public abstract class Player extends LivingEntity {
@@ -5732,7 +5749,7 @@ index 85683fb9a8b468de35995b0d80ffdfb27a87199a..d9e950dfeb9c616a91367764cb8e7110
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index fc9997ad469df8bb770e7f26790aefb10940d2c0..f2714b2a229f8915705639a5ce7b40c57ae1f727 100644
+index 80f13d25e818263e298d572b73cfa19622474ae3..fe22c139fea2e0ca9d2bfa8be7848a0e97815eeb 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -18,7 +18,8 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -5741,15 +5758,15 @@ index fc9997ad469df8bb770e7f26790aefb10940d2c0..f2714b2a229f8915705639a5ce7b40c5
  public final class NoiseGeneratorSettings {
 -   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC;
 +   // MagmaCube - decompile error
-+   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.INT.fieldOf("min_surface_level").forGetter(NoiseGeneratorSettings::getMinSurfaceLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
++   public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.INT.fieldOf("min_surface_level").forGetter(NoiseGeneratorSettings::getMinSurfaceLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled), Codec.BOOL.fieldOf("ore_veins_enabled").forGetter(NoiseGeneratorSettings::isOreVeinsEnabled)).apply(instance, NoiseGeneratorSettings::new));
     public static final Codec<Supplier<NoiseGeneratorSettings>> CODEC = RegistryFileCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, DIRECT_CODEC);
     private final StructureSettings structureSettings;
     private final NoiseSettings noiseSettings;
-@@ -133,7 +134,6 @@ public final class NoiseGeneratorSettings {
+@@ -139,7 +140,6 @@ public final class NoiseGeneratorSettings {
     }
  
     static {
--      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.INT.fieldOf("min_surface_level").forGetter(NoiseGeneratorSettings::getMinSurfaceLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled)).apply(instance, NoiseGeneratorSettings::new));
+-      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.INT.fieldOf("min_surface_level").forGetter(NoiseGeneratorSettings::getMinSurfaceLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled), Codec.BOOL.fieldOf("ore_veins_enabled").forGetter(NoiseGeneratorSettings::isOreVeinsEnabled)).apply(instance, NoiseGeneratorSettings::new));
        register(AMPLIFIED, overworld(new StructureSettings(true), true));
        register(NETHER, netherLikePreset(new StructureSettings(false), Blocks.NETHERRACK.defaultBlockState(), Blocks.LAVA.defaultBlockState(), false));
        register(END, endLikePreset(new StructureSettings(false), Blocks.END_STONE.defaultBlockState(), Blocks.AIR.defaultBlockState(), true, true, false));
@@ -5796,7 +5813,7 @@ index 6ac73abd2407082d9fdcb23a2d0544830bd89c7c..d82888bf743d8fcc11eea6e4d8074787
     private final long seed;
     private final boolean generateFeatures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index a8bfda13af666960ac1568041eb41f912bbbec17..750b2ae46aae27562e9c8b5b638244c9c040954e 100644
+index b90b20b7cfbb4a47d651d41e5d8a2d89b79cd984..33cd7e9698311be18fb2e459e86d547ce6802e31 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 @@ -72,7 +72,7 @@ public abstract class StructureFeature<C extends FeatureConfiguration> {
@@ -5980,7 +5997,7 @@ index 5c54ac6047ef00c9e46c05540d622b822f59340e..8f6023ab3a01aab8c887ea39deb4f8e6
        protected static final int GRIDROOM_DEPTH = 8;
        protected static final int GRIDROOM_HEIGHT = 4;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
-index 5a6c6adb0896d512866a39209db5dee2dd633c97..9dd954f0a156556bffbb4970752d8737bc4bd087 100644
+index 3b435eebd937b2d230ff5ef1950dc35783adf7c6..eba786307cbf1e6746aafe5cb4567c36ab0c5d18 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 @@ -45,7 +45,8 @@ public abstract class StructurePiece {
