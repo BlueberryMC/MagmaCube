@@ -5,7 +5,7 @@ Subject: [PATCH] decompile fix
 
 
 diff --git a/src/main/java/com/mojang/blaze3d/font/TrueTypeGlyphProvider.java b/src/main/java/com/mojang/blaze3d/font/TrueTypeGlyphProvider.java
-index e314932b409bc2cb1deb2f4d25c202150001813f..0b56d6f3f8c60d5e39e64750ba4019e6af88fb54 100644
+index ab32c664bf5e3ca63b1c042d795a6d2c974616bf..07f84cb47793c3d0f1852582687da59e0cbb12d8 100644
 --- a/src/main/java/com/mojang/blaze3d/font/TrueTypeGlyphProvider.java
 +++ b/src/main/java/com/mojang/blaze3d/font/TrueTypeGlyphProvider.java
 @@ -78,9 +78,9 @@ public class TrueTypeGlyphProvider implements GlyphProvider {
@@ -15,8 +15,8 @@ index e314932b409bc2cb1deb2f4d25c202150001813f..0b56d6f3f8c60d5e39e64750ba4019e6
 -               int i3 = intBuffer3.get(0) - intBuffer.get(0);
 +               int i3x = intBuffer3.get(0) - intBuffer.get(0); // MagmaCube - decompile error
                 int i4 = intBuffer4.get(0) - intBuffer2.get(0);
--               if (i3 != 0 && i4 != 0) {
-+               if (i3x != 0 && i4 != 0) { // MagmaCube - decompile error
+-               if (i3 > 0 && i4 > 0) {
++               if (i3x > 0 && i4 > 0) { // MagmaCube - decompile error
                    IntBuffer intBuffer5 = memoryStack.mallocInt(1);
                    IntBuffer intBuffer6 = memoryStack.mallocInt(1);
                    STBTruetype.stbtt_GetGlyphHMetrics(this.font, i2, intBuffer5, intBuffer6);
@@ -373,10 +373,10 @@ index 1557bd730c4f7b1ca5a0ab3770d61766639bc457..2895ce15725debc8e4164a620d496ee6
           options.save();
        });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 58e0de2af161a1291f5fb7fbdef2152fc9e8af99..ac37e2077eb8b1653ef242e2700c51a542c9112c 100644
+index d1af74d6cda28da168409d62f59db84de2d8cb1d..997a39b0768e92858fd19a938e2cc670bd2a0f68 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -2044,9 +2044,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2063,9 +2063,11 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
        crashReportCategory.setDetail("GL debug messages", (CrashReportDetail<String>)(() -> GlDebug.isDebugEnabled() ? String.join("\n", GlDebug.getLastOpenGlDebugMessages()) : "<disabled>"));
        crashReportCategory.setDetail("Using VBOs", (CrashReportDetail<String>)(() -> "Yes"));
        crashReportCategory.setDetail("Is Modded", (CrashReportDetail<String>)(() -> {
@@ -391,7 +391,7 @@ index 58e0de2af161a1291f5fb7fbdef2152fc9e8af99..ac37e2077eb8b1653ef242e2700c51a5
           } else {
              return Minecraft.class.getSigners() == null ? "Very likely; Jar signature invalidated" : "Probably not. Jar signature remains and client brand is untouched.";
           }
-@@ -2064,13 +2066,15 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2083,13 +2085,15 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
           crashReportCategory.setDetail("Resource Packs", (CrashReportDetail<String>)(() -> {
              StringBuilder stringBuilder = new StringBuilder();
  
@@ -410,7 +410,16 @@ index 58e0de2af161a1291f5fb7fbdef2152fc9e8af99..ac37e2077eb8b1653ef242e2700c51a5
                    stringBuilder.append(" (incompatible)");
                 }
              }
-@@ -2641,4 +2645,4 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2110,7 +2114,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+    }
+ 
+    public CompletableFuture<Void> delayTextureReload() {
+-      return this.submit(this::reloadResourcePacks).thenCompose((completableFuture) -> completableFuture);
++      return this.submit((Supplier<CompletableFuture<Void>>) this::reloadResourcePacks).thenCompose((completableFuture) -> completableFuture); // MagmaCube - decompile error
+    }
+ 
+    public void populateSnooper(Snooper snooper) {
+@@ -2660,4 +2664,4 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
           this.serverResources.close();
        }
     }
@@ -619,7 +628,7 @@ index 1871d5f6ae62f5e96a99e4c2a2222ca6c410a9ff..8234185ff985d973cc46933e96432952
        }
  
 diff --git a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldGenSettingsComponent.java b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldGenSettingsComponent.java
-index bf807e38cea5619381a2c50a0c8d23f915943f20..65d7c0a6aa17a1b22ae0294c85bbf99581c8712b 100644
+index 9ef6468469a6e2195926f40886a6fcad04fb04e2..08c8d9af3e9538e5541b85f32395707ed424a951 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldGenSettingsComponent.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldGenSettingsComponent.java
 @@ -92,7 +92,8 @@ public class WorldGenSettingsComponent implements TickableWidget, Widget {
@@ -736,10 +745,10 @@ index ec59f878b6c155bc538b264f331766a09ec51d68..aa0639bce84edb67426aefea15fb348e
              int i2 = intSupplier.getAsInt();
              if (i2 != -1) {
 diff --git a/src/main/java/net/minecraft/client/renderer/GameRenderer.java b/src/main/java/net/minecraft/client/renderer/GameRenderer.java
-index 1a49f368e7dfeb541b8ecdd8336409f66d6ed46e..71adf933e9271fe79ce62649b6e80dab259aeea8 100644
+index fb2830ece4e5e716a181e564034aad672b279887..ff45e68499212091e8c31659bde0c968b3a68b97 100644
 --- a/src/main/java/net/minecraft/client/renderer/GameRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/GameRenderer.java
-@@ -362,60 +362,62 @@ public class GameRenderer implements ResourceManagerReloadListener, AutoCloseabl
+@@ -368,60 +368,62 @@ public class GameRenderer implements ResourceManagerReloadListener, AutoCloseabl
        List<Pair<ShaderInstance, Consumer<ShaderInstance>>> list = Lists.newArrayListWithCapacity(this.shaders.size());
  
        try {
@@ -856,7 +865,7 @@ index 1a49f368e7dfeb541b8ecdd8336409f66d6ed46e..71adf933e9271fe79ce62649b6e80dab
        } catch (IOException var4) {
           list.forEach((pair) -> ((ShaderInstance)pair.getFirst()).close());
           throw new RuntimeException("could not reload shaders", var4);
-@@ -425,7 +427,7 @@ public class GameRenderer implements ResourceManagerReloadListener, AutoCloseabl
+@@ -431,7 +433,7 @@ public class GameRenderer implements ResourceManagerReloadListener, AutoCloseabl
        list.forEach((pair) -> {
           ShaderInstance shaderInstance = (ShaderInstance)pair.getFirst();
           this.shaders.put(shaderInstance.getName(), shaderInstance);
@@ -1461,7 +1470,7 @@ index 9f20e31144df67a2f20a54bce6862ae2719e1098..b55207b4d98d9433b9d11c938fa775e0
  
     static {
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index 31b529fc4283a2375e07fc7d17ed3ae64d910536..c348564f0b0405f6cc1a4dc1c2011c5f970b9269 100644
+index f74a965b1162d5872b4cfdac9b103c0eb4313bc3..57cb598f9650d41bf8cbb0488e37e1bfd9416a14 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
 @@ -60,7 +60,7 @@ public abstract class RegistryAccess {
@@ -1562,7 +1571,7 @@ index 51d14d0cf26d188f8fbb5292617b9882eebdfcfd..ec52d76e9ca5a334569ae5c4ba33deed
                 throw new IllegalStateException("Duplicate loot table " + resourceLocation);
              }
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index b6ca3ec5ddb5952df22ec7ebecc57b5e5cb5a41a..95461255f12291f305399884227e4f2e17d2c3ef 100644
+index 9b536c70df1e776f13d833f6305036a68d35e244..c2012bf5ab9d73e9accad33e2100fcfb110ef99e 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 @@ -69,22 +69,26 @@ public class BlockModelGenerators {
@@ -2015,10 +2024,10 @@ index 2957286aa9e7c266d678c13744fe2d781958bf44..3a7e9ccff0af8df062fb3ddf9543f276
  
     public String toString() {
 diff --git a/src/main/java/net/minecraft/resources/RegistryReadOps.java b/src/main/java/net/minecraft/resources/RegistryReadOps.java
-index 6e2330b400eedfee2b99faf652e91164526d1d09..2703fd443164092771a24eebf538985844d92a37 100644
+index 21cf0c70f8b6e040bb28eb905bc4981384467a6e..919fee2f3ff8fc18e3a9d946319e0d84cf13a1ae 100644
 --- a/src/main/java/net/minecraft/resources/RegistryReadOps.java
 +++ b/src/main/java/net/minecraft/resources/RegistryReadOps.java
-@@ -61,7 +61,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
+@@ -69,7 +69,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
        this.resources = resourceAccess;
        this.registryAccess = registryAccess;
        this.readCache = identityHashMap;
@@ -2027,7 +2036,7 @@ index 6e2330b400eedfee2b99faf652e91164526d1d09..2703fd443164092771a24eebf5389858
     }
  
     protected <E> DataResult<Pair<Supplier<E>, T>> decodeElement(T object, ResourceKey<? extends Registry<E>> resourceKey, Codec<E> codec, boolean flag) {
-@@ -72,7 +72,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
+@@ -80,7 +80,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
           WritableRegistry<E> writableRegistry = (WritableRegistry)optional.get();
           DataResult<Pair<ResourceLocation, T>> dataResult = ResourceLocation.CODEC.decode(this.delegate, object);
           if (!dataResult.result().isPresent()) {
@@ -2037,7 +2046,7 @@ index 6e2330b400eedfee2b99faf652e91164526d1d09..2703fd443164092771a24eebf5389858
              Pair<ResourceLocation, T> pair = (Pair)dataResult.result().get();
              ResourceLocation resourceLocation = (ResourceLocation)pair.getFirst();
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 4c4c4264ef60ba951bdd2366d3ca34c0c4fc398d..d7e51db719161c9ee1aa67bd42449284f7d69604 100644
+index 90e556df852a34749e016efedf46cb23c3155be2..34d213c8e30b81434d322f82ec25c1470332a6dc 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -163,17 +163,18 @@ public class Main {
@@ -2070,10 +2079,10 @@ index 4c4c4264ef60ba951bdd2366d3ca34c0c4fc398d..d7e51db719161c9ee1aa67bd42449284
           Thread thread = new Thread("Server Shutdown Thread") {
              public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 73e2f0ed95fb0b7f61ed2a9fdc494f021a9ecd7e..f69284dea5a2ae9d68b14cbb631e74f3e81e995b 100644
+index 3b8e5f4c3af51d21dd1b102e5b8b28b8feade5b3..384e3f60db7bdb8d53516a754f2a7150525b8aca 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1264,7 +1264,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1265,7 +1265,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
     }
  
     public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -4326,7 +4335,7 @@ index 022a0338631b8194d17e1416306b95b893877f53..7e6d69ca7670a55e09b9f05dc52408a6
           while(var31.hasNext()) {
              ChunkStorage chunkStorage2 = (ChunkStorage)var31.next();
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 7c7b86fb5a29a7ba3be118b0b5723ee5d6d6198e..9263fcb18f0ac8ba3ef7e8e4aec06b96f5b4ad63 100644
+index 51393ee62a3c9e37f55dab538921801a8c2c772e..6036e175b3fc40c1da9a28eea0285ed7b21769ff 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -1042,7 +1042,7 @@ public abstract class Mob extends LivingEntity {
@@ -4851,10 +4860,10 @@ index 329b213eb3dbf332f3f6361ef21d5803c83d91ce..19ccd7a0300663453e0b337faecd6cdb
  
     public static void updateActivity(Axolotl axolotl) {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-index de1d968ce44dbb589389022a7caa81e3156db635..5c5d7b9eaa35ed33eb0151a68ffb5100eb8217b7 100644
+index 64984f48895d18b7bed93eae2b2ad017e13d5887..39aa233b1dcdf2549b43a774a935568552cbdc21 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-@@ -113,7 +113,7 @@ public class Goat extends Animal {
+@@ -109,7 +109,7 @@ public class Goat extends Animal {
     }
  
     public Brain<Goat> getBrain() {
@@ -4864,10 +4873,10 @@ index de1d968ce44dbb589389022a7caa81e3156db635..5c5d7b9eaa35ed33eb0151a68ffb5100
  
     protected void customServerAiStep() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java b/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java
-index ae6a3f82ca1ffbe6f56b0b7a9d251d08fcd553d3..ba275291e105a86c1174a3d50cfc8c5afacbc3eb 100644
+index 4805f73afa114b20cc52a2ad29753311f004b1f2..13ae07122f2199fea374053ab263a9bca04d1254 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/goat/GoatAi.java
-@@ -76,15 +76,18 @@ public class GoatAi {
+@@ -78,15 +78,18 @@ public class GoatAi {
     }
  
     private static void initIdleActivity(Brain<Goat> brain) {
@@ -4883,9 +4892,9 @@ index ae6a3f82ca1ffbe6f56b0b7a9d251d08fcd553d3..ba275291e105a86c1174a3d50cfc8c5a
     }
  
     private static void initRamActivity(Brain<Goat> brain) {
--      brain.addActivityWithConditions(Activity.RAM, ImmutableList.of(Pair.of(0, new RamTarget(TIME_BETWEEN_RAMS, RAM_TARGET_CONDITIONS, (goat) -> goat.isBaby() ? 1 : 2, 3.0F, (goat) -> goat.isBaby() ? 1.0F : 2.5F, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_RAM_IMPACT : SoundEvents.GOAT_RAM_IMPACT)), Pair.of(1, new PrepareRamNearestTarget(TIME_BETWEEN_RAMS.getMinValue(), 4, 7, 1.25F, RAM_TARGET_CONDITIONS, 20, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_PREPARE_RAM : SoundEvents.GOAT_PREPARE_RAM))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
+-      brain.addActivityWithConditions(Activity.RAM, ImmutableList.of(Pair.of(0, new RamTarget((goat) -> goat.isScreamingGoat() ? TIME_BETWEEN_RAMS_SCREAMER : TIME_BETWEEN_RAMS, RAM_TARGET_CONDITIONS, (goat) -> goat.isBaby() ? 1 : 2, 3.0F, (goat) -> goat.isBaby() ? 1.0D : 2.5D, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_RAM_IMPACT : SoundEvents.GOAT_RAM_IMPACT)), Pair.of(1, new PrepareRamNearestTarget((goat) -> goat.isScreamingGoat() ? TIME_BETWEEN_RAMS_SCREAMER.getMinValue() : TIME_BETWEEN_RAMS.getMinValue(), 4, 7, 1.25F, RAM_TARGET_CONDITIONS, 20, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_PREPARE_RAM : SoundEvents.GOAT_PREPARE_RAM))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
 +      // MagmaCube - decompile error
-+      brain.addActivityWithConditions(Activity.RAM, ImmutableList.of(Pair.of(0, new RamTarget<>(TIME_BETWEEN_RAMS, RAM_TARGET_CONDITIONS, (goat) -> goat.isBaby() ? 1 : 2, 3.0F, (goat) -> goat.isBaby() ? 1.0F : 2.5F, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_RAM_IMPACT : SoundEvents.GOAT_RAM_IMPACT)), Pair.of(1, new PrepareRamNearestTarget<>(TIME_BETWEEN_RAMS.getMinValue(), 4, 7, 1.25F, RAM_TARGET_CONDITIONS, 20, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_PREPARE_RAM : SoundEvents.GOAT_PREPARE_RAM))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
++      brain.addActivityWithConditions(Activity.RAM, ImmutableList.of(Pair.of(0, new RamTarget<>((goat) -> goat.isScreamingGoat() ? TIME_BETWEEN_RAMS_SCREAMER : TIME_BETWEEN_RAMS, RAM_TARGET_CONDITIONS, (goat) -> goat.isBaby() ? 1 : 2, 3.0F, (goat) -> goat.isBaby() ? 1.0D : 2.5D, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_RAM_IMPACT : SoundEvents.GOAT_RAM_IMPACT)), Pair.of(1, new PrepareRamNearestTarget<>((goat) -> goat.isScreamingGoat() ? TIME_BETWEEN_RAMS_SCREAMER.getMinValue() : TIME_BETWEEN_RAMS.getMinValue(), 4, 7, 1.25F, RAM_TARGET_CONDITIONS, 20, (goat) -> goat.isScreamingGoat() ? SoundEvents.GOAT_SCREAMING_PREPARE_RAM : SoundEvents.GOAT_PREPARE_RAM))), ImmutableSet.of(Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
     }
  
     public static void updateActivity(Goat goat) {
@@ -5195,7 +5204,7 @@ index 9ef4930086311377bda7cb3ca67c9fcbe2ccecaa..a195e8700dfab3babd88f685d2885540
        hashMap.put(VillagerProfession.CLERIC, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.ROTTEN_FLESH, 32, 16, 2), new VillagerTrades.ItemsForEmeralds(Items.REDSTONE, 1, 2, 1)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.GOLD_INGOT, 3, 12, 10), new VillagerTrades.ItemsForEmeralds(Items.LAPIS_LAZULI, 1, 1, 5)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.RABBIT_FOOT, 2, 12, 20), new VillagerTrades.ItemsForEmeralds(Blocks.GLOWSTONE, 4, 1, 12, 10)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.SCUTE, 4, 12, 30), new VillagerTrades.EmeraldForItems(Items.GLASS_BOTTLE, 9, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.ENDER_PEARL, 5, 1, 15)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.NETHER_WART, 22, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.EXPERIENCE_BOTTLE, 3, 1, 30)})));
        hashMap.put(VillagerProfession.ARMORER, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.LAVA_BUCKET, 1, 12, 20), new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 20), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 14, 3, 15, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 8, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 8, 3, 30, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 16, 3, 30, 0.2F)})));
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 0095e835e6a17e1fe821c77f234fa1fcc51e2a41..afb5acebfc52a3679197f2a0bf105fa9b1bb2a2d 100644
+index 176effcc8ee5287fd180ffc377e0eff2736c43d4..ca5d92f765ac113dee75eed2b5162f942cf435ce 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -122,7 +122,7 @@ public abstract class Player extends LivingEntity {
