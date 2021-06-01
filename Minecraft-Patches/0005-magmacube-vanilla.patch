@@ -4,20 +4,8 @@ Date: Mon, 11 Jan 2021 03:32:09 +0900
 Subject: [PATCH] magmacube > vanilla!
 
 
-diff --git a/src/main/java/net/minecraft/CrashReport.java b/src/main/java/net/minecraft/CrashReport.java
-index 48c63fba1df3ba2e7f624c0e19766fd204bbdae1..438e17a37dd26a5c70f455e03953edf499fec5be 100644
---- a/src/main/java/net/minecraft/CrashReport.java
-+++ b/src/main/java/net/minecraft/CrashReport.java
-@@ -35,6 +35,7 @@ public class CrashReport {
-    }
- 
-    private void initDetails() {
-+      this.systemDetails.setDetail("MagmaCube Version", () -> ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion); // MagmaCube
-       this.systemDetails.setDetail("Minecraft Version", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getName()));
-       this.systemDetails.setDetail("Minecraft Version ID", (CrashReportDetail<String>)(() -> SharedConstants.getCurrentVersion().getId()));
-       this.systemDetails.setDetail("Operating System", (CrashReportDetail<String>)(() -> System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version")));
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 742a2b554e1fba9fb5f3d031208b3495fa7dbeaf..5c5c4905d5b4ba3bab763dfe3aeb35a87e19ec4a 100644
+index 109eca7988bdb6c1cceb802e4ff79c65c3b883c4..3d66b7d2460d82bd6db074a265a93cb9a336b798 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
@@ -40,32 +28,97 @@ index 742a2b554e1fba9fb5f3d031208b3495fa7dbeaf..5c5c4905d5b4ba3bab763dfe3aeb35a8
        this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
        this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
        this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(json, "build_time")).toInstant());
-+      this.magmaCubeVersion = json.has("magmacube_version") ? GsonHelper.getAsString(json, "magmacube_version") : "debug";
++      this.magmaCubeVersion = json.has("magmacube_version") ? GsonHelper.getAsString(json, "magmacube_version") : "debug"; // MagmaCube
     }
  
     public static GameVersion tryDetectVersion() {
+diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
+index a08d7e4b524780821d26b047477114d5f319b2a5..a7275149d0d45b39f6e0ad704872290e57e03b20 100644
+--- a/src/main/java/net/minecraft/SystemReport.java
++++ b/src/main/java/net/minecraft/SystemReport.java
+@@ -26,6 +26,7 @@ public class SystemReport {
+    private final Map<String, String> entries = Maps.newLinkedHashMap();
+ 
+    public SystemReport() {
++      this.setDetail("MagmaCube Version", ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion); // MagmaCube
+       this.setDetail("Minecraft Version", SharedConstants.getCurrentVersion().getName());
+       this.setDetail("Minecraft Version ID", SharedConstants.getCurrentVersion().getId());
+       this.setDetail("Operating System", OPERATING_SYSTEM);
 diff --git a/src/main/java/net/minecraft/client/ClientBrandRetriever.java b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
-index f2ee5a65d22f6eead934dc833ad679e078d6991e..3dfa9e25c0ab623f4e6ba69e5036b834e77d2b06 100644
+index f2ee5a65d22f6eead934dc833ad679e078d6991e..030a319914b452420c253febd0457b2627a9fe0f 100644
 --- a/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 +++ b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
-@@ -7,6 +7,6 @@ public class ClientBrandRetriever {
+@@ -3,10 +3,10 @@ package net.minecraft.client;
+ import net.minecraft.obfuscate.DontObfuscate;
+ 
+ public class ClientBrandRetriever {
+-   public static final String VANILLA_NAME = "vanilla";
++   public static final String VANILLA_NAME = "magmacube"; // MagmaCube > vanilla!;
  
     @DontObfuscate
     public static String getClientModName() {
 -      return "vanilla";
-+      return "magmacube"; // MagmaCube > vanilla!
++      return VANILLA_NAME;
     }
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 4417425e796ff1fe2e634d65d0df379740c6f837..020c21e26be3ee0a4092c11f6b76d61daa599a54 100644
+index e575ebc2865cc945cc8c2c962089ad6198a8d9a8..2c887b454a1f4052cc58577c18a57f86d2d8cbc2 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -243,6 +243,7 @@ public class TitleScreen extends Screen {
+@@ -99,7 +99,7 @@ public class TitleScreen extends Screen {
+          this.splash = this.minecraft.getSplashManager().getSplash();
+       }
+ 
+-      this.copyrightWidth = this.font.width("Copyright Mojang AB. Do not distribute!");
++      this.copyrightWidth = this.font.width(COPYRIGHT_TEXT);
+       this.copyrightX = this.width - this.copyrightWidth - 2;
+       int i = 24;
+       int i2 = this.height / 4 + 48;
+@@ -290,8 +290,9 @@ public class TitleScreen extends Screen {
              s = s + I18n.get("menu.modded");
           }
  
 +         drawString(poseStack, this.font, "MagmaCube " + ((net.minecraft.DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion, 2, this.height - 20, 0xFFFFFF | i6); // MagmaCube
           drawString(poseStack, this.font, s, 2, this.height - 10, 16777215 | i6);
-          drawString(poseStack, this.font, "Copyright Mojang AB. Do not distribute!", this.copyrightX, this.height - 10, 16777215 | i6);
+-         drawString(poseStack, this.font, "Copyright Mojang AB. Do not distribute!", this.copyrightX, this.height - 10, 16777215 | i6);
++         drawString(poseStack, this.font, COPYRIGHT_TEXT, this.copyrightX, this.height - 10, 16777215 | i6);
           if (i > this.copyrightX && i < this.copyrightX + this.copyrightWidth && i2 > this.height - 10 && i2 < this.height) {
+             fill(poseStack, this.copyrightX, this.height - 1, this.copyrightX + this.copyrightWidth, this.height, 16777215 | i6);
+          }
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index f5d9da05c2aad914a45d6064a07ac2270b41e5c5..c7ec5d0dac08fa2bf7296fd26730b7595f76739b 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -940,7 +940,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 
+    @DontObfuscate
+    public String getServerModName() {
+-      return "vanilla";
++      return "magmacube"; // MagmaCube > vanilla!
+    }
+ 
+    public SystemReport fillSystemReport(SystemReport systemReport) {
+diff --git a/src/main/java/net/minecraft/world/entity/ai/Brain.java b/src/main/java/net/minecraft/world/entity/ai/Brain.java
+index 8c67b9bfdf9e50ef4b04d5f06e91c52d0d0bd60d..ffce856e67114c7e20d787b1796f460f6d232c36 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/Brain.java
++++ b/src/main/java/net/minecraft/world/entity/ai/Brain.java
+@@ -69,14 +69,14 @@ public class Brain<E extends LivingEntity> {
+          }
+ 
+          public <T> DataResult<Brain<E>> decode(DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
+-            MutableObject<DataResult<Builder<Brain.MemoryValue<?>>>> mutableObject = new MutableObject(DataResult.success(ImmutableList.builder()));
++            MutableObject<DataResult<Builder<Brain.MemoryValue<?>>>> mutableObjectIn = new MutableObject<>(DataResult.success(ImmutableList.builder()));
+             mapLike.entries().forEach((pair) -> {
+                DataResult<MemoryModuleType<?>> dataResult = Registry.MEMORY_MODULE_TYPE.parse(dynamicOps, pair.getFirst());
+                DataResult<? extends Brain.MemoryValue<?>> dataResult2 = dataResult.flatMap((memoryModuleType) -> this.captureRead(memoryModuleType, dynamicOps, (T)pair.getSecond()));
+-               mutableObject.setValue(mutableObject.getValue().apply2(Builder::add, dataResult2));
++               mutableObjectIn.setValue(mutableObjectIn.getValue().apply2(Builder::add, dataResult2));
+             });
+-            ImmutableList<Brain.MemoryValue<?>> immutableList = mutableObject.getValue().resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of);
+-            return DataResult.success(new Brain(collection, collection2, immutableList, mutableObject::getValue)); // TODO: check mutableObject's type
++            ImmutableList<Brain.MemoryValue<?>> immutableList = mutableObjectIn.getValue().resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of);
++            return DataResult.success(new Brain<>(collection, collection2, immutableList, mutableObject::getValue));
+          }
+ 
+          private <T, U> DataResult<Brain.MemoryValue<U>> captureRead(MemoryModuleType<U> memoryModuleType, DynamicOps<T> dynamicOps, T object) {

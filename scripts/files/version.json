@@ -107,13 +107,13 @@
   },
   "assetIndex": {
     "id": "1.17",
-    "sha1": "7ccefbf653a0f407c655522dab844e29baa0cefb",
+    "sha1": "928de7f973076c901a10a186a09812de9027bab5",
     "size": 346007,
-    "totalSize": 344729165,
-    "url": "https://launchermeta.mojang.com/v1/packages/7ccefbf653a0f407c655522dab844e29baa0cefb/1.17.json"
+    "totalSize": 344904160,
+    "url": "https://launchermeta.mojang.com/v1/packages/928de7f973076c901a10a186a09812de9027bab5/1.17.json"
   },
   "assets": "1.17",
-  "id": "magmacube-21w18a",
+  "id": "magmacube-1.17-pre1",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",

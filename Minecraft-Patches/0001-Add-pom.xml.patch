@@ -6,10 +6,10 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..0045738f3f9699d7f30d79fc61556ccd2babf2de
+index 0000000000000000000000000000000000000000..2f78d1b2201fb95cacd1c80262e287054fbe43f8
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,375 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<project xmlns="http://maven.apache.org/POM/4.0.0"
 +         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..0045738f3f9699d7f30d79fc61556ccd
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>xyz.acrylicstyle.minecraft</groupId>
-+        <version>21w18a</version>
++        <version>1.17-pre1</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -333,9 +333,14 @@ index 0000000000000000000000000000000000000000..0045738f3f9699d7f30d79fc61556ccd
 +            <version>67.1</version>
 +        </dependency>
 +        <dependency>
-+            <groupId>com.github.dblock</groupId>
++            <groupId>com.github.oshi</groupId>
 +            <artifactId>oshi-core</artifactId>
-+            <version>1.3</version>
++            <version>5.7.3</version>
++        </dependency>
++        <dependency>
++            <groupId>com.mojang</groupId>
++            <artifactId>blocklist</artifactId>
++            <version>1.0.5</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/f52cf94abf99911ca88c12f776bcf30c9b6f1617/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/940af6eda421da56e3bf9c390df65ba713cc8f7f/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/95bea66557e205298d65d8c48924013d6afa5e57/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/7310449e6c7bdd202e4f2cd6bd7ad177357f473c/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
-decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.498.4.jar # zml2008/ForgeFlower:fix-exceptions
+decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.498.13.jar
 quickunzip="$basedir/work/quickunzip/quickunzip.jar"
 decompOutput="$basedir/work/Minecraft/$version/source"
 # Remove files that was used previously
@@ -32,16 +32,16 @@ if [ $? != 0 ]; then
   exit 1
 fi
 echo "Applying mapping"
-"$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output-name="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath"
-java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.2.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$version.pr"
-java -Xmx2G -jar "$basedir/work/AccessTransformers/accesstransformers-3.0.1-fatjar.jar" --inJar "$clientRemappedJarPath.2" --outJar "$clientRemappedJarPath" --atFile "$basedir/work/mappings/mappings/$version.at"
+"$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output-name="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath" || exit 1
+java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.2.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$version.pr" || exit 1
+java -Xmx2G -jar "$basedir/work/AccessTransformers/accesstransformers-3.0.1-fatjar.jar" --inJar "$clientRemappedJarPath.2" --outJar "$clientRemappedJarPath" --atFile "$basedir/work/mappings/mappings/$version.at" || exit 1
 echo "Deleting intermediate jar"
 rm "$clientRemappedJarPath.2"
 echo "Unpacking jar..."
 rm -rf "$basedir/work/Minecraft/$version/unpacked"
 mkdir -p "$basedir/work/Minecraft/$version/unpacked"
 cd "$basedir/work/Minecraft/$version/unpacked" || exit 1
-java -Xmx1G -jar "$quickunzip" -q "$clientRemappedJarPath" "$basedir/work/Minecraft/$version/unpacked/"
+java -Xmx1G -jar "$quickunzip" -q "$clientRemappedJarPath" "$basedir/work/Minecraft/$version/unpacked/" || exit 1
 echo "Manifest-Version: 1.0" > "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
 echo "Main-Class: net.minecraft.client.Main" >> "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
 echo "" >> "$basedir/work/Minecraft/$version/unpacked/META-INF/MANIFEST.MF"
@@ -51,6 +51,6 @@ cd "$basedir" || exit 1
 echo "Decompiling the remapped jar..."
 rm -rf "$decompOutput"
 mkdir -p "$decompOutput"
-java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput"
-$basedir/scripts/postDownload.sh
+java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput" || exit 1
+$basedir/scripts/postDownload.sh || exit 1
 echo "  Downloaded the client jar successfully"
