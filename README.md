@@ -15,7 +15,7 @@ Based on MC 1.17-pre1 currently.
 
 ## Bugs
 - ~~Progress of Furnace screen is not moving (it's just visual bug)~~
-- World is stone
+- ~~World is stone~~
 
 ## Things I noticed
 - Modify player name tag with `PlayerRenderer#renderNameTag`
