@@ -4,7 +4,7 @@
 
 A Minecraft that you can patch your own patches into the Minecraft.
 
-Based on MC 1.17-pre1 currently.
+Based on MC 1.17-rc1 currently.
 
 ## Goal
 - Make it editable easily by everyone who wants to code Minecraft
