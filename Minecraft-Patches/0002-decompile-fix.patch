@@ -441,6 +441,19 @@ index 104fd5172f9243af1734ec765b6823e36b8f74a3..588e70f50737d384c3106baf8bc3036f
     }
  
     public void populateSnooper(Snooper snooper) {
+diff --git a/src/main/java/net/minecraft/client/Option.java b/src/main/java/net/minecraft/client/Option.java
+index d34904dd4492f4747f53c151a89b4fd2e0004479..ffd59bd50226d7175b9c995cdb2eaaf9218b282b 100644
+--- a/src/main/java/net/minecraft/client/Option.java
++++ b/src/main/java/net/minecraft/client/Option.java
+@@ -155,7 +155,7 @@ public abstract class Option {
+    private static final Component GRAPHICS_TOOLTIP_FAST = new TranslatableComponent("options.graphics.fast.tooltip");
+    private static final Component GRAPHICS_TOOLTIP_FABULOUS = new TranslatableComponent("options.graphics.fabulous.tooltip", (new TranslatableComponent("options.graphics.fabulous")).withStyle(ChatFormatting.ITALIC));
+    private static final Component GRAPHICS_TOOLTIP_FANCY = new TranslatableComponent("options.graphics.fancy.tooltip");
+-   public static final CycleOption<GraphicsStatus> GRAPHICS = CycleOption.create("options.graphics", Arrays.asList(GraphicsStatus.values()), (List)Stream.of(GraphicsStatus.values()).filter((graphicsStatus) -> graphicsStatus != GraphicsStatus.FABULOUS).collect(Collectors.toList()), () -> Minecraft.getInstance().getGpuWarnlistManager().isSkippingFabulous(), (graphicsStatus) -> {
++   public static final CycleOption<GraphicsStatus> GRAPHICS = CycleOption.create("options.graphics", Arrays.asList(GraphicsStatus.values()), Stream.of(GraphicsStatus.values()).filter((graphicsStatus) -> graphicsStatus != GraphicsStatus.FABULOUS).collect(Collectors.toList()), () -> Minecraft.getInstance().getGpuWarnlistManager().isSkippingFabulous(), (graphicsStatus) -> {
+       MutableComponent mutableComponent = new TranslatableComponent(graphicsStatus.getKey());
+       return graphicsStatus == GraphicsStatus.FABULOUS ? mutableComponent.withStyle(ChatFormatting.ITALIC) : mutableComponent;
+    }, (options) -> options.graphicsMode, (options, option, graphicsStatus) -> {
 diff --git a/src/main/java/net/minecraft/client/Options.java b/src/main/java/net/minecraft/client/Options.java
 index 74d2587524010477174b0ab257d62142c8d09bc2..ef3920890beed1a9ec1f9e96ec45e4c19bbe14fa 100644
 --- a/src/main/java/net/minecraft/client/Options.java
