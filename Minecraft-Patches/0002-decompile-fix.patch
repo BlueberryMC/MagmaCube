@@ -1178,10 +1178,10 @@ index 10d53367bf200fab6ddf579469cde49a7574e9d9..93233d1e9857a391a6963c2f2a22bf26
     private static <T extends Entity> void register(EntityType<? extends T> entityType, EntityRendererProvider<T> entityRendererProvider) {
        PROVIDERS.put(entityType, entityRendererProvider);
 diff --git a/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java b/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java
-index 4ffd253e605bbe6d29efa88c3ddc70ccd35f6e58..a44f2a9509f7a37106d4ae2ed06e2854de2883c0 100644
+index 48e3f95b733420485781235505ac7465f7438a28..89cee4567abba5e958a6a761a6c14e2235d84624 100644
 --- a/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java
 +++ b/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java
-@@ -105,10 +105,12 @@ public class HttpTexture extends SimpleTexture {
+@@ -108,10 +108,12 @@ public class HttpTexture extends SimpleTexture {
                       }
  
                       Minecraft.getInstance().execute(() -> {
@@ -6147,18 +6147,18 @@ index 99fecb0bf244599b81553f81721f3d98c5b17f4f..0932e155e17fa94625eb8f1eb153632a
        TERRAIN_MATCHING("terrain_matching", ImmutableList.of(new GravityProcessor(Heightmap.Types.WORLD_SURFACE_WG, -1))),
        RIGID("rigid", ImmutableList.of());
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator.java b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator.java
-index 052a3ec40de1dd83fe4032e00c65bf8a2f38c6ae..2c3eee747ca8d364dd63b356e8b43ed8a46e535d 100644
+index 3c97ca5e602c5cf0c2dd4c785c76dd3a9e6babf4..351b5cd8c26f18f02e258cecef8f78be3047d8df 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator.java
-@@ -30,7 +30,7 @@ public class AlterGroundDecorator extends TreeDecorator {
-          this.placeCircle(levelSimulatedReader, biConsumer, random, blockPos.west().south(2));
-          this.placeCircle(levelSimulatedReader, biConsumer, random, blockPos.east(2).south(2));
+@@ -31,7 +31,7 @@ public class AlterGroundDecorator extends TreeDecorator {
+             this.placeCircle(levelSimulatedReader, biConsumer, random, blockPos.west().south(2));
+             this.placeCircle(levelSimulatedReader, biConsumer, random, blockPos.east(2).south(2));
  
--         for(int i = 0; i < 5; ++i) {
+-            for(int i = 0; i < 5; ++i) {
 +         for(int il = 0; il < 5; ++il) { // MagmaCube - decompile error
-             int i2 = random.nextInt(64);
-             int i3 = i2 % 8;
-             int i4 = i2 / 8;
+                int i2 = random.nextInt(64);
+                int i3 = i2 % 8;
+                int i4 = i2 / 8;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator.java b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator.java
 index b1ccc0b6dfd518dfade4c7dfe9c150db01dcc5ec..81c6e385cd1dd36690107a420e907dd2e3ea2774 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator.java
