@@ -2445,19 +2445,6 @@ index 845b8193da2fdc1016a8da5c7f6d3dc037edf093..bb55a2f08bfa76fec05eeb7069e910c3
        if (!clazz.isEnum()) {
           return null;
        } else {
-diff --git a/src/main/java/net/minecraft/util/StringDecomposer.java b/src/main/java/net/minecraft/util/StringDecomposer.java
-index 23ab977bc5f4d1cac87a2a3ff4b05b7de37759b0..ef40938738ddfb8795782c31ab01838c4465b38b 100644
---- a/src/main/java/net/minecraft/util/StringDecomposer.java
-+++ b/src/main/java/net/minecraft/util/StringDecomposer.java
-@@ -6,7 +6,7 @@ import net.minecraft.network.chat.FormattedText;
- import net.minecraft.network.chat.Style;
- 
- public class StringDecomposer {
--   private static final char REPLACEMENT_CHAR = '�ｿｽ';
-+   private static final char REPLACEMENT_CHAR = '\ufffd';
-    private static final Optional<Object> STOP_ITERATION = Optional.of(Unit.INSTANCE);
- 
-    private static boolean feedChar(Style style, FormattedCharSink formattedCharSink, int i, char c) {
 diff --git a/src/main/java/net/minecraft/util/StringRepresentable.java b/src/main/java/net/minecraft/util/StringRepresentable.java
 index 4b0c41b58a50ed44963a72bb84724c9c83a037b7..a68fe3a43a37b6c93c987aa8e414606c2624e811 100644
 --- a/src/main/java/net/minecraft/util/StringRepresentable.java
