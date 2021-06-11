@@ -5672,19 +5672,6 @@ index 076bd59b9b688cca955a0e626ab748e152c92427..dcc989405554b511a515af7bd9453dca
        this.rval = LinearCongruentialGenerator.next(this.rval, this.seed);
        return i2;
     }
-diff --git a/src/main/java/net/minecraft/world/level/pathfinder/Node.java b/src/main/java/net/minecraft/world/level/pathfinder/Node.java
-index 0df18a5f648db1facd48e2236b8fc39c44864448..2a171a2690fccb772fb882d55effd2aa7640feec 100644
---- a/src/main/java/net/minecraft/world/level/pathfinder/Node.java
-+++ b/src/main/java/net/minecraft/world/level/pathfinder/Node.java
-@@ -42,7 +42,7 @@ public class Node {
-    }
- 
-    public static int createHash(int i, int i2, int i3) {
--      return i2 & 255 | (i & 32767) << 8 | (i3 & 32767) << 24 | (i < 0 ? Integer.MIN_VALUE : 0) | (i3 < 0 ? '閠�' : 0);
-+      return i2 & 255 | (i & 32767) << 8 | (i3 & 32767) << 24 | (i < 0 ? Integer.MIN_VALUE : 0) | (i3 < 0 ? '\u8000' : 0); // MagmaCube - decompile error
-    }
- 
-    public float distanceTo(Node node) {
 diff --git a/src/main/java/net/minecraft/world/level/portal/PortalForcer.java b/src/main/java/net/minecraft/world/level/portal/PortalForcer.java
 index 81993f152534d59817af0a43f2bc10b7f62200cb..9dbc3e2f74749f97a0f16db481f98af9a9d8cf7c 100644
 --- a/src/main/java/net/minecraft/world/level/portal/PortalForcer.java
