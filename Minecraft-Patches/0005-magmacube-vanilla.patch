@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 109eca7988bdb6c1cceb802e4ff79c65c3b883c4..3d66b7d2460d82bd6db074a265a93cb9a336b798 100644
+index 7024596c667daef8f0794372c86706214ccd9d45..4be3128523530cc4f35ddfb193d8b54f26163b27 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
@@ -33,7 +33,7 @@ index 109eca7988bdb6c1cceb802e4ff79c65c3b883c4..3d66b7d2460d82bd6db074a265a93cb9
  
     public static GameVersion tryDetectVersion() {
 diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
-index a08d7e4b524780821d26b047477114d5f319b2a5..a7275149d0d45b39f6e0ad704872290e57e03b20 100644
+index 6c3d1eccf2b97c6a0b10583fe1d9eb570ddcdf79..9ca90ab3d2b659c23add075d3695ee0a9de04156 100644
 --- a/src/main/java/net/minecraft/SystemReport.java
 +++ b/src/main/java/net/minecraft/SystemReport.java
 @@ -26,6 +26,7 @@ public class SystemReport {
@@ -87,7 +87,7 @@ index e575ebc2865cc945cc8c2c962089ad6198a8d9a8..2c887b454a1f4052cc58577c18a57f86
              fill(poseStack, this.copyrightX, this.height - 1, this.copyrightX + this.copyrightWidth, this.height, 16777215 | i6);
           }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index f5d9da05c2aad914a45d6064a07ac2270b41e5c5..c7ec5d0dac08fa2bf7296fd26730b7595f76739b 100644
+index 4d8c639e40e7eb63d89d99363dfc5934fd3e92b1..0ae2e3c4dd6cc8612edc3a20816b0b1774ada47f 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -940,7 +940,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -99,26 +99,3 @@ index f5d9da05c2aad914a45d6064a07ac2270b41e5c5..c7ec5d0dac08fa2bf7296fd26730b759
     }
  
     public SystemReport fillSystemReport(SystemReport systemReport) {
-diff --git a/src/main/java/net/minecraft/world/entity/ai/Brain.java b/src/main/java/net/minecraft/world/entity/ai/Brain.java
-index 8c67b9bfdf9e50ef4b04d5f06e91c52d0d0bd60d..ffce856e67114c7e20d787b1796f460f6d232c36 100644
---- a/src/main/java/net/minecraft/world/entity/ai/Brain.java
-+++ b/src/main/java/net/minecraft/world/entity/ai/Brain.java
-@@ -69,14 +69,14 @@ public class Brain<E extends LivingEntity> {
-          }
- 
-          public <T> DataResult<Brain<E>> decode(DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
--            MutableObject<DataResult<Builder<Brain.MemoryValue<?>>>> mutableObject = new MutableObject(DataResult.success(ImmutableList.builder()));
-+            MutableObject<DataResult<Builder<Brain.MemoryValue<?>>>> mutableObjectIn = new MutableObject<>(DataResult.success(ImmutableList.builder()));
-             mapLike.entries().forEach((pair) -> {
-                DataResult<MemoryModuleType<?>> dataResult = Registry.MEMORY_MODULE_TYPE.parse(dynamicOps, pair.getFirst());
-                DataResult<? extends Brain.MemoryValue<?>> dataResult2 = dataResult.flatMap((memoryModuleType) -> this.captureRead(memoryModuleType, dynamicOps, (T)pair.getSecond()));
--               mutableObject.setValue(mutableObject.getValue().apply2(Builder::add, dataResult2));
-+               mutableObjectIn.setValue(mutableObjectIn.getValue().apply2(Builder::add, dataResult2));
-             });
--            ImmutableList<Brain.MemoryValue<?>> immutableList = mutableObject.getValue().resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of);
--            return DataResult.success(new Brain(collection, collection2, immutableList, mutableObject::getValue)); // TODO: check mutableObject's type
-+            ImmutableList<Brain.MemoryValue<?>> immutableList = mutableObjectIn.getValue().resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of);
-+            return DataResult.success(new Brain<>(collection, collection2, immutableList, mutableObject::getValue));
-          }
- 
-          private <T, U> DataResult<Brain.MemoryValue<U>> captureRead(MemoryModuleType<U> memoryModuleType, DynamicOps<T> dynamicOps, T object) {
