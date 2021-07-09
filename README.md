@@ -4,7 +4,7 @@
 
 A Minecraft that you can patch your own patches into the Minecraft.
 
-Based on MC 1.17-rc1 currently.
+Based on MC 1.17.1 currently.
 
 ## Goal
 - Make it editable easily by everyone who wants to code Minecraft
@@ -12,10 +12,6 @@ Based on MC 1.17-rc1 currently.
 ## Note
 - You should not use this project for any bad usages
 - Do not redistribute the jar file, without any exception. It is against the Mojang's ToS.
-
-## Bugs
-- ~~Progress of Furnace screen is not moving (it's just visual bug)~~
-- ~~World is stone~~
 
 ## Things I noticed
 - Modify player name tag with `PlayerRenderer#renderNameTag`

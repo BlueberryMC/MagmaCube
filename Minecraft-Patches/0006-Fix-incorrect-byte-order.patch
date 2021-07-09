@@ -5,10 +5,10 @@ Subject: [PATCH] Fix incorrect byte order
 
 
 diff --git a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
-index 4bf874107f3317ff8de9aa798497d269134d664e..82ad895d7baee3e852a51ab76f24ee5c68af0b25 100644
+index 3892cff9a87c856ea6aff3c84dc1da9eab9d006c..729e99e6cda531b0730f5565e63a3ac6c978471d 100644
 --- a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
 +++ b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
-@@ -323,6 +323,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+@@ -321,6 +321,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
        }
  
        ByteBuffer byteBuffer = this.buffer.slice();

@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..65c8fedb7af037edb9b9c9afe555cae2ca529679
+index 0000000000000000000000000000000000000000..7a67810a7b28de0de7f1d7459c27c58ba6a44ab9
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,351 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..65c8fedb7af037edb9b9c9afe555cae2
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>xyz.acrylicstyle.minecraft</groupId>
-+        <version>1.17</version>
++        <version>1.17.1</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -89,7 +89,7 @@ index 0000000000000000000000000000000000000000..65c8fedb7af037edb9b9c9afe555cae2
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>2.1.29</version>
++            <version>2.3.31</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -320,7 +320,7 @@ index 0000000000000000000000000000000000000000..65c8fedb7af037edb9b9c9afe555cae2
 +        <dependency>
 +            <groupId>com.github.oshi</groupId>
 +            <artifactId>oshi-core</artifactId>
-+            <version>5.7.4</version>
++            <version>5.7.5</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
