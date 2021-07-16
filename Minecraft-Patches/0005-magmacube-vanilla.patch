@@ -5,10 +5,10 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index c5229e806aac2f5ed105e7104787570879c6248a..4f45e394f7eddfbb209a3fcef45b40318beef12b 100644
+index 24012bce4bb3e186f711b566c565a9b88c13ea01..d34884ea2ac0140640b37a937329a0e712a8ad79 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
-@@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
+@@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
     private final int dataPackVersion;
     private final Date buildTime;
     private final String releaseTarget;
@@ -16,36 +16,24 @@ index c5229e806aac2f5ed105e7104787570879c6248a..4f45e394f7eddfbb209a3fcef45b4031
  
     private DetectedVersion() {
        this.id = UUID.randomUUID().toString().replaceAll("-", "");
-@@ -37,6 +38,7 @@ public class DetectedVersion implements GameVersion {
+@@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
        this.dataPackVersion = 7;
        this.buildTime = new Date();
-       this.releaseTarget = "1.17.1";
+       this.releaseTarget = "1.18";
 +      this.magmaCubeVersion = "debug"; // MagmaCube
     }
  
     private DetectedVersion(JsonObject json) {
-@@ -50,6 +52,7 @@ public class DetectedVersion implements GameVersion {
+@@ -50,6 +52,7 @@ public class DetectedVersion implements WorldVersion {
        this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
        this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
        this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(json, "build_time")).toInstant());
 +      this.magmaCubeVersion = json.has("magmacube_version") ? GsonHelper.getAsString(json, "magmacube_version") : "debug"; // MagmaCube
     }
  
-    public static GameVersion tryDetectVersion() {
-diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
-index 6c3d1eccf2b97c6a0b10583fe1d9eb570ddcdf79..9ca90ab3d2b659c23add075d3695ee0a9de04156 100644
---- a/src/main/java/net/minecraft/SystemReport.java
-+++ b/src/main/java/net/minecraft/SystemReport.java
-@@ -26,6 +26,7 @@ public class SystemReport {
-    private final Map<String, String> entries = Maps.newLinkedHashMap();
- 
-    public SystemReport() {
-+      this.setDetail("MagmaCube Version", ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion); // MagmaCube
-       this.setDetail("Minecraft Version", SharedConstants.getCurrentVersion().getName());
-       this.setDetail("Minecraft Version ID", SharedConstants.getCurrentVersion().getId());
-       this.setDetail("Operating System", OPERATING_SYSTEM);
+    public static WorldVersion tryDetectVersion() {
 diff --git a/src/main/java/net/minecraft/client/ClientBrandRetriever.java b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
-index f2ee5a65d22f6eead934dc833ad679e078d6991e..030a319914b452420c253febd0457b2627a9fe0f 100644
+index f2ee5a65d22f6eead934dc833ad679e078d6991e..a936731fc72aff0920f203dde18548e8f78b28e5 100644
 --- a/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 +++ b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 @@ -3,10 +3,10 @@ package net.minecraft.client;
@@ -53,7 +41,7 @@ index f2ee5a65d22f6eead934dc833ad679e078d6991e..030a319914b452420c253febd0457b26
  
  public class ClientBrandRetriever {
 -   public static final String VANILLA_NAME = "vanilla";
-+   public static final String VANILLA_NAME = "magmacube"; // MagmaCube > vanilla!;
++   public static final String VANILLA_NAME = "magmacube"; // MagmaCube > vanilla!
  
     @DontObfuscate
     public static String getClientModName() {
@@ -87,10 +75,10 @@ index e575ebc2865cc945cc8c2c962089ad6198a8d9a8..2c887b454a1f4052cc58577c18a57f86
              fill(poseStack, this.copyrightX, this.height - 1, this.copyrightX + this.copyrightWidth, this.height, 16777215 | i6);
           }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 180c931ef6d80b2adb8d1c1ced3536b3f05dd921..9fede4ff5c691b5f98b034bb5623119eead265b4 100644
+index 3344a2c21149d78206fb494de47d9caf86507567..ddabb23232980e299ebb9588e95f9c3ea53443f1 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -936,7 +936,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -992,7 +992,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
     @DontObfuscate
     public String getServerModName() {

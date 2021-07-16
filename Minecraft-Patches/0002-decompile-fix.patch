@@ -57,19 +57,6 @@ index 2f4b3448da5060376e4590c46a9ce9830a000787..8480fe012013eb06c2c6b7ba15b03259
        } catch (NoSuchFieldException | NoSuchMethodException var5) {
        } catch (Throwable var6) {
           throw new RuntimeException(var6);
-diff --git a/src/main/java/com/mojang/blaze3d/platform/MacosUtil.java b/src/main/java/com/mojang/blaze3d/platform/MacosUtil.java
-index a12fa6bb09bb5b26f7f1f513fc285d8d72a49b9d..e04a9fa58900579076f9031fe391e40c5f3a3d77 100644
---- a/src/main/java/com/mojang/blaze3d/platform/MacosUtil.java
-+++ b/src/main/java/com/mojang/blaze3d/platform/MacosUtil.java
-@@ -18,7 +18,7 @@ public class MacosUtil {
-    }
- 
-    private static boolean isInKioskMode(NSObject nSObject) {
--      return (nSObject.sendRaw("styleMask", new Object[0]) & 16384L) == 16384L;
-+      return ((int) nSObject.sendRaw("styleMask", new Object[0]) & 16384L) == 16384L;
-    }
- 
-    private static void toggleFullscreen(NSObject nSObject) {
 diff --git a/src/main/java/com/mojang/blaze3d/vertex/DefaultVertexFormat.java b/src/main/java/com/mojang/blaze3d/vertex/DefaultVertexFormat.java
 index fa940282ef3397cb16222cbe3a744763c231176c..609c6d8eff0ea81ae986379e8d6babda458bb6d4 100644
 --- a/src/main/java/com/mojang/blaze3d/vertex/DefaultVertexFormat.java
@@ -222,10 +209,10 @@ index 2a1db6ef2dafca34948107a7469ac685a1b6984f..d1f19ea5ebe5aa398ac4a36d16142aee
        }).start();
     }
 diff --git a/src/main/java/net/minecraft/SharedConstants.java b/src/main/java/net/minecraft/SharedConstants.java
-index c68b9c371ccaa1b51c365d76590285235a03c834..8b0719dc382e1c0b6b2a6ed6b6ef5224647a6a87 100644
+index 51b3712588e20d46b6034a2d5a6be30eebaf7ffd..68dd74148e1f8a1923f66d38bb3daac86fb6179a 100644
 --- a/src/main/java/net/minecraft/SharedConstants.java
 +++ b/src/main/java/net/minecraft/SharedConstants.java
-@@ -161,7 +161,7 @@ public class SharedConstants {
+@@ -173,7 +173,7 @@ public class SharedConstants {
  
     static {
        ResourceLeakDetector.setLevel(NETTY_LEAK_DETECTION);
@@ -362,7 +349,7 @@ index 84458cf5d6c581a6cdc7de52e096f0cebf849337..11d5d004efa68f91eb6187c92598ad32
           options.save();
        });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 04c4901a54669de8fcea48daad14462fb92733df..a2cdfaf88fc2bce7a0b6a5bd7bf3532b94dc5823 100644
+index 0efe18ad400df1a55133c6231b5660b0af1f3265..de8717ad72e2070d78b113460928e78b97350229 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
 @@ -2211,9 +2211,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
@@ -703,58 +690,41 @@ index c912fd0d7ee9b1d8c7a8a7b0b319d4994d959ccc..93439baf1c2cab15fdb1b870affe1f4a
                    }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 01a2b64ac755432914b07c4bb143a218ca5d3c39..54d5d229d19ce7dccfc70510c026e2f219653492 100644
+index b922b1f63a0db89a3588d783bb05077bd7ae3d9f..169bfc0b229b12c43fe771c53db0007cc51fe3ff 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -510,7 +510,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
- 
-    public void handleRemoveEntities(ClientboundRemoveEntitiesPacket clientboundRemoveEntitiesPacket) {
-       PacketUtils.ensureRunningOnSameThread(clientboundRemoveEntitiesPacket, this, this.minecraft);
--      clientboundRemoveEntitiesPacket.getEntityIds().forEach((i) -> this.level.removeEntity(i, Entity.RemovalReason.DISCARDED));
-+      clientboundRemoveEntitiesPacket.getEntityIds().forEach((java.util.function.IntConsumer) (ix) -> this.level.removeEntity(ix, Entity.RemovalReason.DISCARDED));
-    }
- 
-    public void handleMovePlayer(ClientboundPlayerPositionPacket clientboundPlayerPositionPacket) {
-@@ -1453,11 +1453,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1454,10 +1454,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
              } else {
                 this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                       this.minecraft.setScreen((Screen)null);
 -                     ServerData serverData = this.minecraft.getCurrentServer();
-+                     ServerData serverDatax = this.minecraft.getCurrentServer(); // MagmaCube - decompile error
++                     ServerData serverDatax = this.minecraft.getCurrentServer();
                       if (flag2) {
 -                        if (serverData != null) {
 -                           serverData.setResourcePackStatus(ServerData.ServerPackStatus.ENABLED);
-+                        // MagmaCube start - decompile error
 +                        if (serverDatax != null) {
 +                           serverDatax.setResourcePackStatus(ServerData.ServerPackStatus.ENABLED);
                          }
-+                        // MagmaCube end - decompile error
  
                          this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
-                         this.downloadCallback(this.minecraft.getClientPackSource().downloadAndSelectResourcePack(s, s2, true));
-@@ -1465,14 +1467,18 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1466,13 +1466,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
                          this.send(ServerboundResourcePackPacket.Action.DECLINED);
                          if (flag) {
                             this.connection.disconnect(new TranslatableComponent("multiplayer.requiredTexturePrompt.disconnect"));
 -                        } else if (serverData != null) {
 -                           serverData.setResourcePackStatus(ServerData.ServerPackStatus.DISABLED);
-+                           // MagmaCube start - decompile error
 +                        } else if (serverDatax != null) {
 +                           serverDatax.setResourcePackStatus(ServerData.ServerPackStatus.DISABLED);
-+                           // MagmaCube end - decompile error
                          }
                       }
  
 -                     if (serverData != null) {
 -                        ServerList.saveSingleServer(serverData);
-+                     // MagmaCube start - decompile error
 +                     if (serverDatax != null) {
 +                        ServerList.saveSingleServer(serverDatax);
                       }
-+                     // MagmaCube end - decompile error
  
                    }, flag ? new TranslatableComponent("multiplayer.requiredTexturePrompt.line1") : new TranslatableComponent("multiplayer.texturePrompt.line1"), preparePackPrompt((Component)(flag ? (new TranslatableComponent("multiplayer.requiredTexturePrompt.line2")).withStyle(new ChatFormatting[]{ChatFormatting.YELLOW, ChatFormatting.BOLD}) : new TranslatableComponent("multiplayer.texturePrompt.line2")), clientboundResourcePackPacket.getPrompt()), flag ? CommonComponents.GUI_PROCEED : CommonComponents.GUI_YES, (Component)(flag ? new TranslatableComponent("menu.disconnect") : CommonComponents.GUI_NO))));
-             }
 diff --git a/src/main/java/net/minecraft/client/renderer/BlockEntityWithoutLevelRenderer.java b/src/main/java/net/minecraft/client/renderer/BlockEntityWithoutLevelRenderer.java
 index 9695d8c5a50ad1ff028d5ce3346c53f083e27290..8f4a3327ce0e953dd5666c1fc781b9071f71924c 100644
 --- a/src/main/java/net/minecraft/client/renderer/BlockEntityWithoutLevelRenderer.java
@@ -1524,7 +1494,7 @@ index 2afe92f7c65043a7282cc26c73394b52d081e061..e980f9eb34bd38748cc8cf41d3831e48
           }
  
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index 3cfcabdf6ca8157a9ab63f853b180cf26953b20f..153e9aea50f80c8dc98c82a0eb83ca06f5685991 100644
+index ab859434a210794606eeacb5807838f75e3e6b71..0f82a5da43355afbfc9c723d98497b403d40eee0 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 @@ -60,7 +60,8 @@ public class RecipeProvider implements DataProvider {
@@ -1537,7 +1507,7 @@ index 3cfcabdf6ca8157a9ab63f853b180cf26953b20f..153e9aea50f80c8dc98c82a0eb83ca06
  
     public RecipeProvider(DataGenerator dataGenerator) {
        this.generator = dataGenerator;
-@@ -1169,7 +1170,7 @@ public class RecipeProvider implements DataProvider {
+@@ -1170,7 +1171,7 @@ public class RecipeProvider implements DataProvider {
     }
  
     private static void waxRecipes(Consumer<FinishedRecipe> consumer) {
@@ -1774,7 +1744,7 @@ index 56cee538f47a43b03a8026b30d6d41fcfeab0586..3a8609f10ad6ccbdfa991f18caa0c1b6
  
              if (this.hasElementSeparator()) {
 diff --git a/src/main/java/net/minecraft/network/ConnectionProtocol.java b/src/main/java/net/minecraft/network/ConnectionProtocol.java
-index 090053d4f1e02fc52bbf34064a7a1a5a87db70b9..401f03d93d9b932854f0e1e65340b7a2dc4b26a1 100644
+index 9d642554c28af97f4b13a19854680b45711c7ffa..1da2c47b6f0b9e8e07cd0d5afbffea654d429d84 100644
 --- a/src/main/java/net/minecraft/network/ConnectionProtocol.java
 +++ b/src/main/java/net/minecraft/network/ConnectionProtocol.java
 @@ -12,6 +12,7 @@ import javax.annotation.Nullable;
@@ -1818,21 +1788,21 @@ index 090053d4f1e02fc52bbf34064a7a1a5a87db70b9..401f03d93d9b932854f0e1e65340b7a2
  
  public enum ConnectionProtocol {
 -   HANDSHAKING(-1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientIntentionPacket.class, ClientIntentionPacket::new))),
--   PLAY(0, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientboundAddEntityPacket.class, ClientboundAddEntityPacket::new).addPacket(ClientboundAddExperienceOrbPacket.class, ClientboundAddExperienceOrbPacket::new).addPacket(ClientboundAddMobPacket.class, ClientboundAddMobPacket::new).addPacket(ClientboundAddPaintingPacket.class, ClientboundAddPaintingPacket::new).addPacket(ClientboundAddPlayerPacket.class, ClientboundAddPlayerPacket::new).addPacket(ClientboundAddVibrationSignalPacket.class, ClientboundAddVibrationSignalPacket::new).addPacket(ClientboundAnimatePacket.class, ClientboundAnimatePacket::new).addPacket(ClientboundAwardStatsPacket.class, ClientboundAwardStatsPacket::new).addPacket(ClientboundBlockBreakAckPacket.class, ClientboundBlockBreakAckPacket::new).addPacket(ClientboundBlockDestructionPacket.class, ClientboundBlockDestructionPacket::new).addPacket(ClientboundBlockEntityDataPacket.class, ClientboundBlockEntityDataPacket::new).addPacket(ClientboundBlockEventPacket.class, ClientboundBlockEventPacket::new).addPacket(ClientboundBlockUpdatePacket.class, ClientboundBlockUpdatePacket::new).addPacket(ClientboundBossEventPacket.class, ClientboundBossEventPacket::new).addPacket(ClientboundChangeDifficultyPacket.class, ClientboundChangeDifficultyPacket::new).addPacket(ClientboundChatPacket.class, ClientboundChatPacket::new).addPacket(ClientboundClearTitlesPacket.class, ClientboundClearTitlesPacket::new).addPacket(ClientboundCommandSuggestionsPacket.class, ClientboundCommandSuggestionsPacket::new).addPacket(ClientboundCommandsPacket.class, ClientboundCommandsPacket::new).addPacket(ClientboundContainerClosePacket.class, ClientboundContainerClosePacket::new).addPacket(ClientboundContainerSetContentPacket.class, ClientboundContainerSetContentPacket::new).addPacket(ClientboundContainerSetDataPacket.class, ClientboundContainerSetDataPacket::new).addPacket(ClientboundContainerSetSlotPacket.class, ClientboundContainerSetSlotPacket::new).addPacket(ClientboundCooldownPacket.class, ClientboundCooldownPacket::new).addPacket(ClientboundCustomPayloadPacket.class, ClientboundCustomPayloadPacket::new).addPacket(ClientboundCustomSoundPacket.class, ClientboundCustomSoundPacket::new).addPacket(ClientboundDisconnectPacket.class, ClientboundDisconnectPacket::new).addPacket(ClientboundEntityEventPacket.class, ClientboundEntityEventPacket::new).addPacket(ClientboundExplodePacket.class, ClientboundExplodePacket::new).addPacket(ClientboundForgetLevelChunkPacket.class, ClientboundForgetLevelChunkPacket::new).addPacket(ClientboundGameEventPacket.class, ClientboundGameEventPacket::new).addPacket(ClientboundHorseScreenOpenPacket.class, ClientboundHorseScreenOpenPacket::new).addPacket(ClientboundInitializeBorderPacket.class, ClientboundInitializeBorderPacket::new).addPacket(ClientboundKeepAlivePacket.class, ClientboundKeepAlivePacket::new).addPacket(ClientboundLevelChunkPacket.class, ClientboundLevelChunkPacket::new).addPacket(ClientboundLevelEventPacket.class, ClientboundLevelEventPacket::new).addPacket(ClientboundLevelParticlesPacket.class, ClientboundLevelParticlesPacket::new).addPacket(ClientboundLightUpdatePacket.class, ClientboundLightUpdatePacket::new).addPacket(ClientboundLoginPacket.class, ClientboundLoginPacket::new).addPacket(ClientboundMapItemDataPacket.class, ClientboundMapItemDataPacket::new).addPacket(ClientboundMerchantOffersPacket.class, ClientboundMerchantOffersPacket::new).addPacket(ClientboundMoveEntityPacket.Pos.class, ClientboundMoveEntityPacket.Pos::read).addPacket(ClientboundMoveEntityPacket.PosRot.class, ClientboundMoveEntityPacket.PosRot::read).addPacket(ClientboundMoveEntityPacket.Rot.class, ClientboundMoveEntityPacket.Rot::read).addPacket(ClientboundMoveVehiclePacket.class, ClientboundMoveVehiclePacket::new).addPacket(ClientboundOpenBookPacket.class, ClientboundOpenBookPacket::new).addPacket(ClientboundOpenScreenPacket.class, ClientboundOpenScreenPacket::new).addPacket(ClientboundOpenSignEditorPacket.class, ClientboundOpenSignEditorPacket::new).addPacket(ClientboundPingPacket.class, ClientboundPingPacket::new).addPacket(ClientboundPlaceGhostRecipePacket.class, ClientboundPlaceGhostRecipePacket::new).addPacket(ClientboundPlayerAbilitiesPacket.class, ClientboundPlayerAbilitiesPacket::new).addPacket(ClientboundPlayerCombatEndPacket.class, ClientboundPlayerCombatEndPacket::new).addPacket(ClientboundPlayerCombatEnterPacket.class, ClientboundPlayerCombatEnterPacket::new).addPacket(ClientboundPlayerCombatKillPacket.class, ClientboundPlayerCombatKillPacket::new).addPacket(ClientboundPlayerInfoPacket.class, ClientboundPlayerInfoPacket::new).addPacket(ClientboundPlayerLookAtPacket.class, ClientboundPlayerLookAtPacket::new).addPacket(ClientboundPlayerPositionPacket.class, ClientboundPlayerPositionPacket::new).addPacket(ClientboundRecipePacket.class, ClientboundRecipePacket::new).addPacket(ClientboundRemoveEntitiesPacket.class, ClientboundRemoveEntitiesPacket::new).addPacket(ClientboundRemoveMobEffectPacket.class, ClientboundRemoveMobEffectPacket::new).addPacket(ClientboundResourcePackPacket.class, ClientboundResourcePackPacket::new).addPacket(ClientboundRespawnPacket.class, ClientboundRespawnPacket::new).addPacket(ClientboundRotateHeadPacket.class, ClientboundRotateHeadPacket::new).addPacket(ClientboundSectionBlocksUpdatePacket.class, ClientboundSectionBlocksUpdatePacket::new).addPacket(ClientboundSelectAdvancementsTabPacket.class, ClientboundSelectAdvancementsTabPacket::new).addPacket(ClientboundSetActionBarTextPacket.class, ClientboundSetActionBarTextPacket::new).addPacket(ClientboundSetBorderCenterPacket.class, ClientboundSetBorderCenterPacket::new).addPacket(ClientboundSetBorderLerpSizePacket.class, ClientboundSetBorderLerpSizePacket::new).addPacket(ClientboundSetBorderSizePacket.class, ClientboundSetBorderSizePacket::new).addPacket(ClientboundSetBorderWarningDelayPacket.class, ClientboundSetBorderWarningDelayPacket::new).addPacket(ClientboundSetBorderWarningDistancePacket.class, ClientboundSetBorderWarningDistancePacket::new).addPacket(ClientboundSetCameraPacket.class, ClientboundSetCameraPacket::new).addPacket(ClientboundSetCarriedItemPacket.class, ClientboundSetCarriedItemPacket::new).addPacket(ClientboundSetChunkCacheCenterPacket.class, ClientboundSetChunkCacheCenterPacket::new).addPacket(ClientboundSetChunkCacheRadiusPacket.class, ClientboundSetChunkCacheRadiusPacket::new).addPacket(ClientboundSetDefaultSpawnPositionPacket.class, ClientboundSetDefaultSpawnPositionPacket::new).addPacket(ClientboundSetDisplayObjectivePacket.class, ClientboundSetDisplayObjectivePacket::new).addPacket(ClientboundSetEntityDataPacket.class, ClientboundSetEntityDataPacket::new).addPacket(ClientboundSetEntityLinkPacket.class, ClientboundSetEntityLinkPacket::new).addPacket(ClientboundSetEntityMotionPacket.class, ClientboundSetEntityMotionPacket::new).addPacket(ClientboundSetEquipmentPacket.class, ClientboundSetEquipmentPacket::new).addPacket(ClientboundSetExperiencePacket.class, ClientboundSetExperiencePacket::new).addPacket(ClientboundSetHealthPacket.class, ClientboundSetHealthPacket::new).addPacket(ClientboundSetObjectivePacket.class, ClientboundSetObjectivePacket::new).addPacket(ClientboundSetPassengersPacket.class, ClientboundSetPassengersPacket::new).addPacket(ClientboundSetPlayerTeamPacket.class, ClientboundSetPlayerTeamPacket::new).addPacket(ClientboundSetScorePacket.class, ClientboundSetScorePacket::new).addPacket(ClientboundSetSubtitleTextPacket.class, ClientboundSetSubtitleTextPacket::new).addPacket(ClientboundSetTimePacket.class, ClientboundSetTimePacket::new).addPacket(ClientboundSetTitleTextPacket.class, ClientboundSetTitleTextPacket::new).addPacket(ClientboundSetTitlesAnimationPacket.class, ClientboundSetTitlesAnimationPacket::new).addPacket(ClientboundSoundEntityPacket.class, ClientboundSoundEntityPacket::new).addPacket(ClientboundSoundPacket.class, ClientboundSoundPacket::new).addPacket(ClientboundStopSoundPacket.class, ClientboundStopSoundPacket::new).addPacket(ClientboundTabListPacket.class, ClientboundTabListPacket::new).addPacket(ClientboundTagQueryPacket.class, ClientboundTagQueryPacket::new).addPacket(ClientboundTakeItemEntityPacket.class, ClientboundTakeItemEntityPacket::new).addPacket(ClientboundTeleportEntityPacket.class, ClientboundTeleportEntityPacket::new).addPacket(ClientboundUpdateAdvancementsPacket.class, ClientboundUpdateAdvancementsPacket::new).addPacket(ClientboundUpdateAttributesPacket.class, ClientboundUpdateAttributesPacket::new).addPacket(ClientboundUpdateMobEffectPacket.class, ClientboundUpdateMobEffectPacket::new).addPacket(ClientboundUpdateRecipesPacket.class, ClientboundUpdateRecipesPacket::new).addPacket(ClientboundUpdateTagsPacket.class, ClientboundUpdateTagsPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ServerboundAcceptTeleportationPacket.class, ServerboundAcceptTeleportationPacket::new).addPacket(ServerboundBlockEntityTagQuery.class, ServerboundBlockEntityTagQuery::new).addPacket(ServerboundChangeDifficultyPacket.class, ServerboundChangeDifficultyPacket::new).addPacket(ServerboundChatPacket.class, ServerboundChatPacket::new).addPacket(ServerboundClientCommandPacket.class, ServerboundClientCommandPacket::new).addPacket(ServerboundClientInformationPacket.class, ServerboundClientInformationPacket::new).addPacket(ServerboundCommandSuggestionPacket.class, ServerboundCommandSuggestionPacket::new).addPacket(ServerboundContainerButtonClickPacket.class, ServerboundContainerButtonClickPacket::new).addPacket(ServerboundContainerClickPacket.class, ServerboundContainerClickPacket::new).addPacket(ServerboundContainerClosePacket.class, ServerboundContainerClosePacket::new).addPacket(ServerboundCustomPayloadPacket.class, ServerboundCustomPayloadPacket::new).addPacket(ServerboundEditBookPacket.class, ServerboundEditBookPacket::new).addPacket(ServerboundEntityTagQuery.class, ServerboundEntityTagQuery::new).addPacket(ServerboundInteractPacket.class, ServerboundInteractPacket::new).addPacket(ServerboundJigsawGeneratePacket.class, ServerboundJigsawGeneratePacket::new).addPacket(ServerboundKeepAlivePacket.class, ServerboundKeepAlivePacket::new).addPacket(ServerboundLockDifficultyPacket.class, ServerboundLockDifficultyPacket::new).addPacket(ServerboundMovePlayerPacket.Pos.class, ServerboundMovePlayerPacket.Pos::read).addPacket(ServerboundMovePlayerPacket.PosRot.class, ServerboundMovePlayerPacket.PosRot::read).addPacket(ServerboundMovePlayerPacket.Rot.class, ServerboundMovePlayerPacket.Rot::read).addPacket(ServerboundMovePlayerPacket.StatusOnly.class, ServerboundMovePlayerPacket.StatusOnly::read).addPacket(ServerboundMoveVehiclePacket.class, ServerboundMoveVehiclePacket::new).addPacket(ServerboundPaddleBoatPacket.class, ServerboundPaddleBoatPacket::new).addPacket(ServerboundPickItemPacket.class, ServerboundPickItemPacket::new).addPacket(ServerboundPlaceRecipePacket.class, ServerboundPlaceRecipePacket::new).addPacket(ServerboundPlayerAbilitiesPacket.class, ServerboundPlayerAbilitiesPacket::new).addPacket(ServerboundPlayerActionPacket.class, ServerboundPlayerActionPacket::new).addPacket(ServerboundPlayerCommandPacket.class, ServerboundPlayerCommandPacket::new).addPacket(ServerboundPlayerInputPacket.class, ServerboundPlayerInputPacket::new).addPacket(ServerboundPongPacket.class, ServerboundPongPacket::new).addPacket(ServerboundRecipeBookChangeSettingsPacket.class, ServerboundRecipeBookChangeSettingsPacket::new).addPacket(ServerboundRecipeBookSeenRecipePacket.class, ServerboundRecipeBookSeenRecipePacket::new).addPacket(ServerboundRenameItemPacket.class, ServerboundRenameItemPacket::new).addPacket(ServerboundResourcePackPacket.class, ServerboundResourcePackPacket::new).addPacket(ServerboundSeenAdvancementsPacket.class, ServerboundSeenAdvancementsPacket::new).addPacket(ServerboundSelectTradePacket.class, ServerboundSelectTradePacket::new).addPacket(ServerboundSetBeaconPacket.class, ServerboundSetBeaconPacket::new).addPacket(ServerboundSetCarriedItemPacket.class, ServerboundSetCarriedItemPacket::new).addPacket(ServerboundSetCommandBlockPacket.class, ServerboundSetCommandBlockPacket::new).addPacket(ServerboundSetCommandMinecartPacket.class, ServerboundSetCommandMinecartPacket::new).addPacket(ServerboundSetCreativeModeSlotPacket.class, ServerboundSetCreativeModeSlotPacket::new).addPacket(ServerboundSetJigsawBlockPacket.class, ServerboundSetJigsawBlockPacket::new).addPacket(ServerboundSetStructureBlockPacket.class, ServerboundSetStructureBlockPacket::new).addPacket(ServerboundSignUpdatePacket.class, ServerboundSignUpdatePacket::new).addPacket(ServerboundSwingPacket.class, ServerboundSwingPacket::new).addPacket(ServerboundTeleportToEntityPacket.class, ServerboundTeleportToEntityPacket::new).addPacket(ServerboundUseItemOnPacket.class, ServerboundUseItemOnPacket::new).addPacket(ServerboundUseItemPacket.class, ServerboundUseItemPacket::new))),
+-   PLAY(0, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientboundAddEntityPacket.class, ClientboundAddEntityPacket::new).addPacket(ClientboundAddExperienceOrbPacket.class, ClientboundAddExperienceOrbPacket::new).addPacket(ClientboundAddMobPacket.class, ClientboundAddMobPacket::new).addPacket(ClientboundAddPaintingPacket.class, ClientboundAddPaintingPacket::new).addPacket(ClientboundAddPlayerPacket.class, ClientboundAddPlayerPacket::new).addPacket(ClientboundAddVibrationSignalPacket.class, ClientboundAddVibrationSignalPacket::new).addPacket(ClientboundAnimatePacket.class, ClientboundAnimatePacket::new).addPacket(ClientboundAwardStatsPacket.class, ClientboundAwardStatsPacket::new).addPacket(ClientboundBlockBreakAckPacket.class, ClientboundBlockBreakAckPacket::new).addPacket(ClientboundBlockDestructionPacket.class, ClientboundBlockDestructionPacket::new).addPacket(ClientboundBlockEntityDataPacket.class, ClientboundBlockEntityDataPacket::new).addPacket(ClientboundBlockEventPacket.class, ClientboundBlockEventPacket::new).addPacket(ClientboundBlockUpdatePacket.class, ClientboundBlockUpdatePacket::new).addPacket(ClientboundBossEventPacket.class, ClientboundBossEventPacket::new).addPacket(ClientboundChangeDifficultyPacket.class, ClientboundChangeDifficultyPacket::new).addPacket(ClientboundChatPacket.class, ClientboundChatPacket::new).addPacket(ClientboundClearTitlesPacket.class, ClientboundClearTitlesPacket::new).addPacket(ClientboundCommandSuggestionsPacket.class, ClientboundCommandSuggestionsPacket::new).addPacket(ClientboundCommandsPacket.class, ClientboundCommandsPacket::new).addPacket(ClientboundContainerClosePacket.class, ClientboundContainerClosePacket::new).addPacket(ClientboundContainerSetContentPacket.class, ClientboundContainerSetContentPacket::new).addPacket(ClientboundContainerSetDataPacket.class, ClientboundContainerSetDataPacket::new).addPacket(ClientboundContainerSetSlotPacket.class, ClientboundContainerSetSlotPacket::new).addPacket(ClientboundCooldownPacket.class, ClientboundCooldownPacket::new).addPacket(ClientboundCustomPayloadPacket.class, ClientboundCustomPayloadPacket::new).addPacket(ClientboundCustomSoundPacket.class, ClientboundCustomSoundPacket::new).addPacket(ClientboundDisconnectPacket.class, ClientboundDisconnectPacket::new).addPacket(ClientboundEntityEventPacket.class, ClientboundEntityEventPacket::new).addPacket(ClientboundExplodePacket.class, ClientboundExplodePacket::new).addPacket(ClientboundForgetLevelChunkPacket.class, ClientboundForgetLevelChunkPacket::new).addPacket(ClientboundGameEventPacket.class, ClientboundGameEventPacket::new).addPacket(ClientboundHorseScreenOpenPacket.class, ClientboundHorseScreenOpenPacket::new).addPacket(ClientboundInitializeBorderPacket.class, ClientboundInitializeBorderPacket::new).addPacket(ClientboundKeepAlivePacket.class, ClientboundKeepAlivePacket::new).addPacket(ClientboundLevelChunkPacket.class, ClientboundLevelChunkPacket::new).addPacket(ClientboundLevelEventPacket.class, ClientboundLevelEventPacket::new).addPacket(ClientboundLevelParticlesPacket.class, ClientboundLevelParticlesPacket::new).addPacket(ClientboundLightUpdatePacket.class, ClientboundLightUpdatePacket::new).addPacket(ClientboundLoginPacket.class, ClientboundLoginPacket::new).addPacket(ClientboundMapItemDataPacket.class, ClientboundMapItemDataPacket::new).addPacket(ClientboundMerchantOffersPacket.class, ClientboundMerchantOffersPacket::new).addPacket(ClientboundMoveEntityPacket.Pos.class, ClientboundMoveEntityPacket.Pos::read).addPacket(ClientboundMoveEntityPacket.PosRot.class, ClientboundMoveEntityPacket.PosRot::read).addPacket(ClientboundMoveEntityPacket.Rot.class, ClientboundMoveEntityPacket.Rot::read).addPacket(ClientboundMoveVehiclePacket.class, ClientboundMoveVehiclePacket::new).addPacket(ClientboundOpenBookPacket.class, ClientboundOpenBookPacket::new).addPacket(ClientboundOpenScreenPacket.class, ClientboundOpenScreenPacket::new).addPacket(ClientboundOpenSignEditorPacket.class, ClientboundOpenSignEditorPacket::new).addPacket(ClientboundPingPacket.class, ClientboundPingPacket::new).addPacket(ClientboundPlaceGhostRecipePacket.class, ClientboundPlaceGhostRecipePacket::new).addPacket(ClientboundPlayerAbilitiesPacket.class, ClientboundPlayerAbilitiesPacket::new).addPacket(ClientboundPlayerCombatEndPacket.class, ClientboundPlayerCombatEndPacket::new).addPacket(ClientboundPlayerCombatEnterPacket.class, ClientboundPlayerCombatEnterPacket::new).addPacket(ClientboundPlayerCombatKillPacket.class, ClientboundPlayerCombatKillPacket::new).addPacket(ClientboundPlayerInfoPacket.class, ClientboundPlayerInfoPacket::new).addPacket(ClientboundPlayerLookAtPacket.class, ClientboundPlayerLookAtPacket::new).addPacket(ClientboundPlayerPositionPacket.class, ClientboundPlayerPositionPacket::new).addPacket(ClientboundRecipePacket.class, ClientboundRecipePacket::new).addPacket(ClientboundRemoveEntityPacket.class, ClientboundRemoveEntityPacket::new).addPacket(ClientboundRemoveMobEffectPacket.class, ClientboundRemoveMobEffectPacket::new).addPacket(ClientboundResourcePackPacket.class, ClientboundResourcePackPacket::new).addPacket(ClientboundRespawnPacket.class, ClientboundRespawnPacket::new).addPacket(ClientboundRotateHeadPacket.class, ClientboundRotateHeadPacket::new).addPacket(ClientboundSectionBlocksUpdatePacket.class, ClientboundSectionBlocksUpdatePacket::new).addPacket(ClientboundSelectAdvancementsTabPacket.class, ClientboundSelectAdvancementsTabPacket::new).addPacket(ClientboundSetActionBarTextPacket.class, ClientboundSetActionBarTextPacket::new).addPacket(ClientboundSetBorderCenterPacket.class, ClientboundSetBorderCenterPacket::new).addPacket(ClientboundSetBorderLerpSizePacket.class, ClientboundSetBorderLerpSizePacket::new).addPacket(ClientboundSetBorderSizePacket.class, ClientboundSetBorderSizePacket::new).addPacket(ClientboundSetBorderWarningDelayPacket.class, ClientboundSetBorderWarningDelayPacket::new).addPacket(ClientboundSetBorderWarningDistancePacket.class, ClientboundSetBorderWarningDistancePacket::new).addPacket(ClientboundSetCameraPacket.class, ClientboundSetCameraPacket::new).addPacket(ClientboundSetCarriedItemPacket.class, ClientboundSetCarriedItemPacket::new).addPacket(ClientboundSetChunkCacheCenterPacket.class, ClientboundSetChunkCacheCenterPacket::new).addPacket(ClientboundSetChunkCacheRadiusPacket.class, ClientboundSetChunkCacheRadiusPacket::new).addPacket(ClientboundSetDefaultSpawnPositionPacket.class, ClientboundSetDefaultSpawnPositionPacket::new).addPacket(ClientboundSetDisplayObjectivePacket.class, ClientboundSetDisplayObjectivePacket::new).addPacket(ClientboundSetEntityDataPacket.class, ClientboundSetEntityDataPacket::new).addPacket(ClientboundSetEntityLinkPacket.class, ClientboundSetEntityLinkPacket::new).addPacket(ClientboundSetEntityMotionPacket.class, ClientboundSetEntityMotionPacket::new).addPacket(ClientboundSetEquipmentPacket.class, ClientboundSetEquipmentPacket::new).addPacket(ClientboundSetExperiencePacket.class, ClientboundSetExperiencePacket::new).addPacket(ClientboundSetHealthPacket.class, ClientboundSetHealthPacket::new).addPacket(ClientboundSetObjectivePacket.class, ClientboundSetObjectivePacket::new).addPacket(ClientboundSetPassengersPacket.class, ClientboundSetPassengersPacket::new).addPacket(ClientboundSetPlayerTeamPacket.class, ClientboundSetPlayerTeamPacket::new).addPacket(ClientboundSetScorePacket.class, ClientboundSetScorePacket::new).addPacket(ClientboundSetSubtitleTextPacket.class, ClientboundSetSubtitleTextPacket::new).addPacket(ClientboundSetTimePacket.class, ClientboundSetTimePacket::new).addPacket(ClientboundSetTitleTextPacket.class, ClientboundSetTitleTextPacket::new).addPacket(ClientboundSetTitlesAnimationPacket.class, ClientboundSetTitlesAnimationPacket::new).addPacket(ClientboundSoundEntityPacket.class, ClientboundSoundEntityPacket::new).addPacket(ClientboundSoundPacket.class, ClientboundSoundPacket::new).addPacket(ClientboundStopSoundPacket.class, ClientboundStopSoundPacket::new).addPacket(ClientboundTabListPacket.class, ClientboundTabListPacket::new).addPacket(ClientboundTagQueryPacket.class, ClientboundTagQueryPacket::new).addPacket(ClientboundTakeItemEntityPacket.class, ClientboundTakeItemEntityPacket::new).addPacket(ClientboundTeleportEntityPacket.class, ClientboundTeleportEntityPacket::new).addPacket(ClientboundUpdateAdvancementsPacket.class, ClientboundUpdateAdvancementsPacket::new).addPacket(ClientboundUpdateAttributesPacket.class, ClientboundUpdateAttributesPacket::new).addPacket(ClientboundUpdateMobEffectPacket.class, ClientboundUpdateMobEffectPacket::new).addPacket(ClientboundUpdateRecipesPacket.class, ClientboundUpdateRecipesPacket::new).addPacket(ClientboundUpdateTagsPacket.class, ClientboundUpdateTagsPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ServerboundAcceptTeleportationPacket.class, ServerboundAcceptTeleportationPacket::new).addPacket(ServerboundBlockEntityTagQuery.class, ServerboundBlockEntityTagQuery::new).addPacket(ServerboundChangeDifficultyPacket.class, ServerboundChangeDifficultyPacket::new).addPacket(ServerboundChatPacket.class, ServerboundChatPacket::new).addPacket(ServerboundClientCommandPacket.class, ServerboundClientCommandPacket::new).addPacket(ServerboundClientInformationPacket.class, ServerboundClientInformationPacket::new).addPacket(ServerboundCommandSuggestionPacket.class, ServerboundCommandSuggestionPacket::new).addPacket(ServerboundContainerButtonClickPacket.class, ServerboundContainerButtonClickPacket::new).addPacket(ServerboundContainerClickPacket.class, ServerboundContainerClickPacket::new).addPacket(ServerboundContainerClosePacket.class, ServerboundContainerClosePacket::new).addPacket(ServerboundCustomPayloadPacket.class, ServerboundCustomPayloadPacket::new).addPacket(ServerboundEditBookPacket.class, ServerboundEditBookPacket::new).addPacket(ServerboundEntityTagQuery.class, ServerboundEntityTagQuery::new).addPacket(ServerboundInteractPacket.class, ServerboundInteractPacket::new).addPacket(ServerboundJigsawGeneratePacket.class, ServerboundJigsawGeneratePacket::new).addPacket(ServerboundKeepAlivePacket.class, ServerboundKeepAlivePacket::new).addPacket(ServerboundLockDifficultyPacket.class, ServerboundLockDifficultyPacket::new).addPacket(ServerboundMovePlayerPacket.Pos.class, ServerboundMovePlayerPacket.Pos::read).addPacket(ServerboundMovePlayerPacket.PosRot.class, ServerboundMovePlayerPacket.PosRot::read).addPacket(ServerboundMovePlayerPacket.Rot.class, ServerboundMovePlayerPacket.Rot::read).addPacket(ServerboundMovePlayerPacket.StatusOnly.class, ServerboundMovePlayerPacket.StatusOnly::read).addPacket(ServerboundMoveVehiclePacket.class, ServerboundMoveVehiclePacket::new).addPacket(ServerboundPaddleBoatPacket.class, ServerboundPaddleBoatPacket::new).addPacket(ServerboundPickItemPacket.class, ServerboundPickItemPacket::new).addPacket(ServerboundPlaceRecipePacket.class, ServerboundPlaceRecipePacket::new).addPacket(ServerboundPlayerAbilitiesPacket.class, ServerboundPlayerAbilitiesPacket::new).addPacket(ServerboundPlayerActionPacket.class, ServerboundPlayerActionPacket::new).addPacket(ServerboundPlayerCommandPacket.class, ServerboundPlayerCommandPacket::new).addPacket(ServerboundPlayerInputPacket.class, ServerboundPlayerInputPacket::new).addPacket(ServerboundPongPacket.class, ServerboundPongPacket::new).addPacket(ServerboundRecipeBookChangeSettingsPacket.class, ServerboundRecipeBookChangeSettingsPacket::new).addPacket(ServerboundRecipeBookSeenRecipePacket.class, ServerboundRecipeBookSeenRecipePacket::new).addPacket(ServerboundRenameItemPacket.class, ServerboundRenameItemPacket::new).addPacket(ServerboundResourcePackPacket.class, ServerboundResourcePackPacket::new).addPacket(ServerboundSeenAdvancementsPacket.class, ServerboundSeenAdvancementsPacket::new).addPacket(ServerboundSelectTradePacket.class, ServerboundSelectTradePacket::new).addPacket(ServerboundSetBeaconPacket.class, ServerboundSetBeaconPacket::new).addPacket(ServerboundSetCarriedItemPacket.class, ServerboundSetCarriedItemPacket::new).addPacket(ServerboundSetCommandBlockPacket.class, ServerboundSetCommandBlockPacket::new).addPacket(ServerboundSetCommandMinecartPacket.class, ServerboundSetCommandMinecartPacket::new).addPacket(ServerboundSetCreativeModeSlotPacket.class, ServerboundSetCreativeModeSlotPacket::new).addPacket(ServerboundSetJigsawBlockPacket.class, ServerboundSetJigsawBlockPacket::new).addPacket(ServerboundSetStructureBlockPacket.class, ServerboundSetStructureBlockPacket::new).addPacket(ServerboundSignUpdatePacket.class, ServerboundSignUpdatePacket::new).addPacket(ServerboundSwingPacket.class, ServerboundSwingPacket::new).addPacket(ServerboundTeleportToEntityPacket.class, ServerboundTeleportToEntityPacket::new).addPacket(ServerboundUseItemOnPacket.class, ServerboundUseItemOnPacket::new).addPacket(ServerboundUseItemPacket.class, ServerboundUseItemPacket::new))),
 -   STATUS(1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ServerboundStatusRequestPacket.class, ServerboundStatusRequestPacket::new).addPacket(ServerboundPingRequestPacket.class, ServerboundPingRequestPacket::new)).addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientboundStatusResponsePacket.class, ClientboundStatusResponsePacket::new).addPacket(ClientboundPongResponsePacket.class, ClientboundPongResponsePacket::new))),
 -   LOGIN(2, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientboundLoginDisconnectPacket.class, ClientboundLoginDisconnectPacket::new).addPacket(ClientboundHelloPacket.class, ClientboundHelloPacket::new).addPacket(ClientboundGameProfilePacket.class, ClientboundGameProfilePacket::new).addPacket(ClientboundLoginCompressionPacket.class, ClientboundLoginCompressionPacket::new).addPacket(ClientboundCustomQueryPacket.class, ClientboundCustomQueryPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ServerboundHelloPacket.class, ServerboundHelloPacket::new).addPacket(ServerboundKeyPacket.class, ServerboundKeyPacket::new).addPacket(ServerboundCustomQueryPacket.class, ServerboundCustomQueryPacket::new)));
 +   HANDSHAKING(-1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<ServerHandshakePacketListener>()).addPacket(ClientIntentionPacket.class, ClientIntentionPacket::new))),
-+   PLAY(0, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet<ClientGamePacketListener>()).addPacket(ClientboundAddEntityPacket.class, ClientboundAddEntityPacket::new).addPacket(ClientboundAddExperienceOrbPacket.class, ClientboundAddExperienceOrbPacket::new).addPacket(ClientboundAddMobPacket.class, ClientboundAddMobPacket::new).addPacket(ClientboundAddPaintingPacket.class, ClientboundAddPaintingPacket::new).addPacket(ClientboundAddPlayerPacket.class, ClientboundAddPlayerPacket::new).addPacket(ClientboundAddVibrationSignalPacket.class, ClientboundAddVibrationSignalPacket::new).addPacket(ClientboundAnimatePacket.class, ClientboundAnimatePacket::new).addPacket(ClientboundAwardStatsPacket.class, ClientboundAwardStatsPacket::new).addPacket(ClientboundBlockBreakAckPacket.class, ClientboundBlockBreakAckPacket::new).addPacket(ClientboundBlockDestructionPacket.class, ClientboundBlockDestructionPacket::new).addPacket(ClientboundBlockEntityDataPacket.class, ClientboundBlockEntityDataPacket::new).addPacket(ClientboundBlockEventPacket.class, ClientboundBlockEventPacket::new).addPacket(ClientboundBlockUpdatePacket.class, ClientboundBlockUpdatePacket::new).addPacket(ClientboundBossEventPacket.class, ClientboundBossEventPacket::new).addPacket(ClientboundChangeDifficultyPacket.class, ClientboundChangeDifficultyPacket::new).addPacket(ClientboundChatPacket.class, ClientboundChatPacket::new).addPacket(ClientboundClearTitlesPacket.class, ClientboundClearTitlesPacket::new).addPacket(ClientboundCommandSuggestionsPacket.class, ClientboundCommandSuggestionsPacket::new).addPacket(ClientboundCommandsPacket.class, ClientboundCommandsPacket::new).addPacket(ClientboundContainerClosePacket.class, ClientboundContainerClosePacket::new).addPacket(ClientboundContainerSetContentPacket.class, ClientboundContainerSetContentPacket::new).addPacket(ClientboundContainerSetDataPacket.class, ClientboundContainerSetDataPacket::new).addPacket(ClientboundContainerSetSlotPacket.class, ClientboundContainerSetSlotPacket::new).addPacket(ClientboundCooldownPacket.class, ClientboundCooldownPacket::new).addPacket(ClientboundCustomPayloadPacket.class, ClientboundCustomPayloadPacket::new).addPacket(ClientboundCustomSoundPacket.class, ClientboundCustomSoundPacket::new).addPacket(ClientboundDisconnectPacket.class, ClientboundDisconnectPacket::new).addPacket(ClientboundEntityEventPacket.class, ClientboundEntityEventPacket::new).addPacket(ClientboundExplodePacket.class, ClientboundExplodePacket::new).addPacket(ClientboundForgetLevelChunkPacket.class, ClientboundForgetLevelChunkPacket::new).addPacket(ClientboundGameEventPacket.class, ClientboundGameEventPacket::new).addPacket(ClientboundHorseScreenOpenPacket.class, ClientboundHorseScreenOpenPacket::new).addPacket(ClientboundInitializeBorderPacket.class, ClientboundInitializeBorderPacket::new).addPacket(ClientboundKeepAlivePacket.class, ClientboundKeepAlivePacket::new).addPacket(ClientboundLevelChunkPacket.class, ClientboundLevelChunkPacket::new).addPacket(ClientboundLevelEventPacket.class, ClientboundLevelEventPacket::new).addPacket(ClientboundLevelParticlesPacket.class, ClientboundLevelParticlesPacket::new).addPacket(ClientboundLightUpdatePacket.class, ClientboundLightUpdatePacket::new).addPacket(ClientboundLoginPacket.class, ClientboundLoginPacket::new).addPacket(ClientboundMapItemDataPacket.class, ClientboundMapItemDataPacket::new).addPacket(ClientboundMerchantOffersPacket.class, ClientboundMerchantOffersPacket::new).addPacket(ClientboundMoveEntityPacket.Pos.class, ClientboundMoveEntityPacket.Pos::read).addPacket(ClientboundMoveEntityPacket.PosRot.class, ClientboundMoveEntityPacket.PosRot::read).addPacket(ClientboundMoveEntityPacket.Rot.class, ClientboundMoveEntityPacket.Rot::read).addPacket(ClientboundMoveVehiclePacket.class, ClientboundMoveVehiclePacket::new).addPacket(ClientboundOpenBookPacket.class, ClientboundOpenBookPacket::new).addPacket(ClientboundOpenScreenPacket.class, ClientboundOpenScreenPacket::new).addPacket(ClientboundOpenSignEditorPacket.class, ClientboundOpenSignEditorPacket::new).addPacket(ClientboundPingPacket.class, ClientboundPingPacket::new).addPacket(ClientboundPlaceGhostRecipePacket.class, ClientboundPlaceGhostRecipePacket::new).addPacket(ClientboundPlayerAbilitiesPacket.class, ClientboundPlayerAbilitiesPacket::new).addPacket(ClientboundPlayerCombatEndPacket.class, ClientboundPlayerCombatEndPacket::new).addPacket(ClientboundPlayerCombatEnterPacket.class, ClientboundPlayerCombatEnterPacket::new).addPacket(ClientboundPlayerCombatKillPacket.class, ClientboundPlayerCombatKillPacket::new).addPacket(ClientboundPlayerInfoPacket.class, ClientboundPlayerInfoPacket::new).addPacket(ClientboundPlayerLookAtPacket.class, ClientboundPlayerLookAtPacket::new).addPacket(ClientboundPlayerPositionPacket.class, ClientboundPlayerPositionPacket::new).addPacket(ClientboundRecipePacket.class, ClientboundRecipePacket::new).addPacket(ClientboundRemoveEntitiesPacket.class, ClientboundRemoveEntitiesPacket::new).addPacket(ClientboundRemoveMobEffectPacket.class, ClientboundRemoveMobEffectPacket::new).addPacket(ClientboundResourcePackPacket.class, ClientboundResourcePackPacket::new).addPacket(ClientboundRespawnPacket.class, ClientboundRespawnPacket::new).addPacket(ClientboundRotateHeadPacket.class, ClientboundRotateHeadPacket::new).addPacket(ClientboundSectionBlocksUpdatePacket.class, ClientboundSectionBlocksUpdatePacket::new).addPacket(ClientboundSelectAdvancementsTabPacket.class, ClientboundSelectAdvancementsTabPacket::new).addPacket(ClientboundSetActionBarTextPacket.class, ClientboundSetActionBarTextPacket::new).addPacket(ClientboundSetBorderCenterPacket.class, ClientboundSetBorderCenterPacket::new).addPacket(ClientboundSetBorderLerpSizePacket.class, ClientboundSetBorderLerpSizePacket::new).addPacket(ClientboundSetBorderSizePacket.class, ClientboundSetBorderSizePacket::new).addPacket(ClientboundSetBorderWarningDelayPacket.class, ClientboundSetBorderWarningDelayPacket::new).addPacket(ClientboundSetBorderWarningDistancePacket.class, ClientboundSetBorderWarningDistancePacket::new).addPacket(ClientboundSetCameraPacket.class, ClientboundSetCameraPacket::new).addPacket(ClientboundSetCarriedItemPacket.class, ClientboundSetCarriedItemPacket::new).addPacket(ClientboundSetChunkCacheCenterPacket.class, ClientboundSetChunkCacheCenterPacket::new).addPacket(ClientboundSetChunkCacheRadiusPacket.class, ClientboundSetChunkCacheRadiusPacket::new).addPacket(ClientboundSetDefaultSpawnPositionPacket.class, ClientboundSetDefaultSpawnPositionPacket::new).addPacket(ClientboundSetDisplayObjectivePacket.class, ClientboundSetDisplayObjectivePacket::new).addPacket(ClientboundSetEntityDataPacket.class, ClientboundSetEntityDataPacket::new).addPacket(ClientboundSetEntityLinkPacket.class, ClientboundSetEntityLinkPacket::new).addPacket(ClientboundSetEntityMotionPacket.class, ClientboundSetEntityMotionPacket::new).addPacket(ClientboundSetEquipmentPacket.class, ClientboundSetEquipmentPacket::new).addPacket(ClientboundSetExperiencePacket.class, ClientboundSetExperiencePacket::new).addPacket(ClientboundSetHealthPacket.class, ClientboundSetHealthPacket::new).addPacket(ClientboundSetObjectivePacket.class, ClientboundSetObjectivePacket::new).addPacket(ClientboundSetPassengersPacket.class, ClientboundSetPassengersPacket::new).addPacket(ClientboundSetPlayerTeamPacket.class, ClientboundSetPlayerTeamPacket::new).addPacket(ClientboundSetScorePacket.class, ClientboundSetScorePacket::new).addPacket(ClientboundSetSubtitleTextPacket.class, ClientboundSetSubtitleTextPacket::new).addPacket(ClientboundSetTimePacket.class, ClientboundSetTimePacket::new).addPacket(ClientboundSetTitleTextPacket.class, ClientboundSetTitleTextPacket::new).addPacket(ClientboundSetTitlesAnimationPacket.class, ClientboundSetTitlesAnimationPacket::new).addPacket(ClientboundSoundEntityPacket.class, ClientboundSoundEntityPacket::new).addPacket(ClientboundSoundPacket.class, ClientboundSoundPacket::new).addPacket(ClientboundStopSoundPacket.class, ClientboundStopSoundPacket::new).addPacket(ClientboundTabListPacket.class, ClientboundTabListPacket::new).addPacket(ClientboundTagQueryPacket.class, ClientboundTagQueryPacket::new).addPacket(ClientboundTakeItemEntityPacket.class, ClientboundTakeItemEntityPacket::new).addPacket(ClientboundTeleportEntityPacket.class, ClientboundTeleportEntityPacket::new).addPacket(ClientboundUpdateAdvancementsPacket.class, ClientboundUpdateAdvancementsPacket::new).addPacket(ClientboundUpdateAttributesPacket.class, ClientboundUpdateAttributesPacket::new).addPacket(ClientboundUpdateMobEffectPacket.class, ClientboundUpdateMobEffectPacket::new).addPacket(ClientboundUpdateRecipesPacket.class, ClientboundUpdateRecipesPacket::new).addPacket(ClientboundUpdateTagsPacket.class, ClientboundUpdateTagsPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<ServerGamePacketListener>()).addPacket(ServerboundAcceptTeleportationPacket.class, ServerboundAcceptTeleportationPacket::new).addPacket(ServerboundBlockEntityTagQuery.class, ServerboundBlockEntityTagQuery::new).addPacket(ServerboundChangeDifficultyPacket.class, ServerboundChangeDifficultyPacket::new).addPacket(ServerboundChatPacket.class, ServerboundChatPacket::new).addPacket(ServerboundClientCommandPacket.class, ServerboundClientCommandPacket::new).addPacket(ServerboundClientInformationPacket.class, ServerboundClientInformationPacket::new).addPacket(ServerboundCommandSuggestionPacket.class, ServerboundCommandSuggestionPacket::new).addPacket(ServerboundContainerButtonClickPacket.class, ServerboundContainerButtonClickPacket::new).addPacket(ServerboundContainerClickPacket.class, ServerboundContainerClickPacket::new).addPacket(ServerboundContainerClosePacket.class, ServerboundContainerClosePacket::new).addPacket(ServerboundCustomPayloadPacket.class, ServerboundCustomPayloadPacket::new).addPacket(ServerboundEditBookPacket.class, ServerboundEditBookPacket::new).addPacket(ServerboundEntityTagQuery.class, ServerboundEntityTagQuery::new).addPacket(ServerboundInteractPacket.class, ServerboundInteractPacket::new).addPacket(ServerboundJigsawGeneratePacket.class, ServerboundJigsawGeneratePacket::new).addPacket(ServerboundKeepAlivePacket.class, ServerboundKeepAlivePacket::new).addPacket(ServerboundLockDifficultyPacket.class, ServerboundLockDifficultyPacket::new).addPacket(ServerboundMovePlayerPacket.Pos.class, ServerboundMovePlayerPacket.Pos::read).addPacket(ServerboundMovePlayerPacket.PosRot.class, ServerboundMovePlayerPacket.PosRot::read).addPacket(ServerboundMovePlayerPacket.Rot.class, ServerboundMovePlayerPacket.Rot::read).addPacket(ServerboundMovePlayerPacket.StatusOnly.class, ServerboundMovePlayerPacket.StatusOnly::read).addPacket(ServerboundMoveVehiclePacket.class, ServerboundMoveVehiclePacket::new).addPacket(ServerboundPaddleBoatPacket.class, ServerboundPaddleBoatPacket::new).addPacket(ServerboundPickItemPacket.class, ServerboundPickItemPacket::new).addPacket(ServerboundPlaceRecipePacket.class, ServerboundPlaceRecipePacket::new).addPacket(ServerboundPlayerAbilitiesPacket.class, ServerboundPlayerAbilitiesPacket::new).addPacket(ServerboundPlayerActionPacket.class, ServerboundPlayerActionPacket::new).addPacket(ServerboundPlayerCommandPacket.class, ServerboundPlayerCommandPacket::new).addPacket(ServerboundPlayerInputPacket.class, ServerboundPlayerInputPacket::new).addPacket(ServerboundPongPacket.class, ServerboundPongPacket::new).addPacket(ServerboundRecipeBookChangeSettingsPacket.class, ServerboundRecipeBookChangeSettingsPacket::new).addPacket(ServerboundRecipeBookSeenRecipePacket.class, ServerboundRecipeBookSeenRecipePacket::new).addPacket(ServerboundRenameItemPacket.class, ServerboundRenameItemPacket::new).addPacket(ServerboundResourcePackPacket.class, ServerboundResourcePackPacket::new).addPacket(ServerboundSeenAdvancementsPacket.class, ServerboundSeenAdvancementsPacket::new).addPacket(ServerboundSelectTradePacket.class, ServerboundSelectTradePacket::new).addPacket(ServerboundSetBeaconPacket.class, ServerboundSetBeaconPacket::new).addPacket(ServerboundSetCarriedItemPacket.class, ServerboundSetCarriedItemPacket::new).addPacket(ServerboundSetCommandBlockPacket.class, ServerboundSetCommandBlockPacket::new).addPacket(ServerboundSetCommandMinecartPacket.class, ServerboundSetCommandMinecartPacket::new).addPacket(ServerboundSetCreativeModeSlotPacket.class, ServerboundSetCreativeModeSlotPacket::new).addPacket(ServerboundSetJigsawBlockPacket.class, ServerboundSetJigsawBlockPacket::new).addPacket(ServerboundSetStructureBlockPacket.class, ServerboundSetStructureBlockPacket::new).addPacket(ServerboundSignUpdatePacket.class, ServerboundSignUpdatePacket::new).addPacket(ServerboundSwingPacket.class, ServerboundSwingPacket::new).addPacket(ServerboundTeleportToEntityPacket.class, ServerboundTeleportToEntityPacket::new).addPacket(ServerboundUseItemOnPacket.class, ServerboundUseItemOnPacket::new).addPacket(ServerboundUseItemPacket.class, ServerboundUseItemPacket::new))),
++   PLAY(0, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet<ClientGamePacketListener>()).addPacket(ClientboundAddEntityPacket.class, ClientboundAddEntityPacket::new).addPacket(ClientboundAddExperienceOrbPacket.class, ClientboundAddExperienceOrbPacket::new).addPacket(ClientboundAddMobPacket.class, ClientboundAddMobPacket::new).addPacket(ClientboundAddPaintingPacket.class, ClientboundAddPaintingPacket::new).addPacket(ClientboundAddPlayerPacket.class, ClientboundAddPlayerPacket::new).addPacket(ClientboundAddVibrationSignalPacket.class, ClientboundAddVibrationSignalPacket::new).addPacket(ClientboundAnimatePacket.class, ClientboundAnimatePacket::new).addPacket(ClientboundAwardStatsPacket.class, ClientboundAwardStatsPacket::new).addPacket(ClientboundBlockBreakAckPacket.class, ClientboundBlockBreakAckPacket::new).addPacket(ClientboundBlockDestructionPacket.class, ClientboundBlockDestructionPacket::new).addPacket(ClientboundBlockEntityDataPacket.class, ClientboundBlockEntityDataPacket::new).addPacket(ClientboundBlockEventPacket.class, ClientboundBlockEventPacket::new).addPacket(ClientboundBlockUpdatePacket.class, ClientboundBlockUpdatePacket::new).addPacket(ClientboundBossEventPacket.class, ClientboundBossEventPacket::new).addPacket(ClientboundChangeDifficultyPacket.class, ClientboundChangeDifficultyPacket::new).addPacket(ClientboundChatPacket.class, ClientboundChatPacket::new).addPacket(ClientboundClearTitlesPacket.class, ClientboundClearTitlesPacket::new).addPacket(ClientboundCommandSuggestionsPacket.class, ClientboundCommandSuggestionsPacket::new).addPacket(ClientboundCommandsPacket.class, ClientboundCommandsPacket::new).addPacket(ClientboundContainerClosePacket.class, ClientboundContainerClosePacket::new).addPacket(ClientboundContainerSetContentPacket.class, ClientboundContainerSetContentPacket::new).addPacket(ClientboundContainerSetDataPacket.class, ClientboundContainerSetDataPacket::new).addPacket(ClientboundContainerSetSlotPacket.class, ClientboundContainerSetSlotPacket::new).addPacket(ClientboundCooldownPacket.class, ClientboundCooldownPacket::new).addPacket(ClientboundCustomPayloadPacket.class, ClientboundCustomPayloadPacket::new).addPacket(ClientboundCustomSoundPacket.class, ClientboundCustomSoundPacket::new).addPacket(ClientboundDisconnectPacket.class, ClientboundDisconnectPacket::new).addPacket(ClientboundEntityEventPacket.class, ClientboundEntityEventPacket::new).addPacket(ClientboundExplodePacket.class, ClientboundExplodePacket::new).addPacket(ClientboundForgetLevelChunkPacket.class, ClientboundForgetLevelChunkPacket::new).addPacket(ClientboundGameEventPacket.class, ClientboundGameEventPacket::new).addPacket(ClientboundHorseScreenOpenPacket.class, ClientboundHorseScreenOpenPacket::new).addPacket(ClientboundInitializeBorderPacket.class, ClientboundInitializeBorderPacket::new).addPacket(ClientboundKeepAlivePacket.class, ClientboundKeepAlivePacket::new).addPacket(ClientboundLevelChunkPacket.class, ClientboundLevelChunkPacket::new).addPacket(ClientboundLevelEventPacket.class, ClientboundLevelEventPacket::new).addPacket(ClientboundLevelParticlesPacket.class, ClientboundLevelParticlesPacket::new).addPacket(ClientboundLightUpdatePacket.class, ClientboundLightUpdatePacket::new).addPacket(ClientboundLoginPacket.class, ClientboundLoginPacket::new).addPacket(ClientboundMapItemDataPacket.class, ClientboundMapItemDataPacket::new).addPacket(ClientboundMerchantOffersPacket.class, ClientboundMerchantOffersPacket::new).addPacket(ClientboundMoveEntityPacket.Pos.class, ClientboundMoveEntityPacket.Pos::read).addPacket(ClientboundMoveEntityPacket.PosRot.class, ClientboundMoveEntityPacket.PosRot::read).addPacket(ClientboundMoveEntityPacket.Rot.class, ClientboundMoveEntityPacket.Rot::read).addPacket(ClientboundMoveVehiclePacket.class, ClientboundMoveVehiclePacket::new).addPacket(ClientboundOpenBookPacket.class, ClientboundOpenBookPacket::new).addPacket(ClientboundOpenScreenPacket.class, ClientboundOpenScreenPacket::new).addPacket(ClientboundOpenSignEditorPacket.class, ClientboundOpenSignEditorPacket::new).addPacket(ClientboundPingPacket.class, ClientboundPingPacket::new).addPacket(ClientboundPlaceGhostRecipePacket.class, ClientboundPlaceGhostRecipePacket::new).addPacket(ClientboundPlayerAbilitiesPacket.class, ClientboundPlayerAbilitiesPacket::new).addPacket(ClientboundPlayerCombatEndPacket.class, ClientboundPlayerCombatEndPacket::new).addPacket(ClientboundPlayerCombatEnterPacket.class, ClientboundPlayerCombatEnterPacket::new).addPacket(ClientboundPlayerCombatKillPacket.class, ClientboundPlayerCombatKillPacket::new).addPacket(ClientboundPlayerInfoPacket.class, ClientboundPlayerInfoPacket::new).addPacket(ClientboundPlayerLookAtPacket.class, ClientboundPlayerLookAtPacket::new).addPacket(ClientboundPlayerPositionPacket.class, ClientboundPlayerPositionPacket::new).addPacket(ClientboundRecipePacket.class, ClientboundRecipePacket::new).addPacket(ClientboundRemoveEntityPacket.class, ClientboundRemoveEntityPacket::new).addPacket(ClientboundRemoveMobEffectPacket.class, ClientboundRemoveMobEffectPacket::new).addPacket(ClientboundResourcePackPacket.class, ClientboundResourcePackPacket::new).addPacket(ClientboundRespawnPacket.class, ClientboundRespawnPacket::new).addPacket(ClientboundRotateHeadPacket.class, ClientboundRotateHeadPacket::new).addPacket(ClientboundSectionBlocksUpdatePacket.class, ClientboundSectionBlocksUpdatePacket::new).addPacket(ClientboundSelectAdvancementsTabPacket.class, ClientboundSelectAdvancementsTabPacket::new).addPacket(ClientboundSetActionBarTextPacket.class, ClientboundSetActionBarTextPacket::new).addPacket(ClientboundSetBorderCenterPacket.class, ClientboundSetBorderCenterPacket::new).addPacket(ClientboundSetBorderLerpSizePacket.class, ClientboundSetBorderLerpSizePacket::new).addPacket(ClientboundSetBorderSizePacket.class, ClientboundSetBorderSizePacket::new).addPacket(ClientboundSetBorderWarningDelayPacket.class, ClientboundSetBorderWarningDelayPacket::new).addPacket(ClientboundSetBorderWarningDistancePacket.class, ClientboundSetBorderWarningDistancePacket::new).addPacket(ClientboundSetCameraPacket.class, ClientboundSetCameraPacket::new).addPacket(ClientboundSetCarriedItemPacket.class, ClientboundSetCarriedItemPacket::new).addPacket(ClientboundSetChunkCacheCenterPacket.class, ClientboundSetChunkCacheCenterPacket::new).addPacket(ClientboundSetChunkCacheRadiusPacket.class, ClientboundSetChunkCacheRadiusPacket::new).addPacket(ClientboundSetDefaultSpawnPositionPacket.class, ClientboundSetDefaultSpawnPositionPacket::new).addPacket(ClientboundSetDisplayObjectivePacket.class, ClientboundSetDisplayObjectivePacket::new).addPacket(ClientboundSetEntityDataPacket.class, ClientboundSetEntityDataPacket::new).addPacket(ClientboundSetEntityLinkPacket.class, ClientboundSetEntityLinkPacket::new).addPacket(ClientboundSetEntityMotionPacket.class, ClientboundSetEntityMotionPacket::new).addPacket(ClientboundSetEquipmentPacket.class, ClientboundSetEquipmentPacket::new).addPacket(ClientboundSetExperiencePacket.class, ClientboundSetExperiencePacket::new).addPacket(ClientboundSetHealthPacket.class, ClientboundSetHealthPacket::new).addPacket(ClientboundSetObjectivePacket.class, ClientboundSetObjectivePacket::new).addPacket(ClientboundSetPassengersPacket.class, ClientboundSetPassengersPacket::new).addPacket(ClientboundSetPlayerTeamPacket.class, ClientboundSetPlayerTeamPacket::new).addPacket(ClientboundSetScorePacket.class, ClientboundSetScorePacket::new).addPacket(ClientboundSetSubtitleTextPacket.class, ClientboundSetSubtitleTextPacket::new).addPacket(ClientboundSetTimePacket.class, ClientboundSetTimePacket::new).addPacket(ClientboundSetTitleTextPacket.class, ClientboundSetTitleTextPacket::new).addPacket(ClientboundSetTitlesAnimationPacket.class, ClientboundSetTitlesAnimationPacket::new).addPacket(ClientboundSoundEntityPacket.class, ClientboundSoundEntityPacket::new).addPacket(ClientboundSoundPacket.class, ClientboundSoundPacket::new).addPacket(ClientboundStopSoundPacket.class, ClientboundStopSoundPacket::new).addPacket(ClientboundTabListPacket.class, ClientboundTabListPacket::new).addPacket(ClientboundTagQueryPacket.class, ClientboundTagQueryPacket::new).addPacket(ClientboundTakeItemEntityPacket.class, ClientboundTakeItemEntityPacket::new).addPacket(ClientboundTeleportEntityPacket.class, ClientboundTeleportEntityPacket::new).addPacket(ClientboundUpdateAdvancementsPacket.class, ClientboundUpdateAdvancementsPacket::new).addPacket(ClientboundUpdateAttributesPacket.class, ClientboundUpdateAttributesPacket::new).addPacket(ClientboundUpdateMobEffectPacket.class, ClientboundUpdateMobEffectPacket::new).addPacket(ClientboundUpdateRecipesPacket.class, ClientboundUpdateRecipesPacket::new).addPacket(ClientboundUpdateTagsPacket.class, ClientboundUpdateTagsPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<ServerGamePacketListener>()).addPacket(ServerboundAcceptTeleportationPacket.class, ServerboundAcceptTeleportationPacket::new).addPacket(ServerboundBlockEntityTagQuery.class, ServerboundBlockEntityTagQuery::new).addPacket(ServerboundChangeDifficultyPacket.class, ServerboundChangeDifficultyPacket::new).addPacket(ServerboundChatPacket.class, ServerboundChatPacket::new).addPacket(ServerboundClientCommandPacket.class, ServerboundClientCommandPacket::new).addPacket(ServerboundClientInformationPacket.class, ServerboundClientInformationPacket::new).addPacket(ServerboundCommandSuggestionPacket.class, ServerboundCommandSuggestionPacket::new).addPacket(ServerboundContainerButtonClickPacket.class, ServerboundContainerButtonClickPacket::new).addPacket(ServerboundContainerClickPacket.class, ServerboundContainerClickPacket::new).addPacket(ServerboundContainerClosePacket.class, ServerboundContainerClosePacket::new).addPacket(ServerboundCustomPayloadPacket.class, ServerboundCustomPayloadPacket::new).addPacket(ServerboundEditBookPacket.class, ServerboundEditBookPacket::new).addPacket(ServerboundEntityTagQuery.class, ServerboundEntityTagQuery::new).addPacket(ServerboundInteractPacket.class, ServerboundInteractPacket::new).addPacket(ServerboundJigsawGeneratePacket.class, ServerboundJigsawGeneratePacket::new).addPacket(ServerboundKeepAlivePacket.class, ServerboundKeepAlivePacket::new).addPacket(ServerboundLockDifficultyPacket.class, ServerboundLockDifficultyPacket::new).addPacket(ServerboundMovePlayerPacket.Pos.class, ServerboundMovePlayerPacket.Pos::read).addPacket(ServerboundMovePlayerPacket.PosRot.class, ServerboundMovePlayerPacket.PosRot::read).addPacket(ServerboundMovePlayerPacket.Rot.class, ServerboundMovePlayerPacket.Rot::read).addPacket(ServerboundMovePlayerPacket.StatusOnly.class, ServerboundMovePlayerPacket.StatusOnly::read).addPacket(ServerboundMoveVehiclePacket.class, ServerboundMoveVehiclePacket::new).addPacket(ServerboundPaddleBoatPacket.class, ServerboundPaddleBoatPacket::new).addPacket(ServerboundPickItemPacket.class, ServerboundPickItemPacket::new).addPacket(ServerboundPlaceRecipePacket.class, ServerboundPlaceRecipePacket::new).addPacket(ServerboundPlayerAbilitiesPacket.class, ServerboundPlayerAbilitiesPacket::new).addPacket(ServerboundPlayerActionPacket.class, ServerboundPlayerActionPacket::new).addPacket(ServerboundPlayerCommandPacket.class, ServerboundPlayerCommandPacket::new).addPacket(ServerboundPlayerInputPacket.class, ServerboundPlayerInputPacket::new).addPacket(ServerboundPongPacket.class, ServerboundPongPacket::new).addPacket(ServerboundRecipeBookChangeSettingsPacket.class, ServerboundRecipeBookChangeSettingsPacket::new).addPacket(ServerboundRecipeBookSeenRecipePacket.class, ServerboundRecipeBookSeenRecipePacket::new).addPacket(ServerboundRenameItemPacket.class, ServerboundRenameItemPacket::new).addPacket(ServerboundResourcePackPacket.class, ServerboundResourcePackPacket::new).addPacket(ServerboundSeenAdvancementsPacket.class, ServerboundSeenAdvancementsPacket::new).addPacket(ServerboundSelectTradePacket.class, ServerboundSelectTradePacket::new).addPacket(ServerboundSetBeaconPacket.class, ServerboundSetBeaconPacket::new).addPacket(ServerboundSetCarriedItemPacket.class, ServerboundSetCarriedItemPacket::new).addPacket(ServerboundSetCommandBlockPacket.class, ServerboundSetCommandBlockPacket::new).addPacket(ServerboundSetCommandMinecartPacket.class, ServerboundSetCommandMinecartPacket::new).addPacket(ServerboundSetCreativeModeSlotPacket.class, ServerboundSetCreativeModeSlotPacket::new).addPacket(ServerboundSetJigsawBlockPacket.class, ServerboundSetJigsawBlockPacket::new).addPacket(ServerboundSetStructureBlockPacket.class, ServerboundSetStructureBlockPacket::new).addPacket(ServerboundSignUpdatePacket.class, ServerboundSignUpdatePacket::new).addPacket(ServerboundSwingPacket.class, ServerboundSwingPacket::new).addPacket(ServerboundTeleportToEntityPacket.class, ServerboundTeleportToEntityPacket::new).addPacket(ServerboundUseItemOnPacket.class, ServerboundUseItemOnPacket::new).addPacket(ServerboundUseItemPacket.class, ServerboundUseItemPacket::new))),
 +   STATUS(1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<ServerStatusPacketListener>()).addPacket(ServerboundStatusRequestPacket.class, ServerboundStatusRequestPacket::new).addPacket(ServerboundPingRequestPacket.class, ServerboundPingRequestPacket::new)).addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet<ClientStatusPacketListener>()).addPacket(ClientboundStatusResponsePacket.class, ClientboundStatusResponsePacket::new).addPacket(ClientboundPongResponsePacket.class, ClientboundPongResponsePacket::new))),
 +   LOGIN(2, protocol().addFlow(PacketFlow.CLIENTBOUND, (new ConnectionProtocol.PacketSet<ClientLoginPacketListener>()).addPacket(ClientboundLoginDisconnectPacket.class, ClientboundLoginDisconnectPacket::new).addPacket(ClientboundHelloPacket.class, ClientboundHelloPacket::new).addPacket(ClientboundGameProfilePacket.class, ClientboundGameProfilePacket::new).addPacket(ClientboundLoginCompressionPacket.class, ClientboundLoginCompressionPacket::new).addPacket(ClientboundCustomQueryPacket.class, ClientboundCustomQueryPacket::new)).addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet<ServerLoginPacketListener>()).addPacket(ServerboundHelloPacket.class, ServerboundHelloPacket::new).addPacket(ServerboundKeyPacket.class, ServerboundKeyPacket::new).addPacket(ServerboundCustomQueryPacket.class, ServerboundCustomQueryPacket::new)));
  
     private static final int MIN_PROTOCOL_ID = -1;
     private static final int MAX_PROTOCOL_ID = 2;
 diff --git a/src/main/java/net/minecraft/network/FriendlyByteBuf.java b/src/main/java/net/minecraft/network/FriendlyByteBuf.java
-index 20c762bd44f32fd32bc95c9b7cf7f813c620ce5f..ff73294a7999acd2c5c2494cb5893405f5edaf4a 100644
+index 21bd8508cf1342f57eff9fafc99eb52014dae106..8a0d288e1369fd697765b0e52b93f23ba3054e04 100644
 --- a/src/main/java/net/minecraft/network/FriendlyByteBuf.java
 +++ b/src/main/java/net/minecraft/network/FriendlyByteBuf.java
-@@ -148,7 +148,7 @@ public class FriendlyByteBuf extends ByteBuf {
+@@ -138,7 +138,7 @@ public class FriendlyByteBuf extends ByteBuf {
  
     public void writeIntIdList(IntList intList) {
        this.writeVarInt(intList.size());
@@ -1953,10 +1923,10 @@ index 788c5b9908f1bf2e6ec887a2fb51ba1c46266740..d887f43249da9043a3c8ebf3a822fe77
  
     static final class ReadCache<E> {
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index c120eb5ce619c07fe0c0960aafc7381e6f6608ed..4fe4d19727a6aef988cf280e98626831efe9f174 100644
+index 3c13556ef829ec76113c7ee988ddaa9855111961..c8f61ea24bd4b57102166cfba81435242c96b216 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
-@@ -164,17 +164,18 @@ public class Main {
+@@ -174,17 +174,17 @@ public class Main {
           levelStorageAccess.saveDataTag(registryHolder, worldData);
           WorldData worldData2 = worldData;
           final DedicatedServer dedicatedServer = MinecraftServer.spin((threadx) -> {
@@ -1965,31 +1935,29 @@ index c120eb5ce619c07fe0c0960aafc7381e6f6608ed..4fe4d19727a6aef988cf280e98626831
 -            dedicatedServer.setPort(optionSet.valueOf(optionSpec12));
 -            dedicatedServer.setDemo(optionSet.has(optionSpec3));
 -            dedicatedServer.setId((String)optionSet.valueOf(optionSpec13));
--            boolean flag = !optionSet.has(optionSpec) && !optionSet.valuesOf(optionSpec14).contains("nogui");
+-            boolean flag = !optionSet.has(optionSpec) && !optionSet.valuesOf(optionSpec15).contains("nogui");
 -            if (flag && !GraphicsEnvironment.isHeadless()) {
 -               dedicatedServer.showGui();
-+            // MagmaCube start - decompile error
-+            DedicatedServer dedicatedServerx = new DedicatedServer(threadx, registryHolder, levelStorageAccess, packRepository, serverResources, worldData2, dedicatedServerSettings, DataFixers.getDataFixer(), minecraftSessionService, gameProfileRepository, gameProfileCache, LoggerChunkProgressListener::new);
-+            dedicatedServerx.setSingleplayerName((String)optionSet.valueOf(optionSpec9));
-+            dedicatedServerx.setPort(optionSet.valueOf(optionSpec12));
-+            dedicatedServerx.setDemo(optionSet.has(optionSpec3));
-+            dedicatedServerx.setId((String)optionSet.valueOf(optionSpec13));
-+            boolean flagx = !optionSet.has(optionSpec) && !optionSet.valuesOf(optionSpec14).contains("nogui");
-+            if (flagx && !GraphicsEnvironment.isHeadless()) {
-+               dedicatedServerx.showGui();
++            DedicatedServer dedicatedServerIn = new DedicatedServer(threadx, registryHolder, levelStorageAccess, packRepository, serverResources, worldData2, dedicatedServerSettings, DataFixers.getDataFixer(), minecraftSessionService, gameProfileRepository, gameProfileCache, LoggerChunkProgressListener::new);
++            dedicatedServerIn.setSingleplayerName((String)optionSet.valueOf(optionSpec9));
++            dedicatedServerIn.setPort(optionSet.valueOf(optionSpec12));
++            dedicatedServerIn.setDemo(optionSet.has(optionSpec3));
++            dedicatedServerIn.setId((String)optionSet.valueOf(optionSpec13));
++            boolean nogui = !optionSet.has(optionSpec) && !optionSet.valuesOf(optionSpec15).contains("nogui");
++            if (nogui && !GraphicsEnvironment.isHeadless()) {
++               dedicatedServerIn.showGui();
              }
--
+ 
 -            return dedicatedServer;
-+            return dedicatedServerx;
-+            // MagmaCube end - decompile error
++            return dedicatedServerIn;
           });
           Thread thread = new Thread("Server Shutdown Thread") {
              public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 7349a2756755470fe5f77f8783ba67b92378db39..180c931ef6d80b2adb8d1c1ced3536b3f05dd921 100644
+index 9937f352a6e252432a4b31ce53798e674189c25d..3344a2c21149d78206fb494de47d9caf86507567 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -750,7 +750,8 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -798,7 +798,8 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
        }
     }
  
@@ -1999,7 +1967,7 @@ index 7349a2756755470fe5f77f8783ba67b92378db39..180c931ef6d80b2adb8d1c1ced3536b3
        this.getProfiler().incrementCounter("runTask");
        super.doRunTask(tickTask);
     }
-@@ -1283,7 +1284,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1339,7 +1340,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
     }
  
     public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -2119,18 +2087,18 @@ index dec3cc6d55fbe8cecf5c827326955ec3979babba..7f57513f882dba63a4164085353c0d0b
     }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 1d1f80426cd188c47cafa52e07a83430fbe8af7a..4e3a34aecaa179c3a23b44bac9d77b6c95bb4b36 100644
+index 2d18d78b66920de15d42e29bcc147c3aec35fa32..ea288cbd6617557781739050412f216e28b19d9b 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -496,9 +496,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
        Executor executor = (runnable) -> this.worldgenMailbox.tell(ChunkTaskPriorityQueueSorter.message(chunkHolder, runnable));
        return completableFuture.thenComposeAsync((either) -> (CompletionStage)either.map((list) -> {
              try {
--               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuture = chunkStatus.generate(executor, this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list);
-+               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuturex = chunkStatus.generate(executor, this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list);
+-               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuture = chunkStatus.generate(executor, this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list, false);
++               CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFutureIn = chunkStatus.generate(executor, this.level, this.generator, this.structureManager, this.lightEngine, (chunkAccess) -> this.protoChunkToFullChunk(chunkHolder), list, false);
                 this.progressListener.onStatusChange(chunkPos, chunkStatus);
 -               return completableFuture;
-+               return completableFuturex;
++               return completableFutureIn;
              } catch (Exception var9) {
                 var9.getStackTrace();
                 CrashReport crashReport = CrashReport.forThrowable(var9, "Exception generating new chunk");
@@ -2376,7 +2344,7 @@ index d1f2f6931c365ca5ca9592fa3318bcb33faac6af..e0444dfcaa90e9ecb1b22220c835f0e6
        this.total.start();
        this.allDone.thenAcceptAsync(this::finish, executor2);
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 151d0034a675e913ca8523780be102ed2d75f232..edebad60afa7da27e6ad8d79320e1d529c4bece2 100644
+index aebeac51bca259eab714495c2e2ebae68ac8e15b..72540db51047702597e32c2566d85fc354350800 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -317,7 +317,7 @@ public abstract class PlayerList {
@@ -3990,6 +3958,140 @@ index 79ceda1254d2f4494cf49764ebccb28feda944f3..b029dd3bc9ddc76f9abaac8009ca7305
           }
  
        });
+diff --git a/src/main/java/net/minecraft/util/profiling/jfr/parse/JfrStatsResult.java b/src/main/java/net/minecraft/util/profiling/jfr/parse/JfrStatsResult.java
+index a3d66e7be6194bdf74accfbf194d36a300ebe203..07194679c66b774ff4b0b927cc7bd1146936ca5f 100644
+--- a/src/main/java/net/minecraft/util/profiling/jfr/parse/JfrStatsResult.java
++++ b/src/main/java/net/minecraft/util/profiling/jfr/parse/JfrStatsResult.java
+@@ -96,8 +96,8 @@ public class JfrStatsResult {
+    }
+ 
+    public List<Pair<ChunkStatus, TimedStatSummary<ChunkGenStat>>> getChunkGenSummary() {
+-      Map<ChunkStatus, List<ChunkGenStat>> map = (Map)this.chunkGenStats.stream().collect(Collectors.groupingBy((chunkGenStat) -> chunkGenStat.status));
+-      return map.entrySet().stream().map((entry) -> Pair.of((ChunkStatus)entry.getKey(), new TimedStatSummary(entry.getValue()))).sorted(Comparator.comparing((pair) -> ((TimedStatSummary)pair.getSecond()).totalDuration).reversed()).collect(Collectors.toList());
++      Map<ChunkStatus, List<ChunkGenStat>> map = this.chunkGenStats.stream().collect(Collectors.groupingBy((chunkGenStat) -> chunkGenStat.status));
++      return map.entrySet().stream().map((entry) -> Pair.of((ChunkStatus)entry.getKey(), new TimedStatSummary<>(entry.getValue()))).sorted(Comparator.<Pair<ChunkStatus, TimedStatSummary<ChunkGenStat>>, Duration>comparing((pair) -> pair.getSecond().totalDuration).reversed()).collect(Collectors.toList());
+    }
+ 
+    public List<CpuLoadStat> getCpuStats() {
+diff --git a/src/main/java/net/minecraft/util/profiling/jfr/serialize/JfrResultJsonSerializer.java b/src/main/java/net/minecraft/util/profiling/jfr/serialize/JfrResultJsonSerializer.java
+index d2b765a3fdc8de59b28dab769c11cbb2cb532904..dbb2756c0760bbcc2ad8def720d15a384aaf9bf5 100644
+--- a/src/main/java/net/minecraft/util/profiling/jfr/serialize/JfrResultJsonSerializer.java
++++ b/src/main/java/net/minecraft/util/profiling/jfr/serialize/JfrResultJsonSerializer.java
+@@ -76,12 +76,12 @@ public class JfrResultJsonSerializer implements JfrResultSerializer {
+          JsonObject jsonObject3 = Util.make(new JsonObject(), (jsonObject2x) -> jsonObject2.add("durationNanosPercentiles", jsonObject2x));
+          timedStatSummary.percentilesNanos.forEach((integer, d) -> jsonObject3.addProperty("p" + integer, d));
+          Function<ChunkGenStat, JsonElement> function = (chunkGenStat) -> {
+-            JsonObject jsonObject = new JsonObject();
+-            jsonObject.addProperty("durationNanos", chunkGenStat.duration.toNanos());
+-            jsonObject.addProperty("level", chunkGenStat.level);
+-            jsonObject.addProperty("blockPosX", chunkGenStat.blockPos.getX());
+-            jsonObject.addProperty("blockPosZ", chunkGenStat.blockPos.getZ());
+-            return jsonObject;
++            JsonObject object = new JsonObject();
++            object.addProperty("durationNanos", chunkGenStat.duration.toNanos());
++            object.addProperty("level", chunkGenStat.level);
++            object.addProperty("blockPosX", chunkGenStat.blockPos.getX());
++            object.addProperty("blockPosZ", chunkGenStat.blockPos.getZ());
++            return object;
+          };
+          jsonObject2.add("fastest", (JsonElement)function.apply(timedStatSummary.fastest));
+          jsonObject2.add("slowest", (JsonElement)function.apply(timedStatSummary.slowest));
+@@ -130,10 +130,10 @@ public class JfrResultJsonSerializer implements JfrResultSerializer {
+       JsonArray jsonArray = new JsonArray();
+       jsonObject.add("topContributors", jsonArray);
+       fileIOSummary.topContributors().limit(10L).forEach((pair) -> {
+-         JsonObject jsonObject = new JsonObject();
+-         jsonArray.add(jsonObject);
+-         jsonObject.addProperty("path", (String)pair.getLeft());
+-         jsonObject.addProperty("totalBytes", (Number)pair.getRight());
++         JsonObject object = new JsonObject();
++         jsonArray.add(object);
++         object.addProperty("path", (String)pair.getLeft());
++         object.addProperty("totalBytes", (Number)pair.getRight());
+       });
+       return jsonObject;
+    }
+@@ -154,10 +154,10 @@ public class JfrResultJsonSerializer implements JfrResultSerializer {
+       JsonArray jsonArray = new JsonArray();
+       jsonObject.add("topContributors", jsonArray);
+       packetSummary.getLargestSizeContributors().stream().limit(10L).forEach((pair) -> {
+-         JsonObject jsonObject = new JsonObject();
+-         jsonArray.add(jsonObject);
+-         jsonObject.addProperty("packetName", (String)pair.getFirst());
+-         jsonObject.addProperty("totalBytes", (Number)pair.getSecond());
++         JsonObject object = new JsonObject();
++         jsonArray.add(object);
++         object.addProperty("packetName", (String)pair.getFirst());
++         object.addProperty("totalBytes", (Number)pair.getSecond());
+       });
+       return jsonObject;
+    }
+@@ -165,16 +165,16 @@ public class JfrResultJsonSerializer implements JfrResultSerializer {
+    private JsonElement cpu(List<CpuLoadStat> list) {
+       JsonObject jsonObject = new JsonObject();
+       BiFunction<List<CpuLoadStat>, ToDoubleFunction<CpuLoadStat>, JsonObject> biFunction = (listx, toDoubleFunction) -> {
+-         JsonObject jsonObject = new JsonObject();
++         JsonObject object = new JsonObject();
+          DoubleSummaryStatistics doubleSummaryStatistics = listx.stream().mapToDouble(toDoubleFunction).summaryStatistics();
+-         jsonObject.addProperty("min", doubleSummaryStatistics.getMin());
+-         jsonObject.addProperty("average", doubleSummaryStatistics.getAverage());
+-         jsonObject.addProperty("max", doubleSummaryStatistics.getMax());
+-         return jsonObject;
++         object.addProperty("min", doubleSummaryStatistics.getMin());
++         object.addProperty("average", doubleSummaryStatistics.getAverage());
++         object.addProperty("max", doubleSummaryStatistics.getMax());
++         return object;
+       };
+-      jsonObject.add("jvm", (JsonElement)biFunction.apply(list, (ToDoubleFunction)(cpuLoadStat) -> cpuLoadStat.jvm));
+-      jsonObject.add("userJvm", (JsonElement)biFunction.apply(list, (ToDoubleFunction)(cpuLoadStat) -> cpuLoadStat.userJvm));
+-      jsonObject.add("system", (JsonElement)biFunction.apply(list, (ToDoubleFunction)(cpuLoadStat) -> cpuLoadStat.system));
++      jsonObject.add("jvm", (JsonElement)biFunction.apply(list, (cpuLoadStat) -> cpuLoadStat.jvm));
++      jsonObject.add("userJvm", (JsonElement)biFunction.apply(list, (cpuLoadStat) -> cpuLoadStat.userJvm));
++      jsonObject.add("system", (JsonElement)biFunction.apply(list, (cpuLoadStat) -> cpuLoadStat.system));
+       return jsonObject;
+    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/profiling/jfr/stats/FileIOStat.java b/src/main/java/net/minecraft/util/profiling/jfr/stats/FileIOStat.java
+index cc11bcf6a905ac57f46ee3d66a479f4007a476d7..0af48d08253ff227966f7477f098197b88439e00 100644
+--- a/src/main/java/net/minecraft/util/profiling/jfr/stats/FileIOStat.java
++++ b/src/main/java/net/minecraft/util/profiling/jfr/stats/FileIOStat.java
+@@ -58,7 +58,7 @@ public class FileIOStat {
+       }
+ 
+       public Stream<Pair<String, Long>> topContributors() {
+-         return ((Map)this.ioStats.stream().filter((fileIOStat) -> fileIOStat.path != null).collect(Collectors.groupingBy((fileIOStat) -> fileIOStat.path, Collectors.summingLong((fileIOStat) -> fileIOStat.bytes)))).entrySet().stream().sorted(Entry.comparingByValue().reversed()).map((entry) -> Pair.of((String)entry.getKey(), (Long)entry.getValue()));
++         return (this.ioStats.stream().filter((fileIOStat) -> fileIOStat.path != null).collect(Collectors.groupingBy((fileIOStat) -> fileIOStat.path, Collectors.summingLong((fileIOStat) -> fileIOStat.bytes)))).entrySet().stream().sorted(Entry.<String, Long>comparingByValue().reversed()).map((entry) -> Pair.of((String)entry.getKey(), (Long)entry.getValue()));
+       }
+    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/profiling/jfr/stats/PacketStat.java b/src/main/java/net/minecraft/util/profiling/jfr/stats/PacketStat.java
+index 15388983879781af67dafb177ad31b5aeb5bf274..f28fc72b4d52dad0d5bf41dffbaf1eb6060ec737 100644
+--- a/src/main/java/net/minecraft/util/profiling/jfr/stats/PacketStat.java
++++ b/src/main/java/net/minecraft/util/profiling/jfr/stats/PacketStat.java
+@@ -37,7 +37,7 @@ public class PacketStat implements TimeStamped {
+          IntSummaryStatistics intSummaryStatistics = list.stream().mapToInt((packetStat) -> packetStat.bytes).summaryStatistics();
+          this.totalSize = intSummaryStatistics.getSum();
+          this.totalCount = (long)list.size();
+-         this.largestSizeContributors = ((Map)list.stream().collect(Collectors.groupingBy((packetStat) -> packetStat.packetName, Collectors.summingLong((packetStat) -> (long)packetStat.bytes)))).entrySet().stream().sorted(Entry.comparingByValue(Comparator.reverseOrder())).limit(5L).map((entry) -> Pair.of((String)entry.getKey(), (Long)entry.getValue())).collect(Collectors.toList());
++         this.largestSizeContributors = (list.stream().collect(Collectors.groupingBy((packetStat) -> packetStat.packetName, Collectors.summingLong((packetStat) -> (long)packetStat.bytes)))).entrySet().stream().sorted(Entry.comparingByValue(Comparator.reverseOrder())).limit(5L).map((entry) -> Pair.of((String)entry.getKey(), (Long)entry.getValue())).collect(Collectors.toList());
+       }
+ 
+       public long getTotalCount() {
+diff --git a/src/main/java/net/minecraft/util/profiling/jfr/stats/TimedStatSummary.java b/src/main/java/net/minecraft/util/profiling/jfr/stats/TimedStatSummary.java
+index de11b7b4f2ff16e2ecfd24b5481765f00d61b9c5..de83505cddd2e865b8f6d94c25d45e3024f3ded2 100644
+--- a/src/main/java/net/minecraft/util/profiling/jfr/stats/TimedStatSummary.java
++++ b/src/main/java/net/minecraft/util/profiling/jfr/stats/TimedStatSummary.java
+@@ -25,7 +25,7 @@ public class TimedStatSummary<T extends TimedStat> {
+          this.totalDuration = (Duration)list2.stream().map(TimedStat::duration).reduce(Duration::plus).orElse(Duration.ZERO);
+          this.fastest = (T)(list2.get(0));
+          this.slowest = (T)(list2.get(list2.size() - 1));
+-         this.secondSlowest = list2.size() > 1 ? Optional.of((TimedStat)list2.get(list2.size() - 2)) : Optional.empty();
++         this.secondSlowest = list2.size() > 1 ? Optional.of(list2.get(list2.size() - 2)) : Optional.empty();
+          this.count = list2.size();
+          this.percentilesNanos = Percentiles.evaluate(list2.stream().mapToLong((timedStat) -> timedStat.duration().toNanos()).toArray());
+       }
 diff --git a/src/main/java/net/minecraft/util/random/WeightedRandom.java b/src/main/java/net/minecraft/util/random/WeightedRandom.java
 index dae91eef8dd089d72eee52357e3b40f5ce00da75..10572f0c05e723833be8ae34587bb3d9235a59f2 100644
 --- a/src/main/java/net/minecraft/util/random/WeightedRandom.java
@@ -4160,7 +4262,7 @@ index d1b4f508c7dfae7b940d337ec7f1559eea0139ea..ddf643269494d4f4f8507b3b3bd019de
           while(var31.hasNext()) {
              ChunkStorage chunkStorage2 = (ChunkStorage)var31.next();
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 43e69b22730f87e85eaa6636dc1e34beadc0b194..743ce77b7be380c0c725a11a3963cf756025c2db 100644
+index 8d04e344239b383ef0fc86114e1f1af735b96da9..defe59a8f74249983825147f3615822eb1364963 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -234,7 +234,7 @@ public abstract class LivingEntity extends Entity {
@@ -4173,10 +4275,10 @@ index 43e69b22730f87e85eaa6636dc1e34beadc0b194..743ce77b7be380c0c725a11a3963cf75
  
     public Brain<?> getBrain() {
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index ed863ab3e0f85e8845269ea4a031a6d8825509ae..bc0339bb41f854bb8d851cc73af8762c40827f02 100644
+index 5382ada950ea1de2ac016caae32f03e13b93740d..b9d66672b52d7b88c3625fbd746beffda2ccd33a 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1043,7 +1043,7 @@ public abstract class Mob extends LivingEntity {
+@@ -1042,7 +1042,7 @@ public abstract class Mob extends LivingEntity {
           if (itemStack.getItem() instanceof SpawnEggItem) {
              if (this.level instanceof ServerLevel) {
                 SpawnEggItem spawnEggItem = (SpawnEggItem)itemStack.getItem();
@@ -4479,18 +4581,18 @@ index 6b8e113b60e7e0aa9e51a4341176c9a0d17b2153..ff9b24ce15d8f3bd252d485b8e8e3feb
  
     protected void sendDebugPackets() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/axolotl/AxolotlAi.java b/src/main/java/net/minecraft/world/entity/animal/axolotl/AxolotlAi.java
-index cd3bd73579c135c19061879381aec738de89cb99..b74c9582ef0a59ad7c3ba13ce3ff933f06524be3 100644
+index 2e685126b08cc94b268b208a9b75add3d916b831..af9b024dd0618c703d263b9c6ea20afd06be6b84 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/axolotl/AxolotlAi.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/axolotl/AxolotlAi.java
-@@ -72,7 +72,7 @@ public class AxolotlAi {
+@@ -69,7 +69,7 @@ public class AxolotlAi {
     }
  
     private static void initIdleActivity(Brain<Axolotl> brain) {
--      brain.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(1, new AnimalMakeLove(EntityType.AXOLOTL, 0.2F)), Pair.of(2, new RunOne<>(ImmutableList.of(Pair.of(new FollowTemptation(AxolotlAi::getSpeedModifier), 1), Pair.of(new BabyFollowAdult<>(ADULT_FOLLOW_RANGE, AxolotlAi::getSpeedModifierFollowingAdult), 1)))), Pair.of(3, new StartAttacking<>(AxolotlAi::findNearestValidAttackTarget)), Pair.of(3, new TryFindWater(6, 0.15F)), Pair.of(4, new GateBehavior(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(new RandomSwim(0.5F), 2), Pair.of(new RandomStroll(0.15F, false), 2), Pair.of(new SetWalkTargetFromLookTarget(AxolotlAi::canSetWalkTargetFromLookTarget, AxolotlAi::getSpeedModifier, 3), 3), Pair.of(new RunIf<>(Entity::isInWaterOrBubble, new DoNothing(30, 60)), 5), Pair.of(new RunIf<>(Entity::isOnGround, new DoNothing(200, 400)), 5))))));
-+      brain.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(1, new AnimalMakeLove(EntityType.AXOLOTL, 0.2F)), Pair.of(2, new RunOne<>(ImmutableList.of(Pair.of(new FollowTemptation(AxolotlAi::getSpeedModifier), 1), Pair.of(new BabyFollowAdult<>(ADULT_FOLLOW_RANGE, AxolotlAi::getSpeedModifierFollowingAdult), 1)))), Pair.of(3, new StartAttacking<>(AxolotlAi::findNearestValidAttackTarget)), Pair.of(3, new TryFindWater(6, 0.15F)), Pair.of(4, new GateBehavior<>(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(new RandomSwim(0.5F), 2), Pair.of(new RandomStroll(0.15F, false), 2), Pair.of(new SetWalkTargetFromLookTarget(AxolotlAi::canSetWalkTargetFromLookTarget, AxolotlAi::getSpeedModifier, 3), 3), Pair.of(new RunIf<>(Entity::isInWaterOrBubble, new DoNothing(30, 60)), 5), Pair.of(new RunIf<>(Entity::isOnGround, new DoNothing(200, 400)), 5))))));
+-      brain.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(1, new AnimalMakeLove(EntityType.AXOLOTL, 0.2F)), Pair.of(2, new RunOne<>(ImmutableList.of(Pair.of(new FollowTemptation(AxolotlAi::getSpeedModifier), 1), Pair.of(new BabyFollowAdult<>(ADULT_FOLLOW_RANGE, AxolotlAi::getSpeedModifierFollowingAdult), 1)))), Pair.of(3, new StartAttacking<>(AxolotlAi::findNearestValidAttackTarget)), Pair.of(3, new TryFindWater(6, 0.15F)), Pair.of(4, new GateBehavior(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(new RandomSwim(0.5F), 2), Pair.of(new RandomStroll(0.15F), 2), Pair.of(new SetWalkTargetFromLookTarget(AxolotlAi::getSpeedModifier, 3), 3), Pair.of(new RunIf<>(Entity::isInWaterOrBubble, new DoNothing(30, 60)), 5), Pair.of(new RunIf<>(Entity::isOnGround, new DoNothing(200, 400)), 5))))));
++      brain.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(0, new RunSometimes<>(new SetEntityLookTarget(EntityType.PLAYER, 6.0F), UniformInt.of(30, 60))), Pair.of(1, new AnimalMakeLove(EntityType.AXOLOTL, 0.2F)), Pair.of(2, new RunOne<>(ImmutableList.of(Pair.of(new FollowTemptation(AxolotlAi::getSpeedModifier), 1), Pair.of(new BabyFollowAdult<>(ADULT_FOLLOW_RANGE, AxolotlAi::getSpeedModifierFollowingAdult), 1)))), Pair.of(3, new StartAttacking<>(AxolotlAi::findNearestValidAttackTarget)), Pair.of(3, new TryFindWater(6, 0.15F)), Pair.of(4, new GateBehavior<>(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(new RandomSwim(0.5F), 2), Pair.of(new RandomStroll(0.15F), 2), Pair.of(new SetWalkTargetFromLookTarget(AxolotlAi::getSpeedModifier, 3), 3), Pair.of(new RunIf<>(Entity::isInWaterOrBubble, new DoNothing(30, 60)), 5), Pair.of(new RunIf<>(Entity::isOnGround, new DoNothing(200, 400)), 5))))));
     }
  
-    private static boolean canSetWalkTargetFromLookTarget(LivingEntity livingEntity) {
+    public static void updateActivity(Axolotl axolotl) {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
 index 853aaf02ee33b3776797df828f1134e0eebf55cc..c02d902001c5f47ce87d18caf19cca881206c2c2 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
@@ -4647,7 +4749,7 @@ index e12e53254ab92978a5f055cf21ee01b443540206..44681e25de1fbc26dafe238ca434e5ef
  
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
 diff --git a/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinAi.java b/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinAi.java
-index 234a5bcf45fcbd9d1a8a18da4deec383347ca5f1..42d56117bded64067371793adfac8c894ab47df0 100644
+index ccce878d3cc39c75f77640ba7670af0e12da0812..9bcae19ad5c8ad157c6da3e7d09ae0bd0988fe12 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinAi.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/piglin/PiglinAi.java
 @@ -144,7 +144,7 @@ public class PiglinAi {
@@ -4808,19 +4910,6 @@ index 2252610bc3e334b6b3040d516d358034a4ed8496..a2aacc11c1a728f6597b01c06791315f
     public static final Supplier<BiMap<Block, Block>> WAX_OFF_BY_BLOCK = Suppliers.memoize(() -> ((BiMap)WAXABLES.get()).inverse());
  
     public HoneycombItem(Item.Properties properties) {
-diff --git a/src/main/java/net/minecraft/world/item/Items.java b/src/main/java/net/minecraft/world/item/Items.java
-index ef51673788d378844638b3f4f5f68e8f4f8a2a27..aa8c066e63046d94fae04dd4e09e53f05c5a36b5 100644
---- a/src/main/java/net/minecraft/world/item/Items.java
-+++ b/src/main/java/net/minecraft/world/item/Items.java
-@@ -1117,7 +1117,7 @@ public class Items {
-    public static final Item POINTED_DRIPSTONE = registerBlock(Blocks.POINTED_DRIPSTONE, CreativeModeTab.TAB_DECORATIONS);
- 
-    private static <T> Optional<T> ifPart2(T object) {
--      return Optional.empty();
-+      return net.minecraft.SharedConstants.CNC_PART_2_ITEMS_AND_BLOCKS ? Optional.ofNullable(object) : Optional.empty(); // MagmaCube - SharedConstants
-    }
- 
-    private static Item registerBlock(Block block) {
 diff --git a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
 index 82a8657d7587ad647828c0d915f23496c2b05fbf..8704d71f6cb4b0b357ec6034b74c2419b5390e16 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
@@ -4960,56 +5049,74 @@ index 33ca065b9abafeb2f1671b06be60d10588731519..f7cf52a42bf58e26d963ee52f52e379a
  
     public String toString() {
 diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
-index df67fa180ae7b4393dc4394a583ec1c1e2e1420d..78fa449992f772d8060c93099083a5aba723e32a 100644
+index 3ea71665f01d736a1ce5bd64b3b5e98289c2d138..178d8a2ca1d0d773fc96e1e965cdf9fa35db8a87 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Biome.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Biome.java
-@@ -53,8 +53,8 @@ import org.apache.logging.log4j.Logger;
+@@ -41,8 +41,8 @@ import org.apache.logging.log4j.Logger;
  
  public final class Biome {
     public static final Logger LOGGER = LogManager.getLogger();
 -   public static final Codec<Biome> DIRECT_CODEC;
 -   public static final Codec<Biome> NETWORK_CODEC;
-+   public static final Codec<Biome> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), Codec.FLOAT.fieldOf("depth").forGetter((biome) -> biome.depth), Codec.FLOAT.fieldOf("scale").forGetter((biome) -> biome.scale), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects), BiomeGenerationSettings.CODEC.forGetter((biome) -> biome.generationSettings), MobSpawnSettings.CODEC.forGetter((biome) -> biome.mobSettings)).apply(instance, Biome::new));
-+   public static final Codec<Biome> NETWORK_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), Codec.FLOAT.fieldOf("depth").forGetter((biome) -> biome.depth), Codec.FLOAT.fieldOf("scale").forGetter((biome) -> biome.scale), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects)).apply(instance, (climateSettings, biomeCategory, f, f2, biomeSpecialEffects) -> new Biome(climateSettings, biomeCategory, f, f2, biomeSpecialEffects, BiomeGenerationSettings.EMPTY, MobSpawnSettings.EMPTY)));
++   public static final Codec<Biome> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects), BiomeGenerationSettings.CODEC.forGetter((biome) -> biome.generationSettings), MobSpawnSettings.CODEC.forGetter((biome) -> biome.mobSettings)).apply(instance, Biome::new));
++   public static final Codec<Biome> NETWORK_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects)).apply(instance, (climateSettings, biomeCategory, biomeSpecialEffects) -> new Biome(climateSettings, biomeCategory, biomeSpecialEffects, BiomeGenerationSettings.EMPTY, MobSpawnSettings.EMPTY)));
     public static final Codec<Supplier<Biome>> CODEC = RegistryFileCodec.create(Registry.BIOME_REGISTRY, DIRECT_CODEC);
     public static final Codec<List<Supplier<Biome>>> LIST_CODEC = RegistryFileCodec.homogeneousList(Registry.BIOME_REGISTRY, DIRECT_CODEC);
-    private final Map<Integer, List<StructureFeature<?>>> structuresByStep = (Map)Registry.STRUCTURE_FEATURE.stream().collect(Collectors.groupingBy((structureFeature) -> structureFeature.step().ordinal()));
-@@ -324,11 +324,6 @@ public final class Biome {
+    private static final PerlinSimplexNoise TEMPERATURE_NOISE = new PerlinSimplexNoise(new WorldgenRandom(1234L), ImmutableList.of(0));
+@@ -244,11 +244,6 @@ public final class Biome {
        return resourceLocation == null ? super.toString() : resourceLocation.toString();
     }
  
 -   static {
--      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), Codec.FLOAT.fieldOf("depth").forGetter((biome) -> biome.depth), Codec.FLOAT.fieldOf("scale").forGetter((biome) -> biome.scale), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects), BiomeGenerationSettings.CODEC.forGetter((biome) -> biome.generationSettings), MobSpawnSettings.CODEC.forGetter((biome) -> biome.mobSettings)).apply(instance, Biome::new));
--      NETWORK_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), Codec.FLOAT.fieldOf("depth").forGetter((biome) -> biome.depth), Codec.FLOAT.fieldOf("scale").forGetter((biome) -> biome.scale), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects)).apply(instance, (climateSettings, biomeCategory, f, f2, biomeSpecialEffects) -> new Biome(climateSettings, biomeCategory, f, f2, biomeSpecialEffects, BiomeGenerationSettings.EMPTY, MobSpawnSettings.EMPTY)));
+-      DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects), BiomeGenerationSettings.CODEC.forGetter((biome) -> biome.generationSettings), MobSpawnSettings.CODEC.forGetter((biome) -> biome.mobSettings)).apply(instance, Biome::new));
+-      NETWORK_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects)).apply(instance, (climateSettings, biomeCategory, biomeSpecialEffects) -> new Biome(climateSettings, biomeCategory, biomeSpecialEffects, BiomeGenerationSettings.EMPTY, MobSpawnSettings.EMPTY)));
 -   }
 -
     public static class BiomeBuilder {
        @Nullable
        public Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-index e8c9426bbae6ea0abbd49af3cfac01cd1c80c21e..0ff3dc45c674b09c38a145a21140f7641681c35d 100644
+index 3a556d57db45a5db1de28b4da46dc4d671df5ffa..1d92fdd4a6d36a0b164dcdc60bf8cfb96d752ff3 100644
 --- a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-@@ -26,7 +26,7 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
+@@ -33,7 +33,7 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
  
  public class MultiNoiseBiomeSource extends BiomeSource {
     private static final MultiNoiseBiomeSource.NoiseParameters DEFAULT_NOISE_PARAMETERS = new MultiNoiseBiomeSource.NoiseParameters(-7, (List<Double>)ImmutableList.of(1.0D, 1.0D));
 -   public static final MapCodec<MultiNoiseBiomeSource> DIRECT_CODEC;
-+   public static final MapCodec<MultiNoiseBiomeSource> DIRECT_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(Codec.LONG.fieldOf("seed").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.seed), RecordCodecBuilder.<Pair<Biome.ClimateParameters, Supplier<Biome>>>create((instancex) -> instancex.group(Biome.ClimateParameters.CODEC.fieldOf("parameters").forGetter(Pair<Biome.ClimateParameters, Supplier<Biome>>::getFirst), Biome.CODEC.fieldOf("biome").forGetter(Pair<Biome.ClimateParameters, Supplier<Biome>>::getSecond)).apply(instancex, Pair::of)).listOf().fieldOf("biomes").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.parameters), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("temperature_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.temperatureParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("humidity_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.humidityParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("altitude_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.altitudeParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("weirdness_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.weirdnessParams)).apply(instance, MultiNoiseBiomeSource::new));
++   public static final MapCodec<MultiNoiseBiomeSource> DIRECT_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(Codec.LONG.fieldOf("seed").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.seed), RecordCodecBuilder.<Pair<Climate.ParameterPoint, Supplier<Biome>>>create((instancex) -> instancex.group(Climate.ParameterPoint.CODEC.fieldOf("parameters").forGetter(Pair<Climate.ParameterPoint, Supplier<Biome>>::getFirst), Biome.CODEC.fieldOf("biome").forGetter(Pair<Climate.ParameterPoint, Supplier<Biome>>::getSecond)).apply(instancex, Pair::of)).listOf().xmap(Climate.ParameterList::new, Climate.ParameterList::biomes).fieldOf("biomes").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.parameters), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("temperature_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.temperatureParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("humidity_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.humidityParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("continentalness_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.continentalnessParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("erosion_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.erosionParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("weirdness_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.weirdnessParams), Codec.INT.fieldOf("min_quart_y").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.minQuartY), Codec.INT.fieldOf("max_quart_y").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.maxQuartY)).apply(instance, MultiNoiseBiomeSource::new));
     public static final Codec<MultiNoiseBiomeSource> CODEC = Codec.mapEither(MultiNoiseBiomeSource.PresetInstance.CODEC, DIRECT_CODEC).xmap((either) -> (MultiNoiseBiomeSource)either.map(MultiNoiseBiomeSource.PresetInstance::biomeSource, Function.identity()), (multiNoiseBiomeSource) -> (Either)multiNoiseBiomeSource.preset().map(Either::left).orElseGet(() -> Either.right(multiNoiseBiomeSource))).codec();
     private final MultiNoiseBiomeSource.NoiseParameters temperatureParams;
     private final MultiNoiseBiomeSource.NoiseParameters humidityParams;
-@@ -104,10 +104,6 @@ public class MultiNoiseBiomeSource extends BiomeSource {
-       return this.seed == l && this.preset.isPresent() && Objects.equals((this.preset.get()).getSecond(), MultiNoiseBiomeSource.Preset.NETHER);
+@@ -169,7 +169,7 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+    public static ImmutableList<Pair<Climate.ParameterPoint, Supplier<Biome>>> parameters(Registry<Biome> registry) {
+       Builder<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> builder = ImmutableList.builder();
+       (new OverworldBiomeBuilder()).addBiomes(builder);
+-      return (ImmutableList)builder.build().stream().map((pair) -> pair.mapSecond((resourceKey) -> () -> registry.getOrThrow(resourceKey))).collect(ImmutableList.toImmutableList());
++      return builder.build().stream().map((pair) -> pair.mapSecond((resourceKey) -> (Supplier<Biome>) () -> registry.getOrThrow(resourceKey))).collect(ImmutableList.toImmutableList());
+    }
+ 
+    public void addMultinoiseDebugInfo(List<String> list, BlockPos blockPos) {
+@@ -190,10 +190,6 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+       list.add("Terrain PV: " + decimalFormat.format(d6) + " O: " + decimalFormat.format(d7) + " F: " + decimalFormat.format(d8));
     }
  
 -   static {
--      DIRECT_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(Codec.LONG.fieldOf("seed").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.seed), RecordCodecBuilder.create((instancex) -> instancex.group(Biome.ClimateParameters.CODEC.fieldOf("parameters").forGetter(Pair::getFirst), Biome.CODEC.fieldOf("biome").forGetter(Pair::getSecond)).apply(instancex, Pair::of)).listOf().fieldOf("biomes").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.parameters), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("temperature_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.temperatureParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("humidity_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.humidityParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("altitude_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.altitudeParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("weirdness_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.weirdnessParams)).apply(instance, MultiNoiseBiomeSource::new));
+-      DIRECT_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(Codec.LONG.fieldOf("seed").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.seed), RecordCodecBuilder.create((instancex) -> instancex.group(Climate.ParameterPoint.CODEC.fieldOf("parameters").forGetter(Pair::getFirst), Biome.CODEC.fieldOf("biome").forGetter(Pair::getSecond)).apply(instancex, Pair::of)).listOf().xmap(Climate.ParameterList::new, Climate.ParameterList::biomes).fieldOf("biomes").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.parameters), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("temperature_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.temperatureParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("humidity_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.humidityParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("continentalness_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.continentalnessParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("erosion_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.erosionParams), MultiNoiseBiomeSource.NoiseParameters.CODEC.fieldOf("weirdness_noise").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.weirdnessParams), Codec.INT.fieldOf("min_quart_y").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.minQuartY), Codec.INT.fieldOf("max_quart_y").forGetter((multiNoiseBiomeSource) -> multiNoiseBiomeSource.maxQuartY)).apply(instance, MultiNoiseBiomeSource::new));
 -   }
 -
-    static class NoiseParameters {
+    public static class NoiseParameters {
        private final int firstOctave;
        private final DoubleList amplitudes;
+@@ -220,7 +216,7 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+ 
+    public static class Preset {
+       static final Map<ResourceLocation, MultiNoiseBiomeSource.Preset> BY_NAME = Maps.newHashMap();
+-      public static final MultiNoiseBiomeSource.Preset NETHER = new MultiNoiseBiomeSource.Preset(new ResourceLocation("nether"), (preset, registry, l) -> new MultiNoiseBiomeSource(l, new Climate.ParameterList(ImmutableList.of(Pair.of(Climate.parameters(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), () -> registry.getOrThrow(Biomes.NETHER_WASTES)), Pair.of(Climate.parameters(0.0F, -0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), () -> registry.getOrThrow(Biomes.SOUL_SAND_VALLEY)), Pair.of(Climate.parameters(0.4F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), () -> registry.getOrThrow(Biomes.CRIMSON_FOREST)), Pair.of(Climate.parameters(0.0F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.375F), () -> registry.getOrThrow(Biomes.WARPED_FOREST)), Pair.of(Climate.parameters(-0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.175F), () -> registry.getOrThrow(Biomes.BASALT_DELTAS)))), Optional.of(Pair.of(registry, preset))));
++      public static final MultiNoiseBiomeSource.Preset NETHER = new MultiNoiseBiomeSource.Preset(new ResourceLocation("nether"), (preset, registry, l) -> new MultiNoiseBiomeSource(l, new Climate.ParameterList<>(ImmutableList.of(Pair.of(Climate.parameters(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), () -> registry.getOrThrow(Biomes.NETHER_WASTES)), Pair.of(Climate.parameters(0.0F, -0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), () -> registry.getOrThrow(Biomes.SOUL_SAND_VALLEY)), Pair.of(Climate.parameters(0.4F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), () -> registry.getOrThrow(Biomes.CRIMSON_FOREST)), Pair.of(Climate.parameters(0.0F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.375F), () -> registry.getOrThrow(Biomes.WARPED_FOREST)), Pair.of(Climate.parameters(-0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.175F), () -> registry.getOrThrow(Biomes.BASALT_DELTAS)))), Optional.of(Pair.of(registry, preset))));
+       public static final MultiNoiseBiomeSource.Preset OVERWORLD = new MultiNoiseBiomeSource.Preset(new ResourceLocation("overworld"), (preset, registry, l) -> MultiNoiseBiomeSource.overworld(registry, l));
+       final ResourceLocation name;
+       private final Function3<MultiNoiseBiomeSource.Preset, Registry<Biome>, Long, MultiNoiseBiomeSource> biomeSource;
 diff --git a/src/main/java/net/minecraft/world/level/block/BaseEntityBlock.java b/src/main/java/net/minecraft/world/level/block/BaseEntityBlock.java
 index 884cefdb38ba9597a12d2b6351b9b3bd463aad02..7c9f9b787c52532311b743e6a467cea394118329 100644
 --- a/src/main/java/net/minecraft/world/level/block/BaseEntityBlock.java
@@ -5194,11 +5301,24 @@ index a196325389cc364f76c672ddf6ea1e9863242202..f0b561d1c3d8f9e0f52f8f8dac8dddda
     }
  
     public static <T extends Enum<T> & StringRepresentable> EnumProperty<T> create(String s, Class<T> clazz, T... enums) {
+diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
+index 7b2ea0d46d476a2f79afc1c48f76fced59251512..928a4c8bdf8216be0274dfbc1007b6cc3d110cba 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
++++ b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
+@@ -204,7 +204,7 @@ public class ChunkStatus {
+ 
+       CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completableFuture = this.generationTask.doWork(this, executor, serverLevel, chunkGenerator, structureManager, threadedLevelLightEngine, function, list, chunkAccess, flag);
+       return chunkGenerationEvent.shouldCommit() ? completableFuture.thenApply((either) -> {
+-         either.ifLeft((chunkAccess) -> chunkGenerationEvent.success = true);
++         either.ifLeft((chunkAccessIn) -> chunkGenerationEvent.success = true);
+          chunkGenerationEvent.commit();
+          return either;
+       }) : completableFuture;
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index dcac6f3a746d9f8358d29d0ea2fb57b323e0852c..75e4670295e7195d93addb15fb3c274b58cf1780 100644
+index b681ead4302977f2be8bc43e2d47e97c907d53e7..8e3e3e481de770bedb93092e39289d94493d73bf 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -689,7 +689,7 @@ public class LevelChunk implements ChunkAccess {
+@@ -701,7 +701,7 @@ public class LevelChunk implements ChunkAccess {
  
     public void unpackTicks() {
        if (this.blockTicks instanceof ProtoTickList) {
@@ -5207,7 +5327,7 @@ index dcac6f3a746d9f8358d29d0ea2fb57b323e0852c..75e4670295e7195d93addb15fb3c274b
           this.blockTicks = EmptyTickList.empty();
        } else if (this.blockTicks instanceof ChunkTickList) {
           ((ChunkTickList)this.blockTicks).copyOut(this.level.getBlockTicks());
-@@ -697,7 +697,7 @@ public class LevelChunk implements ChunkAccess {
+@@ -709,7 +709,7 @@ public class LevelChunk implements ChunkAccess {
        }
  
        if (this.liquidTicks instanceof ProtoTickList) {
@@ -5216,7 +5336,7 @@ index dcac6f3a746d9f8358d29d0ea2fb57b323e0852c..75e4670295e7195d93addb15fb3c274b
           this.liquidTicks = EmptyTickList.empty();
        } else if (this.liquidTicks instanceof ChunkTickList) {
           ((ChunkTickList)this.liquidTicks).copyOut(this.level.getLiquidTicks());
-@@ -707,12 +707,12 @@ public class LevelChunk implements ChunkAccess {
+@@ -719,12 +719,12 @@ public class LevelChunk implements ChunkAccess {
     }
  
     public void packTicks(ServerLevel serverLevel) {
@@ -5231,7 +5351,7 @@ index dcac6f3a746d9f8358d29d0ea2fb57b323e0852c..75e4670295e7195d93addb15fb3c274b
           this.liquidTicks = new ChunkTickList<>(Registry.FLUID::getKey, serverLevel.getLiquidTicks().fetchTicksInChunk(this.chunkPos, true, false), serverLevel.getGameTime());
           this.setUnsaved(true);
        }
-@@ -775,7 +775,7 @@ public class LevelChunk implements ChunkAccess {
+@@ -787,7 +787,7 @@ public class LevelChunk implements ChunkAccess {
  
     private <T extends BlockEntity> void updateBlockEntityTicker(T blockEntity) {
        BlockState blockState = blockEntity.getBlockState();
@@ -5267,10 +5387,10 @@ index 39c90809f9d2b0beafbb880d6963204569a8ca73..c000cf5dea90676f956e8f1d93df306e
           DataLayer dataLayer2 = levelLightEngine.getLayerListener(LightLayer.SKY).getDataLayerData(SectionPos.of(chunkPos, i2));
           if (levelChunkSection != LevelChunk.EMPTY_SECTION || dataLayer != null || dataLayer2 != null) {
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index 3748a9afe8cb543522e25b0018278e5559961836..194b9ab26042a1d766e9bf453eb5e5d1d798e3ce 100644
+index d7c22b132656c19f93bb16c53ad84d68cd682c81..d50eecd6b99fdb0b7ca70159697739f577d81ed4 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-@@ -42,7 +42,8 @@ public class DimensionType {
+@@ -41,7 +41,8 @@ public class DimensionType {
     public static final ResourceLocation OVERWORLD_EFFECTS = new ResourceLocation("overworld");
     public static final ResourceLocation NETHER_EFFECTS = new ResourceLocation("the_nether");
     public static final ResourceLocation END_EFFECTS = new ResourceLocation("the_end");
@@ -5280,7 +5400,7 @@ index 3748a9afe8cb543522e25b0018278e5559961836..194b9ab26042a1d766e9bf453eb5e5d1
     private static final int MOON_PHASES = 8;
     public static final float[] MOON_BRIGHTNESS_PER_PHASE = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
     public static final ResourceKey<DimensionType> OVERWORLD_LOCATION = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("overworld"));
-@@ -291,8 +292,4 @@ public class DimensionType {
+@@ -290,8 +291,4 @@ public class DimensionType {
           return this.hasSkylight == dimensionType.hasSkylight && this.hasCeiling == dimensionType.hasCeiling && this.ultraWarm == dimensionType.ultraWarm && this.natural == dimensionType.natural && this.coordinateScale == dimensionType.coordinateScale && this.createDragonFight == dimensionType.createDragonFight && this.piglinSafe == dimensionType.piglinSafe && this.bedWorks == dimensionType.bedWorks && this.respawnAnchorWorks == dimensionType.respawnAnchorWorks && this.hasRaids == dimensionType.hasRaids && this.minY == dimensionType.minY && this.height == dimensionType.height && this.logicalHeight == dimensionType.logicalHeight && Float.compare(dimensionType.ambientLight, this.ambientLight) == 0 && this.fixedTime.equals(dimensionType.fixedTime) && this.biomeZoomer.equals(dimensionType.biomeZoomer) && this.infiniburn.equals(dimensionType.infiniburn) && this.effectsLocation.equals(dimensionType.effectsLocation);
        }
     }
@@ -5320,7 +5440,7 @@ index f99c040ea84e8412c5ed277058e15bfcee898ec0..5af8fff18728f60e18138e2091ddccb9
  
     }
 diff --git a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
-index e07f247282e77132892abc46ddc7bde023e6edda..fb32067e315b17ecb4132af99819570c10dc661a 100644
+index 4712978f1ac5844d64517c93f1bd13f555f9c931..8fb3150db6e8f0343543f67ce680e3a1d579a69f 100644
 --- a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 +++ b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 @@ -223,7 +223,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
@@ -5343,14 +5463,14 @@ index e07f247282e77132892abc46ddc7bde023e6edda..fb32067e315b17ecb4132af99819570c
              this.processChunkUnload(l);
 @@ -273,7 +273,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
        while(!longSet.isEmpty()) {
-          this.permanentStorage.flush(false);
+          this.permanentStorage.flush();
           this.processPendingLoads();
 -         longSet.removeIf((l) -> {
 +         longSet.removeIf((java.util.function.LongPredicate) (l) -> { // MagmaCube - decompile error
              boolean flag = this.chunkVisibility.get(l) == Visibility.HIDDEN;
              return flag ? this.processChunkUnload(l) : this.storeChunkSections(l, (entityAccess) -> {
              });
-@@ -310,7 +310,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
+@@ -309,7 +309,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
  
     public void dumpSections(Writer writer) throws IOException {
        CsvOutput csvOutput = CsvOutput.builder().addColumn("x").addColumn("y").addColumn("z").addColumn("visibility").addColumn("load_status").addColumn("entity_count").build(writer);
@@ -5373,10 +5493,10 @@ index 85683fb9a8b468de35995b0d80ffdfb27a87199a..d9e950dfeb9c616a91367764cb8e7110
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-index 60fbf146d158ab9f37da310d59faf0783292c46d..f53be85c5ce50b0223758064e3c8bd050681bb0b 100644
+index bf23c23dc106baaa0905b397e8ee2b98733d53ee..19c9635602c3a9e63ffac625ec8fc943afee632c 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-@@ -301,8 +301,8 @@ public final class NoiseBasedChunkGenerator extends ChunkGenerator {
+@@ -308,8 +308,8 @@ public final class NoiseBasedChunkGenerator extends ChunkGenerator {
  
              ChunkAccess var16;
              try {
@@ -5388,7 +5508,7 @@ index 60fbf146d158ab9f37da310d59faf0783292c46d..f53be85c5ce50b0223758064e3c8bd05
                    set.add(levelChunkSection);
                 }
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 15e57857308be3bebbc0f30af673eb89792c346b..1ea13128119127da8665c12ee531ae254329e440 100644
+index 73b13e43c27965f45a4494004136dccc6f47df43..a1f94ff7805c46f30d3c855c776be04ab0d37499 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -18,7 +18,8 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -5438,7 +5558,7 @@ index b8f7261d7a00f2f9c0e4bddd4b13410214836d67..829140075a0518d2c90b88ebdaf8afbd
     private final Map<StructureFeature<?>, StructureFeatureConfiguration> structureConfig;
     @Nullable
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-index 329d132b15469b911501a5aa3cd75f3ff069efef..6cf950106c56ffbc400568504b156cdf53d25c46 100644
+index 43334d76921fbf1656b0ec3027fae2e486625a77..fea1e7cb9ac06b47ae15c9162de796472b5ab78c 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 @@ -35,7 +35,8 @@ import org.apache.logging.log4j.LogManager;
@@ -5465,19 +5585,18 @@ index 71828b854b8295be20e4f202824f64cdf9abe707..d043e54d3fbf56b64690ae29a0f4bf8f
     private final Codec<ConfiguredStructureFeature<C, StructureFeature<C>>> configuredStructureCodec;
  
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/GlowLichenConfiguration.java b/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/GlowLichenConfiguration.java
-index bfe8dad0170f79183d5f053ed89928b3a18469f1..129842d1085891db34a0e81714a52175bd995aa1 100644
+index d1eec352c397882f81bf515437c12e0a7088ba4e..5ea6c64f15b40c17c53ebc4ac1f67554279b67b2 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/GlowLichenConfiguration.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/GlowLichenConfiguration.java
-@@ -11,7 +11,8 @@ import net.minecraft.world.level.block.Block;
+@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Block;
  import net.minecraft.world.level.block.state.BlockState;
  
  public class GlowLichenConfiguration implements FeatureConfiguration {
--   public static final Codec<GlowLichenConfiguration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(1, 64).fieldOf("search_range").orElse(10).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.searchRange), Codec.BOOL.fieldOf("can_place_on_floor").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnFloor), Codec.BOOL.fieldOf("can_place_on_ceiling").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnCeiling), Codec.BOOL.fieldOf("can_place_on_wall").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnWall), Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_spreading").orElse(0.5F).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.chanceOfSpreading), BlockState.CODEC.listOf().fieldOf("can_be_placed_on").forGetter((glowLichenConfiguration) -> new ArrayList(glowLichenConfiguration.canBePlacedOn))).apply(instance, GlowLichenConfiguration::new));
-+   // MagmaCube - decompile error
-+   public static final Codec<GlowLichenConfiguration> CODEC = RecordCodecBuilder.<GlowLichenConfiguration>create((instance) -> instance.group(Codec.intRange(1, 64).fieldOf("search_range").orElse(10).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.searchRange), Codec.BOOL.fieldOf("can_place_on_floor").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnFloor), Codec.BOOL.fieldOf("can_place_on_ceiling").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnCeiling), Codec.BOOL.fieldOf("can_place_on_wall").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnWall), Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_spreading").orElse(0.5F).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.chanceOfSpreading), BlockState.CODEC.listOf().fieldOf("can_be_placed_on").forGetter((glowLichenConfiguration) -> new ArrayList<>(glowLichenConfiguration.canBePlacedOn))).apply(instance, GlowLichenConfiguration::new));
+-   public static final Codec<GlowLichenConfiguration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(1, 64).fieldOf("search_range").orElse(10).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.searchRange), Codec.intRange(0, 128).fieldOf("min_distance_below_surface").orElse(0).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.minDistanceBelowSurface), Codec.BOOL.fieldOf("can_place_on_floor").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnFloor), Codec.BOOL.fieldOf("can_place_on_ceiling").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnCeiling), Codec.BOOL.fieldOf("can_place_on_wall").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnWall), Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_spreading").orElse(0.5F).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.chanceOfSpreading), BlockState.CODEC.listOf().fieldOf("can_be_placed_on").forGetter((glowLichenConfiguration) -> new ArrayList(glowLichenConfiguration.canBePlacedOn))).apply(instance, GlowLichenConfiguration::new));
++   public static final Codec<GlowLichenConfiguration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(1, 64).fieldOf("search_range").orElse(10).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.searchRange), Codec.intRange(0, 128).fieldOf("min_distance_below_surface").orElse(0).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.minDistanceBelowSurface), Codec.BOOL.fieldOf("can_place_on_floor").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnFloor), Codec.BOOL.fieldOf("can_place_on_ceiling").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnCeiling), Codec.BOOL.fieldOf("can_place_on_wall").orElse(false).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.canPlaceOnWall), Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_spreading").orElse(0.5F).forGetter((glowLichenConfiguration) -> glowLichenConfiguration.chanceOfSpreading), BlockState.CODEC.listOf().fieldOf("can_be_placed_on").forGetter((glowLichenConfiguration) -> new ArrayList<>(glowLichenConfiguration.canBePlacedOn))).apply(instance, GlowLichenConfiguration::new));
     public final int searchRange;
+    public final int minDistanceBelowSurface;
     public final boolean canPlaceOnFloor;
-    public final boolean canPlaceOnCeiling;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/SpringConfiguration.java b/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/SpringConfiguration.java
 index eea8527b4b67131844f4a547468da3a7b34b4355..3a54720b94c797ef4140752de92c849eab2f5daf 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/SpringConfiguration.java
@@ -5585,7 +5704,7 @@ index 3fe577b9380b68557e51b3b89b05c8bab34cbd03..b90444bd1d83786c3109d9e8320ebe88
                       compoundTag.putString("id", Registry.ENTITY_TYPE.getKey(EntityType.BEE).toString());
                       beehiveBlockEntity.storeBee(compoundTag, random.nextInt(599), false);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
-index be7e0deaa48e1130e1f7bc80be78802185769bc9..1c4e73fbebc1fd5324ca72d0b52de101b3410c07 100644
+index 805d75cd621ebdebcf21676e544abd6b828f8afa..7e68f1f91debd04892c77ffca03ebc9c1f1a1a65 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
 @@ -37,7 +37,7 @@ import org.apache.logging.log4j.Logger;
@@ -5766,19 +5885,6 @@ index 56af136be0c0c83f182e6d79028719bf484de956..ff0d02a41bb57fbb76236fa1ee5a5122
              });
              int i2;
              if (flag) {
-diff --git a/src/main/java/net/minecraft/world/level/newbiome/context/LazyAreaContext.java b/src/main/java/net/minecraft/world/level/newbiome/context/LazyAreaContext.java
-index 076bd59b9b688cca955a0e626ab748e152c92427..dcc989405554b511a515af7bd9453dca10ce2576 100644
---- a/src/main/java/net/minecraft/world/level/newbiome/context/LazyAreaContext.java
-+++ b/src/main/java/net/minecraft/world/level/newbiome/context/LazyAreaContext.java
-@@ -45,7 +45,7 @@ public class LazyAreaContext implements BigContext<LazyArea> {
-    }
- 
-    public int nextRandom(int i) {
--      int i2 = Math.floorMod(this.rval >> 24, i);
-+      int i2 = (int) Math.floorMod(this.rval >> 24, i);
-       this.rval = LinearCongruentialGenerator.next(this.rval, this.seed);
-       return i2;
-    }
 diff --git a/src/main/java/net/minecraft/world/level/portal/PortalForcer.java b/src/main/java/net/minecraft/world/level/portal/PortalForcer.java
 index 81993f152534d59817af0a43f2bc10b7f62200cb..9dbc3e2f74749f97a0f16db481f98af9a9d8cf7c 100644
 --- a/src/main/java/net/minecraft/world/level/portal/PortalForcer.java
@@ -5804,7 +5910,7 @@ index 81993f152534d59817af0a43f2bc10b7f62200cb..9dbc3e2f74749f97a0f16db481f98af9
     }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index abd4d8afde99263ecfb710a3064f75656d10e07d..9fe00edac38764bbe0f50daccdd6add6d9cdfb9d 100644
+index b61284b02aa1c5e67c1c3cdf1baad53556db4ef4..2f3c53522b2e557a00f695ce3ac4258d9e4c2f8c 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 @@ -98,12 +98,12 @@ public class LevelStorageSource {
@@ -5825,19 +5931,6 @@ index abd4d8afde99263ecfb710a3064f75656d10e07d..9fe00edac38764bbe0f50daccdd6add6
           return WorldGenSettings.makeDefault(registry, registry2, registry3);
        }), dataResult.lifecycle());
     }
-diff --git a/src/main/java/net/minecraft/world/level/storage/LevelSummary.java b/src/main/java/net/minecraft/world/level/storage/LevelSummary.java
-index ad16bf49a9e80979a8f799994464759ca6a8e051..14149623cf152de532c7f6d4b5b9e9021e71999e 100644
---- a/src/main/java/net/minecraft/world/level/storage/LevelSummary.java
-+++ b/src/main/java/net/minecraft/world/level/storage/LevelSummary.java
-@@ -111,7 +111,7 @@ public class LevelSummary implements Comparable<LevelSummary> {
-    public boolean isIncompatibleWorldHeight() {
-       int i = this.levelVersion.minecraftVersion();
-       boolean flag = i > 2692 && i <= 2706;
--      return flag;
-+      return !net.minecraft.SharedConstants.ALLOW_INCOMPATIBLE_WORLD_HEIGHT && flag; // MagmaCube - SharedConstants
-    }
- 
-    public boolean isDisabled() {
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java b/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java
 index 230f66a5111fe568e37860e972948dbae918b990..a0626e404666495fab6695862e85401a1fc35e60 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java

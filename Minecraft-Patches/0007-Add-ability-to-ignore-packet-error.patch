@@ -5,10 +5,10 @@ Subject: [PATCH] Add ability to ignore packet error
 
 
 diff --git a/src/main/java/net/minecraft/network/PacketDecoder.java b/src/main/java/net/minecraft/network/PacketDecoder.java
-index 2316a135d35c9f255eb9150a4651002566da3950..440668db94d7043c23c75536861294081b9b76f9 100644
+index 7bffd4c7d7caf182de6d8b7ce1ed42562c364948..942624cf8dbe5f3a7a1441589be3b45f19cc8161 100644
 --- a/src/main/java/net/minecraft/network/PacketDecoder.java
 +++ b/src/main/java/net/minecraft/network/PacketDecoder.java
-@@ -16,6 +16,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
+@@ -17,6 +17,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Marker MARKER = MarkerManager.getMarker("PACKET_RECEIVED", Connection.PACKET_MARKER);
     private final PacketFlow flow;
@@ -16,16 +16,18 @@ index 2316a135d35c9f255eb9150a4651002566da3950..440668db94d7043c23c7553686129408
  
     public PacketDecoder(PacketFlow packetFlow) {
        this.flow = packetFlow;
-@@ -29,6 +30,12 @@ public class PacketDecoder extends ByteToMessageDecoder {
-          if (packet == null) {
-             throw new IOException("Bad packet id " + i);
-          } else if (friendlyByteBuf.readableBytes() > 0) {
-+             // MagmaCube start - add ability to ignore packet error
-+             if (ignoreError) {
-+                 LOGGER.warn("Packet " + ((ConnectionProtocol) channelHandlerContext.channel().attr(Connection.ATTRIBUTE_PROTOCOL).get()).getId() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + friendlyByteBuf.readableBytes() + " bytes extra whilst reading packet " + i);
-+                 return;
-+             }
-+             // MagmaCube end - add ability to ignore packet error
-             throw new IOException("Packet " + ((ConnectionProtocol)channelHandlerContext.channel().attr(Connection.ATTRIBUTE_PROTOCOL).get()).getId() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + friendlyByteBuf.readableBytes() + " bytes extra whilst reading packet " + i);
-          } else {
-             list.add(packet);
+@@ -39,7 +40,13 @@ public class PacketDecoder extends ByteToMessageDecoder {
+             }
+ 
+             if (friendlyByteBuf.readableBytes() > 0) {
+-               throw new IOException("Packet " + ((ConnectionProtocol)channelHandlerContext.channel().attr(Connection.ATTRIBUTE_PROTOCOL).get()).getId() + "/" + i2 + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + friendlyByteBuf.readableBytes() + " bytes extra whilst reading packet " + i2);
++               // MagmaCube start - add ability to ignore packet error
++               if (ignoreError) {
++                  LOGGER.warn("Packet " + ((ConnectionProtocol) channelHandlerContext.channel().attr(Connection.ATTRIBUTE_PROTOCOL).get()).getId() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + friendlyByteBuf.readableBytes() + " bytes extra whilst reading packet " + i2);
++                  return;
++               }
++               // MagmaCube end - add ability to ignore packet error
++               throw new IOException("Packet " + ((ConnectionProtocol)channelHandlerContext.channel().attr(Connection.ATTRIBUTE_PROTOCOL).get()).getId() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + friendlyByteBuf.readableBytes() + " bytes extra whilst reading packet " + i2);
+             } else {
+                list.add(packet);
+                if (LOGGER.isDebugEnabled()) {
