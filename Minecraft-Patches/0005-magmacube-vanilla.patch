@@ -32,6 +32,18 @@ index 24012bce4bb3e186f711b566c565a9b88c13ea01..d34884ea2ac0140640b37a937329a0e7
     }
  
     public static WorldVersion tryDetectVersion() {
+diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
+index 6c3d1eccf2b97c6a0b10583fe1d9eb570ddcdf79..9ca90ab3d2b659c23add075d3695ee0a9de04156 100644
+--- a/src/main/java/net/minecraft/SystemReport.java
++++ b/src/main/java/net/minecraft/SystemReport.java
+@@ -26,6 +26,7 @@ public class SystemReport {
+    private final Map<String, String> entries = Maps.newLinkedHashMap();
+ 
+    public SystemReport() {
++      this.setDetail("MagmaCube Version", ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion); // MagmaCube
+       this.setDetail("Minecraft Version", SharedConstants.getCurrentVersion().getName());
+       this.setDetail("Minecraft Version ID", SharedConstants.getCurrentVersion().getId());
+       this.setDetail("Operating System", OPERATING_SYSTEM);
 diff --git a/src/main/java/net/minecraft/client/ClientBrandRetriever.java b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 index f2ee5a65d22f6eead934dc833ad679e078d6991e..a936731fc72aff0920f203dde18548e8f78b28e5 100644
 --- a/src/main/java/net/minecraft/client/ClientBrandRetriever.java
