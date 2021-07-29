@@ -209,7 +209,7 @@ index 2a1db6ef2dafca34948107a7469ac685a1b6984f..d1f19ea5ebe5aa398ac4a36d16142aee
        }).start();
     }
 diff --git a/src/main/java/net/minecraft/SharedConstants.java b/src/main/java/net/minecraft/SharedConstants.java
-index 51b3712588e20d46b6034a2d5a6be30eebaf7ffd..68dd74148e1f8a1923f66d38bb3daac86fb6179a 100644
+index f52791a14b26ea254b03d2bfa8a8a4525eb30fa2..d3adc7d831b38cc3f5b6fa5f9a93b780f3a82807 100644
 --- a/src/main/java/net/minecraft/SharedConstants.java
 +++ b/src/main/java/net/minecraft/SharedConstants.java
 @@ -173,7 +173,7 @@ public class SharedConstants {
@@ -5076,7 +5076,7 @@ index 3ea71665f01d736a1ce5bd64b3b5e98289c2d138..178d8a2ca1d0d773fc96e1e965cdf9fa
        @Nullable
        public Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-index 3a556d57db45a5db1de28b4da46dc4d671df5ffa..1d92fdd4a6d36a0b164dcdc60bf8cfb96d752ff3 100644
+index e93d102243fa0693a001190dc89c610f4512a986..8fbdbc5d3d913fcf47e5436544a2f3d27256218a 100644
 --- a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
 @@ -33,7 +33,7 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
@@ -5493,10 +5493,10 @@ index 85683fb9a8b468de35995b0d80ffdfb27a87199a..d9e950dfeb9c616a91367764cb8e7110
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-index bf23c23dc106baaa0905b397e8ee2b98733d53ee..19c9635602c3a9e63ffac625ec8fc943afee632c 100644
+index 7a761e2bfbd9942fce65c9858b54e17c40c546bf..c64094c8e97b49dccf9a635a0ae1e7008d8fcbc0 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-@@ -308,8 +308,8 @@ public final class NoiseBasedChunkGenerator extends ChunkGenerator {
+@@ -312,8 +312,8 @@ public final class NoiseBasedChunkGenerator extends ChunkGenerator {
  
              ChunkAccess var16;
              try {
@@ -5572,7 +5572,7 @@ index 43334d76921fbf1656b0ec3027fae2e486625a77..fea1e7cb9ac06b47ae15c9162de79647
     private final long seed;
     private final boolean generateFeatures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index 71828b854b8295be20e4f202824f64cdf9abe707..d043e54d3fbf56b64690ae29a0f4bf8f529959bc 100644
+index 761e524cd9bdb72ac28a4549c367f789bd9e1494..1bd09a3ef7d1d907aaa8a002e91bada3c3fe20f8 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 @@ -73,7 +73,7 @@ public abstract class StructureFeature<C extends FeatureConfiguration> {
