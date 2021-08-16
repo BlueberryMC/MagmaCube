@@ -209,10 +209,10 @@ index 2a1db6ef2dafca34948107a7469ac685a1b6984f..d1f19ea5ebe5aa398ac4a36d16142aee
        }).start();
     }
 diff --git a/src/main/java/net/minecraft/SharedConstants.java b/src/main/java/net/minecraft/SharedConstants.java
-index f52791a14b26ea254b03d2bfa8a8a4525eb30fa2..d3adc7d831b38cc3f5b6fa5f9a93b780f3a82807 100644
+index 1c480b4b2a5f2d38568ab640dd9b5ca31b35a8e3..c0282f224eed1e146b2f189d89cf577ce42acc06 100644
 --- a/src/main/java/net/minecraft/SharedConstants.java
 +++ b/src/main/java/net/minecraft/SharedConstants.java
-@@ -173,7 +173,7 @@ public class SharedConstants {
+@@ -176,7 +176,7 @@ public class SharedConstants {
  
     static {
        ResourceLeakDetector.setLevel(NETTY_LEAK_DETECTION);
@@ -2087,10 +2087,10 @@ index dec3cc6d55fbe8cecf5c827326955ec3979babba..7f57513f882dba63a4164085353c0d0b
     }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 2d18d78b66920de15d42e29bcc147c3aec35fa32..ea288cbd6617557781739050412f216e28b19d9b 100644
+index 87d209546fed55a9f138b2c2eecb1f54a8371740..5aa430beec33d3b06c139c944d894b8e84172381 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
-@@ -496,9 +496,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -498,9 +498,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
        Executor executor = (runnable) -> this.worldgenMailbox.tell(ChunkTaskPriorityQueueSorter.message(chunkHolder, runnable));
        return completableFuture.thenComposeAsync((either) -> (CompletionStage)either.map((list) -> {
              try {
@@ -2102,7 +2102,7 @@ index 2d18d78b66920de15d42e29bcc147c3aec35fa32..ea288cbd6617557781739050412f216e
              } catch (Exception var9) {
                 var9.getStackTrace();
                 CrashReport crashReport = CrashReport.forThrowable(var9, "Exception generating new chunk");
-@@ -547,7 +547,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -549,7 +549,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              if (protoChunk instanceof ImposterProtoChunk) {
                 levelChunk = ((ImposterProtoChunk)protoChunk).getWrapped();
              } else {
@@ -2111,7 +2111,7 @@ index 2d18d78b66920de15d42e29bcc147c3aec35fa32..ea288cbd6617557781739050412f216e
                 chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk));
              }
  
-@@ -659,9 +659,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -661,9 +661,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              ChunkPos chunkPos = chunkHolder.getPos();
              Packet<?>[] packets = new Packet[2];
              this.getPlayers(chunkPos, false).forEach((serverPlayer) -> {
@@ -2124,7 +2124,7 @@ index 2d18d78b66920de15d42e29bcc147c3aec35fa32..ea288cbd6617557781739050412f216e
                 this.updateChunkTracking(serverPlayer, chunkPos, packets, flag, flag2);
              });
           }
-@@ -790,7 +790,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -797,7 +797,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
           }
        }
  
@@ -2133,7 +2133,7 @@ index 2d18d78b66920de15d42e29bcc147c3aec35fa32..ea288cbd6617557781739050412f216e
        int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
        SectionPos sectionPos = serverPlayer.getLastSectionPos();
        SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -824,17 +824,17 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -831,17 +831,17 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
        int i3 = sectionPos.x();
        int i4 = sectionPos.z();
@@ -2155,7 +2155,7 @@ index 2d18d78b66920de15d42e29bcc147c3aec35fa32..ea288cbd6617557781739050412f216e
                 this.updateChunkTracking(serverPlayer, chunkPos, new Packet[2], flag4, flag5);
              }
           }
-@@ -848,7 +848,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -855,7 +855,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
           }
  
@@ -2243,10 +2243,10 @@ index 1a5a7cd6511f02a2b36efc4ea03f49215ecd1cad..3748dad2c9888d8095a71986e833c6da
                 }
              }
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 430533a6fcaa7806b5cc896261f70650d9940fea..f94205ed3dd466008bdcfa34cff5133e2b742017 100644
+index 41f118f708d6c7375af59433900fa1958fd4ba4d..ea6ad798a7b10cf4f300345046b3c742b2b06896 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-@@ -188,7 +188,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -189,7 +189,7 @@ public class ServerChunkCache extends ChunkSource {
           completableFuture = this.getChunkFutureMainThread(i, i2, chunkStatus, flag);
           this.mainThreadProcessor.managedBlock(completableFuture::isDone);
        } else {
@@ -2255,7 +2255,7 @@ index 430533a6fcaa7806b5cc896261f70650d9940fea..f94205ed3dd466008bdcfa34cff5133e
        }
  
        return completableFuture;
-@@ -345,7 +345,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -346,7 +346,7 @@ public class ServerChunkCache extends ChunkSource {
           }
  
           this.level.getProfiler().popPush("broadcast");
@@ -2264,7 +2264,7 @@ index 430533a6fcaa7806b5cc896261f70650d9940fea..f94205ed3dd466008bdcfa34cff5133e
           this.level.getProfiler().pop();
           this.level.getProfiler().pop();
        }
-@@ -483,7 +483,8 @@ public class ServerChunkCache extends ChunkSource {
+@@ -484,7 +484,8 @@ public class ServerChunkCache extends ChunkSource {
           super.doRunTask(runnable);
        }
  
@@ -4288,10 +4288,10 @@ index 5382ada950ea1de2ac016caae32f03e13b93740d..b9d66672b52d7b88c3625fbd746beffd
                 return optional.isPresent() ? InteractionResult.SUCCESS : InteractionResult.PASS;
              } else {
 diff --git a/src/main/java/net/minecraft/world/entity/SpawnPlacements.java b/src/main/java/net/minecraft/world/entity/SpawnPlacements.java
-index 5eb3006130588d69395a9343313a2a6e1f798a80..1192a03a15a151fbc491444540e258c6ae67e3be 100644
+index b898ed4202843db239625def3709895379e7c41b..cd773695e927dcdd64a6c23f7def66a498a71376 100644
 --- a/src/main/java/net/minecraft/world/entity/SpawnPlacements.java
 +++ b/src/main/java/net/minecraft/world/entity/SpawnPlacements.java
-@@ -58,7 +58,7 @@ public class SpawnPlacements {
+@@ -59,7 +59,7 @@ public class SpawnPlacements {
  
     public static <T extends Entity> boolean checkSpawnRules(EntityType<T> entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, Random random) {
        SpawnPlacements.Data data = (SpawnPlacements.Data)DATA_BY_TYPE.get(entityType);
@@ -4594,10 +4594,10 @@ index 2e685126b08cc94b268b208a9b75add3d916b831..af9b024dd0618c703d263b9c6ea20afd
  
     public static void updateActivity(Axolotl axolotl) {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-index 853aaf02ee33b3776797df828f1134e0eebf55cc..c02d902001c5f47ce87d18caf19cca881206c2c2 100644
+index 0c7beb27ff98e8b175837a40b744afda88f52f2c..4039d6f9db36759433625d33a3b0de9beeddeb7b 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-@@ -121,7 +121,7 @@ public class Goat extends Animal {
+@@ -124,7 +124,7 @@ public class Goat extends Animal {
     }
  
     public Brain<Goat> getBrain() {
@@ -5017,10 +5017,10 @@ index dcf72352c5a31202f33c9776729206e4dd7e6e95..8fde9b36c159b2a6107fee86d225bcfd
  
     public void assignFrom(GameRules gameRules, @Nullable MinecraftServer minecraftServer) {
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index b1361ba237ffc8075da840798b6434e8a14b957a..172f8de15655d37fbc2d22bf5dce4560360bb6e0 100644
+index cfcd319cb5092f627b231829e1968d2ddbd4f8f9..47858b9ef8ecb9b9025ecfc1a57df96f248a1115 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-@@ -81,10 +81,11 @@ public final class NaturalSpawner {
+@@ -83,13 +83,14 @@ public final class NaturalSpawner {
           if (mobCategory != MobCategory.MISC) {
              BlockPos blockPos = entity.blockPosition();
              long l = ChunkPos.asLong(SectionPos.blockToSectionCoord(blockPos.getX()), SectionPos.blockToSectionCoord(blockPos.getZ()));
@@ -5033,7 +5033,11 @@ index b1361ba237ffc8075da840798b6434e8a14b957a..172f8de15655d37fbc2d22bf5dce4560
 +                  potentialCalculator.addCharge(finalEntity.blockPosition(), mobSpawnCost.getCharge()); // MagmaCube - decompile error
                 }
  
-                object2IntOpenHashMap.addTo(mobCategory, 1);
+-               if (entity instanceof Mob) {
++               if (finalEntity instanceof Mob) {
+                   localMobCapTracker.addMob(l, mobCategory);
+                }
+ 
 diff --git a/src/main/java/net/minecraft/world/level/TickNextTickData.java b/src/main/java/net/minecraft/world/level/TickNextTickData.java
 index 33ca065b9abafeb2f1671b06be60d10588731519..f7cf52a42bf58e26d963ee52f52e379a6e517205 100644
 --- a/src/main/java/net/minecraft/world/level/TickNextTickData.java
@@ -5049,7 +5053,7 @@ index 33ca065b9abafeb2f1671b06be60d10588731519..f7cf52a42bf58e26d963ee52f52e379a
  
     public String toString() {
 diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
-index 3ea71665f01d736a1ce5bd64b3b5e98289c2d138..178d8a2ca1d0d773fc96e1e965cdf9fa35db8a87 100644
+index 12e1d326f73dbaa6c9490c952a7b372ec326cf15..d7fc8a9707fe91b5be2e99492f92c53f6674fa3f 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Biome.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Biome.java
 @@ -41,8 +41,8 @@ import org.apache.logging.log4j.Logger;
@@ -5076,7 +5080,7 @@ index 3ea71665f01d736a1ce5bd64b3b5e98289c2d138..178d8a2ca1d0d773fc96e1e965cdf9fa
        @Nullable
        public Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-index e93d102243fa0693a001190dc89c610f4512a986..8fbdbc5d3d913fcf47e5436544a2f3d27256218a 100644
+index edbd0ca59e085e6903d53cd374a08a0a336d41fd..c575de95fa12e641e5e5ee488d6a731b97931e73 100644
 --- a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
 @@ -33,7 +33,7 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
@@ -5088,7 +5092,7 @@ index e93d102243fa0693a001190dc89c610f4512a986..8fbdbc5d3d913fcf47e5436544a2f3d2
     public static final Codec<MultiNoiseBiomeSource> CODEC = Codec.mapEither(MultiNoiseBiomeSource.PresetInstance.CODEC, DIRECT_CODEC).xmap((either) -> (MultiNoiseBiomeSource)either.map(MultiNoiseBiomeSource.PresetInstance::biomeSource, Function.identity()), (multiNoiseBiomeSource) -> (Either)multiNoiseBiomeSource.preset().map(Either::left).orElseGet(() -> Either.right(multiNoiseBiomeSource))).codec();
     private final MultiNoiseBiomeSource.NoiseParameters temperatureParams;
     private final MultiNoiseBiomeSource.NoiseParameters humidityParams;
-@@ -169,7 +169,7 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+@@ -186,7 +186,7 @@ public class MultiNoiseBiomeSource extends BiomeSource {
     public static ImmutableList<Pair<Climate.ParameterPoint, Supplier<Biome>>> parameters(Registry<Biome> registry) {
        Builder<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> builder = ImmutableList.builder();
        (new OverworldBiomeBuilder()).addBiomes(builder);
@@ -5097,8 +5101,8 @@ index e93d102243fa0693a001190dc89c610f4512a986..8fbdbc5d3d913fcf47e5436544a2f3d2
     }
  
     public void addMultinoiseDebugInfo(List<String> list, BlockPos blockPos) {
-@@ -190,10 +190,6 @@ public class MultiNoiseBiomeSource extends BiomeSource {
-       list.add("Terrain PV: " + decimalFormat.format(d6) + " O: " + decimalFormat.format(d7) + " F: " + decimalFormat.format(d8));
+@@ -205,10 +205,6 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+       list.add("Terrain PV: " + decimalFormat.format(d6) + " O: " + decimalFormat.format(terrainShape.offset) + " F: " + decimalFormat.format(terrainShape.factor) + (terrainShape.coastal ? " coast" : ""));
     }
  
 -   static {
@@ -5108,7 +5112,7 @@ index e93d102243fa0693a001190dc89c610f4512a986..8fbdbc5d3d913fcf47e5436544a2f3d2
     public static class NoiseParameters {
        private final int firstOctave;
        private final DoubleList amplitudes;
-@@ -220,7 +216,7 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+@@ -235,7 +231,7 @@ public class MultiNoiseBiomeSource extends BiomeSource {
  
     public static class Preset {
        static final Map<ResourceLocation, MultiNoiseBiomeSource.Preset> BY_NAME = Maps.newHashMap();
@@ -5493,7 +5497,7 @@ index 85683fb9a8b468de35995b0d80ffdfb27a87199a..d9e950dfeb9c616a91367764cb8e7110
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
-index 7a761e2bfbd9942fce65c9858b54e17c40c546bf..c64094c8e97b49dccf9a635a0ae1e7008d8fcbc0 100644
+index 52df826833e2c7e86df5f0acdfdcd993e8f82ead..94c3234df2da6e8f3e1341fa016fb89043834c38 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator.java
 @@ -312,8 +312,8 @@ public final class NoiseBasedChunkGenerator extends ChunkGenerator {
