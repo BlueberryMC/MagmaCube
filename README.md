@@ -4,7 +4,7 @@
 
 A Minecraft that you can patch your own patches into the Minecraft.
 
-Based on MC 1.18 experimental snapshot 3 currently.
+Based on 21w37a (snapshot of MC 1.18) currently.
 
 ## Goal
 - Make it editable easily by everyone who wants to code Minecraft

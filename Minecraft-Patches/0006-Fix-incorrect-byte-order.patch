@@ -1,18 +1,18 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: acrylic-style <ilyy@outlook.jp>
+From: acrylic-style <me@acrylicstyle.xyz>
 Date: Mon, 11 Jan 2021 03:55:35 +0900
 Subject: [PATCH] Fix incorrect byte order
 
 
 diff --git a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
-index 8c523ea28c77fea9842db45a1dc69d95a3b34784..8a4f4370b59959adeef6b010cc980d46ba3fcbc6 100644
+index 9f32f9f8c0b32ed63e02f70a554e2f5c50972278..ea6fccae01c8934fa7c9ee1b94d73e2de23d2b0f 100644
 --- a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
 +++ b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
-@@ -323,6 +323,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
-       }
+@@ -321,6 +321,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+         }
  
-       ByteBuffer byteBuffer = this.buffer.slice();
+         ByteBuffer byteBuffer = this.buffer.slice();
 +      byteBuffer.order(this.buffer.order()); // MagmaCube - fix incorrect byte order
-       this.buffer.clear();
-       return Pair.of(drawState, byteBuffer);
-    }
+         this.buffer.clear();
+         return Pair.of(drawState, byteBuffer);
+     }

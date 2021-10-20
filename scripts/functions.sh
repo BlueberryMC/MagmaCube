@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-version=1.18_experimental-snapshot-3
-name="1.18 experimental snapshot 3"
+version=21w41a
+name="21w41a"
 releaseTarget="1.18"
 stable="false"
-seriesId="ccpreview"
+seriesId="main"
 basedir="$(pwd -P)/"
-WORLD_VERSION=2827
-PROTOCOL_VERSION=1073741867
+WORLD_VERSION=2839
+PROTOCOL_VERSION=1073741869
 RESOURCE_VERSION=7
-DATA_VERSION=7
+DATA_VERSION=8

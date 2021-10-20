@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/7d7acdf4165867cd7334bfa5f3f00af742c5ce16/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/dd353c98457702583b610552da47ff8eb57c602d/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/6685e6de966b4970d947302f55376913454cf512/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/980cc030f1bab70ba64778da9842245bcdc1604c/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
-decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.498.13.jar
+FF_URL="https://maven.minecraftforge.net/net/minecraftforge/forgeflower/1.5.498.14/forgeflower-1.5.498.14.jar"
+decompilerBin="$basedir"/work/ForgeFlower/forgeflower-1.5.498.14.jar
 quickunzip="$basedir/work/quickunzip/quickunzip.jar"
 decompOutput="$basedir/work/Minecraft/$version/source"
 # Remove files that was used previously
 rm -rf "$basedir/Minecraft/src/main"
 rm -rf "$basedir/work/Minecraft/$version/source"
-mkdir -p "$basedir/work/decompiler"
+#mkdir -p "$basedir/work/decompiler"
+mkdir -p "$basedir/work/ForgeFlower"
 mkdir -p "$basedir/Minecraft/src/main/java"
 mkdir -p "$decompOutput"
 # Check mappings
@@ -19,21 +21,25 @@ cd "$basedir/work/mappings" || exit 1
 echo "Checked out: mappings: $(git log --oneline HEAD -1)"
 cd "$basedir" || exit 1
 # Download files
-echo "Downloading client jar..."
-curl $clientJarUrl --output "$clientJarPath"
-if [ $? != 0 ]; then
-  echo "Could not download client jar, please check for errors above, fix it, then run again."
-  exit 1
-fi
-echo "Downloading client mapping..."
-curl $clientMappingUrl --output "$clientMappingPath"
-if [ $? != 0 ]; then
+echo "Downloading ForgeFlower..."
+curl $FF_URL --output "$decompilerBin" || (
   echo "Could not download client mapping, please check for errors above, fix it, then run again."
   exit 1
-fi
+)
+echo "Downloading client jar..."
+curl $clientJarUrl --output "$clientJarPath" || (
+  echo "Could not download client jar, please check for errors above, fix it, then run again."
+  exit 1
+)
+echo "Downloading client mapping..."
+curl $clientMappingUrl --output "$clientMappingPath" || (
+  echo "Could not download client mapping, please check for errors above, fix it, then run again."
+  exit 1
+)
 echo "Applying mapping"
 "$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output-name="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath" || exit 1
 java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.2.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$version.pr" || exit 1
+echo "Applying AccessTransformers"
 java -Xmx2G -jar "$basedir/work/AccessTransformers/accesstransformers-3.0.1-fatjar.jar" --inJar "$clientRemappedJarPath.2" --outJar "$clientRemappedJarPath" --atFile "$basedir/work/mappings/mappings/$version.at" || exit 1
 echo "Deleting intermediate jar"
 rm "$clientRemappedJarPath.2"
@@ -51,6 +57,6 @@ cd "$basedir" || exit 1
 echo "Decompiling the remapped jar..."
 rm -rf "$decompOutput"
 mkdir -p "$decompOutput"
-java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput" || exit 1
+java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 -ind="    " -log="INFO" -mpm=30 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput" || exit 1
 $basedir/scripts/postDownload.sh || exit 1
 echo "  Downloaded the client jar successfully"

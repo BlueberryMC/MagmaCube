@@ -1,17 +1,17 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: acrylic-style <ilyy@outlook.jp>
+From: acrylic-style <me@acrylicstyle.xyz>
 Date: Mon, 11 Jan 2021 00:56:27 +0900
 Subject: [PATCH] show debug renderer when F3+G
 
 
 diff --git a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
-index d08085c2c5e81f9186cad0dc2c70d35fcf65551a..ce7b7a5d049efb50acab06106446ca2191d61c49 100644
+index 72451093b6306c3d91ad93493efd3b2da77f5101..a6f52260d9b45639757fcd5bd9c7008a704a9593 100644
 --- a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 @@ -94,6 +94,27 @@ public class DebugRenderer {
-    public void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, double d, double d2, double d3) {
-       if (this.renderChunkborder && !Minecraft.getInstance().showOnlyReducedInfo()) {
-          this.chunkBorderRenderer.render(poseStack, bufferSource, d, d2, d3);
+     public void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, double d, double d2, double d3) {
+         if (this.renderChunkborder && !Minecraft.getInstance().showOnlyReducedInfo()) {
+             this.chunkBorderRenderer.render(poseStack, bufferSource, d, d2, d3);
 +         // MagmaCube start - show debug renderer with F3+G
 +         if (net.minecraft.SharedConstants.IS_RUNNING_IN_IDE) {
 +            this.pathfindingRenderer.render(poseStack, bufferSource, d, d2, d3);
@@ -33,6 +33,6 @@ index d08085c2c5e81f9186cad0dc2c70d35fcf65551a..ce7b7a5d049efb50acab06106446ca21
 +            this.gameTestDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
 +         }
 +         // MagmaCube end - show debug renderer with F3+G
-       }
+         }
  
-       this.gameTestDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
+         this.gameTestDebugRenderer.render(poseStack, bufferSource, d, d2, d3);

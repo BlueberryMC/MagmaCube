@@ -106,14 +106,14 @@
     ]
   },
   "assetIndex": {
-    "id": "1.17",
-    "sha1": "e5af543d9b3ce1c063a97842c38e50e29f961f00",
-    "size": 345623,
-    "totalSize": 345028703,
-    "url": "https://launchermeta.mojang.com/v1/packages/e5af543d9b3ce1c063a97842c38e50e29f961f00/1.17.json"
+    "id": "1.18",
+    "sha1": "6f882d4dc5b60f2a77c327bd75d03ce3dc3e571d",
+    "size": 347052,
+    "totalSize": 347837609,
+    "url": "https://launchermeta.mojang.com/v1/packages/6f882d4dc5b60f2a77c327bd75d03ce3dc3e571d/1.18.json"
   },
-  "assets": "1.17",
-  "id": "magmacube-1.18_experimental-snapshot-3",
+  "assets": "1.18",
+  "id": "21w41a",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -232,7 +232,7 @@
   ],
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2021-07-29T00:00:00+00:00",
-  "time": "2021-07-29T00:00:00+00:00",
-  "type": "pending"
+  "releaseTime": "2021-10-20T00:00:00+00:00",
+  "time": "2021-10-20T00:00:00+00:00",
+  "type": "snapshot"
 }
