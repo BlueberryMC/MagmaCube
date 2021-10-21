@@ -5,520 +5,45 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 80b8a4fbe85d85978ac0fa546355de7613988843..d34884ea2ac0140640b37a937329a0e712a8ad79 100644
+index 80b8a4fbe85d85978ac0fa546355de7613988843..59d65c7077b0f187bda5d9c45bcc93192f6161df 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
-@@ -15,130 +15,133 @@ import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
+@@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
+     private final int dataPackVersion;
+     private final Date buildTime;
+     private final String releaseTarget;
++    @javax.annotation.Nullable public final String magmaCubeVersion; // MagmaCube
  
- public class DetectedVersion implements WorldVersion {
--    private static final Logger LOGGER = LogManager.getLogger();
--    public static final WorldVersion BUILT_IN = new DetectedVersion();
--    private final String id;
--    private final String name;
--    private final boolean stable;
--    private final DataVersion worldVersion;
--    private final int protocolVersion;
--    private final int resourcePackVersion;
--    private final int dataPackVersion;
--    private final Date buildTime;
--    private final String releaseTarget;
--
--    private DetectedVersion() {
--        this.id = UUID.randomUUID().toString().replaceAll("-", "");
--        this.name = "21w41a";
--        this.stable = false;
--        this.worldVersion = new DataVersion(2839, "main");
--        this.protocolVersion = SharedConstants.getProtocolVersion();
--        this.resourcePackVersion = 8;
--        this.dataPackVersion = 8;
--        this.buildTime = new Date();
--        this.releaseTarget = "1.18";
--    }
--
--    private DetectedVersion(JsonObject json) {
--        this.id = GsonHelper.getAsString(json, "id");
--        this.name = GsonHelper.getAsString(json, "name");
--        this.releaseTarget = GsonHelper.getAsString(json, "release_target");
--        this.stable = GsonHelper.getAsBoolean(json, "stable");
--        this.worldVersion = new DataVersion(GsonHelper.getAsInt(json, "world_version"), GsonHelper.getAsString(json, "series_id", DataVersion.MAIN_SERIES));
--        this.protocolVersion = GsonHelper.getAsInt(json, "protocol_version");
--        JsonObject jsonObject2 = GsonHelper.getAsJsonObject(json, "pack_version");
--        this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
--        this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
--        this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(json, "build_time")).toInstant());
--    }
--
--    public static WorldVersion tryDetectVersion() {
--        try {
--            InputStream inputStream = DetectedVersion.class.getResourceAsStream("/version.json");
--
--            WorldVersion var9;
--            label63: {
--                DetectedVersion var2;
--                try {
--                    if (inputStream == null) {
--                        LOGGER.warn("Missing version information!");
--                        var9 = BUILT_IN;
--                        break label63;
--                    }
--
--                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
--
--                    try {
--                        var2 = new DetectedVersion(GsonHelper.parse(inputStreamReader));
--                    } catch (Throwable var6) {
--                        try {
--                            inputStreamReader.close();
--                        } catch (Throwable var5) {
--                            var6.addSuppressed(var5);
--                        }
--
--                        throw var6;
--                    }
--
--                    inputStreamReader.close();
--                } catch (Throwable var7) {
--                    if (inputStream != null) {
--                        try {
--                            inputStream.close();
--                        } catch (Throwable var4) {
--                            var7.addSuppressed(var4);
--                        }
--                    }
--
--                    throw var7;
--                }
--
--                if (inputStream != null) {
--                    inputStream.close();
--                }
--
--                return var2;
-+   private static final Logger LOGGER = LogManager.getLogger();
-+   public static final WorldVersion BUILT_IN = new DetectedVersion();
-+   private final String id;
-+   private final String name;
-+   private final boolean stable;
-+   private final DataVersion worldVersion;
-+   private final int protocolVersion;
-+   private final int resourcePackVersion;
-+   private final int dataPackVersion;
-+   private final Date buildTime;
-+   private final String releaseTarget;
-+   @javax.annotation.Nullable public final String magmaCubeVersion; // MagmaCube
-+
-+   private DetectedVersion() {
-+      this.id = UUID.randomUUID().toString().replaceAll("-", "");
-+      this.name = "1.18-experimental-1";
-+      this.stable = false;
-+      this.worldVersion = new DataVersion(2825, "ccpreview");
-+      this.protocolVersion = SharedConstants.getProtocolVersion();
-+      this.resourcePackVersion = 7;
-+      this.dataPackVersion = 7;
-+      this.buildTime = new Date();
-+      this.releaseTarget = "1.18";
-+      this.magmaCubeVersion = "debug"; // MagmaCube
-+   }
-+
-+   private DetectedVersion(JsonObject json) {
-+      this.id = GsonHelper.getAsString(json, "id");
-+      this.name = GsonHelper.getAsString(json, "name");
-+      this.releaseTarget = GsonHelper.getAsString(json, "release_target");
-+      this.stable = GsonHelper.getAsBoolean(json, "stable");
-+      this.worldVersion = new DataVersion(GsonHelper.getAsInt(json, "world_version"), GsonHelper.getAsString(json, "series_id", DataVersion.MAIN_SERIES));
-+      this.protocolVersion = GsonHelper.getAsInt(json, "protocol_version");
-+      JsonObject jsonObject2 = GsonHelper.getAsJsonObject(json, "pack_version");
-+      this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
-+      this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
-+      this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(json, "build_time")).toInstant());
-+      this.magmaCubeVersion = json.has("magmacube_version") ? GsonHelper.getAsString(json, "magmacube_version") : "debug"; // MagmaCube
-+   }
-+
-+   public static WorldVersion tryDetectVersion() {
-+      try {
-+         InputStream inputStream = DetectedVersion.class.getResourceAsStream("/version.json");
-+
-+         WorldVersion var9;
-+         label63: {
-+            DetectedVersion var2;
-+            try {
-+               if (inputStream == null) {
-+                  LOGGER.warn("Missing version information!");
-+                  var9 = BUILT_IN;
-+                  break label63;
-+               }
-+
-+               InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-+
-+               try {
-+                  var2 = new DetectedVersion(GsonHelper.parse(inputStreamReader));
-+               } catch (Throwable var6) {
-+                  try {
-+                     inputStreamReader.close();
-+                  } catch (Throwable var5) {
-+                     var6.addSuppressed(var5);
-+                  }
-+
-+                  throw var6;
-+               }
-+
-+               inputStreamReader.close();
-+            } catch (Throwable var7) {
-+               if (inputStream != null) {
-+                  try {
-+                     inputStream.close();
-+                  } catch (Throwable var4) {
-+                     var7.addSuppressed(var4);
-+                  }
-+               }
-+
-+               throw var7;
-             }
+     private DetectedVersion() {
+         this.id = UUID.randomUUID().toString().replaceAll("-", "");
+@@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
+         this.dataPackVersion = 8;
+         this.buildTime = new Date();
+         this.releaseTarget = "1.18";
++        this.magmaCubeVersion = "debug"; // MagmaCube
+     }
  
-             if (inputStream != null) {
--                inputStream.close();
-+               inputStream.close();
-             }
+     private DetectedVersion(JsonObject json) {
+@@ -50,6 +52,7 @@ public class DetectedVersion implements WorldVersion {
+         this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
+         this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
+         this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(json, "build_time")).toInstant());
++        this.magmaCubeVersion = json.has("magmacube_version") ? GsonHelper.getAsString(json, "magmacube_version") : "debug"; // MagmaCube
+     }
  
--            return var9;
--        } catch (JsonParseException | IOException var8) {
--            throw new IllegalStateException("Game version information is corrupt", var8);
--        }
--    }
-+            return var2;
-+         }
- 
--    public String getId() {
--        return this.id;
--    }
-+         if (inputStream != null) {
-+            inputStream.close();
-+         }
- 
--    public String getName() {
--        return this.name;
--    }
-+         return var9;
-+      } catch (JsonParseException | IOException var8) {
-+         throw new IllegalStateException("Game version information is corrupt", var8);
-+      }
-+   }
- 
--    public String getReleaseTarget() {
--        return this.releaseTarget;
--    }
-+   public String getId() {
-+      return this.id;
-+   }
- 
--    public DataVersion getDataVersion() {
--        return this.worldVersion;
--    }
-+   public String getName() {
-+      return this.name;
-+   }
- 
--    public int getProtocolVersion() {
--        return this.protocolVersion;
--    }
-+   public String getReleaseTarget() {
-+      return this.releaseTarget;
-+   }
- 
--    public int getPackVersion(PackType packType) {
--        return packType == PackType.DATA ? this.dataPackVersion : this.resourcePackVersion;
--    }
-+   public DataVersion getDataVersion() {
-+      return this.worldVersion;
-+   }
- 
--    public Date getBuildTime() {
--        return this.buildTime;
--    }
-+   public int getProtocolVersion() {
-+      return this.protocolVersion;
-+   }
- 
--    public boolean isStable() {
--        return this.stable;
--    }
-+   public int getPackVersion(PackType packType) {
-+      return packType == PackType.DATA ? this.dataPackVersion : this.resourcePackVersion;
-+   }
-+
-+   public Date getBuildTime() {
-+      return this.buildTime;
-+   }
-+
-+   public boolean isStable() {
-+      return this.stable;
-+   }
- }
-\ No newline at end of file
+     public static WorldVersion tryDetectVersion() {
 diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
-index 77f13c0c2ec82fbf82e400a035bbb249fe359afb..9ca90ab3d2b659c23add075d3695ee0a9de04156 100644
+index 77f13c0c2ec82fbf82e400a035bbb249fe359afb..74e8f78d68f387fc5d99e42999b7a63a8103f77c 100644
 --- a/src/main/java/net/minecraft/SystemReport.java
 +++ b/src/main/java/net/minecraft/SystemReport.java
-@@ -17,130 +17,131 @@ import oshi.hardware.VirtualMemory;
- import oshi.hardware.CentralProcessor.ProcessorIdentifier;
+@@ -26,6 +26,7 @@ public class SystemReport {
+     private final Map<String, String> entries = Maps.newLinkedHashMap();
  
- public class SystemReport {
--    public static final long BYTES_PER_MEBIBYTE = 1048576L;
--    private static final long ONE_GIGA = 1000000000L;
--    private static final Logger LOGGER = LogManager.getLogger();
--    private static final String OPERATING_SYSTEM = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version");
--    private static final String JAVA_VERSION = System.getProperty("java.version") + ", " + System.getProperty("java.vendor");
--    private static final String JAVA_VM_VERSION = System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor");
--    private final Map<String, String> entries = Maps.newLinkedHashMap();
--
--    public SystemReport() {
--        this.setDetail("Minecraft Version", SharedConstants.getCurrentVersion().getName());
--        this.setDetail("Minecraft Version ID", SharedConstants.getCurrentVersion().getId());
--        this.setDetail("Operating System", OPERATING_SYSTEM);
--        this.setDetail("Java Version", JAVA_VERSION);
--        this.setDetail("Java VM Version", JAVA_VM_VERSION);
--        this.setDetail("Memory", (Supplier<String>)(() -> {
--            Runtime runtime = Runtime.getRuntime();
--            long l = runtime.maxMemory();
--            long l2 = runtime.totalMemory();
--            long l3 = runtime.freeMemory();
--            long l4 = l / 1048576L;
--            long l5 = l2 / 1048576L;
--            long l6 = l3 / 1048576L;
--            return l3 + " bytes (" + l6 + " MiB) / " + l2 + " bytes (" + l5 + " MiB) up to " + l + " bytes (" + l4 + " MiB)";
--        }));
--        this.setDetail("CPUs", (Supplier<String>)(() -> String.valueOf(Runtime.getRuntime().availableProcessors())));
--        this.ignoreErrors("hardware", () -> this.putHardware(new SystemInfo()));
--        this.setDetail("JVM Flags", (Supplier<String>)(() -> {
--            List<String> list = Util.getVmArguments().collect(Collectors.toList());
--            return String.format("%d total; %s", list.size(), String.join(" ", list));
--        }));
--    }
--
--    public void setDetail(String s, String s2) {
--        this.entries.put(s, s2);
--    }
--
--    public void setDetail(String s, Supplier<String> supplier) {
--        try {
--            this.setDetail(s, (String)supplier.get());
--        } catch (Exception var4) {
--            LOGGER.warn("Failed to get system info for {}", s, var4);
--            this.setDetail(s, "ERR");
--        }
--
--    }
--
--    private void putHardware(SystemInfo systemInfo) {
--        HardwareAbstractionLayer hardwareAbstractionLayer = systemInfo.getHardware();
--        this.ignoreErrors("processor", () -> this.putProcessor(hardwareAbstractionLayer.getProcessor()));
--        this.ignoreErrors("graphics", () -> this.putGraphics(hardwareAbstractionLayer.getGraphicsCards()));
--        this.ignoreErrors("memory", () -> this.putMemory(hardwareAbstractionLayer.getMemory()));
--    }
--
--    private void ignoreErrors(String s, Runnable runnable) {
--        try {
--            runnable.run();
--        } catch (Throwable var4) {
--            LOGGER.warn("Failed retrieving info for group {}", s, var4);
--        }
--
--    }
--
--    private void putPhysicalMemory(List<PhysicalMemory> list) {
--        int i = 0;
--
--        for(PhysicalMemory physicalMemory : list) {
--            String s = String.format("Memory slot #%d ", i++);
--            this.setDetail(s + "capacity (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)physicalMemory.getCapacity() / 1048576.0F)));
--            this.setDetail(s + "clockSpeed (GHz)", (Supplier<String>)(() -> String.format("%.2f", (float)physicalMemory.getClockSpeed() / 1.0E9F)));
--            this.setDetail(s + "type", physicalMemory::getMemoryType);
--        }
--
--    }
--
--    private void putVirtualMemory(VirtualMemory virtualMemory) {
--        this.setDetail("Virtual memory max (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getVirtualMax() / 1048576.0F)));
--        this.setDetail("Virtual memory used (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getVirtualInUse() / 1048576.0F)));
--        this.setDetail("Swap memory total (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getSwapTotal() / 1048576.0F)));
--        this.setDetail("Swap memory used (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getSwapUsed() / 1048576.0F)));
--    }
--
--    private void putMemory(GlobalMemory globalMemory) {
--        this.ignoreErrors("physical memory", () -> this.putPhysicalMemory(globalMemory.getPhysicalMemory()));
--        this.ignoreErrors("virtual memory", () -> this.putVirtualMemory(globalMemory.getVirtualMemory()));
--    }
--
--    private void putGraphics(List<GraphicsCard> list) {
--        int i = 0;
--
--        for(GraphicsCard graphicsCard : list) {
--            String s = String.format("Graphics card #%d ", i++);
--            this.setDetail(s + "name", graphicsCard::getName);
--            this.setDetail(s + "vendor", graphicsCard::getVendor);
--            this.setDetail(s + "VRAM (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)graphicsCard.getVRam() / 1048576.0F)));
--            this.setDetail(s + "deviceId", graphicsCard::getDeviceId);
--            this.setDetail(s + "versionInfo", graphicsCard::getVersionInfo);
--        }
--
--    }
--
--    private void putProcessor(CentralProcessor centralProcessor) {
--        ProcessorIdentifier processorIdentifier = centralProcessor.getProcessorIdentifier();
--        this.setDetail("Processor Vendor", processorIdentifier::getVendor);
--        this.setDetail("Processor Name", processorIdentifier::getName);
--        this.setDetail("Identifier", processorIdentifier::getIdentifier);
--        this.setDetail("Microarchitecture", processorIdentifier::getMicroarchitecture);
--        this.setDetail("Frequency (GHz)", (Supplier<String>)(() -> String.format("%.2f", (float)processorIdentifier.getVendorFreq() / 1.0E9F)));
--        this.setDetail("Number of physical packages", (Supplier<String>)(() -> String.valueOf(centralProcessor.getPhysicalPackageCount())));
--        this.setDetail("Number of physical CPUs", (Supplier<String>)(() -> String.valueOf(centralProcessor.getPhysicalProcessorCount())));
--        this.setDetail("Number of logical CPUs", (Supplier<String>)(() -> String.valueOf(centralProcessor.getLogicalProcessorCount())));
--    }
--
--    public void appendToCrashReportString(StringBuilder stringBuilder) {
--        stringBuilder.append("-- ").append("System Details").append(" --\n");
--        stringBuilder.append("Details:");
--        this.entries.forEach((s, s2) -> {
--            stringBuilder.append("\n\t");
--            stringBuilder.append(s);
--            stringBuilder.append(": ");
--            stringBuilder.append(s2);
--        });
--    }
--
--    public String toLineSeparatedString() {
--        return (String)this.entries.entrySet().stream().map((entry) -> (String)entry.getKey() + ": " + (String)entry.getValue()).collect(Collectors.joining(System.lineSeparator()));
--    }
-+   public static final long BYTES_PER_MEBIBYTE = 1048576L;
-+   private static final long ONE_GIGA = 1000000000L;
-+   private static final Logger LOGGER = LogManager.getLogger();
-+   private static final String OPERATING_SYSTEM = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version");
-+   private static final String JAVA_VERSION = System.getProperty("java.version") + ", " + System.getProperty("java.vendor");
-+   private static final String JAVA_VM_VERSION = System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor");
-+   private final Map<String, String> entries = Maps.newLinkedHashMap();
-+
-+   public SystemReport() {
-+      this.setDetail("MagmaCube Version", ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion); // MagmaCube
-+      this.setDetail("Minecraft Version", SharedConstants.getCurrentVersion().getName());
-+      this.setDetail("Minecraft Version ID", SharedConstants.getCurrentVersion().getId());
-+      this.setDetail("Operating System", OPERATING_SYSTEM);
-+      this.setDetail("Java Version", JAVA_VERSION);
-+      this.setDetail("Java VM Version", JAVA_VM_VERSION);
-+      this.setDetail("Memory", (Supplier<String>)(() -> {
-+         Runtime runtime = Runtime.getRuntime();
-+         long l = runtime.maxMemory();
-+         long l2 = runtime.totalMemory();
-+         long l3 = runtime.freeMemory();
-+         long l4 = l / 1048576L;
-+         long l5 = l2 / 1048576L;
-+         long l6 = l3 / 1048576L;
-+         return "" + l3 + " bytes (" + l6 + " MiB) / " + l2 + " bytes (" + l5 + " MiB) up to " + l + " bytes (" + l4 + " MiB)";
-+      }));
-+      this.setDetail("CPUs", (Supplier<String>)(() -> String.valueOf(Runtime.getRuntime().availableProcessors())));
-+      this.ignoreErrors("hardware", () -> this.putHardware(new SystemInfo()));
-+      this.setDetail("JVM Flags", (Supplier<String>)(() -> {
-+         List<String> list = Util.getVmArguments().collect(Collectors.toList());
-+         return String.format("%d total; %s", list.size(), String.join(" ", list));
-+      }));
-+   }
-+
-+   public void setDetail(String s, String s2) {
-+      this.entries.put(s, s2);
-+   }
-+
-+   public void setDetail(String s, Supplier<String> supplier) {
-+      try {
-+         this.setDetail(s, (String)supplier.get());
-+      } catch (Exception var4) {
-+         LOGGER.warn("Failed to get system info for {}", s, var4);
-+         this.setDetail(s, "ERR");
-+      }
-+
-+   }
-+
-+   private void putHardware(SystemInfo systemInfo) {
-+      HardwareAbstractionLayer hardwareAbstractionLayer = systemInfo.getHardware();
-+      this.ignoreErrors("processor", () -> this.putProcessor(hardwareAbstractionLayer.getProcessor()));
-+      this.ignoreErrors("graphics", () -> this.putGraphics(hardwareAbstractionLayer.getGraphicsCards()));
-+      this.ignoreErrors("memory", () -> this.putMemory(hardwareAbstractionLayer.getMemory()));
-+   }
-+
-+   private void ignoreErrors(String s, Runnable runnable) {
-+      try {
-+         runnable.run();
-+      } catch (Throwable var4) {
-+         LOGGER.warn("Failed retrieving info for group {}", s, var4);
-+      }
-+
-+   }
-+
-+   private void putPhysicalMemory(List<PhysicalMemory> list) {
-+      int i = 0;
-+
-+      for(PhysicalMemory physicalMemory : list) {
-+         String s = String.format("Memory slot #%d ", i++);
-+         this.setDetail(s + "capacity (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)physicalMemory.getCapacity() / 1048576.0F)));
-+         this.setDetail(s + "clockSpeed (GHz)", (Supplier<String>)(() -> String.format("%.2f", (float)physicalMemory.getClockSpeed() / 1.0E9F)));
-+         this.setDetail(s + "type", physicalMemory::getMemoryType);
-+      }
-+
-+   }
-+
-+   private void putVirtualMemory(VirtualMemory virtualMemory) {
-+      this.setDetail("Virtual memory max (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getVirtualMax() / 1048576.0F)));
-+      this.setDetail("Virtual memory used (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getVirtualInUse() / 1048576.0F)));
-+      this.setDetail("Swap memory total (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getSwapTotal() / 1048576.0F)));
-+      this.setDetail("Swap memory used (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)virtualMemory.getSwapUsed() / 1048576.0F)));
-+   }
-+
-+   private void putMemory(GlobalMemory globalMemory) {
-+      this.ignoreErrors("physical memory", () -> this.putPhysicalMemory(globalMemory.getPhysicalMemory()));
-+      this.ignoreErrors("virtual memory", () -> this.putVirtualMemory(globalMemory.getVirtualMemory()));
-+   }
-+
-+   private void putGraphics(List<GraphicsCard> list) {
-+      int i = 0;
-+
-+      for(GraphicsCard graphicsCard : list) {
-+         String s = String.format("Graphics card #%d ", i++);
-+         this.setDetail(s + "name", graphicsCard::getName);
-+         this.setDetail(s + "vendor", graphicsCard::getVendor);
-+         this.setDetail(s + "VRAM (MB)", (Supplier<String>)(() -> String.format("%.2f", (float)graphicsCard.getVRam() / 1048576.0F)));
-+         this.setDetail(s + "deviceId", graphicsCard::getDeviceId);
-+         this.setDetail(s + "versionInfo", graphicsCard::getVersionInfo);
-+      }
-+
-+   }
-+
-+   private void putProcessor(CentralProcessor centralProcessor) {
-+      ProcessorIdentifier processorIdentifier = centralProcessor.getProcessorIdentifier();
-+      this.setDetail("Processor Vendor", processorIdentifier::getVendor);
-+      this.setDetail("Processor Name", processorIdentifier::getName);
-+      this.setDetail("Identifier", processorIdentifier::getIdentifier);
-+      this.setDetail("Microarchitecture", processorIdentifier::getMicroarchitecture);
-+      this.setDetail("Frequency (GHz)", (Supplier<String>)(() -> String.format("%.2f", (float)processorIdentifier.getVendorFreq() / 1.0E9F)));
-+      this.setDetail("Number of physical packages", (Supplier<String>)(() -> String.valueOf(centralProcessor.getPhysicalPackageCount())));
-+      this.setDetail("Number of physical CPUs", (Supplier<String>)(() -> String.valueOf(centralProcessor.getPhysicalProcessorCount())));
-+      this.setDetail("Number of logical CPUs", (Supplier<String>)(() -> String.valueOf(centralProcessor.getLogicalProcessorCount())));
-+   }
-+
-+   public void appendToCrashReportString(StringBuilder stringBuilder) {
-+      stringBuilder.append("-- ").append("System Details").append(" --\n");
-+      stringBuilder.append("Details:");
-+      this.entries.forEach((s, s2) -> {
-+         stringBuilder.append("\n\t");
-+         stringBuilder.append(s);
-+         stringBuilder.append(": ");
-+         stringBuilder.append(s2);
-+      });
-+   }
-+
-+   public String toLineSeparatedString() {
-+      return (String)this.entries.entrySet().stream().map((entry) -> (String)entry.getKey() + ": " + (String)entry.getValue()).collect(Collectors.joining(System.lineSeparator()));
-+   }
- }
-\ No newline at end of file
+     public SystemReport() {
++        this.setDetail("MagmaCube Version", ((DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion); // MagmaCube
+         this.setDetail("Minecraft Version", SharedConstants.getCurrentVersion().getName());
+         this.setDetail("Minecraft Version ID", SharedConstants.getCurrentVersion().getId());
+         this.setDetail("Operating System", OPERATING_SYSTEM);
 diff --git a/src/main/java/net/minecraft/client/ClientBrandRetriever.java b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef539dbbd2c 100644
 --- a/src/main/java/net/minecraft/client/ClientBrandRetriever.java
@@ -562,21 +87,15 @@ index 40d4d30f75d514c00e1cc6a252faae3fea503058..4b8d68438c9ead9ac3306a75ffa19e47
                  fill(poseStack, this.copyrightX, this.height - 1, this.copyrightX + this.copyrightWidth, this.height, 16777215 | i6);
              }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index ff222e00847189762573d1540e85b1ab57f3fd3f..eac3123e03aadf533918b85f2ff5475b8a37c8b3 100644
+index 983cbda4cc951dd6bc335a11b7d76e654ffc7da6..6351041938a8cbbb4063c8cc962a511fcf52d24e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -920,10 +920,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-         return this.playerList.getPlayerNamesArray();
+@@ -922,7 +922,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 
+     @DontObfuscate
+     public String getServerModName() {
+-        return "vanilla";
++        return "magmacube"; // MagmaCube > vanilla!
      }
  
--    @DontObfuscate
--    public String getServerModName() {
--        return "vanilla";
--    }
-+   @DontObfuscate
-+   public String getServerModName() {
-+      return "magmacube"; // MagmaCube > vanilla!
-+   }
- 
      public SystemReport fillSystemReport(SystemReport systemReport) {
-         if (this.playerList != null) {

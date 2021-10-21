@@ -222,7 +222,7 @@ index 7bc9bbfdaaca5671901413331376367803f046ef..98e8534a9c98e673f3dce9d599d1e161
          }).start();
      }
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index d635ec691ad51e0fe223effa3d05a7763efbba6d..242090404547f64a6602afa9a0cc9cd75dbdedc5 100644
+index d635ec691ad51e0fe223effa3d05a7763efbba6d..193e89504728aa76282af8fc9de7f083857a6d15 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -24,6 +24,7 @@ import java.nio.file.Path;
@@ -233,6 +233,33 @@ index d635ec691ad51e0fe223effa3d05a7763efbba6d..242090404547f64a6602afa9a0cc9cd7
  import java.time.Duration;
  import java.time.Instant;
  import java.util.Arrays;
+@@ -128,21 +129,21 @@ public class Util {
+     }
+ 
+     private static int getMaxThreads() {
+-        String s = System.getProperty("max.bg.threads");
++        String s = System.getProperty(MAX_THREADS_SYSTEM_PROPERTY);
+         if (s != null) {
+             try {
+                 int i = Integer.parseInt(s);
+-                if (i >= 1 && i <= 255) {
++                if (i >= 1 && i <= DEFAULT_MAX_THREADS) {
+                     return i;
+                 }
+ 
+-                LOGGER.error("Wrong {} property value '{}'. Should be an integer value between 1 and {}.", "max.bg.threads", s, 255);
++                LOGGER.error("Wrong {} property value '{}'. Should be an integer value between 1 and {}.", MAX_THREADS_SYSTEM_PROPERTY, s, DEFAULT_MAX_THREADS);
+             } catch (NumberFormatException var2) {
+-                LOGGER.error("Could not parse {} property value '{}'. Should be an integer value between 1 and {}.", "max.bg.threads", s, 255);
++                LOGGER.error("Could not parse {} property value '{}'. Should be an integer value between 1 and {}.", MAX_THREADS_SYSTEM_PROPERTY, s, DEFAULT_MAX_THREADS);
+             }
+         }
+ 
+-        return 255;
++        return DEFAULT_MAX_THREADS;
+     }
+ 
+     public static ExecutorService bootstrapExecutor() {
 @@ -253,7 +254,7 @@ public class Util {
              String s2 = thread.getName();
              thread.setName(s);
@@ -372,9 +399,27 @@ index 762a8b578ac3805a6d251e81b46acc4c3aee24ad..d0a5166e52c93543b8eeecb501829058
              options.save();
          });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 762045cd08bc20a62b9385723da219db32928da3..96f9acd69d4e9a4724809bfaf95cfda84e28b322 100644
+index 762045cd08bc20a62b9385723da219db32928da3..5381f148800b0720d626c667efb9cdb3a1c54d27 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
+@@ -522,7 +522,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+                 this.options.fullscreen = this.window.isFullscreen();
+             }
+         } else {
+-            StringBuilder stringBuilder = new StringBuilder("Recovering from unsupported resolution (" + this.window.getWidth() + "x" + this.window.getHeight() + ").\nPlease make sure you have up-to-date drivers (see aka.ms/mcdriver for instructions).");
++            StringBuilder stringBuilder = new StringBuilder("Recovering from unsupported resolution (" + this.window.getWidth() + "x" + this.window.getHeight() + ").\n" + UPDATE_DRIVERS_ADVICE);
+             if (GlDebug.isDebugEnabled()) {
+                 stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
+             }
+@@ -974,7 +974,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+             this.profiler.pop();
+             this.profiler.push("tick");
+ 
+-            for(int i2 = 0; i2 < Math.min(10, i); ++i2) {
++            for(int i2 = 0; i2 < Math.min(MAX_TICKS_PER_UPDATE, i); ++i2) {
+                 this.profiler.incrementCounter("clientTick");
+                 this.tick();
+             }
 @@ -2241,13 +2241,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
@@ -1927,9 +1972,75 @@ index daba6dacd7b6b92ce5df17f5392d92886991444a..8faa9f44e8354e77b4b8b784966480a7
              Thread thread = new Thread("Server Shutdown Thread") {
                  public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..ff222e00847189762573d1540e85b1ab57f3fd3f 100644
+index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e654ffc7da6 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -308,7 +308,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+         ProfiledDuration profiledDuration = JvmProfiler.INSTANCE.onWorldLoadedStarted();
+         this.detectBundledResources();
+         this.worldData.setModdedInfo(this.getServerModName(), this.getModdedStatus().shouldReportAsModified());
+-        ChunkProgressListener chunkProgressListener = this.progressListenerFactory.create(11);
++        ChunkProgressListener chunkProgressListener = this.progressListenerFactory.create(START_CHUNK_RADIUS);
+         this.createLevels(chunkProgressListener);
+         this.forceDifficulty();
+         this.prepareLevels(chunkProgressListener);
+@@ -470,7 +470,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+         this.nextTickTime = Util.getMillis();
+         serverChunkCache.addRegionTicket(TicketType.START, new ChunkPos(blockPos), 11, Unit.INSTANCE);
+ 
+-        while(serverChunkCache.getTickingGenerated() != 441) {
++        while(serverChunkCache.getTickingGenerated() != START_TICKING_CHUNK_COUNT) {
+             this.nextTickTime = Util.getMillis() + 10L;
+             this.waitUntilNextTick();
+         }
+@@ -504,7 +504,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+             String s = this.storageSource.getLevelId();
+ 
+             try {
+-                this.setResourcePack("level://" + URLEncoder.encode(s, StandardCharsets.UTF_8.toString()) + "/resources.zip", "");
++                this.setResourcePack(LEVEL_STORAGE_SCHEMA + URLEncoder.encode(s, StandardCharsets.UTF_8.toString()) + "/" + MAP_RESOURCE_FILE, "");
+             } catch (UnsupportedEncodingException var4) {
+                 LOGGER.warn("Something went wrong url encoding {}", s);
+             }
+@@ -638,10 +638,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 
+                 while(this.running) {
+                     long l = Util.getMillis() - this.nextTickTime;
+-                    if (l > 2000L && this.nextTickTime - this.lastOverloadWarning >= 15000L) {
+-                        long l2 = l / 50L;
++                    if (l > OVERLOADED_THRESHOLD && this.nextTickTime - this.lastOverloadWarning >= OVERLOADED_WARNING_INTERVAL) {
++                        long l2 = l / MS_PER_TICK;
+                         LOGGER.warn("Can't keep up! Is the server overloaded? Running {}ms or {} ticks behind", l, l2);
+-                        this.nextTickTime += l2 * 50L;
++                        this.nextTickTime += l2 * MS_PER_TICK;
+                         this.lastOverloadWarning = this.nextTickTime;
+                     }
+ 
+@@ -650,13 +650,13 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+                         this.debugCommandProfiler = new MinecraftServer.TimeProfiler(Util.getNanos(), this.tickCount);
+                     }
+ 
+-                    this.nextTickTime += 50L;
++                    this.nextTickTime += MS_PER_TICK;
+                     this.startMetricsRecordingTick();
+                     this.profiler.push("tick");
+                     this.tickServer(this::haveTime);
+                     this.profiler.popPush("nextTickWait");
+                     this.mayHaveDelayedTasks = true;
+-                    this.delayedTasksMaxNextTickTime = Math.max(Util.getMillis() + 50L, this.nextTickTime);
++                    this.delayedTasksMaxNextTickTime = Math.max(Util.getMillis() + MS_PER_TICK, this.nextTickTime);
+                     this.waitUntilNextTick();
+                     this.profiler.pop();
+                     this.endMetricsRecordingTick();
+@@ -712,7 +712,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+     }
+ 
+     protected boolean shouldRun(TickTask tickTask) {
+-        return tickTask.getTick() + 3 < this.tickCount || this.haveTime();
++        return tickTask.getTick() + MAX_TICK_LATENCY < this.tickCount || this.haveTime();
+     }
+ 
+     public boolean pollTask() {
 @@ -737,7 +737,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
@@ -1939,6 +2050,55 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..ff222e00847189762573d1540e85b1ab
          this.getProfiler().incrementCounter("runTask");
          super.doRunTask(tickTask);
      }
+@@ -782,10 +782,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+         long l = Util.getNanos();
+         ++this.tickCount;
+         this.tickChildren(booleanSupplier);
+-        if (l - this.lastServerStatus >= 5000000000L) {
++        if (l - this.lastServerStatus >= STATUS_EXPIRE_TIME_NS) {
+             this.lastServerStatus = l;
+             this.status.setPlayers(new ServerStatus.Players(this.getMaxPlayers(), this.getPlayerCount()));
+-            GameProfile[] gameProfiles = new GameProfile[Math.min(this.getPlayerCount(), 12)];
++            GameProfile[] gameProfiles = new GameProfile[Math.min(this.getPlayerCount(), MAX_STATUS_PLAYER_SAMPLE)];
+             int i = Mth.nextInt(this.random, 0, this.getPlayerCount() - gameProfiles.length);
+ 
+             for(int i2 = 0; i2 < gameProfiles.length; ++i2) {
+@@ -796,7 +796,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+             this.status.getPlayers().setSample(gameProfiles);
+         }
+ 
+-        if (this.tickCount % 6000 == 0) {
++        if (this.tickCount % AUTOSAVE_INTERVAL == 0) {
+             LOGGER.debug("Autosave started");
+             this.profiler.push("save");
+             this.playerList.saveAll();
+@@ -810,14 +810,14 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+             this.snooper.start();
+         }
+ 
+-        if (this.tickCount % 6000 == 0) {
++        if (this.tickCount % SNOOPER_UPDATE_INTERVAL == 0) {
+             this.snooper.prepare();
+         }
+ 
+         this.profiler.pop();
+         this.profiler.push("tallying");
+-        long l2 = this.tickTimes[this.tickCount % 100] = Util.getNanos() - l;
+-        this.averageTickTime = this.averageTickTime * 0.8F + (float)l2 / 1000000.0F * 0.19999999F;
++        long l2 = this.tickTimes[this.tickCount % TICK_STATS_SPAN] = Util.getNanos() - l;
++        this.averageTickTime = this.averageTickTime * AVERAGE_TICK_TIME_SMOOTHING + (float)l2 / 1000000.0F * 0.19999999F;
+         long l3 = Util.getNanos();
+         this.frameTimer.logFrameDuration(l3 - l);
+         this.profiler.pop();
+@@ -1236,7 +1236,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+     }
+ 
+     public int getAbsoluteMaxWorldSize() {
+-        return 29999984;
++        return ABSOLUTE_MAX_WORLD_SIZE;
+     }
+ 
+     public boolean scheduleExecutables() {
 @@ -1272,7 +1272,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
