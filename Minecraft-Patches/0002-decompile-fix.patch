@@ -800,21 +800,9 @@ index 0c453fe5a7b46d307673f5852e3695059e8a5414..35c862ea64f1a918f0ae211003f233ed
                  }
  
 diff --git a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-index 851526e3838c729d1602fd916afb970828da20d9..ced88d8f40aa20211231afb24354791029e20ccd 100644
+index 851526e3838c729d1602fd916afb970828da20d9..ffb3575310865889c5f53189072317cd7ae7abc6 100644
 --- a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-@@ -867,9 +867,9 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
-         this.renderChunksInFrustum.clear();
- 
-         for(LevelRenderer.RenderChunkInfo renderChunkInfo : ((LevelRenderer.RenderChunkStorage)this.renderChunkStorage.get()).renderChunks) {
--            if (frustum.isVisible(renderChunkInfo.chunk.bb)) {
-+            //if (frustum.isVisible(renderChunkInfo.chunk.bb)) {
-                 this.renderChunksInFrustum.add(renderChunkInfo);
--            }
-+            //}
-         }
- 
-         this.minecraft.getProfiler().pop();
 @@ -880,7 +880,7 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
          Vec3 vec3 = camera.getPosition();
          BlockPos blockPos = camera.getBlockPosition();
@@ -1054,19 +1042,6 @@ index d559ca145678cb3127caffd0d92c2c70be8ea2f3..ebd531cd81b8966d0b738bdb6ce9e56d
                  }
  
                  return flag ? predicate.negate() : predicate;
-diff --git a/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java b/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java
-index dc3a02b97cd9702eb357d69e9bf03e280f3adc26..c2fd9c432b5292ee63fff04ff0a47738ae72b569 100644
---- a/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java
-+++ b/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java
-@@ -426,7 +426,7 @@ public class ChunkRenderDispatcher {
-             boolean flag = this.cancelTasks();
-             BlockPos blockPos = this.origin.immutable();
-             int i = 1;
--            RenderChunkRegion renderChunkRegion = RenderChunkRegion.createIfNotEmpty(ChunkRenderDispatcher.this.level, blockPos.offset(-1, -1, -1), blockPos.offset(16, 16, 16), 1);
-+            RenderChunkRegion renderChunkRegion = RenderChunkRegion.createIfNotEmpty(ChunkRenderDispatcher.this.level, blockPos.offset(-1, -100, -1), blockPos.offset(16, 16, 16), 1);
-             this.lastRebuildTask = new ChunkRenderDispatcher.RenderChunk.RebuildTask(this.getDistToPlayerSqr(), renderChunkRegion, flag || this.compiled.get() != ChunkRenderDispatcher.CompiledChunk.UNCOMPILED);
-             return this.lastRebuildTask;
-         }
 diff --git a/src/main/java/net/minecraft/client/renderer/debug/ChunkDebugRenderer.java b/src/main/java/net/minecraft/client/renderer/debug/ChunkDebugRenderer.java
 index a3b654a02fa1b7452f804e8df6826c1c5bf85ebe..763da7bba70f626190d7f170d4d93849f6260684 100644
 --- a/src/main/java/net/minecraft/client/renderer/debug/ChunkDebugRenderer.java
