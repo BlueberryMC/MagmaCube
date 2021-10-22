@@ -4,7 +4,7 @@
 
 A Minecraft that you can patch your own patches into the Minecraft.
 
-Based on 21w37a (snapshot of MC 1.18) currently.
+Based on 21w42a (snapshot of MC 1.18) currently.
 
 ## Goal
 - Make it editable easily by everyone who wants to code Minecraft
@@ -23,7 +23,6 @@ Properties can be set via jvm argument `-Dkey=value`.
 
 | property | environment variables | what |
 | --- | --- | --- |
-| `magmacube.ignorePacketError` | `magmacubeIgnorePacketError` | whether to log `Packet xx was larger than I expected` errors, rather than throwing exception then interrupting connection |
 
 ----
 
