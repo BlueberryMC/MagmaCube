@@ -6,7 +6,7 @@
 
     <groupId>net.blueberrymc.minecraft</groupId>
     <artifactId>minecraft-parent</artifactId>
-    <version>21w41a</version>
+    <version>21w42a</version>
     <modules>
         <module>Minecraft</module>
     </modules>
@@ -47,4 +47,12 @@
             <url>https://repo2.acrylicstyle.xyz/</url>
         </repository>
     </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>21.0.1</version>
+        </dependency>
+    </dependencies>
 </project>

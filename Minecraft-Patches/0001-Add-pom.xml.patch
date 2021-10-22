@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..ef8cb90d79c806e82440665e7aba3e0624fa7c1e
+index 0000000000000000000000000000000000000000..aa93a7ac75234e91afbd811dfa40134392675887
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,356 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..ef8cb90d79c806e82440665e7aba3e06
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>net.blueberrymc.minecraft</groupId>
-+        <version>21w41a</version>
++        <version>21w42a</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    

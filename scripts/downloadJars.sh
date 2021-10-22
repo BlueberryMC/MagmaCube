@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/dd353c98457702583b610552da47ff8eb57c602d/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/05781f1ce3749ee0958be1de939d15b8aff1910b/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/980cc030f1bab70ba64778da9842245bcdc1604c/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/3941c7f2f5cb768dd16610ec9f834cc01dc1d32b/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
 FF_URL="https://maven.minecraftforge.net/net/minecraftforge/forgeflower/1.5.498.14/forgeflower-1.5.498.14.jar"
@@ -38,9 +38,9 @@ curl $clientMappingUrl --output "$clientMappingPath" || (
 )
 echo "Applying mapping"
 "$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output-name="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath" || exit 1
-java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.2.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$version.pr" || exit 1
+java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.2.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$MAPPINGS_VERSION.pr" || exit 1
 echo "Applying AccessTransformers"
-java -Xmx2G -jar "$basedir/work/AccessTransformers/accesstransformers-3.0.1-fatjar.jar" --inJar "$clientRemappedJarPath.2" --outJar "$clientRemappedJarPath" --atFile "$basedir/work/mappings/mappings/$version.at" || exit 1
+java -Xmx2G -jar "$basedir/work/AccessTransformers/accesstransformers-3.0.1-fatjar.jar" --inJar "$clientRemappedJarPath.2" --outJar "$clientRemappedJarPath" --atFile "$basedir/work/mappings/mappings/$MAPPINGS_VERSION.at" || exit 1
 echo "Deleting intermediate jar"
 rm "$clientRemappedJarPath.2"
 echo "Unpacking jar..."

@@ -4,8 +4,29 @@ Date: Sun, 10 Jan 2021 20:40:08 +0900
 Subject: [PATCH] decompile fix
 
 
+diff --git a/pom.xml b/pom.xml
+index aa93a7ac75234e91afbd811dfa40134392675887..49279e9ab5465f1498196ab06fb9f59d1dd351bb 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -19,6 +19,16 @@
+     <build>
+         <finalName>Minecraft</finalName>
+         <plugins>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-jar-plugin</artifactId>
++                <version>3.1.1</version>
++                <configuration>
++                    <archive>
++                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
++                    </archive>
++                </configuration>
++            </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-shade-plugin</artifactId>
 diff --git a/src/main/java/com/mojang/blaze3d/audio/OggAudioStream.java b/src/main/java/com/mojang/blaze3d/audio/OggAudioStream.java
-index 8f3f9946dd08ade4b63f84c517eeb2576e7af443..6114f057af0b854713e8c9b180649a65963798fe 100644
+index 8f3f9946dd08ade4b63f84c517eeb2576e7af443..7cb31f32512675d3aeac8ee06266cba30e6d3909 100644
 --- a/src/main/java/com/mojang/blaze3d/audio/OggAudioStream.java
 +++ b/src/main/java/com/mojang/blaze3d/audio/OggAudioStream.java
 @@ -190,7 +190,7 @@ public class OggAudioStream implements AudioStream {
@@ -13,7 +34,7 @@ index 8f3f9946dd08ade4b63f84c517eeb2576e7af443..6114f057af0b854713e8c9b180649a65
              }
  
 -            return (boolean)i;
-+            return i != 0;
++            return false;
          }
      }
  
@@ -108,6 +129,19 @@ index 00b8353961e5737884435e1a72f6fef37527c918..81b15d782de7485dba613eb60ee5fc4c
 +    public static final VertexFormat POSITION_TEX_COLOR_NORMAL = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder().put("Position", ELEMENT_POSITION).put("UV0", ELEMENT_UV0).put("Color", ELEMENT_COLOR).put("Normal", ELEMENT_NORMAL).put("Padding", ELEMENT_PADDING).build());
  }
 \ No newline at end of file
+diff --git a/src/main/java/com/mojang/realmsclient/client/FileUpload.java b/src/main/java/com/mojang/realmsclient/client/FileUpload.java
+index caae2969ff5a080b638a80e486ace7bbbc328ce9..79ff84c70f176148585ebb5ed058f0928c74a486 100644
+--- a/src/main/java/com/mojang/realmsclient/client/FileUpload.java
++++ b/src/main/java/com/mojang/realmsclient/client/FileUpload.java
+@@ -159,7 +159,7 @@ public class FileUpload {
+     }
+ 
+     private long getRetryDelaySeconds(HttpResponse httpResponse) {
+-        return Optional.ofNullable(httpResponse.getFirstHeader("Retry-After")).map(NameValuePair::getValue).map(Long::valueOf).orElse(0L);
++        return Optional.ofNullable(httpResponse.getFirstHeader("Retry-After")).map(org.apache.http.Header::getValue).map(Long::valueOf).orElse(0L);
+     }
+ 
+     public boolean isFinished() {
 diff --git a/src/main/java/com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen.java b/src/main/java/com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen.java
 index 7e0907650b0981f460b8c19245ad84213a9b8102..2af941bf22efd7ff09c55ef60386799ab09abc7a 100644
 --- a/src/main/java/com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen.java
@@ -399,7 +433,7 @@ index 762a8b578ac3805a6d251e81b46acc4c3aee24ad..d0a5166e52c93543b8eeecb501829058
              options.save();
          });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 762045cd08bc20a62b9385723da219db32928da3..5381f148800b0720d626c667efb9cdb3a1c54d27 100644
+index 82506668c3a8cd351d79f7366301da9f1d649e91..47db40e4c30fe50517fe442d292c68c8d6d2a122 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
 @@ -522,7 +522,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
@@ -420,7 +454,7 @@ index 762045cd08bc20a62b9385723da219db32928da3..5381f148800b0720d626c667efb9cdb3
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2241,13 +2241,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2238,13 +2238,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -437,7 +471,7 @@ index 762045cd08bc20a62b9385723da219db32928da3..5381f148800b0720d626c667efb9cdb3
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2269,7 +2269,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2266,7 +2266,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -447,10 +481,10 @@ index 762045cd08bc20a62b9385723da219db32928da3..5381f148800b0720d626c667efb9cdb3
  
      public void populateSnooper(Snooper snooper) {
 diff --git a/src/main/java/net/minecraft/client/Options.java b/src/main/java/net/minecraft/client/Options.java
-index bb7e9769b3970fb7247d4ccd5b888cfd8516543c..8b250e492294955a1011c8d7f52a852e918517d9 100644
+index dede8798709a32df3e1c6fef9bd75964eee28e96..b336df8ec081e1fdc2805f36e770fbc726024f33 100644
 --- a/src/main/java/net/minecraft/client/Options.java
 +++ b/src/main/java/net/minecraft/client/Options.java
-@@ -295,7 +295,7 @@ public class Options {
+@@ -297,7 +297,7 @@ public class Options {
          }
  
          for(SoundSource soundSource : SoundSource.values()) {
@@ -459,7 +493,7 @@ index bb7e9769b3970fb7247d4ccd5b888cfd8516543c..8b250e492294955a1011c8d7f52a852e
          }
  
          for(PlayerModelPart playerModelPart : PlayerModelPart.values()) {
-@@ -684,7 +684,7 @@ public class Options {
+@@ -686,7 +686,7 @@ public class Options {
      }
  
      public String dumpOptionsForReport() {
@@ -469,10 +503,10 @@ index bb7e9769b3970fb7247d4ccd5b888cfd8516543c..8b250e492294955a1011c8d7f52a852e
      }
  
 diff --git a/src/main/java/net/minecraft/client/gui/Font.java b/src/main/java/net/minecraft/client/gui/Font.java
-index acd65770cad52719aec86bc0b884f2ca46ed5d32..985abd06db64d141600946406ff954bc9576410d 100644
+index e6286e22864e1fa019a7ea9eaee238a96aa8e9fd..acd74e224159ef69b6190f59b93c07bffeb2c7fa 100644
 --- a/src/main/java/net/minecraft/client/gui/Font.java
 +++ b/src/main/java/net/minecraft/client/gui/Font.java
-@@ -130,14 +130,14 @@ public class Font {
+@@ -131,14 +131,14 @@ public class Font {
                      float[] floats = new float[]{f};
                      int i7 = i5;
                      int i8 = i6;
@@ -491,10 +525,10 @@ index acd65770cad52719aec86bc0b884f2ca46ed5d32..985abd06db64d141600946406ff954bc
                  }
              }
 diff --git a/src/main/java/net/minecraft/client/gui/Gui.java b/src/main/java/net/minecraft/client/gui/Gui.java
-index 1ab621760f2777fff37df895e7224778526bbbdd..df3844c1bb6b5cb429c936738e7d91daeea00089 100644
+index caccdb4caeec7889b05a8e9baa059951a491d56a..883df21e96be64c2d8a9655698aed59281abbd2f 100644
 --- a/src/main/java/net/minecraft/client/gui/Gui.java
 +++ b/src/main/java/net/minecraft/client/gui/Gui.java
-@@ -446,7 +446,7 @@ public class Gui extends GuiComponent {
+@@ -453,7 +453,7 @@ public class Gui extends GuiComponent {
  
              RenderSystem.enableBlend();
              int i = 0;
@@ -503,7 +537,7 @@ index 1ab621760f2777fff37df895e7224778526bbbdd..df3844c1bb6b5cb429c936738e7d91da
              MobEffectTextureManager mobEffectTextureManager = this.minecraft.getMobEffectTextures();
              List<Runnable> list = Lists.newArrayListWithExpectedSize(collection.size());
              RenderSystem.setShaderTexture(0, AbstractContainerScreen.INVENTORY_LOCATION);
-@@ -464,8 +464,8 @@ public class Gui extends GuiComponent {
+@@ -471,8 +471,8 @@ public class Gui extends GuiComponent {
                          ++i;
                          i3 -= 25 * i;
                      } else {
@@ -765,6 +799,212 @@ index 0c453fe5a7b46d307673f5852e3695059e8a5414..35c862ea64f1a918f0ae211003f233ed
                      }
                  }
  
+diff --git a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
+index 851526e3838c729d1602fd916afb970828da20d9..ced88d8f40aa20211231afb24354791029e20ccd 100644
+--- a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
++++ b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
+@@ -867,9 +867,9 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+         this.renderChunksInFrustum.clear();
+ 
+         for(LevelRenderer.RenderChunkInfo renderChunkInfo : ((LevelRenderer.RenderChunkStorage)this.renderChunkStorage.get()).renderChunks) {
+-            if (frustum.isVisible(renderChunkInfo.chunk.bb)) {
++            //if (frustum.isVisible(renderChunkInfo.chunk.bb)) {
+                 this.renderChunksInFrustum.add(renderChunkInfo);
+-            }
++            //}
+         }
+ 
+         this.minecraft.getProfiler().pop();
+@@ -880,7 +880,7 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+         Vec3 vec3 = camera.getPosition();
+         BlockPos blockPos = camera.getBlockPosition();
+         ChunkRenderDispatcher.RenderChunk renderChunk = this.viewArea.getRenderChunkAt(blockPos);
+-        if (renderChunk == null) {
++        if (true || renderChunk == null) {
+             boolean flag = blockPos.getY() > this.level.getMinBuildHeight();
+             int i2 = flag ? this.level.getMaxBuildHeight() - 8 : this.level.getMinBuildHeight() + 8;
+             int i3 = Mth.floor(vec3.x / 16.0D) * 16;
+@@ -924,131 +924,63 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+             for(Direction direction2 : DIRECTIONS) {
+                 ChunkRenderDispatcher.RenderChunk renderChunk2 = this.getRelativeFrom(blockPos, renderChunk, direction2);
+                 if (renderChunk2 == null) {
+-                    if (!this.closeToBorder(blockPos, renderChunk)) {
++                    if (!closeToBorder(blockPos, renderChunk)) {
+                         this.nextFullUpdateMillis.set(System.currentTimeMillis() + 500L);
+                     }
+-                } else if (!flag || !renderChunkInfo.hasDirection(direction2.getOpposite())) {
+-                    if (flag && renderChunkInfo.hasSourceDirections()) {
+-                        ChunkRenderDispatcher.CompiledChunk compiledChunk = renderChunk.getCompiledChunk();
+-                        boolean flag3 = false;
+-
+-                        for(int i2 = 0; i2 < DIRECTIONS.length; ++i2) {
+-                            if (renderChunkInfo.hasSourceDirection(i2) && compiledChunk.facesCanSeeEachother(DIRECTIONS[i2].getOpposite(), direction2)) {
+-                                flag3 = true;
+-                                break;
+-                            }
+-                        }
+-
+-                        if (!flag3) {
+-                            continue;
+-                        }
+-                    }
+-
+-                    if (flag && flag2 && renderChunkInfo.hasSourceDirections() && !renderChunkInfo.hasSourceDirection(direction.ordinal())) {
+-                        ChunkRenderDispatcher.RenderChunk renderChunk3 = this.getRelativeFrom(blockPos, renderChunk, direction.getOpposite());
+-                        if (renderChunk3 == null) {
+-                            continue;
+-                        }
+-
+-                        LevelRenderer.RenderChunkInfo renderChunkInfo2 = renderInfoMap.get(renderChunk3);
+-                        if (renderChunkInfo2 == null) {
+-                            continue;
++                    continue;
++                }
++                if (flag && renderChunkInfo.hasDirection(direction2.getOpposite())) continue;
++                if (flag && renderChunkInfo.hasSourceDirections()) {
++                    ChunkRenderDispatcher.CompiledChunk compiledChunk = renderChunk.getCompiledChunk();
++                    boolean flag3 = false;
++                    for (int i2 = 0; i2 < DIRECTIONS.length; i2++) {
++                        if (renderChunkInfo.hasSourceDirection(i2) && compiledChunk.facesCanSeeEachother(DIRECTIONS[i2].getOpposite(), direction2)) {
++                            flag3 = true;
++                            break;
+                         }
+                     }
+-
+-                    if (flag && flag2) {
+-                        BlockPos blockPos3;
+-                        byte var10001;
+-                        label140: {
+-                            label139: {
+-                                blockPos3 = renderChunk2.getOrigin();
+-                                if (direction2.getAxis() == Direction.Axis.X) {
+-                                    if (blockPos2.getX() > blockPos3.getX()) {
+-                                        break label139;
+-                                    }
+-                                } else if (blockPos2.getX() < blockPos3.getX()) {
+-                                    break label139;
+-                                }
+-
+-                                var10001 = 0;
+-                                break label140;
+-                            }
+-
+-                            var10001 = 16;
+-                        }
+-
+-                        byte var10002;
+-                        label132: {
+-                            label131: {
+-                                if (direction2.getAxis() == Direction.Axis.Y) {
+-                                    if (blockPos2.getY() > blockPos3.getY()) {
+-                                        break label131;
+-                                    }
+-                                } else if (blockPos2.getY() < blockPos3.getY()) {
+-                                    break label131;
+-                                }
+-
+-                                var10002 = 0;
+-                                break label132;
+-                            }
+-
+-                            var10002 = 16;
+-                        }
+-
+-                        byte var10003;
+-                        label124: {
+-                            label123: {
+-                                if (direction2.getAxis() == Direction.Axis.Z) {
+-                                    if (blockPos2.getZ() > blockPos3.getZ()) {
+-                                        break label123;
+-                                    }
+-                                } else if (blockPos2.getZ() < blockPos3.getZ()) {
+-                                    break label123;
+-                                }
+-
+-                                var10003 = 0;
+-                                break label124;
+-                            }
+-
+-                            var10003 = 16;
+-                        }
+-
+-                        BlockPos blockPos4 = blockPos3.offset(var10001, var10002, var10003);
+-                        Vec3 vec32 = new Vec3((double)blockPos4.getX(), (double)blockPos4.getY(), (double)blockPos4.getZ());
+-                        Vec3 vec33 = vec3.subtract(vec32).normalize().scale(CEILED_SECTION_DIAGONAL);
+-                        boolean flag4 = true;
+-
+-                        while(vec3.subtract(vec32).lengthSqr() > 3600.0D) {
+-                            vec32 = vec32.add(vec33);
+-                            if (vec32.y > (double)this.level.getMaxBuildHeight() || vec32.y < (double)this.level.getMinBuildHeight()) {
+-                                break;
+-                            }
+-
+-                            ChunkRenderDispatcher.RenderChunk renderChunk4 = this.viewArea.getRenderChunkAt(new BlockPos(vec32.x, vec32.y, vec32.z));
+-                            if (renderChunk4 == null || renderInfoMap.get(renderChunk4) == null) {
+-                                flag4 = false;
+-                                break;
+-                            }
+-                        }
+-
+-                        if (!flag4) {
+-                            continue;
++                    if (!flag3) continue;
++                }
++                if (flag && flag2 && renderChunkInfo.hasSourceDirections() && !renderChunkInfo.hasSourceDirection(direction.ordinal())) {
++                    ChunkRenderDispatcher.RenderChunk renderChunk3 = getRelativeFrom(blockPos, renderChunk, direction.getOpposite());
++                    if (renderChunk3 == null) continue;
++                    RenderChunkInfo renderChunkInfo2 = renderInfoMap.get(renderChunk3);
++                    if (renderChunkInfo2 == null) continue;
++                }
++                if (flag && flag2) {
++                    BlockPos blockPos3 = renderChunk2.getOrigin();
++                    BlockPos blockPos4 = blockPos3.offset(
++                            ((direction2.getAxis() == Direction.Axis.X) ? (blockPos2.getX() > blockPos3.getX()) : (blockPos2.getX() < blockPos3.getX())) ? 16 : 0,
++                            ((direction2.getAxis() == Direction.Axis.Y) ? (blockPos2.getY() > blockPos3.getY()) : (blockPos2.getY() < blockPos3.getY())) ? 16 : 0,
++                            ((direction2.getAxis() == Direction.Axis.Z) ? (blockPos2.getZ() > blockPos3.getZ()) : (blockPos2.getZ() < blockPos3.getZ())) ? 16 : 0
++                    );
++                    Vec3 vec32 = new Vec3(blockPos4.getX(), blockPos4.getY(), blockPos4.getZ());
++                    Vec3 vec33 = vec3.subtract(vec32).normalize().scale(CEILED_SECTION_DIAGONAL);
++                    boolean flag4 = true;
++                    while (vec3.subtract(vec32).lengthSqr() > 3600.0D) {
++                        vec32 = vec32.add(vec33);
++                        if (vec32.y > this.level.getMaxBuildHeight() || vec32.y < this.level.getMinBuildHeight()) break;
++                        ChunkRenderDispatcher.RenderChunk renderChunk4 = this.viewArea.getRenderChunkAt(new BlockPos(vec32.x, vec32.y, vec32.z));
++                        if (renderChunk4 == null || renderInfoMap.get(renderChunk4) == null) {
++                            flag4 = false;
++                            break;
+                         }
+                     }
++                    if (!flag4) continue;
++                }
+ 
+-                    LevelRenderer.RenderChunkInfo renderChunkInfo3 = renderInfoMap.get(renderChunk2);
+-                    if (renderChunkInfo3 != null) {
+-                        renderChunkInfo3.addSourceDirection(direction2);
+-                    } else if (!renderChunk2.hasAllNeighbors()) {
+-                        if (!this.closeToBorder(blockPos, renderChunk)) {
+-                            this.nextFullUpdateMillis.set(System.currentTimeMillis() + 500L);
+-                        }
+-                    } else {
+-                        LevelRenderer.RenderChunkInfo renderChunkInfo4 = new LevelRenderer.RenderChunkInfo(renderChunk2, direction2, renderChunkInfo.step + 1);
+-                        renderChunkInfo4.setDirections(renderChunkInfo.directions, direction2);
+-                        queue.add(renderChunkInfo4);
+-                        renderInfoMap.put(renderChunk2, renderChunkInfo4);
++                LevelRenderer.RenderChunkInfo renderChunkInfo3 = renderInfoMap.get(renderChunk2);
++                if (renderChunkInfo3 != null) {
++                    renderChunkInfo3.addSourceDirection(direction2);
++                } else if (!renderChunk2.hasAllNeighbors()) {
++                    if (!this.closeToBorder(blockPos, renderChunk)) {
++                        this.nextFullUpdateMillis.set(System.currentTimeMillis() + 500L);
+                     }
++                } else {
++                    LevelRenderer.RenderChunkInfo renderChunkInfo4 = new LevelRenderer.RenderChunkInfo(renderChunk2, direction2, renderChunkInfo.step + 1);
++                    renderChunkInfo4.setDirections(renderChunkInfo.directions, direction2);
++                    queue.add(renderChunkInfo4);
++                    renderInfoMap.put(renderChunk2, renderChunkInfo4);
+                 }
+             }
+         }
 diff --git a/src/main/java/net/minecraft/client/renderer/RenderType.java b/src/main/java/net/minecraft/client/renderer/RenderType.java
 index a12681de2e50ed0cbdae0ad8548ce41bbfb79b64..43c92dc8506703c6672585063d4a3c83466e7ddd 100644
 --- a/src/main/java/net/minecraft/client/renderer/RenderType.java
@@ -814,6 +1054,19 @@ index d559ca145678cb3127caffd0d92c2c70be8ea2f3..ebd531cd81b8966d0b738bdb6ce9e56d
                  }
  
                  return flag ? predicate.negate() : predicate;
+diff --git a/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java b/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java
+index dc3a02b97cd9702eb357d69e9bf03e280f3adc26..c2fd9c432b5292ee63fff04ff0a47738ae72b569 100644
+--- a/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java
++++ b/src/main/java/net/minecraft/client/renderer/chunk/ChunkRenderDispatcher.java
+@@ -426,7 +426,7 @@ public class ChunkRenderDispatcher {
+             boolean flag = this.cancelTasks();
+             BlockPos blockPos = this.origin.immutable();
+             int i = 1;
+-            RenderChunkRegion renderChunkRegion = RenderChunkRegion.createIfNotEmpty(ChunkRenderDispatcher.this.level, blockPos.offset(-1, -1, -1), blockPos.offset(16, 16, 16), 1);
++            RenderChunkRegion renderChunkRegion = RenderChunkRegion.createIfNotEmpty(ChunkRenderDispatcher.this.level, blockPos.offset(-1, -100, -1), blockPos.offset(16, 16, 16), 1);
+             this.lastRebuildTask = new ChunkRenderDispatcher.RenderChunk.RebuildTask(this.getDistToPlayerSqr(), renderChunkRegion, flag || this.compiled.get() != ChunkRenderDispatcher.CompiledChunk.UNCOMPILED);
+             return this.lastRebuildTask;
+         }
 diff --git a/src/main/java/net/minecraft/client/renderer/debug/ChunkDebugRenderer.java b/src/main/java/net/minecraft/client/renderer/debug/ChunkDebugRenderer.java
 index a3b654a02fa1b7452f804e8df6826c1c5bf85ebe..763da7bba70f626190d7f170d4d93849f6260684 100644
 --- a/src/main/java/net/minecraft/client/renderer/debug/ChunkDebugRenderer.java
@@ -1152,6 +1405,90 @@ index fd25df9e5f2dd2cb667c984dc7c82471c0597886..99018f49881c915d88c8728f5f3ae682
          }
      }
  
+diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
+index d46bdb89e3ae101bfb1d839797286efbd63bbc77..94a248f6b1f69b669cd4237f60f0939b6c661026 100644
+--- a/src/main/java/net/minecraft/core/BlockPos.java
++++ b/src/main/java/net/minecraft/core/BlockPos.java
+@@ -238,11 +238,11 @@ public class BlockPos extends Vec3i {
+             };
+     }
+ 
+-    public static Iterable<BlockPos> withinManhattan(BlockPos blockPos, int i, int i2, int i3) {
+-        int i4 = i + i2 + i3;
+-        int i5 = blockPos.getX();
+-        int i6 = blockPos.getY();
+-        int i7 = blockPos.getZ();
++    public static Iterable<BlockPos> withinManhattan(BlockPos blockPos, int originZ, int maxDepth, int reachX) {
++        int reachY = originZ + maxDepth + reachX;
++        int reachZ = blockPos.getX();
++        int originX = blockPos.getY();
++        int originY = blockPos.getZ();
+         return () -> new AbstractIterator<BlockPos>() {
+                 private final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+                 private int currentDepth;
+@@ -255,7 +255,7 @@ public class BlockPos extends Vec3i {
+                 protected BlockPos computeNext() {
+                     if (this.zMirror) {
+                         this.zMirror = false;
+-                        this.cursor.setZ(i7 - (this.cursor.getZ() - i7));
++                        this.cursor.setZ(originY - (this.cursor.getZ() - originY));
+                         return this.cursor;
+                     } else {
+                         BlockPos blockPos;
+@@ -264,24 +264,24 @@ public class BlockPos extends Vec3i {
+                                 ++this.x;
+                                 if (this.x > this.maxX) {
+                                     ++this.currentDepth;
+-                                    if (this.currentDepth > i4) {
++                                    if (this.currentDepth > reachY) {
+                                         return (BlockPos)this.endOfData();
+                                     }
+ 
+-                                    this.maxX = Math.min(i, this.currentDepth);
++                                    this.maxX = Math.min(originZ, this.currentDepth);
+                                     this.x = -this.maxX;
+                                 }
+ 
+-                                this.maxY = Math.min(i2, this.currentDepth - Math.abs(this.x));
++                                this.maxY = Math.min(maxDepth, this.currentDepth - Math.abs(this.x));
+                                 this.y = -this.maxY;
+                             }
+ 
+                             int i = this.x;
+                             int i2 = this.y;
+                             int i3 = this.currentDepth - Math.abs(i) - Math.abs(i2);
+-                            if (i3 <= i3) {
++                            if (i3 <= reachZ) {
+                                 this.zMirror = i3 != 0;
+-                                blockPos = this.cursor.set(i5 + i, i6 + i2, i7 + i3);
++                                blockPos = this.cursor.set(reachZ + i, originX + i2, originY + i3);
+                             }
+                         }
+ 
+@@ -319,10 +319,10 @@ public class BlockPos extends Vec3i {
+         return StreamSupport.stream(betweenClosed(i, i2, i3, i4, i5, i6).spliterator(), false);
+     }
+ 
+-    public static Iterable<BlockPos> betweenClosed(int i, int i2, int i3, int i4, int i5, int i6) {
+-        int i7 = i4 - i + 1;
+-        int i8 = i5 - i2 + 1;
+-        int i9 = i6 - i3 + 1;
++    public static Iterable<BlockPos> betweenClosed(int end, int width, int height, int minX, int minY, int minZ) {
++        int i7 = minX - end + 1;
++        int i8 = minY - width + 1;
++        int i9 = minZ - height + 1;
+         int i10 = i7 * i8 * i9;
+         return () -> new AbstractIterator<BlockPos>() {
+                 private final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+@@ -337,7 +337,7 @@ public class BlockPos extends Vec3i {
+                         int i3 = i2 % i8;
+                         int i4 = i2 / i8;
+                         ++this.index;
+-                        return this.cursor.set(i + i, i2 + i3, i3 + i4);
++                        return this.cursor.set(minX + i, minY + i3, minZ + i4);
+                     }
+                 }
+             };
 diff --git a/src/main/java/net/minecraft/core/NonNullList.java b/src/main/java/net/minecraft/core/NonNullList.java
 index c2190c60e178443cd0a49d4cf42b0febebc2f346..4460f34e2589d9987affa1f40e0ba4c7e2ba3c4d 100644
 --- a/src/main/java/net/minecraft/core/NonNullList.java
@@ -1166,10 +1503,10 @@ index c2190c60e178443cd0a49d4cf42b0febebc2f346..4460f34e2589d9987affa1f40e0ba4c7
  
      @SafeVarargs
 diff --git a/src/main/java/net/minecraft/core/Registry.java b/src/main/java/net/minecraft/core/Registry.java
-index 050346f068373104b8df90e9f2540a5640ebdbf0..61ae4fa2b92d460b5f7d7e478c79f997ed053005 100644
+index 6912000ccc6f4d8d668f8b29dc6fd940a964bf78..e3a3fa52df93e34af7223870b7c6f567f10c3f36 100644
 --- a/src/main/java/net/minecraft/core/Registry.java
 +++ b/src/main/java/net/minecraft/core/Registry.java
-@@ -270,8 +270,8 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -272,8 +272,8 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
      private static <T, R extends WritableRegistry<T>> R internalRegister(ResourceKey<? extends Registry<T>> resourceKey, R writableRegistry, Supplier<T> supplier, Lifecycle lifecycle) {
          ResourceLocation resourceLocation = resourceKey.location();
          LOADERS.put(resourceLocation, supplier);
@@ -1180,7 +1517,7 @@ index 050346f068373104b8df90e9f2540a5640ebdbf0..61ae4fa2b92d460b5f7d7e478c79f997
      }
  
      protected Registry(ResourceKey<? extends Registry<T>> resourceKey, Lifecycle lifecycle) {
-@@ -290,11 +290,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -296,11 +296,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
  
      public <U> DataResult<Pair<T, U>> decode(DynamicOps<U> dynamicOps, U object) {
          return dynamicOps.compressMaps() ? dynamicOps.getNumberValue(object).flatMap((number) -> {
@@ -1196,12 +1533,12 @@ index 050346f068373104b8df90e9f2540a5640ebdbf0..61ae4fa2b92d460b5f7d7e478c79f997
          });
      }
  
-@@ -365,11 +365,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
+@@ -375,11 +375,11 @@ public abstract class Registry<T> implements Codec<T>, Keyable, IdMap<T> {
      }
  
-     public static <V, T extends V> T register(Registry<V> registry, ResourceLocation resourceLocation, T object) {
--        return ((WritableRegistry)registry).register(ResourceKey.create(registry.key, resourceLocation), object, Lifecycle.stable());
-+        return ((WritableRegistry<V>)registry).register(ResourceKey.create(registry.key, resourceLocation), object, Lifecycle.stable());
+     public static <V, T extends V> T register(Registry<V> registry, ResourceKey<V> resourceKey, T object) {
+-        return ((WritableRegistry)registry).register(resourceKey, object, Lifecycle.stable());
++        return ((WritableRegistry<V>)registry).register(resourceKey, object, Lifecycle.stable());
      }
  
      public static <V, T extends V> T registerMapping(Registry<V> registry, int i, String s, T object) {
@@ -1211,10 +1548,10 @@ index 050346f068373104b8df90e9f2540a5640ebdbf0..61ae4fa2b92d460b5f7d7e478c79f997
  
      static {
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index d36b3450de2709ead59fb185075516a84a7a2899..b994983f10f73879eb61a11ed4f59318a0c0c6d3 100644
+index be5f97e7c5b48f4d3fef0a0d904d00e9371fc64d..0665ccaf60d8a6712ed35b7cf39b8be4943dc423 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
-@@ -59,7 +59,7 @@ public abstract class RegistryAccess {
+@@ -63,7 +63,7 @@ public abstract class RegistryAccess {
  
      public <E> Optional<? extends Registry<E>> registry(ResourceKey<? extends Registry<? extends E>> resourceKey) {
          Optional<? extends Registry<E>> optional = this.ownedRegistry(resourceKey);
@@ -1223,7 +1560,7 @@ index d36b3450de2709ead59fb185075516a84a7a2899..b994983f10f73879eb61a11ed4f59318
      }
  
      public <E> Registry<E> registryOrThrow(ResourceKey<? extends Registry<? extends E>> resourceKey) {
-@@ -105,7 +105,7 @@ public abstract class RegistryAccess {
+@@ -109,7 +109,7 @@ public abstract class RegistryAccess {
      }
  
      private static <R extends Registry<?>> void copyBuiltin(RegistryAccess.RegistryHolder registryHolder, ResourceKey<R> resourceKey) {
@@ -1232,7 +1569,7 @@ index d36b3450de2709ead59fb185075516a84a7a2899..b994983f10f73879eb61a11ed4f59318
          Registry<?> registry2 = registry.getOrThrow(resourceKey);
          copy(registryHolder, registry2);
      }
-@@ -172,17 +172,17 @@ public abstract class RegistryAccess {
+@@ -176,17 +176,17 @@ public abstract class RegistryAccess {
  
          private static <E> Codec<RegistryAccess.RegistryHolder> makeNetworkCodec() {
              Codec<ResourceKey<? extends Registry<E>>> codec = ResourceLocation.CODEC.xmap(ResourceKey::createRegistryKey, ResourceKey::location);
@@ -1253,7 +1590,16 @@ index d36b3450de2709ead59fb185075516a84a7a2899..b994983f10f73879eb61a11ed4f59318
          }
  
          public RegistryHolder() {
-@@ -194,7 +194,7 @@ public abstract class RegistryAccess {
+@@ -198,7 +198,7 @@ public abstract class RegistryAccess {
+         }
+ 
+         private static <E> MappedRegistry<?> parseRegistry(ResourceKey<? extends Registry<?>> resourceKey, Dynamic<?> dynamic) {
+-            return (MappedRegistry)RegistryLookupCodec.create(resourceKey).codec().parse(dynamic).resultOrPartial(Util.prefix(resourceKey + " registry: ", RegistryAccess.LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get " + resourceKey + " registry"));
++            return (MappedRegistry<?>) RegistryLookupCodec.create((ResourceKey<? extends Registry<Registry<?>>>) resourceKey).codec().parse(dynamic).resultOrPartial(Util.prefix(resourceKey + " registry: ", RegistryAccess.LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get " + resourceKey + " registry"));
+         }
+ 
+         private RegistryHolder(Map<? extends ResourceKey<? extends Registry<?>>, ? extends MappedRegistry<?>> map) {
+@@ -206,7 +206,7 @@ public abstract class RegistryAccess {
          }
  
          private static <E> MappedRegistry<?> createRegistry(ResourceKey<? extends Registry<?>> resourceKey) {
@@ -1263,10 +1609,10 @@ index d36b3450de2709ead59fb185075516a84a7a2899..b994983f10f73879eb61a11ed4f59318
  
          public <E> Optional<WritableRegistry<E>> ownedRegistry(ResourceKey<? extends Registry<? extends E>> resourceKey) {
 diff --git a/src/main/java/net/minecraft/data/BuiltinRegistries.java b/src/main/java/net/minecraft/data/BuiltinRegistries.java
-index 85b19b5a24bb53c5dfba545a3eff4446978b2500..5b92c824fab81d241315032697b5acb63c0684b0 100644
+index 7710a453550bacd388c851cbd2ffa9822efc6b38..28a3ebc969f129b09b8387ad882045c1f32cfb91 100644
 --- a/src/main/java/net/minecraft/data/BuiltinRegistries.java
 +++ b/src/main/java/net/minecraft/data/BuiltinRegistries.java
-@@ -49,8 +49,8 @@ public class BuiltinRegistries {
+@@ -52,8 +52,8 @@ public class BuiltinRegistries {
      private static <T, R extends WritableRegistry<T>> R internalRegister(ResourceKey<? extends Registry<T>> resourceKey, R writableRegistry, Supplier<T> supplier, Lifecycle lifecycle) {
          ResourceLocation resourceLocation = resourceKey.location();
          LOADERS.put(resourceLocation, supplier);
@@ -1277,12 +1623,12 @@ index 85b19b5a24bb53c5dfba545a3eff4446978b2500..5b92c824fab81d241315032697b5acb6
      }
  
      public static <T> T register(Registry<? super T> registry, String s, T object) {
-@@ -58,11 +58,11 @@ public class BuiltinRegistries {
+@@ -65,11 +65,11 @@ public class BuiltinRegistries {
      }
  
-     public static <V, T extends V> T register(Registry<V> registry, ResourceLocation resourceLocation, T object) {
--        return ((WritableRegistry)registry).register(ResourceKey.create(registry.key(), resourceLocation), object, Lifecycle.stable());
-+        return (T) ((WritableRegistry)registry).register(ResourceKey.create(registry.key(), resourceLocation), object, Lifecycle.stable());
+     public static <V, T extends V> T register(Registry<V> registry, ResourceKey<V> resourceKey, T object) {
+-        return ((WritableRegistry)registry).register(resourceKey, object, Lifecycle.stable());
++        return (T) ((WritableRegistry)registry).register(resourceKey, object, Lifecycle.stable());
      }
  
      public static <V, T extends V> T registerMapping(Registry<V> registry, ResourceKey<V> resourceKey, T object) {
@@ -1305,7 +1651,7 @@ index aa8263159a9c8f72932f0033823d397f35207524..ef803ccc0242559925583469c39e274b
          JsonObject jsonObject2 = new JsonObject();
  
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
-index e13375b3cb2f56abc59e6d190e93050498a4744f..94d31ad8783f50c714f5f8cd45378c707b41920c 100644
+index b5cae59ce25c648a8c3189fc0727a1e82a565e72..5231a72d8c09766ca41ca596f60672816fb46a1a 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 +++ b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 @@ -69,15 +69,15 @@ public class BlockModelGenerators {
@@ -1972,7 +2318,7 @@ index daba6dacd7b6b92ce5df17f5392d92886991444a..8faa9f44e8354e77b4b8b784966480a7
              Thread thread = new Thread("Server Shutdown Thread") {
                  public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e654ffc7da6 100644
+index 0c0c9eb0d6275c2a2144c973bfde86944bc17a98..5345aea510d98ded8f1b64de8ee33cf3f8c35916 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -308,7 +308,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -1984,7 +2330,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
          this.createLevels(chunkProgressListener);
          this.forceDifficulty();
          this.prepareLevels(chunkProgressListener);
-@@ -470,7 +470,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -463,7 +463,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          this.nextTickTime = Util.getMillis();
          serverChunkCache.addRegionTicket(TicketType.START, new ChunkPos(blockPos), 11, Unit.INSTANCE);
  
@@ -1993,7 +2339,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
              this.nextTickTime = Util.getMillis() + 10L;
              this.waitUntilNextTick();
          }
-@@ -504,7 +504,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -497,7 +497,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
              String s = this.storageSource.getLevelId();
  
              try {
@@ -2002,7 +2348,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
              } catch (UnsupportedEncodingException var4) {
                  LOGGER.warn("Something went wrong url encoding {}", s);
              }
-@@ -638,10 +638,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -646,10 +646,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
                  while(this.running) {
                      long l = Util.getMillis() - this.nextTickTime;
@@ -2016,7 +2362,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
                          this.lastOverloadWarning = this.nextTickTime;
                      }
  
-@@ -650,13 +650,13 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -658,13 +658,13 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
                          this.debugCommandProfiler = new MinecraftServer.TimeProfiler(Util.getNanos(), this.tickCount);
                      }
  
@@ -2032,7 +2378,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
                      this.waitUntilNextTick();
                      this.profiler.pop();
                      this.endMetricsRecordingTick();
-@@ -712,7 +712,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -720,7 +720,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
      protected boolean shouldRun(TickTask tickTask) {
@@ -2041,7 +2387,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
      }
  
      public boolean pollTask() {
-@@ -737,7 +737,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -745,7 +745,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
  
@@ -2050,7 +2396,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
          this.getProfiler().incrementCounter("runTask");
          super.doRunTask(tickTask);
      }
-@@ -782,10 +782,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -790,10 +790,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          long l = Util.getNanos();
          ++this.tickCount;
          this.tickChildren(booleanSupplier);
@@ -2063,7 +2409,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
              int i = Mth.nextInt(this.random, 0, this.getPlayerCount() - gameProfiles.length);
  
              for(int i2 = 0; i2 < gameProfiles.length; ++i2) {
-@@ -796,7 +796,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -804,7 +804,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
              this.status.getPlayers().setSample(gameProfiles);
          }
  
@@ -2071,8 +2417,8 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
 +        if (this.tickCount % AUTOSAVE_INTERVAL == 0) {
              LOGGER.debug("Autosave started");
              this.profiler.push("save");
-             this.playerList.saveAll();
-@@ -810,14 +810,14 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+             this.saveEverything(true, false, false);
+@@ -817,14 +817,14 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
              this.snooper.start();
          }
  
@@ -2090,7 +2436,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
          long l3 = Util.getNanos();
          this.frameTimer.logFrameDuration(l3 - l);
          this.profiler.pop();
-@@ -1236,7 +1236,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1243,7 +1243,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
      public int getAbsoluteMaxWorldSize() {
@@ -2099,7 +2445,7 @@ index 833c605a2c187b4f09c46e57ea3ff5ac58af345a..983cbda4cc951dd6bc335a11b7d76e65
      }
  
      public boolean scheduleExecutables() {
-@@ -1272,7 +1272,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1279,7 +1279,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
      public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -4249,6 +4595,19 @@ index af89f06330d1d636fefa9d9bf026170d10605460..3cd8af08c5eeae31c229d5d8f927c35e
      private float mean;
      private float deviation;
      private float min;
+diff --git a/src/main/java/net/minecraft/util/valueproviders/ClampedNormalInt.java b/src/main/java/net/minecraft/util/valueproviders/ClampedNormalInt.java
+index c6022b1bfed0c050e6981ec6e0e879e4b1755814..87c84bb18364a0ba6a77815c3b7f3ce34915f97d 100644
+--- a/src/main/java/net/minecraft/util/valueproviders/ClampedNormalInt.java
++++ b/src/main/java/net/minecraft/util/valueproviders/ClampedNormalInt.java
+@@ -8,7 +8,7 @@ import java.util.function.Function;
+ import net.minecraft.util.Mth;
+ 
+ public class ClampedNormalInt extends IntProvider {
+-    public static final Codec<ClampedNormalInt> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("mean").forGetter((clampedNormalInt) -> clampedNormalInt.mean), Codec.FLOAT.fieldOf("deviation").forGetter((clampedNormalInt) -> clampedNormalInt.deviation), Codec.INT.fieldOf("min_inclusive").forGetter((clampedNormalInt) -> clampedNormalInt.min_inclusive), Codec.INT.fieldOf("max_inclusive").forGetter((clampedNormalInt) -> clampedNormalInt.max_inclusive)).apply(instance, ClampedNormalInt::new)).comapFlatMap((clampedNormalInt) -> clampedNormalInt.max_inclusive < clampedNormalInt.min_inclusive ? DataResult.error("Max must be larger than min: [" + clampedNormalInt.min_inclusive + ", " + clampedNormalInt.max_inclusive + "]") : DataResult.success(clampedNormalInt), Function.identity());
++    public static final Codec<ClampedNormalInt> CODEC = RecordCodecBuilder.<ClampedNormalInt>create((instance) -> instance.group(Codec.FLOAT.fieldOf("mean").forGetter((clampedNormalInt) -> clampedNormalInt.mean), Codec.FLOAT.fieldOf("deviation").forGetter((clampedNormalInt) -> clampedNormalInt.deviation), Codec.INT.fieldOf("min_inclusive").forGetter((clampedNormalInt) -> clampedNormalInt.min_inclusive), Codec.INT.fieldOf("max_inclusive").forGetter((clampedNormalInt) -> clampedNormalInt.max_inclusive)).apply(instance, ClampedNormalInt::new)).comapFlatMap((clampedNormalInt) -> clampedNormalInt.max_inclusive < clampedNormalInt.min_inclusive ? DataResult.error("Max must be larger than min: [" + clampedNormalInt.min_inclusive + ", " + clampedNormalInt.max_inclusive + "]") : DataResult.success(clampedNormalInt), Function.identity());
+     private float mean;
+     private float deviation;
+     private int min_inclusive;
 diff --git a/src/main/java/net/minecraft/util/valueproviders/ConstantFloat.java b/src/main/java/net/minecraft/util/valueproviders/ConstantFloat.java
 index 3e9465d88d25fba69ca39257aeec519819be898f..c503580f6ff76239a26846222cb3bbfe4106e047 100644
 --- a/src/main/java/net/minecraft/util/valueproviders/ConstantFloat.java
@@ -4372,9 +4731,28 @@ index 28aa12ade6d3f4630a4f9f48b81f9728bca2886c..136c44203af18ecbe4cd168eae8b261b
  
      static {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/Brain.java b/src/main/java/net/minecraft/world/entity/ai/Brain.java
-index cc067d0bd86b149d694aba4a3f4da046548160b8..76dddaba89445a6855d0e3c3223a518f49a6f5b1 100644
+index cc067d0bd86b149d694aba4a3f4da046548160b8..0ce05e34f18d35691f3f0eb909afca611bef2155 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/Brain.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/Brain.java
+@@ -69,14 +69,14 @@ public class Brain<E extends LivingEntity> {
+             }
+ 
+             public <T> DataResult<Brain<E>> decode(DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
+-                MutableObject<DataResult<Builder<Brain.MemoryValue<?>>>> mutableObject = new MutableObject(DataResult.success(ImmutableList.builder()));
++                MutableObject<DataResult<Builder<Brain.MemoryValue<?>>>> mutableObjectIn = new MutableObject<>(DataResult.success(ImmutableList.builder()));
+                 mapLike.entries().forEach((pair) -> {
+                     DataResult<MemoryModuleType<?>> dataResult = Registry.MEMORY_MODULE_TYPE.parse(dynamicOps, pair.getFirst());
+                     DataResult<? extends Brain.MemoryValue<?>> dataResult2 = dataResult.flatMap((memoryModuleType) -> this.captureRead(memoryModuleType, dynamicOps, (T)pair.getSecond()));
+-                    mutableObject.setValue((mutableObject.getValue()).apply2(Builder::add, dataResult2));
++                    mutableObjectIn.setValue((mutableObjectIn.getValue()).apply2(Builder::add, dataResult2));
+                 });
+-                ImmutableList<Brain.MemoryValue<?>> immutableList = (ImmutableList)(mutableObject.getValue()).resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of);
+-                return DataResult.success(new Brain(collection, collection2, immutableList, mutableObject::getValue));
++                ImmutableList<Brain.MemoryValue<?>> immutableList = mutableObjectIn.getValue().resultOrPartial(Brain.LOGGER::error).map(Builder::build).orElseGet(ImmutableList::of);
++                return DataResult.success(new Brain<>(collection, collection2, immutableList, mutableObject::getValue));
+             }
+ 
+             private <T, U> DataResult<Brain.MemoryValue<U>> captureRead(MemoryModuleType<U> memoryModuleType, DynamicOps<T> dynamicOps, T object) {
 @@ -157,7 +157,7 @@ public class Brain<E extends LivingEntity> {
      }
  
@@ -4505,7 +4883,7 @@ index b28687daf30f72a039cba0b9edc4d3037bcabd0b..323178b8626b6333a597c3b50c75ac48
              }
          };
 diff --git a/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java b/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
-index e796a4e59d9faa3a40a96ef1a435b91fdf04ddb3..975e654eec1c47a86e2db439af5469da69d9c7ab 100644
+index da4bd7b4c6eae20c47888a5054809c490d5e0023..999564610b92e013500eb865c1495772ceb0c6ab 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
 @@ -91,9 +91,9 @@ public class GossipContainer {
@@ -4535,7 +4913,7 @@ index 3d9d3ff8dae4e73450df432844c3a2d8ed2748f2..e2c5665188966a2975004fd5a23d73c4
      protected boolean isMatchingEntity(LivingEntity livingEntity, LivingEntity livingEntity2) {
          return this.isHostile(livingEntity2) && this.isClose(livingEntity, livingEntity2);
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-index d182f6d2b0ceb7ee405bf950972655de3c10bee4..78f5403b7e1f2f105d9c8f0f3bc468f6f31d5f8f 100644
+index 4424a697f8d1489d16a87471bd39443e6a4be186..4e0d1351902dd54f25fff57f8f89560e7922a16e 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 @@ -31,7 +31,7 @@ public class PoiSection {
@@ -4965,6 +5343,28 @@ index 5ccbd5a146b45e071b6097fed790ff66671331c3..1ed97b03ba7261f69228b926f37b8f0f
                      livingEntity.setPose(pose2);
                      break;
                  }
+diff --git a/src/main/java/net/minecraft/world/inventory/DataSlot.java b/src/main/java/net/minecraft/world/inventory/DataSlot.java
+index 00799f62cea61878d885ee25341129632cad29a5..4b9dd0554d4002ec5c4995dfbdf22f28c12b74ff 100644
+--- a/src/main/java/net/minecraft/world/inventory/DataSlot.java
++++ b/src/main/java/net/minecraft/world/inventory/DataSlot.java
+@@ -10,7 +10,7 @@ public abstract class DataSlot {
+             }
+ 
+             public void set(int ix) {
+-                containerData.set(i, i);
++                containerData.set(i, ix);
+             }
+         };
+     }
+@@ -22,7 +22,7 @@ public abstract class DataSlot {
+             }
+ 
+             public void set(int ix) {
+-                ints[i] = i;
++                ints[i] = ix;
+             }
+         };
+     }
 diff --git a/src/main/java/net/minecraft/world/inventory/RecipeBookMenu.java b/src/main/java/net/minecraft/world/inventory/RecipeBookMenu.java
 index d55b1a0b77cd0e8904b7db6b4b02dcfdeff11b4e..6d7ebb7757e1a89e23856974045ce12a20d0b8ad 100644
 --- a/src/main/java/net/minecraft/world/inventory/RecipeBookMenu.java
@@ -5195,10 +5595,10 @@ index a033b4adb964f3c6c56869fc83e41f9a63d361c2..ec9c8fb36bc5649f702a26cf0bbe8d25
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/biome/Climate.java b/src/main/java/net/minecraft/world/level/biome/Climate.java
-index 4a52daa3e80b90a5f262d19f45952cd459b96c32..0c1bb7af10e13294f978b9ad1ca66163c5da8399 100644
+index dbc0843c63ac1274ac339a10445753eae5c75adb..889c9ce90cf0092077dda71cff30af347668359b 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Climate.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Climate.java
-@@ -46,7 +46,7 @@ public class Climate {
+@@ -54,7 +54,7 @@ public class Climate {
          long distance(Climate.RTree.Node<T> var1, long[] var2);
      }
  
@@ -5207,7 +5607,7 @@ index 4a52daa3e80b90a5f262d19f45952cd459b96c32..0c1bb7af10e13294f978b9ad1ca66163
          public static final Codec<Climate.Parameter> CODEC = ExtraCodecs.intervalCodec(Codec.floatRange(-2.0F, 2.0F), "min", "max", (f, f2) -> f.compareTo(f2) > 0 ? DataResult.error("Cannon construct interval, min > max (" + f + " > " + f2 + ")") : DataResult.success(new Climate.Parameter(Climate.quantizeCoord(f), Climate.quantizeCoord(f2))), (parameter) -> Climate.unquantizeCoord(parameter.min()), (parameter) -> Climate.unquantizeCoord(parameter.max()));
  
          public static Climate.Parameter point(float f) {
-@@ -91,6 +91,8 @@ public class Climate {
+@@ -99,6 +99,8 @@ public class Climate {
      }
  
      public static class ParameterList<T> {
@@ -5216,7 +5616,7 @@ index 4a52daa3e80b90a5f262d19f45952cd459b96c32..0c1bb7af10e13294f978b9ad1ca66163
  
          public ParameterList(List<Pair<Climate.ParameterPoint, Supplier<T>>> list) {
              this.biomes = list;
-@@ -101,12 +103,16 @@ public class Climate {
+@@ -109,12 +111,16 @@ public class Climate {
              return this.findBiomeIndex(targetPoint);
          }
  
@@ -5234,7 +5634,7 @@ index 4a52daa3e80b90a5f262d19f45952cd459b96c32..0c1bb7af10e13294f978b9ad1ca66163
                  long l2 = ((Climate.ParameterPoint)pair.getFirst()).fitness(targetPoint);
                  if (l2 < l) {
                      l = l2;
-@@ -126,7 +132,7 @@ public class Climate {
+@@ -134,7 +140,7 @@ public class Climate {
          }
      }
  
@@ -5243,7 +5643,7 @@ index 4a52daa3e80b90a5f262d19f45952cd459b96c32..0c1bb7af10e13294f978b9ad1ca66163
          public static final Codec<Climate.ParameterPoint> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Climate.Parameter.CODEC.fieldOf("temperature").forGetter((parameterPoint) -> parameterPoint.temperature), Climate.Parameter.CODEC.fieldOf("humidity").forGetter((parameterPoint) -> parameterPoint.humidity), Climate.Parameter.CODEC.fieldOf("continentalness").forGetter((parameterPoint) -> parameterPoint.continentalness), Climate.Parameter.CODEC.fieldOf("erosion").forGetter((parameterPoint) -> parameterPoint.erosion), Climate.Parameter.CODEC.fieldOf("depth").forGetter((parameterPoint) -> parameterPoint.depth), Climate.Parameter.CODEC.fieldOf("weirdness").forGetter((parameterPoint) -> parameterPoint.weirdness), Codec.floatRange(0.0F, 1.0F).fieldOf("offset").xmap(Climate::quantizeCoord, Climate::unquantizeCoord).forGetter((parameterPoint) -> parameterPoint.offset)).apply(instance, Climate.ParameterPoint::new));
  
          long fitness(Climate.TargetPoint targetPoint) {
-@@ -140,6 +146,7 @@ public class Climate {
+@@ -148,6 +154,7 @@ public class Climate {
  
      protected static final class RTree<T> {
          private static final int CHILDREN_PER_NODE = 10;
@@ -5251,7 +5651,7 @@ index 4a52daa3e80b90a5f262d19f45952cd459b96c32..0c1bb7af10e13294f978b9ad1ca66163
          private final ThreadLocal<Climate.RTree.Leaf<T>> lastResult = new ThreadLocal();
  
          private RTree(Climate.RTree.Node<T> node) {
-@@ -154,7 +161,7 @@ public class Climate {
+@@ -162,7 +169,7 @@ public class Climate {
                  if (i != 7) {
                      throw new IllegalStateException("Expecting parameter space to be 7, got " + i);
                  } else {
@@ -5260,8 +5660,16 @@ index 4a52daa3e80b90a5f262d19f45952cd459b96c32..0c1bb7af10e13294f978b9ad1ca66163
                      return new Climate.RTree<>(build(i, list2));
                  }
              }
-@@ -353,41 +360,10 @@ public class Climate {
-         Climate.TargetPoint sample(int var1, int var2, int var3);
+@@ -412,49 +419,13 @@ public class Climate {
+         }
+ 
+         static record Result(BlockPos location, long fitness) {
+-
+-            Result(BlockPos blockPos, long l) {
+-                this.location = blockPos;
+-                this.fitness = l;
+-            }
+         }
      }
  
 -    public static record TargetPoint() {
@@ -5693,7 +6101,7 @@ index 5acf66a3baf9010c4d368be2d7f05749fb6f6d9f..5710e563570cb9edfc799882f0509258
              this.sizeBits = i;
          }
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index 02136c44ad6127bf57edc64b0ac28c47049d4611..94f7f2a3f512c9f45f9ef235b8cfac139dff5e17 100644
+index 59e063b713aa6bf02ce9d2c6a727b33439f964fc..08c1e06d3e4524a244a1277b8e31fe20b832283a 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 @@ -39,7 +39,7 @@ public class DimensionType {
@@ -5705,7 +6113,7 @@ index 02136c44ad6127bf57edc64b0ac28c47049d4611..94f7f2a3f512c9f45f9ef235b8cfac13
      private static final int MOON_PHASES = 8;
      public static final float[] MOON_BRIGHTNESS_PER_PHASE = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
      public static final ResourceKey<DimensionType> OVERWORLD_LOCATION = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("overworld"));
-@@ -282,8 +282,4 @@ public class DimensionType {
+@@ -278,8 +278,4 @@ public class DimensionType {
              return this.hasSkylight == dimensionType.hasSkylight && this.hasCeiling == dimensionType.hasCeiling && this.ultraWarm == dimensionType.ultraWarm && this.natural == dimensionType.natural && this.coordinateScale == dimensionType.coordinateScale && this.createDragonFight == dimensionType.createDragonFight && this.piglinSafe == dimensionType.piglinSafe && this.bedWorks == dimensionType.bedWorks && this.respawnAnchorWorks == dimensionType.respawnAnchorWorks && this.hasRaids == dimensionType.hasRaids && this.minY == dimensionType.minY && this.height == dimensionType.height && this.logicalHeight == dimensionType.logicalHeight && Float.compare(dimensionType.ambientLight, this.ambientLight) == 0 && this.fixedTime.equals(dimensionType.fixedTime) && this.infiniburn.equals(dimensionType.infiniburn) && this.effectsLocation.equals(dimensionType.effectsLocation);
          }
      }
@@ -5798,31 +6206,31 @@ index c565b92b29154ace6ab6119aa4ee73aacbf5ede2..7b3cb0b82ed5e543f7593beabd613918
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 8431a1df1a1d7a71dd06b1ed68936bb2b9673ac6..ffb4216fcf5df11e8f20fa01cab09d221fe271ee 100644
+index 8b681f59aaf326a8f517aedd15d9623ba8cab4ed..ab95e8efd825348aa7b5aedddd2bf6a9806c61e2 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatur
- import net.minecraft.world.level.levelgen.synth.NormalNoise;
+@@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
+ import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
  
  public final class NoiseGeneratorSettings {
 -    public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC;
-+    public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), NoiseOctaves.CODEC.fieldOf("octaves").forGetter(NoiseGeneratorSettings::noiseOctaves), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), SurfaceRules.RuleSource.CODEC.fieldOf("surface_rule").forGetter(NoiseGeneratorSettings::surfaceRule), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled), Codec.BOOL.fieldOf("ore_veins_enabled").forGetter(NoiseGeneratorSettings::isOreVeinsEnabled), Codec.BOOL.fieldOf("noodle_caves_enabled").forGetter(NoiseGeneratorSettings::isNoodleCavesEnabled), Codec.BOOL.fieldOf("legacy_random_source").forGetter(NoiseGeneratorSettings::useLegacyRandomSource)).apply(instance, NoiseGeneratorSettings::new));
++    public static final Codec<NoiseGeneratorSettings> DIRECT_CODEC = RecordCodecBuilder.<NoiseGeneratorSettings>create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), SurfaceRules.RuleSource.CODEC.fieldOf("surface_rule").forGetter(NoiseGeneratorSettings::surfaceRule), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled), Codec.BOOL.fieldOf("ore_veins_enabled").forGetter(NoiseGeneratorSettings::isOreVeinsEnabled), Codec.BOOL.fieldOf("noodle_caves_enabled").forGetter(NoiseGeneratorSettings::isNoodleCavesEnabled), Codec.BOOL.fieldOf("legacy_random_source").forGetter(NoiseGeneratorSettings::useLegacyRandomSource)).apply(instance, NoiseGeneratorSettings::new));
      public static final Codec<Supplier<NoiseGeneratorSettings>> CODEC = RegistryFileCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, DIRECT_CODEC);
      private final WorldgenRandom.Algorithm randomSource;
      private final StructureSettings structureSettings;
-@@ -171,7 +171,6 @@ public final class NoiseGeneratorSettings {
+@@ -163,7 +163,6 @@ public final class NoiseGeneratorSettings {
      }
  
      static {
--        DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), NoiseOctaves.CODEC.fieldOf("octaves").forGetter(NoiseGeneratorSettings::noiseOctaves), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), SurfaceRules.RuleSource.CODEC.fieldOf("surface_rule").forGetter(NoiseGeneratorSettings::surfaceRule), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled), Codec.BOOL.fieldOf("ore_veins_enabled").forGetter(NoiseGeneratorSettings::isOreVeinsEnabled), Codec.BOOL.fieldOf("noodle_caves_enabled").forGetter(NoiseGeneratorSettings::isNoodleCavesEnabled), Codec.BOOL.fieldOf("legacy_random_source").forGetter(NoiseGeneratorSettings::useLegacyRandomSource)).apply(instance, NoiseGeneratorSettings::new));
-         register(LARGE_BIOMES, overworld(new StructureSettings(true), false, true, false));
-         register(AMPLIFIED, overworld(new StructureSettings(true), true, false, false));
+-        DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(StructureSettings.CODEC.fieldOf("structures").forGetter(NoiseGeneratorSettings::structureSettings), NoiseSettings.CODEC.fieldOf("noise").forGetter(NoiseGeneratorSettings::noiseSettings), BlockState.CODEC.fieldOf("default_block").forGetter(NoiseGeneratorSettings::getDefaultBlock), BlockState.CODEC.fieldOf("default_fluid").forGetter(NoiseGeneratorSettings::getDefaultFluid), SurfaceRules.RuleSource.CODEC.fieldOf("surface_rule").forGetter(NoiseGeneratorSettings::surfaceRule), Codec.INT.fieldOf("bedrock_roof_position").forGetter(NoiseGeneratorSettings::getBedrockRoofPosition), Codec.INT.fieldOf("bedrock_floor_position").forGetter(NoiseGeneratorSettings::getBedrockFloorPosition), Codec.INT.fieldOf("sea_level").forGetter(NoiseGeneratorSettings::seaLevel), Codec.BOOL.fieldOf("disable_mob_generation").forGetter(NoiseGeneratorSettings::disableMobGeneration), Codec.BOOL.fieldOf("aquifers_enabled").forGetter(NoiseGeneratorSettings::isAquifersEnabled), Codec.BOOL.fieldOf("noise_caves_enabled").forGetter(NoiseGeneratorSettings::isNoiseCavesEnabled), Codec.BOOL.fieldOf("deepslate_enabled").forGetter(NoiseGeneratorSettings::isDeepslateEnabled), Codec.BOOL.fieldOf("ore_veins_enabled").forGetter(NoiseGeneratorSettings::isOreVeinsEnabled), Codec.BOOL.fieldOf("noodle_caves_enabled").forGetter(NoiseGeneratorSettings::isNoodleCavesEnabled), Codec.BOOL.fieldOf("legacy_random_source").forGetter(NoiseGeneratorSettings::useLegacyRandomSource)).apply(instance, NoiseGeneratorSettings::new));
+         register(LARGE_BIOMES, overworld(new StructureSettings(true), false, true));
+         register(AMPLIFIED, overworld(new StructureSettings(true), true, false));
          register(NETHER, netherLikePreset(new StructureSettings(false), Blocks.NETHERRACK.defaultBlockState(), Blocks.LAVA.defaultBlockState()));
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
-index 0891a8c422115e206c3a348f2ce724b97eb528f5..18d6b638d781dcca898f5ebd2401d1c97525515a 100644
+index 7cba098e5269690a985b3ceac36c562118c5f9f2..bb4059ec1870d83f1f3e399eb3c23b834800dc1f 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
-@@ -128,7 +128,7 @@ public class NoiseSampler implements Climate.Sampler {
+@@ -96,7 +96,7 @@ public class NoiseSampler implements Climate.Sampler {
          int i4 = noiseSettings.minY();
          this.minCellY = Mth.intFloorDiv(i4, i2);
          this.isNoiseCavesEnabled = flag;
@@ -5832,15 +6240,15 @@ index 0891a8c422115e206c3a348f2ce724b97eb528f5..18d6b638d781dcca898f5ebd2401d1c9
              RandomSource randomSource = algorithm.newInstance(l);
              randomSource.consumeCount(17292);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
-index 9c56fc49bdab73f49356483ef9790760f04bf974..11297af01f9fe3dee3e73a583009e7eea9442e55 100644
+index 66ac70d03722f7fdebf815bf2e3f5ccef4a63b59..a7baef2e4ff0e9c39c5a3583040e14bad91f2c2a 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
 @@ -8,7 +8,7 @@ import java.util.function.Function;
  import net.minecraft.world.level.dimension.DimensionType;
  
- public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, double densityFactor, double densityOffset, boolean islandNoiseOverride, boolean isAmplified, boolean useLegacyRandom) {
--    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified), Codec.BOOL.optionalFieldOf("use_legacy_random", false, Lifecycle.experimental()).forGetter(NoiseSettings::useLegacyRandom)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
-+    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.<NoiseSettings>create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified), Codec.BOOL.optionalFieldOf("use_legacy_random", false, Lifecycle.experimental()).forGetter(NoiseSettings::useLegacyRandom)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
+ public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, double densityFactor, double densityOffset, boolean islandNoiseOverride, boolean isAmplified) {
+-    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
++    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.<NoiseSettings>create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
  
      private static DataResult<NoiseSettings> guardY(NoiseSettings noiseSettings) {
          if (noiseSettings.minY() + noiseSettings.height() > DimensionType.MAX_Y + 1) {
@@ -5868,7 +6276,7 @@ index 3b2f916eaf7f7e558725f33cbcb942d9ce19093f..1c5747aa9682134e547afcf54e8f78dd
      private final Map<StructureFeature<?>, StructureFeatureConfiguration> structureConfig;
      private final ImmutableMap<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> configuredStructures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java b/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
-index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2fed432ca 100644
+index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1c7267fe1 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
 @@ -107,16 +107,20 @@ public class SurfaceRules {
@@ -5975,19 +6383,18 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
              }
          }
      }
-@@ -350,24 +301,24 @@ public class SurfaceRules {
+@@ -350,23 +301,24 @@ public class SurfaceRules {
          protected abstract boolean compute(S var1);
      }
  
--    static record NoiseThresholdConditionSource(String name, NormalNoise.NoiseParameters noise) implements SurfaceRules.ConditionSource {
+-    static record NoiseThresholdConditionSource(ResourceKey<NormalNoise.NoiseParameters> noise) implements SurfaceRules.ConditionSource {
 -        final double minThreshold;
 -        final double maxThreshold;
-+    static record NoiseThresholdConditionSource(String name, NormalNoise.NoiseParameters noise, double minThreshold, double maxThreshold) implements SurfaceRules.ConditionSource {
-         static final Codec<SurfaceRules.NoiseThresholdConditionSource> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.STRING.fieldOf("name").forGetter(SurfaceRules.NoiseThresholdConditionSource::name), NormalNoise.NoiseParameters.CODEC.fieldOf("noise").forGetter(SurfaceRules.NoiseThresholdConditionSource::noise), Codec.DOUBLE.fieldOf("min_threshold").forGetter(SurfaceRules.NoiseThresholdConditionSource::minThreshold), Codec.DOUBLE.fieldOf("max_threshold").forGetter(SurfaceRules.NoiseThresholdConditionSource::maxThreshold)).apply(instance, SurfaceRules.NoiseThresholdConditionSource::new));
++    static record NoiseThresholdConditionSource(ResourceKey<NormalNoise.NoiseParameters> noise, double minThreshold, double maxThreshold) implements SurfaceRules.ConditionSource {
+         static final Codec<SurfaceRules.NoiseThresholdConditionSource> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ResourceKey.codec(Registry.NOISE_REGISTRY).fieldOf("noise").forGetter(SurfaceRules.NoiseThresholdConditionSource::noise), Codec.DOUBLE.fieldOf("min_threshold").forGetter(SurfaceRules.NoiseThresholdConditionSource::minThreshold), Codec.DOUBLE.fieldOf("max_threshold").forGetter(SurfaceRules.NoiseThresholdConditionSource::maxThreshold)).apply(instance, SurfaceRules.NoiseThresholdConditionSource::new));
  
--        NoiseThresholdConditionSource(String s, NormalNoise.NoiseParameters noiseParameters, double d, double d2) {
--            this.name = s;
--            this.noise = noiseParameters;
+-        NoiseThresholdConditionSource(ResourceKey<NormalNoise.NoiseParameters> resourceKey, double d, double d2) {
+-            this.noise = resourceKey;
 -            this.minThreshold = d;
 -            this.maxThreshold = d2;
 -        }
@@ -5998,7 +6405,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
  
          public SurfaceRules.Condition apply(SurfaceRules.Context context) {
 -            // $FF: Couldn't be decompiled
-+            final NormalNoise noise = context.system.getOrCreateNoise(this.name, this.noise);
++            final NormalNoise noise = context.system.getOrCreateNoise(this.noise);
 +            class NoiseThresholdCondition extends SurfaceRules.LazyCondition<SurfaceRules.NoiseThresholdConditionState> {
 +                protected boolean compute(SurfaceRules.NoiseThresholdConditionState noiseThresholdConditionState) {
 +                    double d = noise.getValue(noiseThresholdConditionState.blockX, 0.0D, noiseThresholdConditionState.blockZ);
@@ -6011,7 +6418,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          }
  
          public double minThreshold() {
-@@ -379,30 +330,10 @@ public class SurfaceRules {
+@@ -378,30 +330,10 @@ public class SurfaceRules {
          }
      }
  
@@ -6043,7 +6450,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          public boolean test() {
              return !this.target.test();
          }
-@@ -411,10 +342,6 @@ public class SurfaceRules {
+@@ -410,10 +342,6 @@ public class SurfaceRules {
      static record NotConditionSource(SurfaceRules.ConditionSource target) implements SurfaceRules.ConditionSource {
          static final Codec<SurfaceRules.NotConditionSource> CODEC = SurfaceRules.ConditionSource.CODEC.xmap(SurfaceRules.NotConditionSource::new, SurfaceRules.NotConditionSource::target).fieldOf("invert").codec();
  
@@ -6054,7 +6461,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          public Codec<? extends SurfaceRules.ConditionSource> codec() {
              return CODEC;
          }
-@@ -439,11 +366,6 @@ public class SurfaceRules {
+@@ -438,11 +366,6 @@ public class SurfaceRules {
      }
  
      static record SequenceRule(List<SurfaceRules.SurfaceRule> rules) implements SurfaceRules.SurfaceRule {
@@ -6066,7 +6473,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          @Nullable
          public BlockState tryApply(int i, int i2, int i3) {
              for(SurfaceRules.SurfaceRule surfaceRule : this.rules) {
-@@ -460,10 +382,6 @@ public class SurfaceRules {
+@@ -459,10 +382,6 @@ public class SurfaceRules {
      static record SequenceRuleSource(List<SurfaceRules.RuleSource> sequence) implements SurfaceRules.RuleSource {
          static final Codec<SurfaceRules.SequenceRuleSource> CODEC = SurfaceRules.RuleSource.CODEC.listOf().xmap(SurfaceRules.SequenceRuleSource::new, SurfaceRules.SequenceRuleSource::sequence).fieldOf("sequence").codec();
  
@@ -6077,7 +6484,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -484,11 +402,6 @@ public class SurfaceRules {
+@@ -483,11 +402,6 @@ public class SurfaceRules {
      }
  
      static record StateRule(BlockState state) implements SurfaceRules.SurfaceRule {
@@ -6089,7 +6496,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          public BlockState tryApply(int i, int i2, int i3) {
              return this.state;
          }
-@@ -508,25 +421,24 @@ public class SurfaceRules {
+@@ -507,25 +421,24 @@ public class SurfaceRules {
          }
      }
  
@@ -6126,7 +6533,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          }
      }
  
-@@ -550,12 +462,6 @@ public class SurfaceRules {
+@@ -549,12 +462,6 @@ public class SurfaceRules {
      }
  
      static record TestRule(SurfaceRules.Condition condition, SurfaceRules.SurfaceRule followup) implements SurfaceRules.SurfaceRule {
@@ -6139,7 +6546,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          @Nullable
          public BlockState tryApply(int i, int i2, int i3) {
              return !this.condition.test() ? null : this.followup.tryApply(i, i2, i3);
-@@ -565,11 +471,6 @@ public class SurfaceRules {
+@@ -564,11 +471,6 @@ public class SurfaceRules {
      static record TestRuleSource(SurfaceRules.ConditionSource ifTrue, SurfaceRules.RuleSource thenRun) implements SurfaceRules.RuleSource {
          static final Codec<SurfaceRules.TestRuleSource> CODEC = RecordCodecBuilder.create((instance) -> instance.group(SurfaceRules.ConditionSource.CODEC.fieldOf("if_true").forGetter(SurfaceRules.TestRuleSource::ifTrue), SurfaceRules.RuleSource.CODEC.fieldOf("then_run").forGetter(SurfaceRules.TestRuleSource::thenRun)).apply(instance, SurfaceRules.TestRuleSource::new));
  
@@ -6151,7 +6558,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -583,18 +484,9 @@ public class SurfaceRules {
+@@ -582,18 +484,9 @@ public class SurfaceRules {
          void update(S var1);
      }
  
@@ -6171,7 +6578,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          public Codec<? extends SurfaceRules.ConditionSource> codec() {
              return CODEC;
          }
-@@ -606,9 +498,9 @@ public class SurfaceRules {
+@@ -605,9 +498,9 @@ public class SurfaceRules {
                  }
              }
  
@@ -6184,7 +6591,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          }
  
          public int offset() {
-@@ -624,24 +516,22 @@ public class SurfaceRules {
+@@ -623,24 +516,22 @@ public class SurfaceRules {
          }
      }
  
@@ -6218,7 +6625,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
          }
  
          public VerticalAnchor anchor() {
-@@ -657,39 +547,6 @@ public class SurfaceRules {
+@@ -656,39 +547,6 @@ public class SurfaceRules {
          }
      }
  
@@ -6261,7 +6668,7 @@ index 788909e39961ee56dbc1110be98604b05dbb3df1..896978d337e03927210b5390080829b2
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-index e3c301d1b67ddd722e656a0708b525978a04a118..7b1c9bebccf3350411939ace93c1ce919d823baf 100644
+index be9d860eab7d786cb7c40bee582a2403aefbc518..406ef95c3081ad8c728fd70e392faf5c5820de14 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 @@ -35,7 +35,7 @@ import org.apache.logging.log4j.LogManager;
@@ -6545,13 +6952,13 @@ index 7deb3b88d387d575b1980aac728536af30d9e127..2574645c15d792ecd656a8a5cd28b7d8
              }
  
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index 7d9a6b141509949d3d6e81b31ec67c3d9ac20b94..438a5507acaa3be7a2c17143c22e0a3f2cc49cb5 100644
+index fa3e0d90191b51ef638e5d7f4fb62d635fedf636..88a7e97728ff9ce1ffb275786e0f9b72b82657ca 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 @@ -262,16 +262,16 @@ public abstract class FlowingFluid extends Fluid {
                  BlockPos blockPos3 = blockPos.relative(direction2);
                  short s = getCacheKey(blockPos2, blockPos3);
-                 Pair<BlockState, FluidState> pair = short2ObjectMap.computeIfAbsent(s, (ix) -> {
+                 Pair<BlockState, FluidState> pair = short2ObjectMap.computeIfAbsent(s, (sx) -> {
 -                    BlockState blockState = levelReader.getBlockState(blockPos3);
 -                    return Pair.of(blockState, blockState.getFluidState());
 +                    BlockState blockStateIn = levelReader.getBlockState(blockPos3);
@@ -6560,7 +6967,7 @@ index 7d9a6b141509949d3d6e81b31ec67c3d9ac20b94..438a5507acaa3be7a2c17143c22e0a3f
                  BlockState blockState2 = (BlockState)pair.getFirst();
                  FluidState fluidState = (FluidState)pair.getSecond();
                  if (this.canPassThrough(levelReader, this.getFlowing(), blockPos, blockState, direction2, blockPos3, blockState2, fluidState)) {
-                     boolean flag = short2BooleanMap.computeIfAbsent(s, (ix) -> {
+                     boolean flag = short2BooleanMap.computeIfAbsent(s, (sx) -> {
 -                        BlockPos blockPos2 = blockPos3.below();
 -                        BlockState blockState2 = levelReader.getBlockState(blockPos2);
 -                        return this.isWaterHole(levelReader, this.getFlowing(), blockPos3, blockState2, blockPos2, blockState2);
@@ -6573,7 +6980,7 @@ index 7d9a6b141509949d3d6e81b31ec67c3d9ac20b94..438a5507acaa3be7a2c17143c22e0a3f
 @@ -332,8 +332,8 @@ public abstract class FlowingFluid extends Fluid {
              BlockPos blockPos2 = blockPos.relative(direction);
              short s = getCacheKey(blockPos, blockPos2);
-             Pair<BlockState, FluidState> pair = short2ObjectMap.computeIfAbsent(s, (ix) -> {
+             Pair<BlockState, FluidState> pair = short2ObjectMap.computeIfAbsent(s, (sx) -> {
 -                BlockState blockState = levelReader.getBlockState(blockPos2);
 -                return Pair.of(blockState, blockState.getFluidState());
 +                BlockState blockStateIn = levelReader.getBlockState(blockPos2);
@@ -6584,7 +6991,7 @@ index 7d9a6b141509949d3d6e81b31ec67c3d9ac20b94..438a5507acaa3be7a2c17143c22e0a3f
 @@ -341,8 +341,8 @@ public abstract class FlowingFluid extends Fluid {
              if (this.canPassThrough(levelReader, fluidState2.getType(), blockPos, blockState, direction, blockPos2, blockState2, fluidState)) {
                  BlockPos blockPos3 = blockPos2.below();
-                 boolean flag = short2BooleanMap.computeIfAbsent(s, (ix) -> {
+                 boolean flag = short2BooleanMap.computeIfAbsent(s, (sx) -> {
 -                    BlockState blockState2 = levelReader.getBlockState(blockPos3);
 -                    return this.isWaterHole(levelReader, this.getFlowing(), blockPos2, blockState2, blockPos3, blockState2);
 +                    BlockState blockState2In = levelReader.getBlockState(blockPos3);
@@ -6615,10 +7022,23 @@ index 95a9620d9e6b8ec54f14014a9c7e4d6ef93a5626..bf4782eaf340b3ff6e58471fb57e954e
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index 619bba5c39bf32e63dec38d9398f75927e9ddb83..e05bbe6ce17925d81a3f9cc08967503581242e24 100644
+index 9cd2dd6868e2754766f420371226e5e34c8026c3..580bbbe940e77331940359ec0d5b0ae05116f1e3 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-@@ -97,12 +97,12 @@ public class LevelStorageSource {
+@@ -83,20 +83,20 @@ public class LevelStorageSource {
+ 
+     private static <T> Pair<WorldGenSettings, Lifecycle> readWorldGenSettings(Dynamic<T> dynamic, DataFixer dataFixer, int i) {
+         Dynamic<T> dynamic2 = dynamic.get("WorldGenSettings").orElseEmptyMap();
+-        UnmodifiableIterator dynamic3 = OLD_SETTINGS_KEYS.iterator();
++        UnmodifiableIterator this_is_not_dynamic = OLD_SETTINGS_KEYS.iterator();
+ 
+-        while(dynamic3.hasNext()) {
+-            String s = (String)dynamic3.next();
++        while(this_is_not_dynamic.hasNext()) {
++            String s = (String)this_is_not_dynamic.next();
+             Optional<? extends Dynamic<?>> optional = dynamic.get(s).result();
+             if (optional.isPresent()) {
+                 dynamic2 = dynamic2.set(s, optional.get());
              }
          }
  
@@ -6627,13 +7047,9 @@ index 619bba5c39bf32e63dec38d9398f75927e9ddb83..e05bbe6ce17925d81a3f9cc089675035
 +        Dynamic<T> dynamic3In = dataFixer.update(References.WORLD_GEN_SETTINGS, dynamic2, i, SharedConstants.getCurrentVersion().getWorldVersion());
 +        DataResult<WorldGenSettings> dataResult = WorldGenSettings.CODEC.parse(dynamic3In);
          return Pair.of((WorldGenSettings)dataResult.resultOrPartial(Util.prefix("WorldGenSettings: ", LOGGER::error)).orElseGet(() -> {
--            Registry<DimensionType> registry = (Registry)RegistryLookupCodec.create(Registry.DIMENSION_TYPE_REGISTRY).codec().parse(dynamic3).resultOrPartial(Util.prefix("Dimension type registry: ", LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get dimension registry"));
--            Registry<Biome> registry2 = (Registry)RegistryLookupCodec.create(Registry.BIOME_REGISTRY).codec().parse(dynamic3).resultOrPartial(Util.prefix("Biome registry: ", LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get biome registry"));
--            Registry<NoiseGeneratorSettings> registry3 = (Registry)RegistryLookupCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY).codec().parse(dynamic3).resultOrPartial(Util.prefix("Noise settings registry: ", LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get noise settings registry"));
-+            Registry<DimensionType> registry = (Registry)RegistryLookupCodec.create(Registry.DIMENSION_TYPE_REGISTRY).codec().parse(dynamic3In).resultOrPartial(Util.prefix("Dimension type registry: ", LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get dimension registry"));
-+            Registry<Biome> registry2 = (Registry)RegistryLookupCodec.create(Registry.BIOME_REGISTRY).codec().parse(dynamic3In).resultOrPartial(Util.prefix("Biome registry: ", LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get biome registry"));
-+            Registry<NoiseGeneratorSettings> registry3 = (Registry)RegistryLookupCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY).codec().parse(dynamic3In).resultOrPartial(Util.prefix("Noise settings registry: ", LOGGER::error)).orElseThrow(() -> new IllegalStateException("Failed to get noise settings registry"));
-             return WorldGenSettings.makeDefault(registry, registry2, registry3);
+-            RegistryAccess registryAccess = RegistryAccess.RegistryHolder.readFromDisk(dynamic3);
++            RegistryAccess registryAccess = RegistryAccess.RegistryHolder.readFromDisk(dynamic3In);
+             return WorldGenSettings.makeDefault(registryAccess);
          }), dataResult.lifecycle());
      }
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java b/src/main/java/net/minecraft/world/level/storage/loot/GsonAdapterFactory.java
@@ -6743,3 +7159,12 @@ index 251bad05e5aa60e4e3db45f6c8f71bdccec6f414..ca61c096b945773414748ed9bcd0bf9c
      }
  
      public TimerQueue(TimerCallbacks<T> timerCallbacks, Stream<Dynamic<Tag>> stream) {
+diff --git a/src/main/resources/META-INF/MANIFEST.MF b/src/main/resources/META-INF/MANIFEST.MF
+index 54f165d5b7667fdf8dc7d999ef532ab39eda546f..d43ed607295b14c114a19860f02ed5a38e7b3c87 100644
+--- a/src/main/resources/META-INF/MANIFEST.MF
++++ b/src/main/resources/META-INF/MANIFEST.MF
+@@ -1,3 +1,3 @@
+ Manifest-Version: 1.0
+ Main-Class: net.minecraft.client.main.Main
+-
++Multi-Release: true
