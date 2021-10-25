@@ -10,4 +10,4 @@ ASSETS=~/.minecraft/assets
 if [[ "$OSTYPE" == *"win"* || "$OSTYPE" == "msys" ]]; then
   ASSETS=~/AppData/Roaming/.minecraft/assets
 fi
-java -Dlog4j.configuration=log4j2.xml -Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -cp "$mcpath" net.minecraft.client.main.Main --version="$version" --assetIndex=1.16 --versionType debug --username="Dev" --uuid="abc" --accessToken="abc" --assetsDir="$ASSETS" --gameDir="$basedir/work/testClient" "$@"
+java -Dlog4j.configuration=log4j2.xml -Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -cp "$mcpath" net.minecraft.client.main.Main --version="$version" --assetIndex=1.17 --versionType debug --username="Dev" --uuid="abc" --accessToken="abc" --assetsDir="$ASSETS" --gameDir="$basedir/work/testClient" "$@"
