@@ -11,7 +11,7 @@ We merge pull requests that makes sense.
 - First, build the project with `./scripts/build.sh`
 - Set game directory that MagmaCube will run at (-> Path #1)
 - See where is assets folder in .minecraft, and copy them. (-> Path #2)
-- Run this: `./scripts/runClient.sh --accessToken=abc --userType=mojang --uuid=1865ab8c700b478b9b52a8c58739df1a --username=Dev --gameDir=(Path #1) --assetsDir=(Path #2) --assetIndex=1.16`
+- Run this: `./scripts/runClient.sh`
 
 ## How to rebuild patches (Saving patches)
 - Every single commit is a single patch file.
