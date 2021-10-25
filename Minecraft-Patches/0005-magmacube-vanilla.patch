@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index c5229e806aac2f5ed105e7104787570879c6248a..4f45e394f7eddfbb209a3fcef45b40318beef12b 100644
+index b7bd976876a29d277df2e9eaa488d206662fce20..9a13c492a03c4b9ca4d7db561acc47c9e3769f01 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements GameVersion {
@@ -33,7 +33,7 @@ index c5229e806aac2f5ed105e7104787570879c6248a..4f45e394f7eddfbb209a3fcef45b4031
  
     public static GameVersion tryDetectVersion() {
 diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
-index 6c3d1eccf2b97c6a0b10583fe1d9eb570ddcdf79..9ca90ab3d2b659c23add075d3695ee0a9de04156 100644
+index 54acc476129cc4690cae1c643bc90022b5d21e5d..7de71eb2eede551afce27d6c90a31e277be09419 100644
 --- a/src/main/java/net/minecraft/SystemReport.java
 +++ b/src/main/java/net/minecraft/SystemReport.java
 @@ -26,6 +26,7 @@ public class SystemReport {
@@ -45,7 +45,7 @@ index 6c3d1eccf2b97c6a0b10583fe1d9eb570ddcdf79..9ca90ab3d2b659c23add075d3695ee0a
        this.setDetail("Minecraft Version ID", SharedConstants.getCurrentVersion().getId());
        this.setDetail("Operating System", OPERATING_SYSTEM);
 diff --git a/src/main/java/net/minecraft/client/ClientBrandRetriever.java b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
-index f2ee5a65d22f6eead934dc833ad679e078d6991e..030a319914b452420c253febd0457b2627a9fe0f 100644
+index 1163b0e7de403ce1782587f48e42c37be0494e45..8c3e951c3f6a7f6a4e8e150cb325847303ded360 100644
 --- a/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 +++ b/src/main/java/net/minecraft/client/ClientBrandRetriever.java
 @@ -3,10 +3,10 @@ package net.minecraft.client;
@@ -63,7 +63,7 @@ index f2ee5a65d22f6eead934dc833ad679e078d6991e..030a319914b452420c253febd0457b26
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index e575ebc2865cc945cc8c2c962089ad6198a8d9a8..2c887b454a1f4052cc58577c18a57f86d2d8cbc2 100644
+index f2a7d33c5f3d2a570b6399424e3d3a8ef4c3d730..84e3d01e69d2bd65706ef763cf6cc821f92115cc 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 @@ -99,7 +99,7 @@ public class TitleScreen extends Screen {
@@ -87,7 +87,7 @@ index e575ebc2865cc945cc8c2c962089ad6198a8d9a8..2c887b454a1f4052cc58577c18a57f86
              fill(poseStack, this.copyrightX, this.height - 1, this.copyrightX + this.copyrightWidth, this.height, 16777215 | i6);
           }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 180c931ef6d80b2adb8d1c1ced3536b3f05dd921..9fede4ff5c691b5f98b034bb5623119eead265b4 100644
+index 21db712c7bedf63551e70e11c86b81a4535962ce..2f2adb2fc7df4150bb6eaecd4254fcdad6f08782 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -936,7 +936,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa

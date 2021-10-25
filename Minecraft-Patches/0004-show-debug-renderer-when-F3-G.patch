@@ -5,7 +5,7 @@ Subject: [PATCH] show debug renderer when F3+G
 
 
 diff --git a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
-index d08085c2c5e81f9186cad0dc2c70d35fcf65551a..ce7b7a5d049efb50acab06106446ca2191d61c49 100644
+index ff01490cc3019a1a71f4c85addeebdaca74a5a8e..b4e1e07b90f6d20e2c9b1e650af300cde66c3a8d 100644
 --- a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 @@ -94,6 +94,27 @@ public class DebugRenderer {
