@@ -91,6 +91,19 @@ index 5d67e82e1e84949675c52f25f655c57cfc0adb6d..be0cd286660a3b104a267603ecf51c79
      }
  
      private static void toggleFullscreen(NSObject nSObject) {
+diff --git a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
+index 9f32f9f8c0b32ed63e02f70a554e2f5c50972278..3d487f375e5dc3e4deb276ad8a7164e65848c03a 100644
+--- a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
++++ b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
+@@ -61,7 +61,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
+     }
+ 
+     private static int roundUp(int i) {
+-        int i2 = 2097152;
++        int i2 = GROWTH_SIZE;
+         if (i == 0) {
+             return i2;
+         } else {
 diff --git a/src/main/java/com/mojang/blaze3d/vertex/DefaultVertexFormat.java b/src/main/java/com/mojang/blaze3d/vertex/DefaultVertexFormat.java
 index 00b8353961e5737884435e1a72f6fef37527c918..81b15d782de7485dba613eb60ee5fc4c090e4388 100644
 --- a/src/main/java/com/mojang/blaze3d/vertex/DefaultVertexFormat.java
@@ -800,18 +813,9 @@ index 0c453fe5a7b46d307673f5852e3695059e8a5414..35c862ea64f1a918f0ae211003f233ed
                  }
  
 diff --git a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-index 851526e3838c729d1602fd916afb970828da20d9..ffb3575310865889c5f53189072317cd7ae7abc6 100644
+index 851526e3838c729d1602fd916afb970828da20d9..c34fe16a7f19226e24c023445fa5d10b71dc268d 100644
 --- a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-@@ -880,7 +880,7 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
-         Vec3 vec3 = camera.getPosition();
-         BlockPos blockPos = camera.getBlockPosition();
-         ChunkRenderDispatcher.RenderChunk renderChunk = this.viewArea.getRenderChunkAt(blockPos);
--        if (renderChunk == null) {
-+        if (true || renderChunk == null) {
-             boolean flag = blockPos.getY() > this.level.getMinBuildHeight();
-             int i2 = flag ? this.level.getMaxBuildHeight() - 8 : this.level.getMinBuildHeight() + 8;
-             int i3 = Mth.floor(vec3.x / 16.0D) * 16;
 @@ -924,131 +924,63 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
              for(Direction direction2 : DIRECTIONS) {
                  ChunkRenderDispatcher.RenderChunk renderChunk2 = this.getRelativeFrom(blockPos, renderChunk, direction2);
@@ -1381,7 +1385,7 @@ index fd25df9e5f2dd2cb667c984dc7c82471c0597886..99018f49881c915d88c8728f5f3ae682
      }
  
 diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
-index d46bdb89e3ae101bfb1d839797286efbd63bbc77..94a248f6b1f69b669cd4237f60f0939b6c661026 100644
+index d46bdb89e3ae101bfb1d839797286efbd63bbc77..18149d3cb10780ece878a45a4ac2efe1d1d38ab1 100644
 --- a/src/main/java/net/minecraft/core/BlockPos.java
 +++ b/src/main/java/net/minecraft/core/BlockPos.java
 @@ -238,11 +238,11 @@ public class BlockPos extends Vec3i {
@@ -1460,7 +1464,7 @@ index d46bdb89e3ae101bfb1d839797286efbd63bbc77..94a248f6b1f69b669cd4237f60f0939b
                          int i4 = i2 / i8;
                          ++this.index;
 -                        return this.cursor.set(i + i, i2 + i3, i3 + i4);
-+                        return this.cursor.set(minX + i, minY + i3, minZ + i4);
++                        return this.cursor.set(end + i, width + i3, height + i4);
                      }
                  }
              };
