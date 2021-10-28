@@ -4,27 +4,6 @@ Date: Sun, 10 Jan 2021 20:40:08 +0900
 Subject: [PATCH] decompile fix
 
 
-diff --git a/pom.xml b/pom.xml
-index aa93a7ac75234e91afbd811dfa40134392675887..49279e9ab5465f1498196ab06fb9f59d1dd351bb 100644
---- a/pom.xml
-+++ b/pom.xml
-@@ -19,6 +19,16 @@
-     <build>
-         <finalName>Minecraft</finalName>
-         <plugins>
-+            <plugin>
-+                <groupId>org.apache.maven.plugins</groupId>
-+                <artifactId>maven-jar-plugin</artifactId>
-+                <version>3.1.1</version>
-+                <configuration>
-+                    <archive>
-+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-+                    </archive>
-+                </configuration>
-+            </plugin>
-             <plugin>
-                 <groupId>org.apache.maven.plugins</groupId>
-                 <artifactId>maven-shade-plugin</artifactId>
 diff --git a/src/main/java/com/mojang/blaze3d/audio/OggAudioStream.java b/src/main/java/com/mojang/blaze3d/audio/OggAudioStream.java
 index 8f3f9946dd08ade4b63f84c517eeb2576e7af443..7cb31f32512675d3aeac8ee06266cba30e6d3909 100644
 --- a/src/main/java/com/mojang/blaze3d/audio/OggAudioStream.java
@@ -446,10 +425,10 @@ index 762a8b578ac3805a6d251e81b46acc4c3aee24ad..d0a5166e52c93543b8eeecb501829058
              options.save();
          });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 82506668c3a8cd351d79f7366301da9f1d649e91..47db40e4c30fe50517fe442d292c68c8d6d2a122 100644
+index 9c616c6500d6ce2d009314610065c0ee3f3cc574..7ef68b3761ca17361b6280f68ee50d6b05f39836 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -522,7 +522,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -516,7 +516,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen = this.window.isFullscreen();
              }
          } else {
@@ -458,7 +437,7 @@ index 82506668c3a8cd351d79f7366301da9f1d649e91..47db40e4c30fe50517fe442d292c68c8
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -974,7 +974,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -968,7 +968,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -467,7 +446,7 @@ index 82506668c3a8cd351d79f7366301da9f1d649e91..47db40e4c30fe50517fe442d292c68c8
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2238,13 +2238,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2228,13 +2228,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -484,7 +463,7 @@ index 82506668c3a8cd351d79f7366301da9f1d649e91..47db40e4c30fe50517fe442d292c68c8
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2266,7 +2266,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2256,7 +2256,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -492,12 +471,47 @@ index 82506668c3a8cd351d79f7366301da9f1d649e91..47db40e4c30fe50517fe442d292c68c8
 +        return this.submit((Supplier<CompletableFuture<Void>>) this::reloadResourcePacks).thenCompose((completableFuture) -> completableFuture);
      }
  
-     public void populateSnooper(Snooper snooper) {
+     public void setCurrentServer(@Nullable ServerData serverData) {
+diff --git a/src/main/java/net/minecraft/client/Option.java b/src/main/java/net/minecraft/client/Option.java
+index 9e93b00cc450cc07b3724f6cf151231a0692d4a6..e0680c2d81025dd845d1882f407b7596f8a8e917 100644
+--- a/src/main/java/net/minecraft/client/Option.java
++++ b/src/main/java/net/minecraft/client/Option.java
+@@ -167,24 +167,12 @@ public abstract class Option {
+     private static final Component PRIORITIZE_CHUNK_TOOLTIP_NONE = new TranslatableComponent("options.prioritizeChunkUpdates.none.tooltip");
+     private static final Component PRIORITIZE_CHUNK_TOOLTIP_PLAYER_AFFECTED = new TranslatableComponent("options.prioritizeChunkUpdates.byPlayer.tooltip");
+     private static final Component PRIORITIZE_CHUNK_TOOLTIP_NEARBY = new TranslatableComponent("options.prioritizeChunkUpdates.nearby.tooltip");
+-    public static final CycleOption<PrioritizeChunkUpdates> PRIORITIZE_CHUNK_UPDATES = CycleOption.create("options.prioritizeChunkUpdates", PrioritizeChunkUpdates.values(), (prioritizeChunkUpdates) -> new TranslatableComponent(prioritizeChunkUpdates.getKey()), (options) -> options.prioritizeChunkUpdates, (options, option, prioritizeChunkUpdates) -> options.prioritizeChunkUpdates = prioritizeChunkUpdates).setTooltip((minecraft) -> (prioritizeChunkUpdates) -> {
+-            Object var10000;
+-            switch(prioritizeChunkUpdates) {
+-            case NONE:
+-                var10000 = minecraft.font.split(PRIORITIZE_CHUNK_TOOLTIP_NONE, 200);
+-                break;
+-            case PLAYER_AFFECTED:
+-                var10000 = minecraft.font.split(PRIORITIZE_CHUNK_TOOLTIP_PLAYER_AFFECTED, 200);
+-                break;
+-            case NEARBY:
+-                var10000 = minecraft.font.split(PRIORITIZE_CHUNK_TOOLTIP_NEARBY, 200);
+-                break;
+-            default:
+-                var10000 = ImmutableList.of();
+-            }
+-
+-            return var10000;
+-        });
++    public static final CycleOption<PrioritizeChunkUpdates> PRIORITIZE_CHUNK_UPDATES = CycleOption.create("options.prioritizeChunkUpdates", PrioritizeChunkUpdates.values(), (prioritizeChunkUpdates) -> new TranslatableComponent(prioritizeChunkUpdates.getKey()), (options) -> options.prioritizeChunkUpdates, (options, option, prioritizeChunkUpdates) -> options.prioritizeChunkUpdates = prioritizeChunkUpdates).setTooltip((minecraft) -> (prioritizeChunkUpdates) -> switch (prioritizeChunkUpdates) {
++        case NONE -> minecraft.font.split(PRIORITIZE_CHUNK_TOOLTIP_NONE, 200);
++        case PLAYER_AFFECTED -> minecraft.font.split(PRIORITIZE_CHUNK_TOOLTIP_PLAYER_AFFECTED, 200);
++        case NEARBY -> minecraft.font.split(PRIORITIZE_CHUNK_TOOLTIP_NEARBY, 200);
++        default -> ImmutableList.of();
++    });
+     public static final CycleOption<AttackIndicatorStatus> ATTACK_INDICATOR = CycleOption.create("options.attackIndicator", AttackIndicatorStatus.values(), (attackIndicatorStatus) -> new TranslatableComponent(attackIndicatorStatus.getKey()), (options) -> options.attackIndicator, (options, option, attackIndicatorStatus) -> options.attackIndicator = attackIndicatorStatus);
+     public static final CycleOption<ChatVisiblity> CHAT_VISIBILITY = CycleOption.create("options.chat.visibility", ChatVisiblity.values(), (chatVisiblity) -> new TranslatableComponent(chatVisiblity.getKey()), (options) -> options.chatVisibility, (options, option, chatVisiblity) -> options.chatVisibility = chatVisiblity);
+     private static final Component GRAPHICS_TOOLTIP_FAST = new TranslatableComponent("options.graphics.fast.tooltip");
 diff --git a/src/main/java/net/minecraft/client/Options.java b/src/main/java/net/minecraft/client/Options.java
-index dede8798709a32df3e1c6fef9bd75964eee28e96..b336df8ec081e1fdc2805f36e770fbc726024f33 100644
+index 8cee279f0e9ef4956b81393407cbf34629d781fe..53d83fe9412a78aa92279f0b0fcc8c826c6cb43d 100644
 --- a/src/main/java/net/minecraft/client/Options.java
 +++ b/src/main/java/net/minecraft/client/Options.java
-@@ -297,7 +297,7 @@ public class Options {
+@@ -295,7 +295,7 @@ public class Options {
          }
  
          for(SoundSource soundSource : SoundSource.values()) {
@@ -506,7 +520,7 @@ index dede8798709a32df3e1c6fef9bd75964eee28e96..b336df8ec081e1fdc2805f36e770fbc7
          }
  
          for(PlayerModelPart playerModelPart : PlayerModelPart.values()) {
-@@ -686,7 +686,7 @@ public class Options {
+@@ -684,7 +684,7 @@ public class Options {
      }
  
      public String dumpOptionsForReport() {
@@ -1161,7 +1175,7 @@ index ce8671a6ea9284aa8327b11cd165834e87ebffa4..64258228cf8133f66afcb67952e59211
      private final Set<Stitcher.Holder> texturesToBeStitched = Sets.newHashSetWithExpectedSize(256);
      private final List<Stitcher.Region> storage = Lists.newArrayListWithCapacity(256);
 diff --git a/src/main/java/net/minecraft/client/resources/ClientPackSource.java b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
-index 9bdfafeab938901dc62cbd24894bf200124109e4..142989d3972771f04aaf6d6b672dac378c867481 100644
+index 7ff0deca40be95d50538fe125d563343c73c9cfd..56d51630cbc596a753060ff577b7879cc80231b9 100644
 --- a/src/main/java/net/minecraft/client/resources/ClientPackSource.java
 +++ b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
 @@ -143,8 +143,8 @@ public class ClientPackSource implements RepositorySource {
@@ -1745,14 +1759,14 @@ index 93c7fa0d855362a60c0b140f522e6b7b30c59a4b..31fa1eeef7b270889482c7796562ee07
              if (biFunction != null) {
                  RecipeBuilder recipeBuilder = (RecipeBuilder)biFunction.apply(block, itemLike);
 diff --git a/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java b/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java
-index 1e04c3d287a6d711efdf133a2c45ff100ccf794a..54fa2ea9fac77de9e61909349f8a9d1f9c08814d 100644
+index 40f6b52cb2a9e90b8668bf6fe7c983410d94cc1b..9bf2203d8e7f6c6bd33defef1d4cefc500258ed8 100644
 --- a/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java
 +++ b/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java
 @@ -74,17 +74,17 @@ public class StructureFeatures {
      }
  
      public static void registerStructures(BiConsumer<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>> biConsumer) {
--        Set<ResourceKey<Biome>> set = ImmutableSet.builder().add(Biomes.DEEP_FROZEN_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN).add(Biomes.DEEP_WARM_OCEAN).build();
+-        Set<ResourceKey<Biome>> set = ImmutableSet.builder().add(Biomes.DEEP_FROZEN_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN).build();
 -        Set<ResourceKey<Biome>> set2 = ImmutableSet.builder().add(Biomes.FROZEN_OCEAN).add(Biomes.OCEAN).add(Biomes.COLD_OCEAN).add(Biomes.LUKEWARM_OCEAN).add(Biomes.WARM_OCEAN).addAll(set).build();
 -        Set<ResourceKey<Biome>> set3 = ImmutableSet.builder().add(Biomes.BEACH).add(Biomes.SNOWY_BEACH).build();
 -        Set<ResourceKey<Biome>> set4 = ImmutableSet.builder().add(Biomes.RIVER).add(Biomes.FROZEN_RIVER).build();
@@ -1763,7 +1777,7 @@ index 1e04c3d287a6d711efdf133a2c45ff100ccf794a..54fa2ea9fac77de9e61909349f8a9d1f
 -        Set<ResourceKey<Biome>> set9 = ImmutableSet.builder().add(Biomes.BAMBOO_JUNGLE).add(Biomes.JUNGLE).add(Biomes.SPARSE_JUNGLE).build();
 -        Set<ResourceKey<Biome>> set10 = ImmutableSet.builder().add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(Biomes.DARK_FOREST).add(Biomes.GROVE).build();
 -        Set<ResourceKey<Biome>> set11 = ImmutableSet.builder().add(Biomes.NETHER_WASTES).add(Biomes.BASALT_DELTAS).add(Biomes.SOUL_SAND_VALLEY).add(Biomes.CRIMSON_FOREST).add(Biomes.WARPED_FOREST).build();
-+        Set<ResourceKey<Biome>> set = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.DEEP_FROZEN_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN).add(Biomes.DEEP_WARM_OCEAN).build();
++        Set<ResourceKey<Biome>> set = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.DEEP_FROZEN_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN).build();
 +        Set<ResourceKey<Biome>> set2 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.FROZEN_OCEAN).add(Biomes.OCEAN).add(Biomes.COLD_OCEAN).add(Biomes.LUKEWARM_OCEAN).add(Biomes.WARM_OCEAN).addAll(set).build();
 +        Set<ResourceKey<Biome>> set3 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.BEACH).add(Biomes.SNOWY_BEACH).build();
 +        Set<ResourceKey<Biome>> set4 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.RIVER).add(Biomes.FROZEN_RIVER).build();
@@ -2266,10 +2280,10 @@ index 47115782b954917fec13a69346e0bdaaaa700d67..93445809acf071f6d48dc87a3d1da329
  
      static final class ReadCache<E> {
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index daba6dacd7b6b92ce5df17f5392d92886991444a..8faa9f44e8354e77b4b8b784966480a7135c1b2d 100644
+index 1d0576c3f2e408fc94e1c0d46e701417a493ecbe..5147ab1473199f587887d620342158d8b9ba8236 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
-@@ -178,17 +178,17 @@ public class Main {
+@@ -175,17 +175,17 @@ public class Main {
              levelStorageAccess.saveDataTag(registryHolder, worldData);
              WorldData worldData2 = worldData;
              final DedicatedServer dedicatedServer = MinecraftServer.spin((threadx) -> {
@@ -2297,76 +2311,10 @@ index daba6dacd7b6b92ce5df17f5392d92886991444a..8faa9f44e8354e77b4b8b784966480a7
              Thread thread = new Thread("Server Shutdown Thread") {
                  public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 0c0c9eb0d6275c2a2144c973bfde86944bc17a98..5345aea510d98ded8f1b64de8ee33cf3f8c35916 100644
+index 2f5a7e1f6b9015a70cf93d819b0b3e7be8a80aa2..6636fcfe7d716d8811d002134316ffa41937f0f3 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -308,7 +308,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-         ProfiledDuration profiledDuration = JvmProfiler.INSTANCE.onWorldLoadedStarted();
-         this.detectBundledResources();
-         this.worldData.setModdedInfo(this.getServerModName(), this.getModdedStatus().shouldReportAsModified());
--        ChunkProgressListener chunkProgressListener = this.progressListenerFactory.create(11);
-+        ChunkProgressListener chunkProgressListener = this.progressListenerFactory.create(START_CHUNK_RADIUS);
-         this.createLevels(chunkProgressListener);
-         this.forceDifficulty();
-         this.prepareLevels(chunkProgressListener);
-@@ -463,7 +463,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-         this.nextTickTime = Util.getMillis();
-         serverChunkCache.addRegionTicket(TicketType.START, new ChunkPos(blockPos), 11, Unit.INSTANCE);
- 
--        while(serverChunkCache.getTickingGenerated() != 441) {
-+        while(serverChunkCache.getTickingGenerated() != START_TICKING_CHUNK_COUNT) {
-             this.nextTickTime = Util.getMillis() + 10L;
-             this.waitUntilNextTick();
-         }
-@@ -497,7 +497,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-             String s = this.storageSource.getLevelId();
- 
-             try {
--                this.setResourcePack("level://" + URLEncoder.encode(s, StandardCharsets.UTF_8.toString()) + "/resources.zip", "");
-+                this.setResourcePack(LEVEL_STORAGE_SCHEMA + URLEncoder.encode(s, StandardCharsets.UTF_8.toString()) + "/" + MAP_RESOURCE_FILE, "");
-             } catch (UnsupportedEncodingException var4) {
-                 LOGGER.warn("Something went wrong url encoding {}", s);
-             }
-@@ -646,10 +646,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
- 
-                 while(this.running) {
-                     long l = Util.getMillis() - this.nextTickTime;
--                    if (l > 2000L && this.nextTickTime - this.lastOverloadWarning >= 15000L) {
--                        long l2 = l / 50L;
-+                    if (l > OVERLOADED_THRESHOLD && this.nextTickTime - this.lastOverloadWarning >= OVERLOADED_WARNING_INTERVAL) {
-+                        long l2 = l / MS_PER_TICK;
-                         LOGGER.warn("Can't keep up! Is the server overloaded? Running {}ms or {} ticks behind", l, l2);
--                        this.nextTickTime += l2 * 50L;
-+                        this.nextTickTime += l2 * MS_PER_TICK;
-                         this.lastOverloadWarning = this.nextTickTime;
-                     }
- 
-@@ -658,13 +658,13 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-                         this.debugCommandProfiler = new MinecraftServer.TimeProfiler(Util.getNanos(), this.tickCount);
-                     }
- 
--                    this.nextTickTime += 50L;
-+                    this.nextTickTime += MS_PER_TICK;
-                     this.startMetricsRecordingTick();
-                     this.profiler.push("tick");
-                     this.tickServer(this::haveTime);
-                     this.profiler.popPush("nextTickWait");
-                     this.mayHaveDelayedTasks = true;
--                    this.delayedTasksMaxNextTickTime = Math.max(Util.getMillis() + 50L, this.nextTickTime);
-+                    this.delayedTasksMaxNextTickTime = Math.max(Util.getMillis() + MS_PER_TICK, this.nextTickTime);
-                     this.waitUntilNextTick();
-                     this.profiler.pop();
-                     this.endMetricsRecordingTick();
-@@ -720,7 +720,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-     }
- 
-     protected boolean shouldRun(TickTask tickTask) {
--        return tickTask.getTick() + 3 < this.tickCount || this.haveTime();
-+        return tickTask.getTick() + MAX_TICK_LATENCY < this.tickCount || this.haveTime();
-     }
- 
-     public boolean pollTask() {
-@@ -745,7 +745,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -736,7 +736,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
  
@@ -2375,56 +2323,7 @@ index 0c0c9eb0d6275c2a2144c973bfde86944bc17a98..5345aea510d98ded8f1b64de8ee33cf3
          this.getProfiler().incrementCounter("runTask");
          super.doRunTask(tickTask);
      }
-@@ -790,10 +790,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-         long l = Util.getNanos();
-         ++this.tickCount;
-         this.tickChildren(booleanSupplier);
--        if (l - this.lastServerStatus >= 5000000000L) {
-+        if (l - this.lastServerStatus >= STATUS_EXPIRE_TIME_NS) {
-             this.lastServerStatus = l;
-             this.status.setPlayers(new ServerStatus.Players(this.getMaxPlayers(), this.getPlayerCount()));
--            GameProfile[] gameProfiles = new GameProfile[Math.min(this.getPlayerCount(), 12)];
-+            GameProfile[] gameProfiles = new GameProfile[Math.min(this.getPlayerCount(), MAX_STATUS_PLAYER_SAMPLE)];
-             int i = Mth.nextInt(this.random, 0, this.getPlayerCount() - gameProfiles.length);
- 
-             for(int i2 = 0; i2 < gameProfiles.length; ++i2) {
-@@ -804,7 +804,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-             this.status.getPlayers().setSample(gameProfiles);
-         }
- 
--        if (this.tickCount % 6000 == 0) {
-+        if (this.tickCount % AUTOSAVE_INTERVAL == 0) {
-             LOGGER.debug("Autosave started");
-             this.profiler.push("save");
-             this.saveEverything(true, false, false);
-@@ -817,14 +817,14 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-             this.snooper.start();
-         }
- 
--        if (this.tickCount % 6000 == 0) {
-+        if (this.tickCount % SNOOPER_UPDATE_INTERVAL == 0) {
-             this.snooper.prepare();
-         }
- 
-         this.profiler.pop();
-         this.profiler.push("tallying");
--        long l2 = this.tickTimes[this.tickCount % 100] = Util.getNanos() - l;
--        this.averageTickTime = this.averageTickTime * 0.8F + (float)l2 / 1000000.0F * 0.19999999F;
-+        long l2 = this.tickTimes[this.tickCount % TICK_STATS_SPAN] = Util.getNanos() - l;
-+        this.averageTickTime = this.averageTickTime * AVERAGE_TICK_TIME_SMOOTHING + (float)l2 / 1000000.0F * 0.19999999F;
-         long l3 = Util.getNanos();
-         this.frameTimer.logFrameDuration(l3 - l);
-         this.profiler.pop();
-@@ -1243,7 +1243,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-     }
- 
-     public int getAbsoluteMaxWorldSize() {
--        return 29999984;
-+        return ABSOLUTE_MAX_WORLD_SIZE;
-     }
- 
-     public boolean scheduleExecutables() {
-@@ -1279,7 +1279,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1215,7 +1215,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
      public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -2573,10 +2472,10 @@ index 595db43a0f044cbedfd4367ac69491f5f7fc032e..b8872e22ff9aa96e4025b167508c9f87
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 803c812d7ea798bd55e8d8b1d7daaf278c940098..326e858ec46b55085607fccd0a3fe945acc7a2d7 100644
+index 45f4b49a85b9f7d84f04e75a524ef924ef9142ea..acccb89ea0635891b072a09f13ae000b5aa27c4e 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
-@@ -540,11 +540,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -541,11 +541,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
          CompletableFuture<Either<List<ChunkAccess>, ChunkHolder.ChunkLoadingFailure>> completableFuture = this.getChunkRangeFuture(chunkPos, chunkStatus.getRange(), (i) -> this.getDependencyStatus(chunkStatus, i));
          this.level.getProfiler().incrementCounter((Supplier<String>)(() -> "chunkGenerate " + chunkStatus.getName()));
          Executor executor = (runnable) -> this.worldgenMailbox.tell(ChunkTaskPriorityQueueSorter.message(chunkHolder, runnable));
@@ -2591,7 +2490,7 @@ index 803c812d7ea798bd55e8d8b1d7daaf278c940098..326e858ec46b55085607fccd0a3fe945
                  } catch (Exception var9) {
                      var9.getStackTrace();
                      CrashReport crashReport = CrashReport.forThrowable(var9, "Exception generating new chunk");
-@@ -593,7 +593,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -594,7 +594,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  if (protoChunk instanceof ImposterProtoChunk) {
                      levelChunk = ((ImposterProtoChunk)protoChunk).getWrapped();
                  } else {
@@ -2600,7 +2499,7 @@ index 803c812d7ea798bd55e8d8b1d7daaf278c940098..326e858ec46b55085607fccd0a3fe945
                      chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk, false));
                  }
  
-@@ -875,7 +875,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -874,7 +874,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
          }
  
@@ -2609,7 +2508,7 @@ index 803c812d7ea798bd55e8d8b1d7daaf278c940098..326e858ec46b55085607fccd0a3fe945
          int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
          SectionPos sectionPos = serverPlayer.getLastSectionPos();
          SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -909,17 +909,17 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -908,17 +908,17 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          int i3 = sectionPos.x();
          int i4 = sectionPos.z();
@@ -2631,7 +2530,7 @@ index 803c812d7ea798bd55e8d8b1d7daaf278c940098..326e858ec46b55085607fccd0a3fe945
                      this.updateChunkTracking(serverPlayer, chunkPos, new MutableObject(), flag4, flag5);
                  }
              }
-@@ -935,9 +935,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -934,9 +934,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  }
              }
  
@@ -2756,10 +2655,10 @@ index c9b465291388399c058b856365254e7d091aa623..18d2286f78e02d800c207e6b535722d5
                  return true;
              } else {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index a11cf36cd2e606564992ff5bc9d63a1fa9fe2a41..d74edf61f86fed5e33a9612acd06a551d5c75c7e 100644
+index 20dbd90769f2744e8573c8db54809d54b0fff4ab..aac41bd55603ea81388081a425c3a92add87ccb2 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1307,7 +1307,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1311,7 +1311,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  object2IntOpenHashMap.addTo(s, 1);
              }
  
@@ -2974,11 +2873,87 @@ index c337a6dc8cc16260f2038439027065ad77839128..487da6925055ec72c437165a15053e8d
          }
      }
  
+diff --git a/src/main/java/net/minecraft/util/CubicSpline.java b/src/main/java/net/minecraft/util/CubicSpline.java
+index f835d37d9077fcae88e4aa3d38f84fdd0ba03968..b2f1419034de563586c6a72c88e0254966217b0b 100644
+--- a/src/main/java/net/minecraft/util/CubicSpline.java
++++ b/src/main/java/net/minecraft/util/CubicSpline.java
+@@ -18,30 +18,25 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+     @VisibleForDebug
+     String parityString();
+ 
++    record Point<C>(float location, CubicSpline<C> value, float derivative) {
++    }
++
+     static <C> Codec<CubicSpline<C>> codec(Codec<ToFloatFunction<C>> codec) {
+         MutableObject<Codec<CubicSpline<C>>> mutableObject = new MutableObject();
+         Codec<Point<C>> codec2 = RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("location").forGetter(Point::location), ExtraCodecs.lazyInitializedCodec(mutableObject::getValue).fieldOf("value").forGetter(Point::value), Codec.FLOAT.fieldOf("derivative").forGetter(Point::derivative)).apply(instance, (f, cubicSpline, f2) -> {
+-                record Point(float location, CubicSpline<C> value, float derivative, ToFloatFunction<C> coordinate) {
+-
+-                    Point(float f, CubicSpline<C> cubicSpline, float f2) {
+-                        this.location = f;
+-                        this.value = cubicSpline;
+-                        this.derivative = f2;
+-                    }
+-                }
+ 
+                 return new Point(f, cubicSpline, f2);
+             }));
+-        Codec<CubicSpline.Multipoint<C>> codec3 = RecordCodecBuilder.create((instance) -> instance.group(codec.fieldOf("coordinate").forGetter(CubicSpline.Multipoint::coordinate), codec2.listOf().fieldOf("points").forGetter((multipoint) -> IntStream.range(0, multipoint.locations.length).mapToObj((i) -> new Point(multipoint.locations()[i], (CubicSpline)multipoint.values().get(i), multipoint.derivatives()[i])).toList())).apply(instance, (toFloatFunction, list) -> {
++        Codec<CubicSpline.Multipoint<C>> codec3 = RecordCodecBuilder.create((instance) -> instance.group(codec.fieldOf("coordinate").forGetter(o -> o.coordinate()), codec2.listOf().fieldOf("points").forGetter((multipoint) -> (List) IntStream.range(0, multipoint.locations.length).mapToObj((i) -> new Point(multipoint.locations()[i], multipoint.values().get(i), multipoint.derivatives()[i])).toList())).apply(instance, (toFloatFunction, list) -> {
+                 float[] floats = new float[list.size()];
+                 com.google.common.collect.ImmutableList.Builder<CubicSpline<C>> builder = ImmutableList.builder();
+                 float[] floats2 = new float[list.size()];
+ 
+                 for(int i = 0; i < list.size(); ++i) {
+-                    Point<C> 1Point = (Point)list.get(i);
+-                    floats[i] = 1Point.location();
+-                    builder.add(1Point.value());
+-                    floats2[i] = 1Point.derivative();
++                    Point<C> point = (Point)list.get(i);
++                    floats[i] = point.location();
++                    builder.add(point.value());
++                    floats2[i] = point.derivative();
+                 }
+ 
+                 return new CubicSpline.Multipoint(toFloatFunction, floats, builder.build(), floats2);
+@@ -68,6 +63,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+         private final FloatList locations = new FloatArrayList();
+         private final List<CubicSpline<C>> values = Lists.newArrayList();
+         private final FloatList derivatives = new FloatArrayList();
++        private final ToFloatFunction<C> coordinate;
+ 
+         protected Builder(ToFloatFunction<C> toFloatFunction) {
+             this.coordinate = toFloatFunction;
+@@ -99,11 +95,6 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+ 
+     @VisibleForDebug
+     public static record Constant<C>(float value) implements CubicSpline<C> {
+-
+-        public Constant(float f) {
+-            this.value = f;
+-        }
+-
+         public float apply(C object) {
+             return this.value;
+         }
+@@ -114,11 +105,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+     }
+ 
+     @VisibleForDebug
+-    public static record Multipoint(ToFloatFunction<C> coordinate, List<CubicSpline<C>> values, float[] derivatives) implements CubicSpline {
+-        final float[] locations; else {
+-                throw new IllegalArgumentException("All lengths must be equal, got: " + floats.length + " " + list.size() + " " + floats2.length);
+-            }
+-        }
++    record Multipoint<C>(ToFloatFunction<C> coordinate, float[] derivatives, List<CubicSpline<C>> values, float[] locations) implements CubicSpline<C> {
+ 
+         public float apply(C object) {
+             float f = this.coordinate.apply(object);
 diff --git a/src/main/java/net/minecraft/util/ExtraCodecs.java b/src/main/java/net/minecraft/util/ExtraCodecs.java
-index a3a5248f4a8560274306e5247184caca71ae3b47..c1b07acb7c07d1b25a68a17330d6702d48c7a622 100644
+index c4ade41ebee3b290775c6fcaace6e5cdee4397eb..65ad7341e1c2fa711d2d2f4b39083608aa7dc843 100644
 --- a/src/main/java/net/minecraft/util/ExtraCodecs.java
 +++ b/src/main/java/net/minecraft/util/ExtraCodecs.java
-@@ -34,8 +34,8 @@ public class ExtraCodecs {
+@@ -35,8 +35,8 @@ public class ExtraCodecs {
                  P object2 = (P)listx.get(1);
                  return biFunction.apply(object, object2);
              }), (object) -> ImmutableList.of(function.apply(object), function2.apply(object)));
@@ -2989,7 +2964,7 @@ index a3a5248f4a8560274306e5247184caca71ae3b47..c1b07acb7c07d1b25a68a17330d6702d
          return Codec.either(codec, codec4).comapFlatMap((either) -> either.map((object) -> biFunction.apply(object, object), DataResult::success), (object) -> {
              P object2 = (P)function.apply(object);
              P object3 = (P)function2.apply(object);
-@@ -48,7 +48,7 @@ public class ExtraCodecs {
+@@ -49,7 +49,7 @@ public class ExtraCodecs {
              public <T> DataResult<Pair<A, T>> apply(DynamicOps<T> dynamicOps, T objectx, DataResult<Pair<A, T>> dataResult) {
                  MutableObject<String> mutableObject = new MutableObject();
                  Optional<Pair<A, T>> optional = dataResult.resultOrPartial(mutableObject::setValue);
@@ -2998,6 +2973,51 @@ index a3a5248f4a8560274306e5247184caca71ae3b47..c1b07acb7c07d1b25a68a17330d6702d
              }
  
              public <T> DataResult<T> coApply(DynamicOps<T> dynamicOps, A objectx, DataResult<T> dataResult) {
+@@ -126,13 +126,7 @@ public class ExtraCodecs {
+         return new ExtraCodecs.LazyInitializedCodec(supplier);
+     }
+ 
+-    static final class EitherCodec<F, S> implements Codec<Either<F, S>> {
+-
+-        public EitherCodec(Codec<F> codec, Codec<S> codec2) {
+-            this.first = codec;
+-            this.second = codec2;
+-        }
+-
++    static record EitherCodec<F, S>(Codec<F> first, Codec<S> second) implements Codec<Either<F, S>> {
+         public <T> DataResult<Pair<Either<F, S>, T>> decode(DynamicOps<T> dynamicOps, T object) {
+             DataResult<Pair<Either<F, S>, T>> dataResult = this.first.decode(dynamicOps, object).map((pair) -> pair.mapFirst(Either::left));
+             if (!dataResult.error().isPresent()) {
+@@ -167,11 +161,10 @@ public class ExtraCodecs {
+         }
+     }
+ 
+-    static record LazyInitializedCodec(Supplier<Codec<A>> delegate, Codec<F> first, Codec<S> second) implements Codec {
++    static record LazyInitializedCodec<A>(Supplier<Codec<A>> delegate) implements Codec<A> {
+ 
+-        LazyInitializedCodec(Supplier<Codec<A>> supplier) {
+-            Supplier<Codec<A>> var2 = Suppliers.memoize(supplier::get);
+-            this.delegate = var2;
++        LazyInitializedCodec(Supplier<Codec<A>> delegate) {
++            this.delegate = Suppliers.memoize(delegate::get);
+         }
+ 
+         public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> dynamicOps, T object) {
+@@ -183,13 +176,7 @@ public class ExtraCodecs {
+         }
+     }
+ 
+-    static final class XorCodec<F, S> implements Codec<Either<F, S>> {
+-
+-        public XorCodec(Codec<F> codec, Codec<S> codec2) {
+-            this.first = codec;
+-            this.second = codec2;
+-        }
+-
++    static record XorCodec<F, S>(Codec<F> first, Codec<S> second) implements Codec<Either<F, S>> {
+         public <T> DataResult<Pair<Either<F, S>, T>> decode(DynamicOps<T> dynamicOps, T object) {
+             DataResult<Pair<Either<F, S>, T>> dataResult = this.first.decode(dynamicOps, object).map((pair) -> pair.mapFirst(Either::left));
+             DataResult<Pair<Either<F, S>, T>> dataResult2 = this.second.decode(dynamicOps, object).map((pair) -> pair.mapFirst(Either::right));
 diff --git a/src/main/java/net/minecraft/util/InclusiveRange.java b/src/main/java/net/minecraft/util/InclusiveRange.java
 index 72fd17a88a2f97b94676d6be8368e081df57b7ed..e426bb2b73dc40e00e22dba093344e5ce9d25cdc 100644
 --- a/src/main/java/net/minecraft/util/InclusiveRange.java
@@ -3053,10 +3073,10 @@ index 9f1bb807bad4032f0f37bf9bdd79209b88b8789b..c925805d1dea978832b60ae6ce86c2de
  
              public String toString() {
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index 2729bbefe84f595b92bb33b24318f95b2b8a82e9..4376a2b65f09b2ce83e6d8f01614035a05c92218 100644
+index cb4ccfe39437b6ac658d57dc35a03b1b83a32b61..cff678f5f5f57649fb75f368ac74b9db3a7c4c6a 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-@@ -559,17 +559,17 @@ public class DataFixers {
+@@ -562,17 +562,17 @@ public class DataFixers {
          dataFixerBuilder.addFixer(new AddNewChoices(schema131, "Added Glow Squid", References.ENTITY));
          dataFixerBuilder.addFixer(new AddNewChoices(schema131, "Added Glow Item Frame", References.ENTITY));
          Schema schema132 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
@@ -3152,55 +3172,6 @@ index 84e34e10e7adc02746a439c5e5a0455300e4dc4f..daf42bdafcab9dc6d8f79c5fb1ff35a2
      }
  }
 \ No newline at end of file
-diff --git a/src/main/java/net/minecraft/util/datafix/fixes/BedBlockEntityInjecter.java b/src/main/java/net/minecraft/util/datafix/fixes/BedBlockEntityInjecter.java
-index 6fbb2c96aab62b942fef26282e1e6fea02217449..12b859e332f1d5a57d45da687359148a8d161780 100644
---- a/src/main/java/net/minecraft/util/datafix/fixes/BedBlockEntityInjecter.java
-+++ b/src/main/java/net/minecraft/util/datafix/fixes/BedBlockEntityInjecter.java
-@@ -12,6 +12,8 @@ import com.mojang.datafixers.types.Type;
- import com.mojang.datafixers.types.templates.List.ListType;
- import com.mojang.datafixers.util.Pair;
- import com.mojang.serialization.Dynamic;
-+
-+import java.util.Iterator;
- import java.util.List;
- import java.util.Map;
- import java.util.function.Function;
-@@ -39,11 +41,11 @@ public class BedBlockEntityInjecter extends DataFix {
-         OpticFinder<?> opticFinder = DSL.fieldFinder("Level", type);
-         OpticFinder<List<TE>> opticFinder2 = DSL.fieldFinder("TileEntities", listType);
-         int i = 416;
--        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(References.BLOCK_ENTITY), this.getOutputSchema().findChoiceType(References.BLOCK_ENTITY), (dynamicOps) -> (pair) -> pair), this.fixTypeEverywhereTyped("BedBlockEntityInjecter", this.getOutputSchema().getType(References.CHUNK), (typed) -> {
-+        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(References.BLOCK_ENTITY), this.getOutputSchema().findChoiceType(References.BLOCK_ENTITY), (dynamicOps) -> (pair) -> (Pair) pair), this.fixTypeEverywhereTyped("BedBlockEntityInjecter", this.getOutputSchema().getType(References.CHUNK), (typed) -> {
-             Typed<?> typed2 = typed.getTyped(opticFinder);
-             Dynamic<?> dynamic = typed2.get(DSL.remainderFinder());
--            int i = dynamic.get("xPos").asInt(0);
--            int i2 = dynamic.get("zPos").asInt(0);
-+            int xPos = dynamic.get("xPos").asInt(0);
-+            int zPos = dynamic.get("zPos").asInt(0);
-             List<TE> list = Lists.newArrayList((Iterable)typed2.getOrCreate(opticFinder2));
-             List<? extends Dynamic<?>> list2 = dynamic.get("Sections").asList(Function.identity());
- 
-@@ -53,16 +55,17 @@ public class BedBlockEntityInjecter extends DataFix {
-                 Stream<Integer> stream = dynamic2.get("Blocks").asStream().map((dynamicx) -> dynamicx.asInt(0));
-                 int i5 = 0;
- 
--                for(int i6 : stream::iterator) {
-+                for (Iterator<Integer> it = stream.iterator(); it.hasNext(); ) {
-+                    int i6 = it.next();
-                     if (416 == (i6 & 255) << 4) {
-                         int i7 = i5 & 15;
-                         int i8 = i5 >> 8 & 15;
-                         int i9 = i5 >> 4 & 15;
-                         Map<Dynamic<?>, Dynamic<?>> map = Maps.newHashMap();
-                         map.put(dynamic2.createString("id"), dynamic2.createString("minecraft:bed"));
--                        map.put(dynamic2.createString("x"), dynamic2.createInt(i7 + (i << 4)));
-+                        map.put(dynamic2.createString("x"), dynamic2.createInt(i7 + (xPos << 4)));
-                         map.put(dynamic2.createString("y"), dynamic2.createInt(i8 + (i4 << 4)));
--                        map.put(dynamic2.createString("z"), dynamic2.createInt(i9 + (i2 << 4)));
-+                        map.put(dynamic2.createString("z"), dynamic2.createInt(i9 + (zPos << 4)));
-                         map.put(dynamic2.createString("color"), dynamic2.createShort((short)14));
-                         list.add((type2.read(dynamic2.createMap(map)).result().orElseThrow(() -> new IllegalStateException("Could not parse newly created bed block entity."))).getFirst());
-                     }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/BiomeFix.java b/src/main/java/net/minecraft/util/datafix/fixes/BiomeFix.java
 index 04fec0c98753679661a17c2dd33f8839bb204124..be972e0b8e6bdfe19a4e47dbdc95de7498d0f4fe 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/BiomeFix.java
@@ -3322,36 +3293,94 @@ index d6aa74de191db9769783d9ce280f2ddb1825a592..55e188467327ddd0d720fd3670e2acdf
  
      private CavesAndCliffsRenames() {
      }
+diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkBedBlockEntityInjecterFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkBedBlockEntityInjecterFix.java
+index b2e42841c2df2ea282a1b940375499103ac6ae8d..bd36d76e52ce6bf90b26e4518f7a50eb5244fb2c 100644
+--- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkBedBlockEntityInjecterFix.java
++++ b/src/main/java/net/minecraft/util/datafix/fixes/ChunkBedBlockEntityInjecterFix.java
+@@ -12,6 +12,8 @@ import com.mojang.datafixers.types.Type;
+ import com.mojang.datafixers.types.templates.List.ListType;
+ import com.mojang.datafixers.util.Pair;
+ import com.mojang.serialization.Dynamic;
++
++import java.util.Iterator;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.function.Function;
+@@ -39,11 +41,11 @@ public class ChunkBedBlockEntityInjecterFix extends DataFix {
+         OpticFinder<?> opticFinder = DSL.fieldFinder("Level", type);
+         OpticFinder<List<TE>> opticFinder2 = DSL.fieldFinder("TileEntities", listType);
+         int i = 416;
+-        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(References.BLOCK_ENTITY), this.getOutputSchema().findChoiceType(References.BLOCK_ENTITY), (dynamicOps) -> (pair) -> pair), this.fixTypeEverywhereTyped("BedBlockEntityInjecter", this.getOutputSchema().getType(References.CHUNK), (typed) -> {
++        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(References.BLOCK_ENTITY), this.getOutputSchema().findChoiceType(References.BLOCK_ENTITY), (dynamicOps) -> (pair) -> (Pair) pair), this.fixTypeEverywhereTyped("BedBlockEntityInjecter", this.getOutputSchema().getType(References.CHUNK), (typed) -> {
+             Typed<?> typed2 = typed.getTyped(opticFinder);
+             Dynamic<?> dynamic = typed2.get(DSL.remainderFinder());
+-            int i = dynamic.get("xPos").asInt(0);
+-            int i2 = dynamic.get("zPos").asInt(0);
++            int xPos = dynamic.get("xPos").asInt(0);
++            int zPos = dynamic.get("zPos").asInt(0);
+             List<TE> list = Lists.newArrayList((Iterable)typed2.getOrCreate(opticFinder2));
+             List<? extends Dynamic<?>> list2 = dynamic.get("Sections").asList(Function.identity());
+ 
+@@ -53,16 +55,17 @@ public class ChunkBedBlockEntityInjecterFix extends DataFix {
+                 Stream<Integer> stream = dynamic2.get("Blocks").asStream().map((dynamicx) -> dynamicx.asInt(0));
+                 int i5 = 0;
+ 
+-                for(int i6 : stream::iterator) {
++                for (Iterator<Integer> it = stream.iterator(); it.hasNext(); ) {
++                    int i6 = it.next();
+                     if (416 == (i6 & 255) << 4) {
+                         int i7 = i5 & 15;
+                         int i8 = i5 >> 8 & 15;
+                         int i9 = i5 >> 4 & 15;
+                         Map<Dynamic<?>, Dynamic<?>> map = Maps.newHashMap();
+                         map.put(dynamic2.createString("id"), dynamic2.createString("minecraft:bed"));
+-                        map.put(dynamic2.createString("x"), dynamic2.createInt(i7 + (i << 4)));
++                        map.put(dynamic2.createString("x"), dynamic2.createInt(i7 + (xPos << 4)));
+                         map.put(dynamic2.createString("y"), dynamic2.createInt(i8 + (i4 << 4)));
+-                        map.put(dynamic2.createString("z"), dynamic2.createInt(i9 + (i2 << 4)));
++                        map.put(dynamic2.createString("z"), dynamic2.createInt(i9 + (zPos << 4)));
+                         map.put(dynamic2.createString("color"), dynamic2.createShort((short)14));
+                         list.add((type2.read(dynamic2.createMap(map)).result().orElseThrow(() -> new IllegalStateException("Could not parse newly created bed block entity."))).getFirst());
+                     }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java
-index ff5b9c4969fcfd6a884e0005e6260d1922112163..3b38560f2a6141743d86729fb16d605ff4a0351e 100644
+index 2e0b21f588fb7f29b8bec040f99a56edd821bc18..1f8b2cc3a9e8199f34284d9ec4d9741f71af503a 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java
-@@ -67,12 +67,12 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+@@ -75,13 +75,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
                  int i = flag ? -4 : 0;
                  Dynamic<?>[] dynamics = getBiomeContainers(dynamic, flag, i, mutableBoolean);
                  Dynamic<?> dynamic2 = makePalettedContainer(dynamic.createList(Stream.of(dynamic.createMap(ImmutableMap.of(dynamic.createString("Name"), dynamic.createString("minecraft:air"))))));
--                typedx = typedx.updateTyped(opticFinder2, type4, (typed) -> {
-+                typedx = typedx.updateTyped(opticFinder2, type4, (typedIn) -> {
+-                MutableObject<Supplier<ChunkProtoTickListFix.PoorMansPalettedContainer>> mutableObject = new MutableObject(() -> null);
++                MutableObject<Supplier<ChunkProtoTickListFix.PoorMansPalettedContainer>> mutableObject = new MutableObject<>(() -> null);
+                 typed2 = typed2.updateTyped(opticFinder2, type4, (typedx) -> {
                      IntSet intSet = new IntOpenHashSet();
--                    Dynamic<?> dynamic3 = typed.write().result().orElseThrow(() -> new IllegalStateException("Malformed Chunk.Level.Sections"));
-+                    Dynamic<?> dynamic3 = typedIn.write().result().orElseThrow(() -> new IllegalStateException("Malformed Chunk.Level.Sections"));
+                     Dynamic<?> dynamic3 = typedx.write().result().orElseThrow(() -> new IllegalStateException("Malformed Chunk.Level.Sections"));
                      List<Dynamic<?>> list = dynamic3.asStream().map((dynamic2x) -> {
                          int i2 = dynamic2x.get("Y").asInt(0);
 -                        Dynamic<?> dynamic3 = DataFixUtils.orElse(dynamic2x.get("Palette").result().flatMap((dynamic2xx) -> dynamic2x.get("BlockStates").result().map((dynamic2) -> makeOptimizedPalettedContainer(dynamic2xx, dynamic2))), dynamic2);
-+                        Dynamic<?> dynamic3In = DataFixUtils.orElse(dynamic2x.get("Palette").result().flatMap((dynamic2xx) -> dynamic2x.get("BlockStates").result().map((dynamicIn2) -> makeOptimizedPalettedContainer(dynamic2xx, dynamicIn2))), dynamic2);
++                        Dynamic<?> dynamic3In = DataFixUtils.orElse(dynamic2x.get("Palette").result().flatMap((dynamic2xx) -> dynamic2x.get("BlockStates").result().map((dynamic2In) -> makeOptimizedPalettedContainer(dynamic2xx, dynamic2In))), dynamic2);
                          Dynamic<?> dynamic4 = dynamic2x;
                          int i3 = i2 - i;
                          if (i3 >= 0 && i3 < dynamics.length) {
-@@ -80,7 +80,7 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+@@ -91,13 +91,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+                         intSet.add(i2);
+                         if (dynamic2x.get("Y").asInt(Integer.MAX_VALUE) == 0) {
+                             mutableObject.setValue(() -> {
+-                                List<? extends Dynamic<?>> list = dynamic3.get("palette").asList(Function.identity());
+-                                long[] longs = dynamic3.get("data").asLongStream().toArray();
+-                                return new ChunkProtoTickListFix.PoorMansPalettedContainer(list, longs);
++                                List<? extends Dynamic<?>> listIn = dynamic3In.get("palette").asList(Function.identity());
++                                long[] longs = dynamic3In.get("data").asLongStream().toArray();
++                                return new ChunkProtoTickListFix.PoorMansPalettedContainer(listIn, longs);
+                             });
                          }
  
-                         intSet.add(i2);
 -                        return dynamic4.set("block_states", dynamic3).remove("Palette").remove("BlockStates");
 +                        return dynamic4.set("block_states", dynamic3In).remove("Palette").remove("BlockStates");
                      }).collect(Collectors.toCollection(ArrayList::new));
  
                      for(int i2 = 0; i2 < dynamics.length; ++i2) {
-@@ -107,12 +107,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+@@ -124,12 +124,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
              mutableBoolean.setValue(ints.length == 1536);
              if (mutableBoolean.booleanValue()) {
                  for(int i2 = 0; i2 < 24; ++i2) {
@@ -3398,6 +3427,51 @@ index bbf296da4c7d6b6db0826b942ab664f3c2d10f8e..325f85d4fe6c2ee36e2369f414c81825
                      this.sides = section.upgrade(this.sides);
                      this.sections[section.y] = section;
                  }));
+diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkProtoTickListFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkProtoTickListFix.java
+index fde49a4e077b72007a3cc1dc7de3ea57a39798f0..7d6237b1a6c8a7b20130f29e37674dfcd2d569af 100644
+--- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkProtoTickListFix.java
++++ b/src/main/java/net/minecraft/util/datafix/fixes/ChunkProtoTickListFix.java
+@@ -47,23 +47,23 @@ public class ChunkProtoTickListFix extends DataFix {
+                 Dynamic<?> dynamic = typedx.get(DSL.remainderFinder());
+                 MutableInt mutableInt = new MutableInt();
+                 Int2ObjectMap<Supplier<ChunkProtoTickListFix.PoorMansPalettedContainer>> int2ObjectMap = new Int2ObjectArrayMap();
+-                typedx.getOptionalTyped(opticFinder2).ifPresent((typed) -> typed.getAllTyped(opticFinder3).forEach((typedx) -> {
+-                        Dynamic<?> dynamic = typedx.get(DSL.remainderFinder());
+-                        int i = dynamic.get("Y").asInt(Integer.MAX_VALUE);
++                typedx.getOptionalTyped(opticFinder2).ifPresent((typedIn) -> typedIn.getAllTyped(opticFinder3).forEach((typedIn2) -> {
++                        Dynamic<?> dynamicIn = typedIn2.get(DSL.remainderFinder());
++                        int i = dynamicIn.get("Y").asInt(Integer.MAX_VALUE);
+                         if (i != Integer.MAX_VALUE) {
+-                            if (typedx.getOptionalTyped(opticFinder5).isPresent()) {
++                            if (typedIn2.getOptionalTyped(opticFinder5).isPresent()) {
+                                 mutableInt.setValue(Math.min(i, mutableInt.getValue()));
+                             }
+ 
+-                            typedx.getOptionalTyped(opticFinder4).ifPresent((typed) -> int2ObjectMap.put(i, Suppliers.memoize(() -> {
+-                                    List<? extends Dynamic<?>> list = typed.getOptionalTyped(opticFinder6).map((typedx) -> typedx.write().result().map((dynamic) -> dynamic.asList(Function.identity())).orElse(Collections.emptyList())).orElse(Collections.emptyList());
+-                                    long[] longs = (typed.get(DSL.remainderFinder())).get("data").asLongStream().toArray();
++                            typedIn2.getOptionalTyped(opticFinder4).ifPresent((typedIn3) -> int2ObjectMap.put(i, Suppliers.memoize(() -> {
++                                    List<? extends Dynamic<?>> list = typedIn3.getOptionalTyped(opticFinder6).map((typedIn4) -> typedIn4.write().result().map((dynamicIn2) -> dynamicIn2.asList(Function.identity())).orElse(Collections.emptyList())).orElse(Collections.emptyList());
++                                    long[] longs = (typedIn3.get(DSL.remainderFinder())).get("data").asLongStream().toArray();
+                                     return new ChunkProtoTickListFix.PoorMansPalettedContainer(list, longs);
+                                 })));
+                         }
+                     }));
+                 byte b = mutableInt.getValue().byteValue();
+-                typedx = typedx.update(DSL.remainderFinder(), (dynamicx) -> dynamicx.update("yPos", (dynamic) -> dynamic.createByte(b)));
++                typedx = typedx.update(DSL.remainderFinder(), (dynamicx) -> dynamicx.update("yPos", (dynamicIn) -> dynamicIn.createByte(b)));
+                 if (!typedx.getOptionalTyped(opticFinder7).isPresent() && !dynamic.get("fluid_ticks").result().isPresent()) {
+                     int i = dynamic.get("xPos").asInt(0);
+                     int i2 = dynamic.get("zPos").asInt(0);
+@@ -119,7 +119,7 @@ public class ChunkProtoTickListFix extends DataFix {
+         int i6 = i4 >>> 4 & 15;
+         int i7 = i4 >>> 8 & 15;
+         String s = (String)function.apply(supplier != null ? ((ChunkProtoTickListFix.PoorMansPalettedContainer)supplier.get()).get(i5, i6, i7) : null);
+-        return dynamic.createMap(ImmutableMap.builder().put(dynamic.createString("i"), dynamic.createString(s)).put(dynamic.createString("x"), dynamic.createInt(i * 16 + i5)).put(dynamic.createString("y"), dynamic.createInt(i2 * 16 + i6)).put(dynamic.createString("z"), dynamic.createInt(i3 * 16 + i7)).put(dynamic.createString("t"), dynamic.createInt(0)).put(dynamic.createString("p"), dynamic.createInt(0)).build());
++        return dynamic.createMap(ImmutableMap.<Dynamic<?>, Dynamic<?>>builder().put(dynamic.createString("i"), dynamic.createString(s)).put(dynamic.createString("x"), dynamic.createInt(i * 16 + i5)).put(dynamic.createString("y"), dynamic.createInt(i2 * 16 + i6)).put(dynamic.createString("z"), dynamic.createInt(i3 * 16 + i7)).put(dynamic.createString("t"), dynamic.createInt(0)).put(dynamic.createString("p"), dynamic.createInt(0)).build());
+     }
+ 
+     public static final class PoorMansPalettedContainer {
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkStatusFix2.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkStatusFix2.java
 index ab7931e277bfef1a6dfcb1acdb8995e8a951622b..28aebc40b4a980e0817e54882b915fe225251242 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkStatusFix2.java
@@ -4653,10 +4727,10 @@ index 26fd1c29d10cd770c468f8b3e6ac7a0f1fc9bebe..92522bfbdb47b3561e5b50793e564b82
      private final int maxInclusive;
  
 diff --git a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
-index e78ee6f8bdf06792dc0dc45172921b69cad0a467..7b386b6e4103c7590165db99c2f3945f0ac06772 100644
+index 9f50016fc2004bffc27029cb014d5ff0d7f9b75d..d8a3c704954b102a7624c3358956dff8befe0060 100644
 --- a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
 +++ b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
-@@ -103,7 +103,7 @@ public class WorldUpgrader {
+@@ -106,7 +106,7 @@ public class WorldUpgrader {
                  builder2.put(resourceKey2, new ChunkStorage(new File(file, "region"), this.dataFixer, true));
              }
  
@@ -4665,8 +4739,8 @@ index e78ee6f8bdf06792dc0dc45172921b69cad0a467..7b386b6e4103c7590165db99c2f3945f
              long l = Util.getMillis();
              this.status = new TranslatableComponent("optimizeWorld.stage.upgrading");
  
-@@ -115,7 +115,7 @@ public class WorldUpgrader {
-                 for(UnmodifiableIterator iOException2 = this.levels.iterator(); iOException2.hasNext(); f2 += f3) {
+@@ -118,7 +118,7 @@ public class WorldUpgrader {
+                 for(UnmodifiableIterator iOException2 = immutableSet.iterator(); iOException2.hasNext(); f2 += f3) {
                      ResourceKey<Level> resourceKey3 = (ResourceKey)iOException2.next();
                      ListIterator<ChunkPos> listIterator = (ListIterator)immutableMap.get(resourceKey3);
 -                    ChunkStorage chunkStorage = (ChunkStorage)immutableMap2.get(resourceKey3);
@@ -4674,15 +4748,15 @@ index e78ee6f8bdf06792dc0dc45172921b69cad0a467..7b386b6e4103c7590165db99c2f3945f
                      if (listIterator.hasNext()) {
                          ChunkPos chunkPos = (ChunkPos)listIterator.next();
                          boolean flag2 = false;
-@@ -175,7 +175,7 @@ public class WorldUpgrader {
+@@ -178,7 +178,7 @@ public class WorldUpgrader {
              }
  
              this.status = new TranslatableComponent("optimizeWorld.stage.finished");
--            UnmodifiableIterator var31 = immutableMap2.values().iterator();
-+            UnmodifiableIterator var31 = immutableMap2In.values().iterator();
+-            UnmodifiableIterator var32 = immutableMap2.values().iterator();
++            UnmodifiableIterator var32 = immutableMap2In.values().iterator();
  
-             while(var31.hasNext()) {
-                 ChunkStorage chunkStorage2 = (ChunkStorage)var31.next();
+             while(var32.hasNext()) {
+                 ChunkStorage chunkStorage2 = (ChunkStorage)var32.next();
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
 index b68a97c94aca26b2a81c76e473683ba42312af70..4829086d94e3ed676e8d834c2d09ed7665e7a204 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
@@ -5427,19 +5501,6 @@ index 53d772f066d3f0e84b59ac8c727033535aa7186a..ec5501be91d303eca9e5088913e5842b
      }
  
      BlockState getBlockState(BlockPos var1);
-diff --git a/src/main/java/net/minecraft/world/level/EmptyTickList.java b/src/main/java/net/minecraft/world/level/EmptyTickList.java
-index 8a09499bef0ec4e4ed896b0557d4e3114cea64e3..a81be87abbf0124155160253617383c55b000ad3 100644
---- a/src/main/java/net/minecraft/world/level/EmptyTickList.java
-+++ b/src/main/java/net/minecraft/world/level/EmptyTickList.java
-@@ -6,7 +6,7 @@ public class EmptyTickList<T> implements TickList<T> {
-     private static final EmptyTickList<Object> INSTANCE = new EmptyTickList<>();
- 
-     public static <T> EmptyTickList<T> empty() {
--        return INSTANCE;
-+        return (EmptyTickList<T>) INSTANCE;
-     }
- 
-     public boolean hasScheduledTick(BlockPos blockPos, T object) {
 diff --git a/src/main/java/net/minecraft/world/level/Explosion.java b/src/main/java/net/minecraft/world/level/Explosion.java
 index 32914d98dbb1f55b45f5522fa0d994b060ed5d8c..fe98af3e49242ae3405a0519bb2823d068ce7bb0 100644
 --- a/src/main/java/net/minecraft/world/level/Explosion.java
@@ -5468,6 +5529,24 @@ index 6f503f858b1d5d9d9ea5922f32d4bc3764ed8ca7..68be4820135396354fb9d90cbf8bcaec
      }
  
      public void assignFrom(GameRules gameRules, @Nullable MinecraftServer minecraftServer) {
+diff --git a/src/main/java/net/minecraft/world/level/LevelAccessor.java b/src/main/java/net/minecraft/world/level/LevelAccessor.java
+index 7cce24ef2ae66001f2d53b8afbdf48ce04e5233f..249620d0ef6e1b94e4edc8cd296e66a298f3e2ab 100644
+--- a/src/main/java/net/minecraft/world/level/LevelAccessor.java
++++ b/src/main/java/net/minecraft/world/level/LevelAccessor.java
+@@ -29,11 +29,11 @@ public interface LevelAccessor extends CommonLevelAccessor, LevelTimeAccess {
+ 
+     LevelTickAccess<Block> getBlockTicks();
+ 
+-    private default <T> ScheduledTick<T> createTick(BlockPos blockPos, T object, int i, TickPriority tickPriority) {
++    default <T> ScheduledTick<T> createTick(BlockPos blockPos, T object, int i, TickPriority tickPriority) {
+         return new ScheduledTick(object, blockPos, this.getLevelData().getGameTime() + (long)i, tickPriority, this.nextSubTickCount());
+     }
+ 
+-    private default <T> ScheduledTick<T> createTick(BlockPos blockPos, T object, int i) {
++    default <T> ScheduledTick<T> createTick(BlockPos blockPos, T object, int i) {
+         return new ScheduledTick(object, blockPos, this.getLevelData().getGameTime() + (long)i, this.nextSubTickCount());
+     }
+ 
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 index a5ff0de8da25a5a0b88aec672325b4b101e6d432..4c42f34321b8da1d7bdb38e2fa07cc6e5a49def8 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
@@ -5490,19 +5569,6 @@ index a5ff0de8da25a5a0b88aec672325b4b101e6d432..4c42f34321b8da1d7bdb38e2fa07cc6e
                          localMobCapCalculator.addMob(levelChunk.getPos(), mobCategory);
                      }
  
-diff --git a/src/main/java/net/minecraft/world/level/TickNextTickData.java b/src/main/java/net/minecraft/world/level/TickNextTickData.java
-index 07a3ad779f07bb5fe22d70c4b7d65a6945b3f385..bf4a625ba631fa1100c2bb022099df1857cf8edd 100644
---- a/src/main/java/net/minecraft/world/level/TickNextTickData.java
-+++ b/src/main/java/net/minecraft/world/level/TickNextTickData.java
-@@ -39,7 +39,7 @@ public class TickNextTickData<T> {
-     }
- 
-     public static <T> Comparator<TickNextTickData<T>> createTimeComparator() {
--        return Comparator.comparingLong((tickNextTickData) -> tickNextTickData.triggerTick).thenComparing((tickNextTickData) -> tickNextTickData.priority).thenComparingLong((tickNextTickData) -> tickNextTickData.c);
-+        return Comparator.<TickNextTickData<T>>comparingLong((tickNextTickData) -> tickNextTickData.triggerTick).thenComparing((tickNextTickData) -> tickNextTickData.priority).thenComparingLong((tickNextTickData) -> tickNextTickData.c);
-     }
- 
-     public String toString() {
 diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
 index cd3ab3f2df085f7d1caa690c2775919b3ed2c332..93ca6e6d807adf8d03fa0fb9ff5d850e4636fdd8 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Biome.java
@@ -5531,17 +5597,18 @@ index cd3ab3f2df085f7d1caa690c2775919b3ed2c332..93ca6e6d807adf8d03fa0fb9ff5d850e
          @Nullable
          public Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
-index a033b4adb964f3c6c56869fc83e41f9a63d361c2..ec9c8fb36bc5649f702a26cf0bbe8d25426e79d4 100644
+index cd4d3198e4c44c12f8c2ad07ba50e68be5c51f21..34658f6f3a048f75532754f339be1ad6a1673c78 100644
 --- a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
-@@ -38,14 +38,6 @@ public abstract class BiomeSource {
-         Map<FeatureData, Set<FeatureData>> map = Maps.newHashMap();
+@@ -46,15 +46,6 @@ public abstract class BiomeSource {
+         Map<FeatureData, Set<FeatureData>> map = new TreeMap(comparator);
          int i = 0;
  
--        record FeatureData(int step, ConfiguredFeature<?, ?> feature) {
+-        record FeatureData(int featureIndex, int step, ConfiguredFeature<?, ?> feature) {
 -
--            FeatureData(int i, ConfiguredFeature<?, ?> configuredFeature) {
--                this.step = i;
+-            FeatureData(int i, int i2, ConfiguredFeature<?, ?> configuredFeature) {
+-                this.featureIndex = i;
+-                this.step = i2;
 -                this.feature = configuredFeature;
 -            }
 -        }
@@ -5549,8 +5616,8 @@ index a033b4adb964f3c6c56869fc83e41f9a63d361c2..ec9c8fb36bc5649f702a26cf0bbe8d25
          for(Biome biome : list) {
              List<FeatureData> list2 = Lists.newArrayList();
              List<List<Supplier<ConfiguredFeature<?, ?>>>> list3 = biome.getGenerationSettings().features();
-@@ -69,12 +61,12 @@ public abstract class BiomeSource {
-         Set<FeatureData> set3 = Sets.newHashSet();
+@@ -79,12 +70,12 @@ public abstract class BiomeSource {
+         Set<FeatureData> set3 = new TreeSet(comparator);
          List<FeatureData> list4 = Lists.newArrayList();
  
 -        for(FeatureData 1FeatureData : map.keySet()) {
@@ -5564,12 +5631,12 @@ index a033b4adb964f3c6c56869fc83e41f9a63d361c2..ec9c8fb36bc5649f702a26cf0bbe8d25
                  Collections.reverse(list4);
                  throw new IllegalStateException("Feature order cycle found: " + (String)list4.stream().filter(set3::contains).map(Object::toString).collect(Collectors.joining(", ")));
              }
-@@ -186,4 +178,7 @@ public abstract class BiomeSource {
+@@ -196,4 +187,7 @@ public abstract class BiomeSource {
          Registry.register(Registry.BIOME_SOURCE, "checkerboard", CheckerboardColumnBiomeSource.CODEC);
          Registry.register(Registry.BIOME_SOURCE, "the_end", TheEndBiomeSource.CODEC);
      }
 +
-+    record FeatureData(int step, ConfiguredFeature<?, ?> feature) {
++    record FeatureData(int featureIndex, int step, ConfiguredFeature<?, ?> feature) {
 +    }
  }
 \ No newline at end of file
@@ -5692,11 +5759,11 @@ index dbc0843c63ac1274ac339a10445753eae5c75adb..889c9ce90cf0092077dda71cff30af34
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-index 87d6578e1787021efd529c4b65069b154b0d6b8f..cca5b0a6952c45a2568e125c9f8e4c2be7bfb50d 100644
+index 0f484d3c598d5b9c1ede80a1705be207f79662c4..177b08448fc0580124ed74c8ff9547006d831373 100644
 --- a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-@@ -27,7 +27,7 @@ import net.minecraft.world.level.levelgen.NoiseSampler;
- import net.minecraft.world.level.levelgen.TerrainInfo;
+@@ -28,7 +28,7 @@ import net.minecraft.world.level.levelgen.TerrainInfo;
+ import net.minecraft.world.level.levelgen.blending.Blender;
  
  public class MultiNoiseBiomeSource extends BiomeSource {
 -    public static final MapCodec<MultiNoiseBiomeSource> DIRECT_CODEC;
@@ -5704,7 +5771,7 @@ index 87d6578e1787021efd529c4b65069b154b0d6b8f..cca5b0a6952c45a2568e125c9f8e4c2b
      public static final Codec<MultiNoiseBiomeSource> CODEC = Codec.mapEither(MultiNoiseBiomeSource.PresetInstance.CODEC, DIRECT_CODEC).xmap((either) -> (MultiNoiseBiomeSource)either.map(MultiNoiseBiomeSource.PresetInstance::biomeSource, Function.identity()), (multiNoiseBiomeSource) -> (Either)multiNoiseBiomeSource.preset().map(Either::left).orElseGet(() -> Either.right(multiNoiseBiomeSource))).codec();
      private final Climate.ParameterList<Biome> parameters;
      private final Optional<Pair<Registry<Biome>, MultiNoiseBiomeSource.Preset>> preset;
-@@ -89,10 +89,6 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+@@ -90,10 +90,6 @@ public class MultiNoiseBiomeSource extends BiomeSource {
          }
      }
  
@@ -5729,7 +5796,7 @@ index f36aeb222dcf0648d626f423d9ba26ca0a2f3be3..6d688bc0d308f09cc21b0f01476ba387
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/block/IronBarsBlock.java b/src/main/java/net/minecraft/world/level/block/IronBarsBlock.java
-index fac22fb1fb2193b75d0f61ca8764ff9ff794b142..7f267cfe12617e7ae2d3e5d4193fc0cb2a98cb71 100644
+index 94198785a875a18d134a5e6102bb73846933111e..9c4ca39dbda2362460bd31732a4a31307b7137e0 100644
 --- a/src/main/java/net/minecraft/world/level/block/IronBarsBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/IronBarsBlock.java
 @@ -55,7 +55,7 @@ public class IronBarsBlock extends CrossCollisionBlock {
@@ -5935,10 +6002,10 @@ index 1ed51ee91f9d051a6bb70d462b8ab8edf3cce6f6..568a8e0584c248908a3633017948233d
              return this.property.getName() + "=" + this.property.getName(this.value);
          }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-index bf12a1cf7da93299175815305b067e382fc3c567..9048490cc260fceefcb0a0c69b30d3cf9a7e2dd2 100644
+index 109f487ceaf89bff39334d6ddcd66302dd2b326a..1c1abc65a2b45366f2798554ce0dfe73c5988829 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-@@ -302,7 +302,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -307,7 +307,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
  
                      while(var15.hasNext()) {
                          Entry<ConfiguredStructureFeature<?, ?>, Collection<ResourceKey<Biome>>> entry = (Entry)var15.next();
@@ -5947,48 +6014,138 @@ index bf12a1cf7da93299175815305b067e382fc3c567..9048490cc260fceefcb0a0c69b30d3cf
                          if (structureStart2.isValid()) {
                              structureFeatureManager.setStartForFeature(sectionPos, structureFeature, structureStart2, chunkAccess);
                              continue label39;
-diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 5712a925d62f8549f583ae22c7df37e766072444..0375edd2c3805b0bf25384e48b69386a548a6ecd 100644
---- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-+++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -491,30 +491,30 @@ public class LevelChunk extends ChunkAccess {
- 
-     public void unpackTicks() {
-         if (this.blockTicks instanceof ProtoTickList) {
--            ((ProtoTickList)this.blockTicks).copyOut(this.level.getBlockTicks(), (blockPos) -> this.getBlockState(blockPos).getBlock());
-+            ((ProtoTickList<Block>)this.blockTicks).copyOut(this.level.getBlockTicks(), (blockPos) -> this.getBlockState(blockPos).getBlock());
-             this.blockTicks = EmptyTickList.empty();
-         } else if (this.blockTicks instanceof ChunkTickList) {
--            ((ChunkTickList)this.blockTicks).copyOut(this.level.getBlockTicks());
-+            ((ChunkTickList<Block>)this.blockTicks).copyOut(this.level.getBlockTicks());
-             this.blockTicks = EmptyTickList.empty();
-         }
- 
-         if (this.liquidTicks instanceof ProtoTickList) {
--            ((ProtoTickList)this.liquidTicks).copyOut(this.level.getLiquidTicks(), (blockPos) -> this.getFluidState(blockPos).getType());
-+            ((ProtoTickList<Fluid>)this.liquidTicks).copyOut(this.level.getLiquidTicks(), (blockPos) -> this.getFluidState(blockPos).getType());
-             this.liquidTicks = EmptyTickList.empty();
-         } else if (this.liquidTicks instanceof ChunkTickList) {
--            ((ChunkTickList)this.liquidTicks).copyOut(this.level.getLiquidTicks());
-+            ((ChunkTickList<Fluid>)this.liquidTicks).copyOut(this.level.getLiquidTicks());
-             this.liquidTicks = EmptyTickList.empty();
-         }
- 
+diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
+index fd89784024a7902af70e8c28d2e3306f68d32c5e..ed0867c30f96099ad735fbc5e4a0ca2c7372140b 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
++++ b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
+@@ -42,7 +42,60 @@ public class ChunkStatus {
+     };
+     public static final ChunkStatus EMPTY = registerSimple("empty", (ChunkStatus)null, -1, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, (chunkStatus, serverLevel, chunkGenerator, list, chunkAccess) -> {
+     });
+-    public static final ChunkStatus STRUCTURE_STARTS;
++    public static final ChunkStatus STRUCTURE_STARTS = register("structure_starts", EMPTY, 0, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, new GenerationTask() {
++        @Override
++        public CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> doWork(ChunkStatus chunkStatus, Executor executor, ServerLevel serverLevel, ChunkGenerator chunkGenerator, StructureManager structureManager, ThreadedLevelLightEngine threadedLevelLightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> chunkAccessCompletableFutureFunction, List<ChunkAccess> list, ChunkAccess chunkAccess, boolean var10) {
++            if (!chunkAccess.getStatus().isOrAfter(chunkStatus)) {
++                BelowZeroRetrogen belowZeroRetrogen = chunkAccess.getBelowZeroRetrogen();
++                if (belowZeroRetrogen == null) {
++                    if (serverLevel.getServer().getWorldData().worldGenSettings().generateFeatures()) {
++                        chunkGenerator.createStructures(serverLevel.registryAccess(), serverLevel.structureFeatureManager(), chunkAccess, structureManager, serverLevel.getSeed());
++                    }
++                } else {
++                    ChunkStatus chunkStatus2 = belowZeroRetrogen.targetStatus();
++                    chunkStatus = chunkStatus2;
++                    if (chunkStatus2.isOrAfter(NOISE)) {
++                        int i = 4;
++                        LevelChunkSection levelChunkSection = chunkAccess.getSection(4);
++                        BlockPos.betweenClosed(BlockPos.ZERO, new BlockPos(15, 4, 15)).forEach((blockPos) -> {
++                            if (levelChunkSection.getBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ()).is(Blocks.BEDROCK)) {
++                                levelChunkSection.setBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ(), Blocks.DEEPSLATE.defaultBlockState());
++                            }
++
++                        });
++
++                        for(int i2 = 0; i2 < 4; ++i2) {
++                            LevelChunkSection levelChunkSection2 = chunkAccess.getSection(i2);
++                            BlockPos.betweenClosed(BlockPos.ZERO, new BlockPos(15, 15, 15)).forEach((blockPos) -> {
++                                if (belowZeroRetrogen.hasBedrockAt(blockPos.getX(), blockPos.getZ())) {
++                                    levelChunkSection2.setBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ(), Blocks.DEEPSLATE.defaultBlockState());
++                                }
++
++                            });
++                        }
++
++                        LevelChunkSection levelChunkSection3 = chunkAccess.getSection(0);
++                        BlockPos.betweenClosed(BlockPos.ZERO, new BlockPos(15, 0, 15)).forEach((blockPos) -> {
++                            if (belowZeroRetrogen.hasBedrockAt(blockPos.getX(), blockPos.getZ())) {
++                                levelChunkSection3.setBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ(), Blocks.BEDROCK.defaultBlockState());
++                            }
++
++                        });
++                    }
++                }
++
++                if (chunkAccess instanceof ProtoChunk) {
++                    ProtoChunk protoChunk = (ProtoChunk)chunkAccess;
++                    protoChunk.setStatus(chunkStatus);
++                    if (chunkStatus.isOrAfter(FEATURES)) {
++                        protoChunk.setLightEngine(threadedLevelLightEngine);
++                    }
++                }
++            }
++
++            return CompletableFuture.completedFuture(Either.left(chunkAccess));
++        }
++    });
+     public static final ChunkStatus STRUCTURE_REFERENCES = registerSimple("structure_references", STRUCTURE_STARTS, 8, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, (chunkStatus, serverLevel, chunkGenerator, list, chunkAccess) -> {
+         WorldGenRegion worldGenRegion = new WorldGenRegion(serverLevel, list, chunkStatus, -1);
+         chunkGenerator.createReferences(worldGenRegion, serverLevel.structureFeatureManager().forWorldGenRegion(worldGenRegion), chunkAccess);
+@@ -241,60 +294,6 @@ public class ChunkStatus {
+         return Registry.CHUNK_STATUS.getKey(this).toString();
      }
  
-     public void packTicks(ServerLevel serverLevel) {
--        if (this.blockTicks == EmptyTickList.empty()) {
-+        if (this.blockTicks.equals(EmptyTickList.empty())) {
-             this.blockTicks = new ChunkTickList<>(Registry.BLOCK::getKey, serverLevel.getBlockTicks().fetchTicksInChunk(this.chunkPos, true, false), serverLevel.getGameTime());
-             this.setUnsaved(true);
-         }
- 
--        if (this.liquidTicks == EmptyTickList.empty()) {
-+        if (this.liquidTicks.equals(EmptyTickList.empty())) {
-             this.liquidTicks = new ChunkTickList<>(Registry.FLUID::getKey, serverLevel.getLiquidTicks().fetchTicksInChunk(this.chunkPos, true, false), serverLevel.getGameTime());
-             this.setUnsaved(true);
-         }
-@@ -563,7 +563,7 @@ public class LevelChunk extends ChunkAccess {
+-    static {
+-        STRUCTURE_STARTS = register("structure_starts", EMPTY, 0, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, (chunkStatus, executor, serverLevel, chunkGenerator, structureManager, threadedLevelLightEngine, function, list, chunkAccess, flag) -> {
+-            if (!chunkAccess.getStatus().isOrAfter(chunkStatus)) {
+-                BelowZeroRetrogen belowZeroRetrogen = chunkAccess.getBelowZeroRetrogen();
+-                if (belowZeroRetrogen == null) {
+-                    if (serverLevel.getServer().getWorldData().worldGenSettings().generateFeatures()) {
+-                        chunkGenerator.createStructures(serverLevel.registryAccess(), serverLevel.structureFeatureManager(), chunkAccess, structureManager, serverLevel.getSeed());
+-                    }
+-                } else {
+-                    ChunkStatus chunkStatus2 = belowZeroRetrogen.targetStatus();
+-                    chunkStatus = chunkStatus2;
+-                    if (chunkStatus2.isOrAfter(NOISE)) {
+-                        int i = 4;
+-                        LevelChunkSection levelChunkSection = chunkAccess.getSection(4);
+-                        BlockPos.betweenClosed(BlockPos.ZERO, new BlockPos(15, 4, 15)).forEach((blockPos) -> {
+-                            if (levelChunkSection.getBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ()).is(Blocks.BEDROCK)) {
+-                                levelChunkSection.setBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ(), Blocks.DEEPSLATE.defaultBlockState());
+-                            }
+-
+-                        });
+-
+-                        for(int i2 = 0; i2 < 4; ++i2) {
+-                            LevelChunkSection levelChunkSection2 = chunkAccess.getSection(i2);
+-                            BlockPos.betweenClosed(BlockPos.ZERO, new BlockPos(15, 15, 15)).forEach((blockPos) -> {
+-                                if (belowZeroRetrogen.hasBedrockAt(blockPos.getX(), blockPos.getZ())) {
+-                                    levelChunkSection2.setBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ(), Blocks.DEEPSLATE.defaultBlockState());
+-                                }
+-
+-                            });
+-                        }
+-
+-                        LevelChunkSection levelChunkSection3 = chunkAccess.getSection(0);
+-                        BlockPos.betweenClosed(BlockPos.ZERO, new BlockPos(15, 0, 15)).forEach((blockPos) -> {
+-                            if (belowZeroRetrogen.hasBedrockAt(blockPos.getX(), blockPos.getZ())) {
+-                                levelChunkSection3.setBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ(), Blocks.BEDROCK.defaultBlockState());
+-                            }
+-
+-                        });
+-                    }
+-                }
+-
+-                if (chunkAccess instanceof ProtoChunk) {
+-                    ProtoChunk protoChunk = (ProtoChunk)chunkAccess;
+-                    protoChunk.setStatus(chunkStatus);
+-                    if (chunkStatus.isOrAfter(FEATURES)) {
+-                        protoChunk.setLightEngine(threadedLevelLightEngine);
+-                    }
+-                }
+-            }
+-
+-            return CompletableFuture.completedFuture(Either.left(chunkAccess));
+-        });
+-    }
+-
+     public static enum ChunkType {
+         PROTOCHUNK,
+         LEVELCHUNK;
+diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
+index fb2b18dd050839051c56a63803b49292da4716d3..4d7dc415834290417630d23294fde8e240f9b345 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
++++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
+@@ -561,7 +561,7 @@ public class LevelChunk extends ChunkAccess {
  
      private <T extends BlockEntity> void updateBlockEntityTicker(T blockEntity) {
          BlockState blockState = blockEntity.getBlockState();
@@ -6079,11 +6236,24 @@ index 5acf66a3baf9010c4d368be2d7f05749fb6f6d9f..5710e563570cb9edfc799882f0509258
          Strategy(int i) {
              this.sizeBits = i;
          }
+diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
+index 221795e5ada454b5daa73e123d82ac22291138d0..e104f77f346b3aa326e0f3e590a3de09ede6ae3c 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
++++ b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
+@@ -139,7 +139,7 @@ public class ChunkSerializer {
+             chunkAccess = protoChunk;
+             protoChunk.setInhabitedTime(l);
+             if (compoundTag.contains("below_zero_retrogen", 10)) {
+-                BelowZeroRetrogen.CODEC.parse(new Dynamic(NbtOps.INSTANCE, compoundTag.getCompound("below_zero_retrogen"))).resultOrPartial(LOGGER::error).ifPresent(protoChunk::setBelowZeroRetrogen);
++                BelowZeroRetrogen.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compoundTag.getCompound("below_zero_retrogen"))).resultOrPartial(LOGGER::error).ifPresent(protoChunk::setBelowZeroRetrogen);
+             }
+ 
+             ChunkStatus chunkStatus = ChunkStatus.byName(compoundTag.getString("Status"));
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index 59e063b713aa6bf02ce9d2c6a727b33439f964fc..08c1e06d3e4524a244a1277b8e31fe20b832283a 100644
+index 36fa61f63ccede3944e42193aa7a60c86394c837..ae6a9c251c8ba23fb84327e3fc01003ef205fed5 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-@@ -39,7 +39,7 @@ public class DimensionType {
+@@ -41,7 +41,7 @@ public class DimensionType {
      public static final ResourceLocation OVERWORLD_EFFECTS = new ResourceLocation("overworld");
      public static final ResourceLocation NETHER_EFFECTS = new ResourceLocation("the_nether");
      public static final ResourceLocation END_EFFECTS = new ResourceLocation("the_end");
@@ -6092,7 +6262,7 @@ index 59e063b713aa6bf02ce9d2c6a727b33439f964fc..08c1e06d3e4524a244a1277b8e31fe20
      private static final int MOON_PHASES = 8;
      public static final float[] MOON_BRIGHTNESS_PER_PHASE = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
      public static final ResourceKey<DimensionType> OVERWORLD_LOCATION = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("overworld"));
-@@ -278,8 +278,4 @@ public class DimensionType {
+@@ -280,8 +280,4 @@ public class DimensionType {
              return this.hasSkylight == dimensionType.hasSkylight && this.hasCeiling == dimensionType.hasCeiling && this.ultraWarm == dimensionType.ultraWarm && this.natural == dimensionType.natural && this.coordinateScale == dimensionType.coordinateScale && this.createDragonFight == dimensionType.createDragonFight && this.piglinSafe == dimensionType.piglinSafe && this.bedWorks == dimensionType.bedWorks && this.respawnAnchorWorks == dimensionType.respawnAnchorWorks && this.hasRaids == dimensionType.hasRaids && this.minY == dimensionType.minY && this.height == dimensionType.height && this.logicalHeight == dimensionType.logicalHeight && Float.compare(dimensionType.ambientLight, this.ambientLight) == 0 && this.fixedTime.equals(dimensionType.fixedTime) && this.infiniburn.equals(dimensionType.infiniburn) && this.effectsLocation.equals(dimensionType.effectsLocation);
          }
      }
@@ -6185,10 +6355,10 @@ index c565b92b29154ace6ab6119aa4ee73aacbf5ede2..7b3cb0b82ed5e543f7593beabd613918
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 8b681f59aaf326a8f517aedd15d9623ba8cab4ed..ab95e8efd825348aa7b5aedddd2bf6a9806c61e2 100644
+index 542516ec0e00c4a8d3d5e044834e11c6c5caa099..c7c412c02efcfdf7cb42b793395dac3f2ee0baf4 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-@@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
+@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
  import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
  
  public final class NoiseGeneratorSettings {
@@ -6197,7 +6367,7 @@ index 8b681f59aaf326a8f517aedd15d9623ba8cab4ed..ab95e8efd825348aa7b5aedddd2bf6a9
      public static final Codec<Supplier<NoiseGeneratorSettings>> CODEC = RegistryFileCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, DIRECT_CODEC);
      private final WorldgenRandom.Algorithm randomSource;
      private final StructureSettings structureSettings;
-@@ -163,7 +163,6 @@ public final class NoiseGeneratorSettings {
+@@ -164,7 +164,6 @@ public final class NoiseGeneratorSettings {
      }
  
      static {
@@ -6206,32 +6376,32 @@ index 8b681f59aaf326a8f517aedd15d9623ba8cab4ed..ab95e8efd825348aa7b5aedddd2bf6a9
          register(AMPLIFIED, overworld(new StructureSettings(true), true, false));
          register(NETHER, netherLikePreset(new StructureSettings(false), Blocks.NETHERRACK.defaultBlockState(), Blocks.LAVA.defaultBlockState()));
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
-index 7cba098e5269690a985b3ceac36c562118c5f9f2..bb4059ec1870d83f1f3e399eb3c23b834800dc1f 100644
+index d2d17700bf3d4233483356536dba471a808fea3b..e4f8d3b414bd3fa37fc9c223c436d67d380d65d5 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
-@@ -96,7 +96,7 @@ public class NoiseSampler implements Climate.Sampler {
+@@ -99,7 +99,7 @@ public class NoiseSampler implements Climate.Sampler {
          int i4 = noiseSettings.minY();
          this.minCellY = Mth.intFloorDiv(i4, i2);
          this.isNoiseCavesEnabled = flag;
--        this.baseNoise = (noiseChunk) -> noiseChunk.createNoiseInterpolator((i, i2, i3) -> this.calculateBaseNoise(i, i2, i3, noiseChunk.terrainInfo(QuartPos.fromBlock(i), QuartPos.fromBlock(i3))));
-+        this.baseNoise = (noiseChunk) -> noiseChunk.createNoiseInterpolator((ix, i2x, i3x) -> this.calculateBaseNoise(ix, i2x, i3x, noiseChunk.terrainInfo(QuartPos.fromBlock(ix), QuartPos.fromBlock(i3x))));
+-        this.baseNoise = (noiseChunk) -> noiseChunk.createNoiseInterpolator((i, i2, i3) -> this.calculateBaseNoise(i, i2, i3, noiseChunk.noiseData(QuartPos.fromBlock(i), QuartPos.fromBlock(i3)).terrainInfo(), noiseChunk.getBlender()));
++        this.baseNoise = (noiseChunk) -> noiseChunk.createNoiseInterpolator((iIn, i2In, i3In) -> this.calculateBaseNoise(iIn, i2In, i3In, noiseChunk.noiseData(QuartPos.fromBlock(iIn), QuartPos.fromBlock(i3In)).terrainInfo(), noiseChunk.getBlender()));
          if (noiseSettings.islandNoiseOverride()) {
              RandomSource randomSource = algorithm.newInstance(l);
              randomSource.consumeCount(17292);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
-index 66ac70d03722f7fdebf815bf2e3f5ccef4a63b59..a7baef2e4ff0e9c39c5a3583040e14bad91f2c2a 100644
+index 6da280f0da5d62ed0204942689fd1ec59160e079..8648b8d425c4bc82396190c59f6b631acc3690bf 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
-@@ -8,7 +8,7 @@ import java.util.function.Function;
+@@ -9,7 +9,7 @@ import net.minecraft.world.level.biome.TerrainShaper;
  import net.minecraft.world.level.dimension.DimensionType;
  
- public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, double densityFactor, double densityOffset, boolean islandNoiseOverride, boolean isAmplified) {
--    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
-+    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.<NoiseSettings>create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
+ public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, double densityFactor, double densityOffset, boolean islandNoiseOverride, boolean isAmplified, TerrainShaper terrainShaper) {
+-    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified), TerrainShaper.CODEC.fieldOf("terrain_shaper").forGetter(NoiseSettings::terrainShaper)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
++    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.<NoiseSettings>create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.DOUBLE.fieldOf("density_factor").forGetter(NoiseSettings::densityFactor), Codec.DOUBLE.fieldOf("density_offset").forGetter(NoiseSettings::densityOffset), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified), TerrainShaper.CODEC.fieldOf("terrain_shaper").forGetter(NoiseSettings::terrainShaper)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
  
      private static DataResult<NoiseSettings> guardY(NoiseSettings noiseSettings) {
          if (noiseSettings.minY() + noiseSettings.height() > DimensionType.MAX_Y + 1) {
-@@ -27,8 +27,4 @@ public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSam
+@@ -28,8 +28,4 @@ public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSam
          });
          return noiseSettings;
      }
@@ -6255,10 +6425,10 @@ index 3b2f916eaf7f7e558725f33cbcb942d9ce19093f..1c5747aa9682134e547afcf54e8f78dd
      private final Map<StructureFeature<?>, StructureFeatureConfiguration> structureConfig;
      private final ImmutableMap<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> configuredStructures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java b/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
-index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1c7267fe1 100644
+index b4777ccb9e6ff0c7a40eeabe0d00da13e766b5ba..12ef3ddcdef91d9795475071b4710fcee1271cc7 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
-@@ -107,16 +107,20 @@ public class SurfaceRules {
+@@ -108,16 +108,20 @@ public class SurfaceRules {
      static record BiomeConditionSource(List<ResourceKey<Biome>> biomes) implements SurfaceRules.ConditionSource {
          static final Codec<SurfaceRules.BiomeConditionSource> CODEC = ResourceKey.codec(Registry.BIOME_REGISTRY).listOf().fieldOf("biome_is").xmap(SurfaceRules::isBiome, SurfaceRules.BiomeConditionSource::biomes).codec();
  
@@ -6284,7 +6454,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          }
      }
  
-@@ -127,11 +131,6 @@ public class SurfaceRules {
+@@ -128,11 +132,6 @@ public class SurfaceRules {
              this(blockState, new SurfaceRules.StateRule(blockState));
          }
  
@@ -6296,7 +6466,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -234,28 +233,7 @@ public class SurfaceRules {
+@@ -230,28 +229,7 @@ public class SurfaceRules {
                  }
              }
  
@@ -6326,7 +6496,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
              }
          }
  
-@@ -264,34 +242,7 @@ public class SurfaceRules {
+@@ -260,34 +238,7 @@ public class SurfaceRules {
                  return state.biome.getTemperature(new BlockPos(state.blockX, state.blockY, state.blockZ)) < 0.15F;
              }
  
@@ -6362,7 +6532,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
              }
          }
      }
-@@ -350,23 +301,24 @@ public class SurfaceRules {
+@@ -346,23 +297,24 @@ public class SurfaceRules {
          protected abstract boolean compute(S var1);
      }
  
@@ -6397,7 +6567,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          }
  
          public double minThreshold() {
-@@ -378,30 +330,10 @@ public class SurfaceRules {
+@@ -374,30 +326,10 @@ public class SurfaceRules {
          }
      }
  
@@ -6429,7 +6599,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          public boolean test() {
              return !this.target.test();
          }
-@@ -410,10 +342,6 @@ public class SurfaceRules {
+@@ -406,10 +338,6 @@ public class SurfaceRules {
      static record NotConditionSource(SurfaceRules.ConditionSource target) implements SurfaceRules.ConditionSource {
          static final Codec<SurfaceRules.NotConditionSource> CODEC = SurfaceRules.ConditionSource.CODEC.xmap(SurfaceRules.NotConditionSource::new, SurfaceRules.NotConditionSource::target).fieldOf("invert").codec();
  
@@ -6440,7 +6610,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          public Codec<? extends SurfaceRules.ConditionSource> codec() {
              return CODEC;
          }
-@@ -438,11 +366,6 @@ public class SurfaceRules {
+@@ -434,11 +362,6 @@ public class SurfaceRules {
      }
  
      static record SequenceRule(List<SurfaceRules.SurfaceRule> rules) implements SurfaceRules.SurfaceRule {
@@ -6452,7 +6622,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          @Nullable
          public BlockState tryApply(int i, int i2, int i3) {
              for(SurfaceRules.SurfaceRule surfaceRule : this.rules) {
-@@ -459,10 +382,6 @@ public class SurfaceRules {
+@@ -455,10 +378,6 @@ public class SurfaceRules {
      static record SequenceRuleSource(List<SurfaceRules.RuleSource> sequence) implements SurfaceRules.RuleSource {
          static final Codec<SurfaceRules.SequenceRuleSource> CODEC = SurfaceRules.RuleSource.CODEC.listOf().xmap(SurfaceRules.SequenceRuleSource::new, SurfaceRules.SequenceRuleSource::sequence).fieldOf("sequence").codec();
  
@@ -6463,7 +6633,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -483,11 +402,6 @@ public class SurfaceRules {
+@@ -479,11 +398,6 @@ public class SurfaceRules {
      }
  
      static record StateRule(BlockState state) implements SurfaceRules.SurfaceRule {
@@ -6475,7 +6645,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          public BlockState tryApply(int i, int i2, int i3) {
              return this.state;
          }
-@@ -507,25 +421,24 @@ public class SurfaceRules {
+@@ -503,25 +417,23 @@ public class SurfaceRules {
          }
      }
  
@@ -6507,12 +6677,11 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
 +            }
 +            StoneDepthCondition stoneDepthCondition = new StoneDepthCondition();
 +            context.yConditions.add(stoneDepthCondition);
-+            if (addRunDepth) context.hasCeilingRules = true;
 +            return stoneDepthCondition;
          }
      }
  
-@@ -549,12 +462,6 @@ public class SurfaceRules {
+@@ -545,12 +457,6 @@ public class SurfaceRules {
      }
  
      static record TestRule(SurfaceRules.Condition condition, SurfaceRules.SurfaceRule followup) implements SurfaceRules.SurfaceRule {
@@ -6525,7 +6694,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          @Nullable
          public BlockState tryApply(int i, int i2, int i3) {
              return !this.condition.test() ? null : this.followup.tryApply(i, i2, i3);
-@@ -564,11 +471,6 @@ public class SurfaceRules {
+@@ -560,11 +466,6 @@ public class SurfaceRules {
      static record TestRuleSource(SurfaceRules.ConditionSource ifTrue, SurfaceRules.RuleSource thenRun) implements SurfaceRules.RuleSource {
          static final Codec<SurfaceRules.TestRuleSource> CODEC = RecordCodecBuilder.create((instance) -> instance.group(SurfaceRules.ConditionSource.CODEC.fieldOf("if_true").forGetter(SurfaceRules.TestRuleSource::ifTrue), SurfaceRules.RuleSource.CODEC.fieldOf("then_run").forGetter(SurfaceRules.TestRuleSource::thenRun)).apply(instance, SurfaceRules.TestRuleSource::new));
  
@@ -6537,7 +6706,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -582,18 +484,9 @@ public class SurfaceRules {
+@@ -578,18 +479,9 @@ public class SurfaceRules {
          void update(S var1);
      }
  
@@ -6557,7 +6726,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          public Codec<? extends SurfaceRules.ConditionSource> codec() {
              return CODEC;
          }
-@@ -605,9 +498,9 @@ public class SurfaceRules {
+@@ -601,9 +493,9 @@ public class SurfaceRules {
                  }
              }
  
@@ -6570,7 +6739,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          }
  
          public int offset() {
-@@ -623,24 +516,22 @@ public class SurfaceRules {
+@@ -619,24 +511,22 @@ public class SurfaceRules {
          }
      }
  
@@ -6604,7 +6773,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
          }
  
          public VerticalAnchor anchor() {
-@@ -656,39 +547,6 @@ public class SurfaceRules {
+@@ -652,39 +542,6 @@ public class SurfaceRules {
          }
      }
  
@@ -6647,7 +6816,7 @@ index 97a5441c8d7073305caa4dc1e056dca2f0562548..1a6a2228ecffa4ae070ab6beef49dee1
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-index be9d860eab7d786cb7c40bee582a2403aefbc518..406ef95c3081ad8c728fd70e392faf5c5820de14 100644
+index aabe2759852e50bae989e9fd0eecee3288483596..a5ce11556fd7bdd49d9765759147d7752e5e5508 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 @@ -35,7 +35,7 @@ import org.apache.logging.log4j.LogManager;
@@ -6814,7 +6983,7 @@ index 63dd2c443efe85be88c4e9eef2dd2e8915424d0b..efaed4bd304b39d78c20b8577484d818
          protected static final int GRIDROOM_DEPTH = 8;
          protected static final int GRIDROOM_HEIGHT = 4;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
-index 79700915e0b77c55ec8d302791cd19f31799ddfd..83bc8c3e1bad9b8bd2e5e8c21b5767594050bcf1 100644
+index 5e3231fcb5abae537a142bceac311f0ddd179aa2..39944dd846cd91e9ae05fb919b0a003d7d3d80ba 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 @@ -47,7 +47,7 @@ public abstract class StructurePiece {
@@ -6931,7 +7100,7 @@ index 7deb3b88d387d575b1980aac728536af30d9e127..2574645c15d792ecd656a8a5cd28b7d8
              }
  
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index fa3e0d90191b51ef638e5d7f4fb62d635fedf636..88a7e97728ff9ce1ffb275786e0f9b72b82657ca 100644
+index 8cef607e91cae47d58eda965bbfff7332a9007f2..d14fb555951bf480db03af9bc3088c0102eb472c 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 @@ -262,16 +262,16 @@ public abstract class FlowingFluid extends Fluid {
@@ -7138,6 +7307,87 @@ index 251bad05e5aa60e4e3db45f6c8f71bdccec6f414..ca61c096b945773414748ed9bcd0bf9c
      }
  
      public TimerQueue(TimerCallbacks<T> timerCallbacks, Stream<Dynamic<Tag>> stream) {
+diff --git a/src/main/java/net/minecraft/world/ticks/BlackholeTickAccess.java b/src/main/java/net/minecraft/world/ticks/BlackholeTickAccess.java
+index 1454d50ade65cac9c90a31eaf85014a66f7697e0..eacb549cb0c2fcd0bfe03cd561e3bbeadedf143a 100644
+--- a/src/main/java/net/minecraft/world/ticks/BlackholeTickAccess.java
++++ b/src/main/java/net/minecraft/world/ticks/BlackholeTickAccess.java
+@@ -33,10 +33,10 @@ public class BlackholeTickAccess {
+     };
+ 
+     public static <T> TickContainerAccess<T> emptyContainer() {
+-        return CONTAINER_BLACKHOLE;
++        return (TickContainerAccess<T>) CONTAINER_BLACKHOLE;
+     }
+ 
+     public static <T> LevelTickAccess<T> emptyLevelList() {
+-        return LEVEL_BLACKHOLE;
++        return (LevelTickAccess<T>) LEVEL_BLACKHOLE;
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/ticks/LevelTicks.java b/src/main/java/net/minecraft/world/ticks/LevelTicks.java
+index 6be0ac66a9aec8947a3a4d23851a6b899b64f2fb..6955773c3fd5ee38b3b843619ba6d8191f459705 100644
+--- a/src/main/java/net/minecraft/world/ticks/LevelTicks.java
++++ b/src/main/java/net/minecraft/world/ticks/LevelTicks.java
+@@ -75,7 +75,7 @@ public class LevelTicks<T> implements LevelTickAccess<T> {
+         long l = ChunkPos.asLong(scheduledTick.pos());
+         LevelChunkTicks<T> levelChunkTicks = (LevelChunkTicks)this.allContainers.get(l);
+         if (levelChunkTicks == null) {
+-            Util.pauseInIde((T)(new IllegalStateException("Trying to schedule tick in not loaded position " + scheduledTick.pos())));
++            Util.pauseInIde((new IllegalStateException("Trying to schedule tick in not loaded position " + scheduledTick.pos())));
+         } else {
+             levelChunkTicks.schedule(scheduledTick);
+         }
+diff --git a/src/main/java/net/minecraft/world/ticks/SavedTick.java b/src/main/java/net/minecraft/world/ticks/SavedTick.java
+index 3753976fe10dcaa7078af44d40b6d84ad6de1bf0..43e618365794ef6d57e3ef7a2a823cbc40c9f372 100644
+--- a/src/main/java/net/minecraft/world/ticks/SavedTick.java
++++ b/src/main/java/net/minecraft/world/ticks/SavedTick.java
+@@ -10,7 +10,7 @@ import net.minecraft.nbt.CompoundTag;
+ import net.minecraft.nbt.ListTag;
+ import net.minecraft.world.level.ChunkPos;
+ 
+-record SavedTick(T type, BlockPos pos, int delay, TickPriority priority) {
++record SavedTick<T>(T type, BlockPos pos, int delay, TickPriority priority) {
+     private static final String TAG_ID = "i";
+     private static final String TAG_X = "x";
+     private static final String TAG_Y = "y";
+@@ -33,13 +33,6 @@ record SavedTick(T type, BlockPos pos, int delay, TickPriority priority) {
+         }
+     };
+ 
+-    SavedTick(T object, BlockPos blockPos, int i, TickPriority tickPriority) {
+-        this.type = object;
+-        this.pos = blockPos;
+-        this.delay = i;
+-        this.priority = tickPriority;
+-    }
+-
+     public static <T> void loadTickList(ListTag listTag, Function<String, Optional<T>> function, ChunkPos chunkPos, Consumer<SavedTick<T>> consumer) {
+         long l = chunkPos.toLong();
+ 
+diff --git a/src/main/java/net/minecraft/world/ticks/ScheduledTick.java b/src/main/java/net/minecraft/world/ticks/ScheduledTick.java
+index 7164560148da5ddae8c41e2d5663ec74e496f339..00a8bc2d95207aabca3cca4b6c130ca54bce8024 100644
+--- a/src/main/java/net/minecraft/world/ticks/ScheduledTick.java
++++ b/src/main/java/net/minecraft/world/ticks/ScheduledTick.java
+@@ -5,7 +5,7 @@ import java.util.Comparator;
+ import javax.annotation.Nullable;
+ import net.minecraft.core.BlockPos;
+ 
+-public record ScheduledTick(T type, BlockPos pos, long triggerTick, TickPriority priority, long subTickOrder) {
++public record ScheduledTick<T>(T type, BlockPos pos, long triggerTick, TickPriority priority, long subTickOrder) {
+     public static final Comparator<ScheduledTick<?>> DRAIN_ORDER = (scheduledTick, scheduledTick2) -> {
+         int i = Long.compare(scheduledTick.triggerTick, scheduledTick2.triggerTick);
+         if (i != 0) {
+@@ -42,4 +42,8 @@ public record ScheduledTick(T type, BlockPos pos, long triggerTick, TickPriority
+     public static <T> ScheduledTick<T> worldgen(T object, BlockPos blockPos, long l) {
+         return new ScheduledTick(object, blockPos, 0L, TickPriority.NORMAL, l);
+     }
++
++    public ScheduledTick(T object, BlockPos blockPos, long l, long l2) {
++        this(object, blockPos, l, TickPriority.NORMAL, l2);
++    }
+ }
+\ No newline at end of file
 diff --git a/src/main/resources/META-INF/MANIFEST.MF b/src/main/resources/META-INF/MANIFEST.MF
 index 54f165d5b7667fdf8dc7d999ef532ab39eda546f..d43ed607295b14c114a19860f02ed5a38e7b3c87 100644
 --- a/src/main/resources/META-INF/MANIFEST.MF

@@ -6,7 +6,7 @@
 
     <groupId>net.blueberrymc.minecraft</groupId>
     <artifactId>minecraft-parent</artifactId>
-    <version>21w42a</version>
+    <version>21w43a</version>
     <modules>
         <module>Minecraft</module>
     </modules>

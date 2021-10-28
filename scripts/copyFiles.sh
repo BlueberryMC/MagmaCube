@@ -16,6 +16,7 @@ mv -f "$basedir/work/Minecraft/$version/unpacked/log4j2.xml" "$basedir/work/Mine
 #mv -f "$basedir/work/Minecraft/$version/unpacked/pack.mcmeta" "$basedir/work/Minecraft/$version/source/src/main/resources/"
 mv -f "$basedir/work/Minecraft/$version/unpacked/pack.png" "$basedir/work/Minecraft/$version/source/src/main/resources/"
 mv -f "$basedir/work/Minecraft/$version/unpacked/version.json" "$basedir/work/Minecraft/$version/source/src/main/resources/"
+mv -f "$basedir/work/Minecraft/$version/unpacked/flightrecorder-config.jfc" "$basedir/work/Minecraft/$version/source/src/main/resources/"
 rm -rf "$basedir/work/Minecraft/$version/unpacked" & # remove unneeded folder in background
 cp -rf "$basedir/work/Minecraft/$version/source/src/main/java" "$basedir/Minecraft/src/main/java"
 cp -rf "$basedir/work/Minecraft/$version/source/src/main/resources" "$basedir/Minecraft/src/main/resources"

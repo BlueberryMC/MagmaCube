@@ -1,6 +1,7 @@
 # garbages
 .idea/
 *.iml
+*.ipr
 dependency-reduced-pom.xml
 
 # minecraft things (compiled files and decompiled files)
