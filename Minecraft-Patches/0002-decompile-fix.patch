@@ -2874,7 +2874,7 @@ index c337a6dc8cc16260f2038439027065ad77839128..487da6925055ec72c437165a15053e8d
      }
  
 diff --git a/src/main/java/net/minecraft/util/CubicSpline.java b/src/main/java/net/minecraft/util/CubicSpline.java
-index f835d37d9077fcae88e4aa3d38f84fdd0ba03968..b2f1419034de563586c6a72c88e0254966217b0b 100644
+index f835d37d9077fcae88e4aa3d38f84fdd0ba03968..3a5cda68854d7b04720a0679360224b4b8c85296 100644
 --- a/src/main/java/net/minecraft/util/CubicSpline.java
 +++ b/src/main/java/net/minecraft/util/CubicSpline.java
 @@ -18,30 +18,25 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
@@ -2945,7 +2945,7 @@ index f835d37d9077fcae88e4aa3d38f84fdd0ba03968..b2f1419034de563586c6a72c88e02549
 -                throw new IllegalArgumentException("All lengths must be equal, got: " + floats.length + " " + list.size() + " " + floats2.length);
 -            }
 -        }
-+    record Multipoint<C>(ToFloatFunction<C> coordinate, float[] derivatives, List<CubicSpline<C>> values, float[] locations) implements CubicSpline<C> {
++    record Multipoint<C>(ToFloatFunction<C> coordinate, float[] locations, List<CubicSpline<C>> values, float[] derivatives) implements CubicSpline<C> {
  
          public float apply(C object) {
              float f = this.coordinate.apply(object);
