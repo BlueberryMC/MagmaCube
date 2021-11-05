@@ -28,6 +28,6 @@ echo "  \"java_version\": 16," >> "$version_json"
 echo "  \"stable\": $stable" >> "$version_json"
 echo "}" >> "$version_json"
 cat "$version_json"
-mvn clean install
+mvn clean install || exit 1
 cp "$version_json_bak" "$version_json" || exit 1
 rm "$version_json_bak"

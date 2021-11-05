@@ -6,7 +6,7 @@
 
     <groupId>net.blueberrymc.minecraft</groupId>
     <artifactId>minecraft-parent</artifactId>
-    <version>21w43a</version>
+    <version>21w44a</version>
     <modules>
         <module>Minecraft</module>
     </modules>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>21.0.1</version>
+            <version>22.0.0</version>
         </dependency>
     </dependencies>
 </project>
