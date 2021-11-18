@@ -107,10 +107,10 @@
   },
   "assetIndex": {
     "id": "1.18",
-    "sha1": "843bb3402bc89e57d3a2e1cced0dd166d660f226",
+    "sha1": "8ac8f48629b68793b8f59bbd4f3a6f18f361c78e",
     "size": 348135,
-    "totalSize": 465700640,
-    "url": "https://launchermeta.mojang.com/v1/packages/843bb3402bc89e57d3a2e1cced0dd166d660f226/1.18.json"
+    "totalSize": 465780337,
+    "url": "https://launchermeta.mojang.com/v1/packages/8ac8f48629b68793b8f59bbd4f3a6f18f361c78e/1.18.json"
   },
   "assets": "1.18",
   "logging": {
@@ -126,8 +126,8 @@
     }
   },
   "javaVersion": {
-    "component": "java-runtime-alpha",
-    "majorVersion": 16
+    "component": "java-runtime-beta",
+    "majorVersion": 17
   },
   "libraries": [
     {
@@ -229,10 +229,10 @@
       ]
     }
   ],
-  "id": "1.18-pre1-deobf",
+  "id": "1.18-pre3-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2021-11-12T00:00:00+00:00",
-  "time": "2021-11-12T00:00:00+00:00",
+  "releaseTime": "2021-11-18T00:00:00+00:00",
+  "time": "2021-11-18T00:00:00+00:00",
   "type": "snapshot"
 }

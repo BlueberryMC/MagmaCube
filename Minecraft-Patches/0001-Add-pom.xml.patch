@@ -6,10 +6,10 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..3fe54596cdcb7cf246ce76e3ef7862dd75affd8e
+index 0000000000000000000000000000000000000000..c516335eedad26ff91151fc7051e455c4fac0f94
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,366 @@
+@@ -0,0 +1,369 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<project xmlns="http://maven.apache.org/POM/4.0.0"
 +         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,11 +17,14 @@ index 0000000000000000000000000000000000000000..3fe54596cdcb7cf246ce76e3ef7862dd
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>net.blueberrymc.minecraft</groupId>
-+        <version>1.18-pre1</version>
++        <version>1.18-pre3</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
 +    <properties>
++        <text2speech.version>1.11.3</text2speech.version>
++        <maven.compiler.source>17</maven.compiler.source>
++        <maven.compiler.target>17</maven.compiler.target>
 +        <log4j.version>2.14.1</log4j.version>
 +        <lwjgl.version>3.2.2</lwjgl.version>
 +    </properties>
@@ -76,7 +79,7 @@ index 0000000000000000000000000000000000000000..3fe54596cdcb7cf246ce76e3ef7862dd
 +        </repository>
 +        <repository>
 +            <id>indexdata</id>
-+            <url>http://maven.indexdata.com/</url>
++            <url>https://maven.indexdata.com/</url>
 +        </repository>
 +    </repositories>
 +
@@ -99,7 +102,7 @@ index 0000000000000000000000000000000000000000..3fe54596cdcb7cf246ce76e3ef7862dd
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.1.36</version>
++            <version>3.2.37</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -345,7 +348,7 @@ index 0000000000000000000000000000000000000000..3fe54596cdcb7cf246ce76e3ef7862dd
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>text2speech</artifactId>
-+            <version>1.11.3</version>
++            <version>${text2speech.version}</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.java.jutils</groupId>

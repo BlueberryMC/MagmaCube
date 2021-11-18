@@ -408,10 +408,10 @@ index 762a8b578ac3805a6d251e81b46acc4c3aee24ad..d0a5166e52c93543b8eeecb501829058
              options.save();
          });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 78f7679111b2ddc1a1e79a59141ca56b874f8849..2d44a98b4c6b3ffa6f64b406bf9fbe07ccb64b5c 100644
+index e20e4f9686db478efd5572b42d16980eb6951fe2..c14bc95b16e784845f666192dc0b2af8a37ac19f 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -517,7 +517,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -516,7 +516,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen = this.window.isFullscreen();
              }
          } else {
@@ -420,7 +420,7 @@ index 78f7679111b2ddc1a1e79a59141ca56b874f8849..2d44a98b4c6b3ffa6f64b406bf9fbe07
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -969,7 +969,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -968,7 +968,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -429,7 +429,7 @@ index 78f7679111b2ddc1a1e79a59141ca56b874f8849..2d44a98b4c6b3ffa6f64b406bf9fbe07
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2233,13 +2233,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2229,13 +2229,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -446,7 +446,7 @@ index 78f7679111b2ddc1a1e79a59141ca56b874f8849..2d44a98b4c6b3ffa6f64b406bf9fbe07
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2261,7 +2261,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2257,7 +2257,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -491,10 +491,10 @@ index eac1085032dfd9318d7ff470f0cf35f39f1d11e6..a6dbc8b187405d7884d65d66567dec77
      public static final CycleOption<ChatVisiblity> CHAT_VISIBILITY = CycleOption.create("options.chat.visibility", ChatVisiblity.values(), (chatVisiblity) -> new TranslatableComponent(chatVisiblity.getKey()), (options) -> options.chatVisibility, (options, option, chatVisiblity) -> options.chatVisibility = chatVisiblity);
      private static final Component GRAPHICS_TOOLTIP_FAST = new TranslatableComponent("options.graphics.fast.tooltip");
 diff --git a/src/main/java/net/minecraft/client/Options.java b/src/main/java/net/minecraft/client/Options.java
-index ba9672252bf59236e74c9f25131c34650400369e..d983644c75e7f6d2161ef976fae1c8820fd9f78a 100644
+index 953997808e915ea6c838ced1c35ac38f82255e31..b79acc9ccbcc4e001b4c7634a87a4d6d707676ee 100644
 --- a/src/main/java/net/minecraft/client/Options.java
 +++ b/src/main/java/net/minecraft/client/Options.java
-@@ -296,7 +296,7 @@ public class Options {
+@@ -297,7 +297,7 @@ public class Options {
          }
  
          for(SoundSource soundSource : SoundSource.values()) {
@@ -503,7 +503,7 @@ index ba9672252bf59236e74c9f25131c34650400369e..d983644c75e7f6d2161ef976fae1c882
          }
  
          for(PlayerModelPart playerModelPart : PlayerModelPart.values()) {
-@@ -685,7 +685,7 @@ public class Options {
+@@ -686,7 +686,7 @@ public class Options {
      }
  
      public String dumpOptionsForReport() {
@@ -752,7 +752,7 @@ index d168ae161670ef13e6f8f84821423ec8a522fed5..c7bf0a0a9e71c89abbcd996cf0352945
                          }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index e8a6a5dd16994870e57225d62720c2ccffa60aef..f6b64dc5d5f1d2f2ceefebe17760c56edaa13254 100644
+index d3604f0e912f675bc7038d25282d7f703bd645bc..e5c361d891800862f85345ae63e69a640fc88611 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 @@ -509,7 +509,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
@@ -764,7 +764,7 @@ index e8a6a5dd16994870e57225d62720c2ccffa60aef..f6b64dc5d5f1d2f2ceefebe17760c56e
      }
  
      public void handleMovePlayer(ClientboundPlayerPositionPacket clientboundPlayerPositionPacket) {
-@@ -1472,10 +1472,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1474,10 +1474,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
                  } else {
                      this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                              this.minecraft.setScreen((Screen)null);
@@ -778,7 +778,7 @@ index e8a6a5dd16994870e57225d62720c2ccffa60aef..f6b64dc5d5f1d2f2ceefebe17760c56e
                                  }
  
                                  this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
-@@ -1484,13 +1484,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1486,13 +1486,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
                                  this.send(ServerboundResourcePackPacket.Action.DECLINED);
                                  if (flag) {
                                      this.connection.disconnect(new TranslatableComponent("multiplayer.requiredTexturePrompt.disconnect"));
@@ -810,10 +810,10 @@ index 0c453fe5a7b46d307673f5852e3695059e8a5414..35c862ea64f1a918f0ae211003f233ed
                  }
  
 diff --git a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-index 66666c112479d88ce900280b6989cbe2c9e74c0a..780e9a18015c976b61e71dc5cc4b857b1d299128 100644
+index 726a3d65453663651a7f729d981854f39d3a59b1..4385b775c1ec603448b1085382836b30f8378c4c 100644
 --- a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-@@ -924,131 +924,63 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+@@ -925,131 +925,63 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
              for(Direction direction2 : DIRECTIONS) {
                  ChunkRenderDispatcher.RenderChunk renderChunk2 = this.getRelativeFrom(blockPos, renderChunk, direction2);
                  if (renderChunk2 == null) {
@@ -1333,7 +1333,7 @@ index fd25df9e5f2dd2cb667c984dc7c82471c0597886..99018f49881c915d88c8728f5f3ae682
      }
  
 diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
-index d46bdb89e3ae101bfb1d839797286efbd63bbc77..18149d3cb10780ece878a45a4ac2efe1d1d38ab1 100644
+index 8af3cc9618cf16aff613627ec15d6e7d4a0ffc74..2c7cbb2c11c3bc6f76db3c42414f7a5df151cb80 100644
 --- a/src/main/java/net/minecraft/core/BlockPos.java
 +++ b/src/main/java/net/minecraft/core/BlockPos.java
 @@ -238,11 +238,11 @@ public class BlockPos extends Vec3i {
@@ -1392,7 +1392,7 @@ index d46bdb89e3ae101bfb1d839797286efbd63bbc77..18149d3cb10780ece878a45a4ac2efe1
                              }
                          }
  
-@@ -319,10 +319,10 @@ public class BlockPos extends Vec3i {
+@@ -325,10 +325,10 @@ public class BlockPos extends Vec3i {
          return StreamSupport.stream(betweenClosed(i, i2, i3, i4, i5, i6).spliterator(), false);
      }
  
@@ -1407,7 +1407,7 @@ index d46bdb89e3ae101bfb1d839797286efbd63bbc77..18149d3cb10780ece878a45a4ac2efe1
          int i10 = i7 * i8 * i9;
          return () -> new AbstractIterator<BlockPos>() {
                  private final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
-@@ -337,7 +337,7 @@ public class BlockPos extends Vec3i {
+@@ -343,7 +343,7 @@ public class BlockPos extends Vec3i {
                          int i3 = i2 % i8;
                          int i4 = i2 / i8;
                          ++this.index;
@@ -1417,7 +1417,7 @@ index d46bdb89e3ae101bfb1d839797286efbd63bbc77..18149d3cb10780ece878a45a4ac2efe1
                  }
              };
 diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index b8d4416cd18bd41e61c0a3c9f2e638af19b1e7cb..f48aab8ccb8b5d6045daa252ae695a1bc6a18a66 100644
+index be20b35aebb5b60ec01e2c0b8aaf0d56c5d2cb92..071159e7fdfdecde98e6df8aa142f8b2ed069c50 100644
 --- a/src/main/java/net/minecraft/core/MappedRegistry.java
 +++ b/src/main/java/net/minecraft/core/MappedRegistry.java
 @@ -219,6 +219,6 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
@@ -1740,7 +1740,7 @@ index b7ee9bbd3d1313d857cdd17d90935b0ae1cc1f19..8013c9426675bec8fecda95361a4d8d2
          register(biConsumer, DESERT_PYRAMID, Biomes.DESERT);
          register(biConsumer, IGLOO, Biomes.SNOWY_TAIGA);
 diff --git a/src/main/java/net/minecraft/data/worldgen/placement/VegetationPlacements.java b/src/main/java/net/minecraft/data/worldgen/placement/VegetationPlacements.java
-index 21d27c44b623a050219070833fb6247c95730455..47e3d7c659c580bc3a20e7b33f7f53411ebb1849 100644
+index 9132b3d79fc3d0427eb9f19cdef1df875e3d5c1d..25b6180e41d4cd624abcc34846812973dc570b69 100644
 --- a/src/main/java/net/minecraft/data/worldgen/placement/VegetationPlacements.java
 +++ b/src/main/java/net/minecraft/data/worldgen/placement/VegetationPlacements.java
 @@ -120,7 +120,7 @@ public class VegetationPlacements {
@@ -2206,7 +2206,7 @@ index cebb099d321cb419cf7995e741036ac169a04e52..1a651a4a93102697e94a0c61254b5406
  
      public String toString() {
 diff --git a/src/main/java/net/minecraft/resources/RegistryReadOps.java b/src/main/java/net/minecraft/resources/RegistryReadOps.java
-index d8d925ff921f39bf9de8254ecea9a873f833570b..25af145ae3460d564d7be551489e9de33f0ad755 100644
+index 5f0d29fdc1aef807f7c32c37e55c35cc9d9f762c..e605e0f2f627fd32547032169f827bad4db3ed44 100644
 --- a/src/main/java/net/minecraft/resources/RegistryReadOps.java
 +++ b/src/main/java/net/minecraft/resources/RegistryReadOps.java
 @@ -49,7 +49,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
@@ -2227,7 +2227,7 @@ index d8d925ff921f39bf9de8254ecea9a873f833570b..25af145ae3460d564d7be551489e9de3
              } else {
                  Pair<ResourceLocation, T> pair = dataResult.result().get();
                  ResourceKey<E> resourceKey2 = ResourceKey.create(resourceKey, (ResourceLocation)pair.getFirst());
-@@ -135,7 +135,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
+@@ -139,7 +139,7 @@ public class RegistryReadOps<T> extends DelegatingOps<T> {
      }
  
      protected <E> DataResult<Registry<E>> registry(ResourceKey<? extends Registry<E>> resourceKey) {
@@ -2302,10 +2302,10 @@ index 27c90d19b6a7fd2be0f4d61627081aef59ea4699..32412fbbd625b7ae22e62b0f43915218
              Thread thread = new Thread("Server Shutdown Thread") {
                  public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 06350b3eb966587b727032e27bf41c16c61d4b0b..50d7c84a61136ce7cd455b889f17ef9031955304 100644
+index 970e2ec516731444512a4665b2188f15ee0ee1d4..df77b086743abf66a6d3d4a1e9423c153a1edb60 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -737,7 +737,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -741,7 +741,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
  
@@ -2314,7 +2314,7 @@ index 06350b3eb966587b727032e27bf41c16c61d4b0b..50d7c84a61136ce7cd455b889f17ef90
          this.getProfiler().incrementCounter("runTask");
          super.doRunTask(tickTask);
      }
-@@ -1227,7 +1227,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1231,7 +1231,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
      public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -2408,7 +2408,7 @@ index 595db43a0f044cbedfd4367ac69491f5f7fc032e..b8872e22ff9aa96e4025b167508c9f87
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 1d61b4cc717535b0826ca491a90fac89be7d6e85..ae2e57186d7ed1a62f45b4460cd4777c120d4e3b 100644
+index 1b71f915c7bcc3d94254a93a5d9d9c8466ea2fe6..adc37b688ba81600c9bb9173f3015e0058c8471a 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -544,11 +544,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -2545,7 +2545,7 @@ index 2f6895913d779bac8a6a924357bef00ed067966c..3ec0889935db08f7940922a4ae47d45f
                      }
                  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index dcfe70b4630b5c0a87a8c5c1fd5bf8b4ae307ef7..4d4e548a13c59456d7750058dae393ad3afb9715 100644
+index 95fd86c9e7419cd9648f2746c72caa174a26eef8..4145fab1c10bca9baffdf947bce2041747c1630b 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 @@ -187,7 +187,7 @@ public class ServerChunkCache extends ChunkSource {
@@ -2557,7 +2557,7 @@ index dcfe70b4630b5c0a87a8c5c1fd5bf8b4ae307ef7..4d4e548a13c59456d7750058dae393ad
          }
  
          return completableFuture;
-@@ -499,7 +499,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -503,7 +503,7 @@ public class ServerChunkCache extends ChunkSource {
              super.doRunTask(runnable);
          }
  
@@ -2567,10 +2567,10 @@ index dcfe70b4630b5c0a87a8c5c1fd5bf8b4ae307ef7..4d4e548a13c59456d7750058dae393ad
                  return true;
              } else {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index dac6bc0345d47afcfd63358303e667c3b9d46485..49ddc1fee7df956c4655e654215e3aabe51de6d6 100644
+index ea806e7a285d9933e07888871edc0144b48b50db..e57f6152a061144e75c532062adf2a46d79b6517 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1336,7 +1336,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1340,7 +1340,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  object2IntOpenHashMap.addTo(s, 1);
              }
  
@@ -3295,10 +3295,10 @@ index b2e42841c2df2ea282a1b940375499103ac6ae8d..bd36d76e52ce6bf90b26e4518f7a50eb
                          list.add((type2.read(dynamic2.createMap(map)).result().orElseThrow(() -> new IllegalStateException("Could not parse newly created bed block entity."))).getFirst());
                      }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java
-index 3f54db6f0d000c184815d23f7f472a04f7f1dd95..46e05ea1504830328fa3b9503ba1373fe4fed129 100644
+index e48ed76dd3f33b2d4c0f10bfea68f9d9d5a0d0e9..dd4dc0151ca82c817f56ca8ed3bb00aa978f76da 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/ChunkHeightAndBiomeFix.java
-@@ -79,15 +79,15 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+@@ -81,15 +81,15 @@ public class ChunkHeightAndBiomeFix extends DataFix {
                  Dynamic<?>[] dynamics = getBiomeContainers(dynamic, flag, i, mutableBoolean);
                  Dynamic<?> dynamic2 = makePalettedContainer(dynamic.createList(Stream.of(dynamic.createMap(ImmutableMap.of(dynamic.createString("Name"), dynamic.createString("minecraft:air"))))));
                  Set<String> set = Sets.newHashSet();
@@ -3318,7 +3318,7 @@ index 3f54db6f0d000c184815d23f7f472a04f7f1dd95..46e05ea1504830328fa3b9503ba1373f
                          }), dynamic2);
                          Dynamic<?> dynamic4 = dynamic2x;
                          int i3 = i2 - i;
-@@ -98,13 +98,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+@@ -100,13 +100,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
                          intSet.add(i2);
                          if (dynamic2x.get("Y").asInt(Integer.MAX_VALUE) == 0) {
                              mutableObject.setValue(() -> {
@@ -3336,7 +3336,7 @@ index 3f54db6f0d000c184815d23f7f472a04f7f1dd95..46e05ea1504830328fa3b9503ba1373f
                      }).collect(Collectors.toCollection(ArrayList::new));
  
                      for(int i2 = 0; i2 < dynamics.length; ++i2) {
-@@ -157,12 +157,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+@@ -159,12 +159,13 @@ public class ChunkHeightAndBiomeFix extends DataFix {
              mutableBoolean.setValue(true);
  
              for(int i2 = 0; i2 < 24; ++i2) {
@@ -3352,6 +3352,21 @@ index 3f54db6f0d000c184815d23f7f472a04f7f1dd95..46e05ea1504830328fa3b9503ba1373f
              }
  
              if (flag) {
+@@ -246,11 +247,11 @@ public class ChunkHeightAndBiomeFix extends DataFix {
+     private static <T> Dynamic<T> shiftUpgradeData(Dynamic<T> dynamic) {
+         return dynamic.update("Indices", (dynamicx) -> {
+             Map<Dynamic<?>, Dynamic<?>> map = new HashMap();
+-            dynamicx.getMapValues().result().ifPresent((map2) -> map2.forEach((dynamic, dynamic2) -> {
++            dynamicx.getMapValues().result().ifPresent((map2) -> map2.forEach((dynamicIn, dynamic2) -> {
+                     try {
+-                        dynamic.asString().result().map(Integer::parseInt).ifPresent((integer) -> {
++                        dynamicIn.asString().result().map(Integer::parseInt).ifPresent((integer) -> {
+                             int i = integer - -4;
+-                            map.put(dynamic.createString(Integer.toString(i)), dynamic2);
++                            map.put(dynamicIn.createString(Integer.toString(i)), dynamic2);
+                         });
+                     } catch (NumberFormatException var4) {
+                     }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix.java
 index bbf296da4c7d6b6db0826b942ab664f3c2d10f8e..325f85d4fe6c2ee36e2369f414c81825fa6116a0 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix.java
@@ -4731,11 +4746,11 @@ index 26fd1c29d10cd770c468f8b3e6ac7a0f1fc9bebe..92522bfbdb47b3561e5b50793e564b82
      private final int maxInclusive;
  
 diff --git a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
-index 9f50016fc2004bffc27029cb014d5ff0d7f9b75d..d8a3c704954b102a7624c3358956dff8befe0060 100644
+index 4558d0fc417e04d4add501d97abc3b45e64d1e83..1316db21ee0a659cd29095a3a4dd3f107aaccf97 100644
 --- a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
 +++ b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
-@@ -106,7 +106,7 @@ public class WorldUpgrader {
-                 builder2.put(resourceKey2, new ChunkStorage(new File(file, "region"), this.dataFixer, true));
+@@ -107,7 +107,7 @@ public class WorldUpgrader {
+                 builder2.put(resourceKey2, new ChunkStorage(path.resolve("region"), this.dataFixer, true));
              }
  
 -            ImmutableMap<ResourceKey<Level>, ChunkStorage> immutableMap2 = builder2.build();
@@ -4743,7 +4758,7 @@ index 9f50016fc2004bffc27029cb014d5ff0d7f9b75d..d8a3c704954b102a7624c3358956dff8
              long l = Util.getMillis();
              this.status = new TranslatableComponent("optimizeWorld.stage.upgrading");
  
-@@ -118,7 +118,7 @@ public class WorldUpgrader {
+@@ -119,7 +119,7 @@ public class WorldUpgrader {
                  for(UnmodifiableIterator iOException2 = immutableSet.iterator(); iOException2.hasNext(); f2 += f3) {
                      ResourceKey<Level> resourceKey3 = (ResourceKey)iOException2.next();
                      ListIterator<ChunkPos> listIterator = (ListIterator)immutableMap.get(resourceKey3);
@@ -4752,7 +4767,7 @@ index 9f50016fc2004bffc27029cb014d5ff0d7f9b75d..d8a3c704954b102a7624c3358956dff8
                      if (listIterator.hasNext()) {
                          ChunkPos chunkPos = (ChunkPos)listIterator.next();
                          boolean flag2 = false;
-@@ -178,7 +178,7 @@ public class WorldUpgrader {
+@@ -179,7 +179,7 @@ public class WorldUpgrader {
              }
  
              this.status = new TranslatableComponent("optimizeWorld.stage.finished");
@@ -4996,10 +5011,10 @@ index 4f2768f40bff55acc05068a2a8c4243516f4b8f0..3dd2b31e3f31b01d58260169144b02fd
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index 80005069525b14d243a9478e9d132fd138a8fd27..f7c8070ac9232f4e16eae52c6798b4a4130df2c1 100644
+index 978b25fe86883f27d4835c4c6363cc296a16b08a..00f9d5b38aa26fe61592b4c5397f93f1a4e262ba 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-@@ -147,9 +147,9 @@ public class Fox extends Animal {
+@@ -145,9 +145,9 @@ public class Fox extends Animal {
          this.goalSelector.addGoal(1, new Fox.FaceplantGoal());
          this.goalSelector.addGoal(2, new Fox.FoxPanicGoal(2.2D));
          this.goalSelector.addGoal(3, new Fox.FoxBreedGoal(1.0D));
@@ -5228,7 +5243,7 @@ index 6d2f4d61b5b35e151caf85b7880647ad5362cba2..34363197b004de9821a39942674bc261
          hashMap.put(VillagerProfession.CLERIC, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.ROTTEN_FLESH, 32, 16, 2), new VillagerTrades.ItemsForEmeralds(Items.REDSTONE, 1, 2, 1)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.GOLD_INGOT, 3, 12, 10), new VillagerTrades.ItemsForEmeralds(Items.LAPIS_LAZULI, 1, 1, 5)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.RABBIT_FOOT, 2, 12, 20), new VillagerTrades.ItemsForEmeralds(Blocks.GLOWSTONE, 4, 1, 12, 10)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.SCUTE, 4, 12, 30), new VillagerTrades.EmeraldForItems(Items.GLASS_BOTTLE, 9, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.ENDER_PEARL, 5, 1, 15)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.NETHER_WART, 22, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.EXPERIENCE_BOTTLE, 3, 1, 30)})));
          hashMap.put(VillagerProfession.ARMORER, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.LAVA_BUCKET, 1, 12, 20), new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 20), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 14, 3, 15, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 8, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 8, 3, 30, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 16, 3, 30, 0.2F)})));
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index aa85792c119eb6695f7326540f925938c7ab96da..8f476e41dc10b4b6b7ac177939ca20303bf914d5 100644
+index 1143040afc3042b40ee78063e97218b36f5233f5..5157dd323295bcdbf324e717f8da26c81d0eae85 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -122,7 +122,7 @@ public abstract class Player extends LivingEntity {
@@ -5488,10 +5503,10 @@ index 10940db725bbd15d2fe072ea7a9541e9e38061e7..77cc8501d5d02677cf81b44c24f6569a
          @Nullable
          public Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
-index afd59b78978fd9abf8ef0259371f5f42cdbd647b..ff616a466094b70c9c127263d2d19e39c51b44cd 100644
+index 4cf5f7953dbcf4fd4591403dad8f947be78f5c18..b22fb73337dab0db6c82d87905e928f28b790eac 100644
 --- a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
-@@ -52,9 +52,6 @@ public abstract class BiomeSource implements BiomeResolver {
+@@ -55,9 +55,6 @@ public abstract class BiomeSource implements BiomeResolver {
          Map<FeatureData, Set<FeatureData>> map = new TreeMap(comparator);
          int i = 0;
  
@@ -5501,7 +5516,7 @@ index afd59b78978fd9abf8ef0259371f5f42cdbd647b..ff616a466094b70c9c127263d2d19e39
          for(Biome biome : list) {
              List<FeatureData> list2 = Lists.newArrayList();
              List<List<Supplier<PlacedFeature>>> list3 = biome.getGenerationSettings().features();
-@@ -79,12 +76,12 @@ public abstract class BiomeSource implements BiomeResolver {
+@@ -82,12 +79,12 @@ public abstract class BiomeSource implements BiomeResolver {
          Set<FeatureData> set3 = new TreeSet(comparator);
          List<FeatureData> list4 = Lists.newArrayList();
  
@@ -5516,9 +5531,9 @@ index afd59b78978fd9abf8ef0259371f5f42cdbd647b..ff616a466094b70c9c127263d2d19e39
                  if (!flag) {
                      throw new IllegalStateException("Feature order cycle found");
                  }
-@@ -220,4 +217,7 @@ public abstract class BiomeSource implements BiomeResolver {
-         Registry.register(Registry.BIOME_SOURCE, "checkerboard", CheckerboardColumnBiomeSource.CODEC);
-         Registry.register(Registry.BIOME_SOURCE, "the_end", TheEndBiomeSource.CODEC);
+@@ -234,4 +231,7 @@ public abstract class BiomeSource implements BiomeResolver {
+ 
+     public static record StepFeatureData(List<PlacedFeature> features, ToIntFunction<PlacedFeature> indexMapping) {
      }
 +
 +    record FeatureData(int featureIndex, int step, PlacedFeature feature) {
@@ -5852,46 +5867,75 @@ index 1ed51ee91f9d051a6bb70d462b8ab8edf3cce6f6..568a8e0584c248908a3633017948233d
              return this.property.getName() + "=" + this.property.getName(this.value);
          }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-index 6cab42d88452f993c2c4da4fce7bab48b284655a..0d586fa739a8ac2b8f734a615c469882e9ece5e4 100644
+index 404af0c3345b56679a53aaf94d9e3bd9e0a13c0f..e0401397526ce6a9392978697f9b833cefceb83c 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-@@ -309,7 +309,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -208,9 +208,9 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+             long l = worldgenRandom.setDecorationSeed(worldGenLevel.getSeed(), blockPos.getX(), blockPos.getZ());
+             Set<Biome> set = new ObjectArraySet();
+             ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPosx) -> {
+-                ChunkAccess chunkAccess = worldGenLevel.getChunk(chunkPosx.x, chunkPosx.z);
++                ChunkAccess ca = worldGenLevel.getChunk(chunkPosx.x, chunkPosx.z);
  
-                     while(var15.hasNext()) {
-                         Entry<ConfiguredStructureFeature<?, ?>, Collection<ResourceKey<Biome>>> entry = (Entry)var15.next();
--                        StructureStart<?> structureStart2 = ((ConfiguredStructureFeature)entry.getKey()).generate(registryAccess, this, this.biomeSource, structureManager, l, chunkPos, i, structureFeatureConfiguration2, chunkAccess, (biome) -> this.validBiome(registry, (entry.getValue())::contains, biome));
-+                        StructureStart<?> structureStart2 = entry.getKey().generate(registryAccess, this, this.biomeSource, structureManager, l, chunkPos, i, structureFeatureConfiguration2, chunkAccess, (biome) -> this.validBiome(registry, (entry.getValue())::contains, biome));
-                         if (structureStart2.isValid()) {
-                             structureFeatureManager.setStartForFeature(sectionPos, structureFeature, structureStart2, chunkAccess);
-                             continue label39;
+-                for(LevelChunkSection levelChunkSection : chunkAccess.getSections()) {
++                for(LevelChunkSection levelChunkSection : ca.getSections()) {
+                     levelChunkSection.getBiomes().getAll(set::add);
+                 }
+ 
+@@ -345,7 +345,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+ 
+                         while(var16.hasNext()) {
+                             Entry<ConfiguredStructureFeature<?, ?>, Collection<ResourceKey<Biome>>> entry = (Entry)var16.next();
+-                            StructureStart<?> structureStart4 = ((ConfiguredStructureFeature)entry.getKey()).generate(registryAccess, this, this.biomeSource, structureManager, l, chunkPos, i, structureFeatureConfiguration2, chunkAccess, (biome) -> this.validBiome(registry, (entry.getValue())::contains, biome));
++                            StructureStart<?> structureStart4 = entry.getKey().generate(registryAccess, this, this.biomeSource, structureManager, l, chunkPos, i, structureFeatureConfiguration2, chunkAccess, (biome) -> this.validBiome(registry, (entry.getValue())::contains, biome));
+                             if (structureStart4.isValid()) {
+                                 structureFeatureManager.setStartForFeature(sectionPos, structureFeature, structureStart4, chunkAccess);
+                                 continue label48;
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
-index 8fb004fa017b48f7dd5e6613668327b992a75868..42eff5e30f89033452c577b36cdb6437a1b99338 100644
+index 667db1937824954cb4df84ae994ae76d3c76dc76..7ec4b0a1c499ccf5b5821082bc9d165f66ddf284 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
-@@ -40,7 +40,9 @@ public class ChunkStatus {
+@@ -43,21 +43,24 @@ public class ChunkStatus {
      };
      public static final ChunkStatus EMPTY = registerSimple("empty", (ChunkStatus)null, -1, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, (chunkStatus, serverLevel, chunkGenerator, list, chunkAccess) -> {
      });
 -    public static final ChunkStatus STRUCTURE_STARTS = register("structure_starts", EMPTY, 0, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, (chunkStatus, executor, serverLevel, chunkGenerator, structureManager, threadedLevelLightEngine, function, list, chunkAccess, flag) -> {
+-        if (!chunkAccess.getStatus().isOrAfter(chunkStatus)) {
+-            if (serverLevel.getServer().getWorldData().worldGenSettings().generateFeatures()) {
+-                chunkGenerator.createStructures(serverLevel.registryAccess(), serverLevel.structureFeatureManager(), chunkAccess, structureManager, serverLevel.getSeed());
+-            }
 +    public static final ChunkStatus STRUCTURE_STARTS = register("structure_starts", EMPTY, 0, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, new GenerationTask() {
 +        @Override
 +        public CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> doWork(ChunkStatus chunkStatus, Executor executor, ServerLevel serverLevel, ChunkGenerator chunkGenerator, StructureManager structureManager, ThreadedLevelLightEngine threadedLevelLightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> chunkAccessCompletableFutureFunction, List<ChunkAccess> list, ChunkAccess chunkAccess, boolean var10) {
-         if (!chunkAccess.getStatus().isOrAfter(chunkStatus)) {
-             if (serverLevel.getServer().getWorldData().worldGenSettings().generateFeatures()) {
-                 chunkGenerator.createStructures(serverLevel.registryAccess(), serverLevel.structureFeatureManager(), chunkAccess, structureManager, serverLevel.getSeed());
-@@ -53,6 +55,7 @@ public class ChunkStatus {
-         }
++            if (!chunkAccess.getStatus().isOrAfter(chunkStatus)) {
++                if (serverLevel.getServer().getWorldData().worldGenSettings().generateFeatures()) {
++                    chunkGenerator.createStructures(serverLevel.registryAccess(), serverLevel.structureFeatureManager(), chunkAccess, structureManager, serverLevel.getSeed());
++                }
  
-         return CompletableFuture.completedFuture(Either.left(chunkAccess));
-+        }
-     });
-     public static final ChunkStatus STRUCTURE_REFERENCES = registerSimple("structure_references", STRUCTURE_STARTS, 8, PRE_FEATURES, ChunkStatus.ChunkType.PROTOCHUNK, (chunkStatus, serverLevel, chunkGenerator, list, chunkAccess) -> {
-         WorldGenRegion worldGenRegion = new WorldGenRegion(serverLevel, list, chunkStatus, -1);
+-            if (chunkAccess instanceof ProtoChunk) {
+-                ProtoChunk protoChunk = (ProtoChunk)chunkAccess;
+-                protoChunk.setStatus(chunkStatus);
++                if (chunkAccess instanceof ProtoChunk) {
++                    ProtoChunk protoChunk = (ProtoChunk) chunkAccess;
++                    protoChunk.setStatus(chunkStatus);
++                }
++
++                serverLevel.onStructureStartsAvailable(chunkAccess);
+             }
+ 
+-            serverLevel.onStructureStartsAvailable(chunkAccess);
++            return CompletableFuture.completedFuture(Either.left(chunkAccess));
+         }
+-
+-        return CompletableFuture.completedFuture(Either.left(chunkAccess));
+     }, (chunkStatus, serverLevel, structureManager, threadedLevelLightEngine, function, chunkAccess) -> {
+         if (!chunkAccess.getStatus().isOrAfter(chunkStatus)) {
+             if (chunkAccess instanceof ProtoChunk) {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index a86374ea5b6417dc930fe226b773d481411c06b2..2606195c9ac2294d446842a34effe94c5c9d330b 100644
+index ea7cfdcc38c0bad71490a094a4731ab931b14069..d4283692efdef9861041eb1057556b7e1d5c395a 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -561,7 +561,7 @@ public class LevelChunk extends ChunkAccess {
+@@ -570,7 +570,7 @@ public class LevelChunk extends ChunkAccess {
  
      private <T extends BlockEntity> void updateBlockEntityTicker(T blockEntity) {
          BlockState blockState = blockEntity.getBlockState();
@@ -5901,10 +5945,10 @@ index a86374ea5b6417dc930fe226b773d481411c06b2..2606195c9ac2294d446842a34effe94c
              this.removeBlockEntityTicker(blockEntity.getBlockPos());
          } else {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-index cf9f8ed0174acc02e6bf9c4d13c56316bb161e2f..54f06f22d726d0ce5b29d8ff22a957c08541a04c 100644
+index 1c46b5a0a50ca892c060f5d87a101aacd4c295bb..8c52ca244b1addfa04a508a5adc07283ac597d7f 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-@@ -37,7 +37,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -40,7 +40,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
      public void acquire() {
          if (this.traces != null) {
              Thread thread = Thread.currentThread();
@@ -5913,7 +5957,7 @@ index cf9f8ed0174acc02e6bf9c4d13c56316bb161e2f..54f06f22d726d0ce5b29d8ff22a957c0
          }
  
          ThreadingDetector.checkAndLock(this.lock, this.traces, "PalettedContainer");
-@@ -48,7 +48,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -51,7 +51,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
      }
  
      public static <T> Codec<PalettedContainer<T>> codec(IdMap<T> idMap, Codec<T> codec, PalettedContainer.Strategy strategy, T object) {
@@ -5922,7 +5966,7 @@ index cf9f8ed0174acc02e6bf9c4d13c56316bb161e2f..54f06f22d726d0ce5b29d8ff22a957c0
      }
  
      public PalettedContainer(IdMap<T> idMap, PalettedContainer.Strategy strategy, PalettedContainer.Configuration<T> configuration, BitStorage bitStorage, List<T> list) {
-@@ -243,12 +243,6 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -263,12 +263,6 @@ public class PalettedContainer<T> implements PaletteResize<T> {
      }
  
      static record Configuration<T>(Palette.Factory factory, int bits) {
@@ -5935,7 +5979,7 @@ index cf9f8ed0174acc02e6bf9c4d13c56316bb161e2f..54f06f22d726d0ce5b29d8ff22a957c0
          public PalettedContainer.Data<T> createData(IdMap<T> idMap, PaletteResize<T> paletteResize, int i) {
              BitStorage bitStorage = (BitStorage)(this.bits == 0 ? new ZeroBitStorage(i) : new SimpleBitStorage(this.bits, i));
              Palette<T> palette = this.factory.create(this.bits, idMap, paletteResize, List.of());
-@@ -261,7 +255,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -281,7 +275,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
          void accept(T var1, int var2);
      }
  
@@ -5944,7 +5988,7 @@ index cf9f8ed0174acc02e6bf9c4d13c56316bb161e2f..54f06f22d726d0ce5b29d8ff22a957c0
  
          public void copyFrom(Palette<T> palette, BitStorage bitStorage) {
              for(int i = 0; i < bitStorage.getSize(); ++i) {
-@@ -285,12 +279,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -305,12 +299,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
          }
      }
  
@@ -5958,7 +6002,7 @@ index cf9f8ed0174acc02e6bf9c4d13c56316bb161e2f..54f06f22d726d0ce5b29d8ff22a957c0
      }
  
      public abstract static class Strategy {
-@@ -343,6 +332,8 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -364,6 +353,8 @@ public class PalettedContainer<T> implements PaletteResize<T> {
              }
          };
  
@@ -5968,7 +6012,7 @@ index cf9f8ed0174acc02e6bf9c4d13c56316bb161e2f..54f06f22d726d0ce5b29d8ff22a957c0
              this.sizeBits = i;
          }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
-index 43cb8fd1cb922e849901f579c4bc515cba6c7063..eec010dd6b8702405b841a9307910d9f24bfaa90 100644
+index b8c971afe28557f50124bbf9fb98d8019df96fcb..ff5f48e36f77be5334d38c0e27c5e686637376ca 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 @@ -145,7 +145,7 @@ public class ChunkSerializer {
@@ -5980,8 +6024,27 @@ index 43cb8fd1cb922e849901f579c4bc515cba6c7063..eec010dd6b8702405b841a9307910d9f
              }
  
              ChunkStatus chunkStatus = ChunkStatus.byName(compoundTag.getString("Status"));
+@@ -371,13 +371,13 @@ public class ChunkSerializer {
+ 
+             if (listTag2 != null) {
+                 for(int i = 0; i < listTag2.size(); ++i) {
+-                    CompoundTag compoundTag = listTag2.getCompound(i);
+-                    boolean flag = compoundTag.getBoolean("keepPacked");
++                    CompoundTag tag = listTag2.getCompound(i);
++                    boolean flag = tag.getBoolean("keepPacked");
+                     if (flag) {
+-                        levelChunk.setBlockEntityNbt(compoundTag);
++                        levelChunk.setBlockEntityNbt(tag);
+                     } else {
+-                        BlockPos blockPos = BlockEntity.getPosFromTag(compoundTag);
+-                        BlockEntity blockEntity = BlockEntity.loadStatic(blockPos, levelChunk.getBlockState(blockPos), compoundTag);
++                        BlockPos blockPos = BlockEntity.getPosFromTag(tag);
++                        BlockEntity blockEntity = BlockEntity.loadStatic(blockPos, levelChunk.getBlockState(blockPos), tag);
+                         if (blockEntity != null) {
+                             levelChunk.setBlockEntity(blockEntity);
+                         }
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index 774307b2b7cefda9bc774d0334b406979be99ec6..4a53b9db67074f27be4b3cb4174c41cbe1cdebfd 100644
+index 72d766aae11a9855e60cd7c1d7b36c7ecf79ca88..6b5166c537033a5de01839de543a019bcf7b34bd 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 @@ -41,7 +41,7 @@ public class DimensionType {
@@ -6359,10 +6422,10 @@ index 108daa28701fe806be5364581462fd97446d9ec6..d2cc2f6c7d093d9dc2a02c24950bf6e6
      private final long seed;
      private final boolean generateFeatures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java b/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
-index 90a660224f5c832c2efdb8b1fe75e5abf79b4304..a29439d0be0fc87db715f2fbd43018fc8e728f95 100644
+index 3fe043a42de16d4624b299b9f8d794a79c81ef3a..11924b44add3e480d7a17526d2b065f5e079f1e5 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
-@@ -142,13 +142,13 @@ public class Blender {
+@@ -157,13 +157,13 @@ public class Blender {
  
              for(Blender.PositionedBlendingData positionedBlendingData : this.densityData) {
                  positionedBlendingData.blendingData.iterateDensities(QuartPos.fromSection(positionedBlendingData.chunkX), QuartPos.fromSection(positionedBlendingData.chunkZ), i5 - 2, i5 + 2, (i4x, i5x, i6x, dx) -> {
@@ -6381,11 +6444,21 @@ index 90a660224f5c832c2efdb8b1fe75e5abf79b4304..a29439d0be0fc87db715f2fbd43018fc
                          mutableDouble2.add(dx * d3);
                          mutableDouble.add(d3);
                      }
+@@ -356,7 +356,8 @@ public class Blender {
+ 
+         double d3 = d;
+         double d4 = d2;
+-        return (d3, d4x, d5) -> distanceToCube(d3 - 8.0D - d3, d4x - OLD_CHUNK_CENTER_Y, d5 - 8.0D - d4, 8.0D, OLD_CHUNK_Y_RADIUS, 8.0D);
++        // TODO: right? (d3 -> d3x)
++        return (d3x, d4x, d5) -> distanceToCube(d3x - 8.0D - d3, d4x - OLD_CHUNK_CENTER_Y, d5 - 8.0D - d4, 8.0D, OLD_CHUNK_Y_RADIUS, 8.0D);
+     }
+ 
+     private static double distanceToCube(double d, double d2, double d3, double d4, double d5, double d6) {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java b/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
-index 2c32e051d08987354a19f8d2d2e12df4c34ae864..68a535a77193e7d0449a113cf69b2a7428f1f096 100644
+index 51d7a53bb03a77fd1a8c3db07ce482f4064a1a06..c4bad7700bf242d735b5aa19c62aad4f0ac7c28c 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
-@@ -55,7 +55,7 @@ public class BlendingData {
+@@ -56,7 +56,7 @@ public class BlendingData {
      private final transient double[][] densities;
      private final transient double[] floorDensities;
      private static final Codec<double[]> DOUBLE_ARRAY_CODEC = Codec.DOUBLE.listOf().xmap(Doubles::toArray, Doubles::asList);
@@ -6394,11 +6467,37 @@ index 2c32e051d08987354a19f8d2d2e12df4c34ae864..68a535a77193e7d0449a113cf69b2a74
  
      private static DataResult<BlendingData> validateArraySize(BlendingData blendingData) {
          return blendingData.heights.length != CELL_COLUMN_COUNT ? DataResult.error("heights has to be of length " + CELL_COLUMN_COUNT) : DataResult.success(blendingData);
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/EndCityFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/EndCityFeature.java
+index 53e733482d7d0b8872f9a2f4f5ad27bf1e733304..0aa396618e977f82e25b46bdddd1321f8fa4a096 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/feature/EndCityFeature.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/feature/EndCityFeature.java
+@@ -58,7 +58,7 @@ public class EndCityFeature extends StructureFeature<NoneFeatureConfiguration> {
+             return Optional.empty();
+         } else {
+             BlockPos blockPos = context.chunkPos().getMiddleBlockPosition(i);
+-            return !context.validBiome().test(context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(blockPos.getX()), QuartPos.fromBlock(blockPos.getY()), QuartPos.fromBlock(blockPos.getZ()))) ? Optional.empty() : Optional.of((PieceGenerator<>)(structurePiecesBuilder, contextx) -> {
++            return !context.validBiome().test(context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(blockPos.getX()), QuartPos.fromBlock(blockPos.getY()), QuartPos.fromBlock(blockPos.getZ()))) ? Optional.empty() : Optional.of((structurePiecesBuilder, contextx) -> {
+                 Rotation rotation = Rotation.getRandom(contextx.random());
+                 List<StructurePiece> list = Lists.newArrayList();
+                 EndCityPieces.startHouseTower(contextx.structureManager(), blockPos, rotation, list, contextx.random());
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/RuinedPortalFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/RuinedPortalFeature.java
+index c77eb3cf3fc86d3ea8922a4535a5e3570098d035..2b107e8413cf5e6f0ab82a7cc8f8d4fb67fb2de6 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/feature/RuinedPortalFeature.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/feature/RuinedPortalFeature.java
+@@ -103,7 +103,7 @@ public class RuinedPortalFeature extends StructureFeature<RuinedPortalConfigurat
+         int i = context.chunkGenerator().getBaseHeight(blockPos3.getX(), blockPos3.getZ(), RuinedPortalPiece.getHeightMapType(verticalPlacement), context.heightAccessor()) - 1;
+         int i2 = findSuitableY(worldgenRandom, context.chunkGenerator(), verticalPlacement, properties.airPocket, i, boundingBox.getYSpan(), boundingBox, context.heightAccessor());
+         BlockPos blockPos4 = new BlockPos(blockPos2.getX(), i2, blockPos2.getZ());
+-        return !context.validBiome().test(context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(blockPos4.getX()), QuartPos.fromBlock(blockPos4.getY()), QuartPos.fromBlock(blockPos4.getZ()))) ? Optional.empty() : Optional.of((PieceGenerator<>)(structurePiecesBuilder, context2) -> {
++        return !context.validBiome().test(context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(blockPos4.getX()), QuartPos.fromBlock(blockPos4.getY()), QuartPos.fromBlock(blockPos4.getZ()))) ? Optional.empty() : Optional.of((structurePiecesBuilder, context2) -> {
+             if (ruinedPortalConfiguration.portalType == RuinedPortalFeature.Type.MOUNTAIN || ruinedPortalConfiguration.portalType == RuinedPortalFeature.Type.OCEAN || ruinedPortalConfiguration.portalType == RuinedPortalFeature.Type.STANDARD) {
+                 properties.cold = isCold(blockPos4, context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(blockPos4.getX()), QuartPos.fromBlock(blockPos4.getY()), QuartPos.fromBlock(blockPos4.getZ())));
+             }
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index 4ba3175094237131c27f37ff9906c5ab19518792..c7ba6fbdd60b794bdc131973441987b81ba43c1b 100644
+index 8fa4252aa723301f8f305ba7727580fc6b5273fc..be5f039d04e8ac3aa0cc0bc627b1a4be472df411 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-@@ -106,7 +106,7 @@ public class StructureFeature<C extends FeatureConfiguration> {
+@@ -109,7 +109,7 @@ public class StructureFeature<C extends FeatureConfiguration> {
      @Nullable
      public static StructureStart<?> loadStaticStart(StructurePieceSerializationContext structurePieceSerializationContext, CompoundTag compoundTag, long l) {
          String s = compoundTag.getString("id");
@@ -6407,6 +6506,19 @@ index 4ba3175094237131c27f37ff9906c5ab19518792..c7ba6fbdd60b794bdc131973441987b8
              return StructureStart.INVALID_START;
          } else {
              StructureFeature<?> structureFeature = Registry.STRUCTURE_FEATURE.get(new ResourceLocation(s.toLowerCase(Locale.ROOT)));
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/WoodlandMansionFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/WoodlandMansionFeature.java
+index 811708564204294ffa5910f376a68fada4256067..4872c96adf127b5e34336bcae1ac3ac0edd5e77b 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/feature/WoodlandMansionFeature.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/feature/WoodlandMansionFeature.java
+@@ -56,7 +56,7 @@ public class WoodlandMansionFeature extends StructureFeature<NoneFeatureConfigur
+             return Optional.empty();
+         } else {
+             BlockPos blockPos = new BlockPos(context.chunkPos().getMiddleBlockX(), i5 + 1, context.chunkPos().getMiddleBlockZ());
+-            return Optional.of((PieceGenerator<>)(structurePiecesBuilder, contextx) -> {
++            return Optional.of((structurePiecesBuilder, contextx) -> {
+                 List<WoodlandMansionPieces.WoodlandMansionPiece> list = Lists.newLinkedList();
+                 WoodlandMansionPieces.generateMansion(contextx.structureManager(), blockPos, rotation, list, worldgenRandom);
+                 list.forEach(structurePiecesBuilder::addPiece);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/SpringConfiguration.java b/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/SpringConfiguration.java
 index 60edac66f520fd88e9eb503002eeeed1e4b92d96..1fe60ceec9ec81e016f8465058345ef83444cc59 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/configurations/SpringConfiguration.java
@@ -6434,10 +6546,19 @@ index 0a2be0889855d5806bef38cb06d90dd6eab9c0e0..e54c793aa5f95bb1f784bcbcf0517a91
      private final int separation;
      private final int salt;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-index 32df4b5a34fd09ea37929c8da72242e69ef1508c..559a09e5b1800f73b5033482fdf849246fd1dbae 100644
+index 702c35520d10fb0c1d88c575a6be6dad075a04fc..d25cbcf3eb2faa17bb3dc9260779f128ca782499 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-@@ -182,12 +182,12 @@ public class JigsawPlacement {
+@@ -75,7 +75,7 @@ public class JigsawPlacement {
+             } else {
+                 int i5 = boundingBox.minY() + poolElementStructurePiece.getGroundLevelDelta();
+                 poolElementStructurePiece.move(0, i3 - i5, 0);
+-                return Optional.of((PieceGenerator<>)(structurePiecesBuilder, contextx) -> {
++                return Optional.of((structurePiecesBuilder, contextx) -> {
+                     List<PoolElementStructurePiece> list = Lists.newArrayList();
+                     list.add(poolElementStructurePiece);
+                     if (jigsawConfiguration.maxDepth() > 0) {
+@@ -199,12 +199,12 @@ public class JigsawPlacement {
                                          if (!boundingBox2.isInside(structureBlockInfox.pos.relative(JigsawBlock.getFrontFacing(structureBlockInfox.state)))) {
                                              return 0;
                                          } else {
@@ -6536,10 +6657,10 @@ index fd194708d1fb7ad7a17098776afa6d46311fb348..6043701b98811623d50ca47a987ee211
  
      public static ConstantHeight of(VerticalAnchor verticalAnchor) {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/placement/PlacedFeature.java b/src/main/java/net/minecraft/world/level/levelgen/placement/PlacedFeature.java
-index 496f06551573af11a5d76ae4c323d6f66a7be0e4..06944e92ba230bd28d71f91e153f6c8747d68f70 100644
+index c5b4844182fd2b177cc79965db560406c983fb07..a96470f8fd726da1b6d938f5a3348a75d834e8a9 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/placement/PlacedFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/placement/PlacedFeature.java
-@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+@@ -17,7 +17,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
  import org.apache.commons.lang3.mutable.MutableBoolean;
  
  public class PlacedFeature {
@@ -6548,7 +6669,7 @@ index 496f06551573af11a5d76ae4c323d6f66a7be0e4..06944e92ba230bd28d71f91e153f6c87
      public static final Codec<Supplier<PlacedFeature>> CODEC = RegistryFileCodec.create(Registry.PLACED_FEATURE_REGISTRY, DIRECT_CODEC);
      public static final Codec<List<Supplier<PlacedFeature>>> LIST_CODEC = RegistryFileCodec.homogeneousList(Registry.PLACED_FEATURE_REGISTRY, DIRECT_CODEC);
      private final Supplier<ConfiguredFeature<?, ?>> feature;
-@@ -60,8 +60,4 @@ public class PlacedFeature {
+@@ -66,8 +66,4 @@ public class PlacedFeature {
      public String toString() {
          return "Placed " + Registry.FEATURE.getKey(((ConfiguredFeature)this.feature.get()).feature());
      }
@@ -6556,6 +6677,20 @@ index 496f06551573af11a5d76ae4c323d6f66a7be0e4..06944e92ba230bd28d71f91e153f6c87
 -    static {
 -        DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(ConfiguredFeature.CODEC.fieldOf("feature").forGetter((placedFeature) -> placedFeature.feature), PlacementModifier.CODEC.listOf().fieldOf("placement").forGetter((placedFeature) -> placedFeature.placement)).apply(instance, PlacedFeature::new));
 -    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/NetherFossilFeature.java b/src/main/java/net/minecraft/world/level/levelgen/structure/NetherFossilFeature.java
+index b2b59bc03172d94f8ccce95809efe2598d2bc175..f34be566f0eeee17f6a5e984f3b4242a5acd36c1 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/structure/NetherFossilFeature.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/structure/NetherFossilFeature.java
+@@ -47,7 +47,7 @@ public class NetherFossilFeature extends NoiseAffectingStructureFeature<RangeCon
+             return Optional.empty();
+         } else {
+             BlockPos blockPos = new BlockPos(i, i4, i2);
+-            return Optional.of((PieceGenerator<>)(structurePiecesBuilder, context2) -> NetherFossilPieces.addPieces(context.structureManager(), structurePiecesBuilder, worldgenRandom, blockPos));
++            return Optional.of((structurePiecesBuilder, context2) -> NetherFossilPieces.addPieces(context.structureManager(), structurePiecesBuilder, worldgenRandom, blockPos));
+         }
+     }
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java b/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
@@ -6606,6 +6741,32 @@ index c7c8fcc0922f64929287dd5ae67d2c2a3e0d1b5e..49fd6fd51b553834062dfcda22099f19
              return compoundTag;
          }
      }
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGenerator.java b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGenerator.java
+index 06303f5ab73c07774bf5b541ef3f8a3ec0507db6..3e78e92dacdcbaf7b366de8a85a0d011af07c69a 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGenerator.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGenerator.java
+@@ -11,6 +11,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureMana
+ public interface PieceGenerator<C extends FeatureConfiguration> {
+     void generatePieces(StructurePiecesBuilder var1, PieceGenerator.Context<C> var2);
+ 
+-    public static record Context(C config, ChunkGenerator chunkGenerator, StructureManager structureManager, ChunkPos chunkPos, LevelHeightAccessor heightAccessor, WorldgenRandom random, long seed) {
++    public static record Context<C>(C config, ChunkGenerator chunkGenerator, StructureManager structureManager, ChunkPos chunkPos, LevelHeightAccessor heightAccessor, WorldgenRandom random, long seed) {
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGeneratorSupplier.java b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGeneratorSupplier.java
+index d2afb5e0f5474ac96da2f66e96efba899adcf594..1a36018d5d782f3d10efa5b0b5837088b3ab903b 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGeneratorSupplier.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PieceGeneratorSupplier.java
+@@ -26,7 +26,7 @@ public interface PieceGeneratorSupplier<C extends FeatureConfiguration> {
+         return (context) -> context.validBiomeOnTop(types);
+     }
+ 
+-    public static record Context(ChunkGenerator chunkGenerator, BiomeSource biomeSource, long seed, ChunkPos chunkPos, C config, LevelHeightAccessor heightAccessor, Predicate<Biome> validBiome, StructureManager structureManager, RegistryAccess registryAccess) {
++    public static record Context<C>(ChunkGenerator chunkGenerator, BiomeSource biomeSource, long seed, ChunkPos chunkPos, C config, LevelHeightAccessor heightAccessor, Predicate<Biome> validBiome, StructureManager structureManager, RegistryAccess registryAccess) {
+ 
+         public boolean validBiomeOnTop(Heightmap.Types types) {
+             int i = this.chunkPos.getMiddleBlockX();
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
 index 68eaafe2c5a241adc1039fcc9f1247b6cbb9ec0a..73b457e351136d701bd76477791cbbaf7a4cbd28 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
@@ -6759,7 +6920,7 @@ index 7cadd6ef88f0904ce5748e269f6713840d416739..a97e8481af27dc6692b8d187ab751098
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index 9cd2dd6868e2754766f420371226e5e34c8026c3..580bbbe940e77331940359ec0d5b0ae05116f1e3 100644
+index b3c6e50f24802d6e4f1a7e0f08a7c27dfefc22c1..a6ce6879fada021fafccd30aee6cf124dfe10034 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 @@ -83,20 +83,20 @@ public class LevelStorageSource {
@@ -6941,7 +7102,7 @@ index 991d8b974866d6358afdbe8c16c6e4c10f48938f..43e618365794ef6d57e3ef7a2a823cbc
      private static final String TAG_X = "x";
      private static final String TAG_Y = "y";
 diff --git a/src/main/java/net/minecraft/world/ticks/ScheduledTick.java b/src/main/java/net/minecraft/world/ticks/ScheduledTick.java
-index 04b26d2ac445779e4baa77f60a0a2a49c650e7bd..bba05a1ba77aec409bfa2bbdbc334dab5f0c22d9 100644
+index e6629042be3aa1da6b14b79fd3ebc9cefacb42ac..4d4d6541b0633f78dd5fd797e62b95754de2428a 100644
 --- a/src/main/java/net/minecraft/world/ticks/ScheduledTick.java
 +++ b/src/main/java/net/minecraft/world/ticks/ScheduledTick.java
 @@ -5,7 +5,7 @@ import java.util.Comparator;

@@ -5,34 +5,34 @@ Subject: [PATCH] show debug renderer when F3+G
 
 
 diff --git a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
-index 72451093b6306c3d91ad93493efd3b2da77f5101..a6f52260d9b45639757fcd5bd9c7008a704a9593 100644
+index 72451093b6306c3d91ad93493efd3b2da77f5101..8751753b726c78f8ec6c330d1436895b3b99c110 100644
 --- a/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/debug/DebugRenderer.java
 @@ -94,6 +94,27 @@ public class DebugRenderer {
      public void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, double d, double d2, double d3) {
          if (this.renderChunkborder && !Minecraft.getInstance().showOnlyReducedInfo()) {
              this.chunkBorderRenderer.render(poseStack, bufferSource, d, d2, d3);
-+         // MagmaCube start - show debug renderer with F3+G
-+         if (net.minecraft.SharedConstants.IS_RUNNING_IN_IDE) {
-+            this.pathfindingRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.waterDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.chunkBorderRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.heightMapRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.collisionBoxRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.neighborsUpdateRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.structureRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.lightDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.worldGenAttemptRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.solidFaceRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.chunkRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.brainDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.villageSectionsDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.beeDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.raidDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.goalSelectorRenderer.render(poseStack, bufferSource, d, d2, d3);
-+            this.gameTestDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
-+         }
-+         // MagmaCube end - show debug renderer with F3+G
++            // MagmaCube start - show debug renderer with F3+G
++            if (net.minecraft.SharedConstants.IS_RUNNING_IN_IDE) {
++                this.pathfindingRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.waterDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.chunkBorderRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.heightMapRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.collisionBoxRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.neighborsUpdateRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.structureRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.lightDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.worldGenAttemptRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.solidFaceRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.chunkRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.brainDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.villageSectionsDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.beeDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.raidDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.goalSelectorRenderer.render(poseStack, bufferSource, d, d2, d3);
++                this.gameTestDebugRenderer.render(poseStack, bufferSource, d, d2, d3);
++            }
++            // MagmaCube end - show debug renderer with F3+G
          }
  
          this.gameTestDebugRenderer.render(poseStack, bufferSource, d, d2, d3);

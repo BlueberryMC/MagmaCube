@@ -6,7 +6,7 @@
 
     <groupId>net.blueberrymc.minecraft</groupId>
     <artifactId>minecraft-parent</artifactId>
-    <version>1.18-pre1</version>
+    <version>1.18-pre3</version>
     <modules>
         <module>Minecraft</module>
     </modules>
