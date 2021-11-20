@@ -1555,6 +1555,42 @@ index 78350a9ead7b513afa32a1252c41000549e798e9..3fac014c712411f12813cee1875da5bd
          }
  
          public <E> Optional<WritableRegistry<E>> ownedRegistry(ResourceKey<? extends Registry<? extends E>> resourceKey) {
+diff --git a/src/main/java/net/minecraft/core/particles/ParticleTypes.java b/src/main/java/net/minecraft/core/particles/ParticleTypes.java
+index 3fe23a4976ea5f885a43a70b00ba5f40ac27b518..090ff25a63d34d9f183c94c73ab1c15c0946eac3 100644
+--- a/src/main/java/net/minecraft/core/particles/ParticleTypes.java
++++ b/src/main/java/net/minecraft/core/particles/ParticleTypes.java
+@@ -19,8 +19,8 @@ public class ParticleTypes {
+     public static final SimpleParticleType LANDING_LAVA = register("landing_lava", false);
+     public static final SimpleParticleType DRIPPING_WATER = register("dripping_water", false);
+     public static final SimpleParticleType FALLING_WATER = register("falling_water", false);
+-    public static final ParticleType<DustParticleOptions> DUST;
+-    public static final ParticleType<DustColorTransitionOptions> DUST_COLOR_TRANSITION;
++    public static final ParticleType<DustParticleOptions> DUST = register("dust", DustParticleOptions.DESERIALIZER, (particleType) -> DustParticleOptions.CODEC);
++    public static final ParticleType<DustColorTransitionOptions> DUST_COLOR_TRANSITION = register("dust_color_transition", DustColorTransitionOptions.DESERIALIZER, (particleType) -> DustColorTransitionOptions.CODEC);
+     public static final SimpleParticleType EFFECT = register("effect", false);
+     public static final SimpleParticleType ELDER_GUARDIAN = register("elder_guardian", true);
+     public static final SimpleParticleType ENCHANTED_HIT = register("enchanted_hit", false);
+@@ -41,7 +41,7 @@ public class ParticleTypes {
+     public static final SimpleParticleType HEART = register("heart", false);
+     public static final SimpleParticleType INSTANT_EFFECT = register("instant_effect", false);
+     public static final ParticleType<ItemParticleOption> ITEM = register("item", ItemParticleOption.DESERIALIZER, ItemParticleOption::codec);
+-    public static final ParticleType<VibrationParticleOption> VIBRATION;
++    public static final ParticleType<VibrationParticleOption> VIBRATION = register("vibration", VibrationParticleOption.DESERIALIZER, (particleType) -> VibrationParticleOption.CODEC);
+     public static final SimpleParticleType ITEM_SLIME = register("item_slime", false);
+     public static final SimpleParticleType ITEM_SNOWBALL = register("item_snowball", false);
+     public static final SimpleParticleType LARGE_SMOKE = register("large_smoke", false);
+@@ -106,10 +106,4 @@ public class ParticleTypes {
+             }
+         });
+     }
+-
+-    static {
+-        DUST = register("dust", DustParticleOptions.DESERIALIZER, (particleType) -> DustParticleOptions.CODEC);
+-        DUST_COLOR_TRANSITION = register("dust_color_transition", DustColorTransitionOptions.DESERIALIZER, (particleType) -> DustColorTransitionOptions.CODEC);
+-        VIBRATION = register("vibration", VibrationParticleOption.DESERIALIZER, (particleType) -> VibrationParticleOption.CODEC);
+-    }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/data/BuiltinRegistries.java b/src/main/java/net/minecraft/data/BuiltinRegistries.java
 index 5f690250c9d7df01e99d5a3b4e19408e7ccd62fd..369cccb969be8470e2cbfe66f716b0d041c5a95b 100644
 --- a/src/main/java/net/minecraft/data/BuiltinRegistries.java
