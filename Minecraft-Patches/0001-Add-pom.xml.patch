@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..c516335eedad26ff91151fc7051e455c4fac0f94
+index 0000000000000000000000000000000000000000..c776993503cbc7d441f9335d4970f58fe32a0cb2
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,369 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..c516335eedad26ff91151fc7051e455c
 +    <parent>
 +        <artifactId>minecraft-parent</artifactId>
 +        <groupId>net.blueberrymc.minecraft</groupId>
-+        <version>1.18-pre3</version>
++        <version>1.18-pre5</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..c516335eedad26ff91151fc7051e455c
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.2.37</version>
++            <version>3.2.38</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
