@@ -107,10 +107,10 @@
   },
   "assetIndex": {
     "id": "1.18",
-    "sha1": "b1c3e63f32c489f977ac4d325e6a7ba5b7aa757e",
+    "sha1": "ce48875941e15ce9a4fbd692f72e48c0aa43c278",
     "size": 348135,
-    "totalSize": 465746058,
-    "url": "https://launchermeta.mojang.com/v1/packages/b1c3e63f32c489f977ac4d325e6a7ba5b7aa757e/1.18.json"
+    "totalSize": 465771951,
+    "url": "https://launchermeta.mojang.com/v1/packages/ce48875941e15ce9a4fbd692f72e48c0aa43c278/1.18.json"
   },
   "assets": "1.18",
   "logging": {
@@ -229,10 +229,10 @@
       ]
     }
   ],
-  "id": "1.18-pre5-deobf",
+  "id": "1.18-rc1-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2021-11-18T00:00:00+00:00",
-  "time": "2021-11-18T00:00:00+00:00",
+  "releaseTime": "2021-11-24T00:00:00+00:00",
+  "time": "2021-11-24T00:00:00+00:00",
   "type": "snapshot"
 }

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/561446f5e8345f0d77b56f7874ce8aa71cdb1c62/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/6232765f8b87066e271ab984eccd8a8f3af03630/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://launcher.mojang.com/v1/objects/77225d67ef98f5af3990facda860d1e4fd7118b9/client.txt"
+clientMappingUrl="https://launcher.mojang.com/v1/objects/44441ef893cb6531e8322d257e8d03d5463fb810/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
 FF_URL="https://maven.minecraftforge.net/net/minecraftforge/forgeflower/1.5.498.14/forgeflower-1.5.498.14.jar"
@@ -23,7 +23,7 @@ cd "$basedir" || exit 1
 # Download files
 echo "Downloading ForgeFlower..."
 curl $FF_URL --output "$decompilerBin" || (
-  echo "Could not download client mapping, please check for errors above, fix it, then run again."
+  echo "Could not download ForgeFlower, please check for errors above, fix it, then run again."
   exit 1
 )
 echo "Downloading client jar..."
@@ -57,6 +57,6 @@ cd "$basedir" || exit 1
 echo "Decompiling the remapped jar..."
 rm -rf "$decompOutput"
 mkdir -p "$decompOutput"
-java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 -ind="    " -log="INFO" -mpm=30 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput" || exit 1
+java -Xmx4G -jar "$decompilerBin" -dgs=1 -rsy=1 -ind="    " -log="WARN" -mpm=30 "$basedir/work/Minecraft/$version/unpacked" "$decompOutput" || exit 1
 $basedir/scripts/postDownload.sh || exit 1
 echo "  Downloaded the client jar successfully"
