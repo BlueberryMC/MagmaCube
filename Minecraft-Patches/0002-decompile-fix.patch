@@ -2964,7 +2964,7 @@ index 595db43a0f044cbedfd4367ac69491f5f7fc032e..b8872e22ff9aa96e4025b167508c9f87
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 8ddbfc76eb234e6b6033986936ca0d5178216cf6..d503f0ca7e2a3f239626ef3a49b0af40af5961a6 100644
+index 20aad61da4b681c52afaf70ff3e1f693d9a3e0e4..b185ab250275d1090395c4c0c0ef533350696d47 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -303,7 +303,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -3014,7 +3014,7 @@ index 8ddbfc76eb234e6b6033986936ca0d5178216cf6..d503f0ca7e2a3f239626ef3a49b0af40
                      chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk, false));
                  }
  
-@@ -912,7 +912,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -907,7 +907,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
          }
  
@@ -3023,7 +3023,7 @@ index 8ddbfc76eb234e6b6033986936ca0d5178216cf6..d503f0ca7e2a3f239626ef3a49b0af40
          int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
          SectionPos sectionPos = serverPlayer.getLastSectionPos();
          SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -946,17 +946,17 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -941,17 +941,17 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          int i3 = sectionPos.x();
          int i4 = sectionPos.z();
@@ -3045,7 +3045,7 @@ index 8ddbfc76eb234e6b6033986936ca0d5178216cf6..d503f0ca7e2a3f239626ef3a49b0af40
                      this.updateChunkTracking(serverPlayer, chunkPos, new MutableObject(), flag4, flag5);
                  }
              }
-@@ -972,9 +972,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -967,9 +967,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  }
              }
  
@@ -7721,7 +7721,7 @@ index c565b92b29154ace6ab6119aa4ee73aacbf5ede2..7b3cb0b82ed5e543f7593beabd613918
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 867c7b649a1d503ec422c092786dae9885f709ee..3c3d9966e4edfb54523ff6ea504a23a9bf159cbb 100644
+index 3089e54dc75ec6fd04e33b02f285ecb99d616a9a..9164bdf07463e168d42cc3a4b29f852d30906de6 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
