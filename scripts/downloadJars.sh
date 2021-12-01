@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://launcher.mojang.com/v1/objects/060dd014d59c90d723db87f9c9cedb511f374a71/client.jar"
+clientJarUrl="https://launcher.mojang.com/v1/objects/4cf8ed5168308946275308cae955ec70b4379477/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
 clientMappingUrl="https://launcher.mojang.com/v1/objects/b64667a23e5ea5f0cc0547241c253d2a72a97c56/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
