@@ -1,10 +1,10 @@
-name: Build (JDK 16)
+name: Build (JDK 17)
 
 on:
   push:
-    branches: '*'
+    branches: ['*']
   pull_request:
-    branches: '*'
+    branches: ['*']
 
 jobs:
   build:
@@ -22,12 +22,12 @@ jobs:
     - name: Pre-build step
       if: ${{ !steps.skip-workflow.outputs.skip }}
       run: 'git submodule init && git submodule update && git config --global user.email me@acrylicstyle.xyz && git config --global user.name acrylic-style'
-    - name: Set up JDK 16
+    - name: Set up JDK 17
       if: ${{ !steps.skip-workflow.outputs.skip }}
       uses: actions/setup-java@v2
       with:
-        java-version: '16'
-        distribution: 'adopt'
+        java-version: '17'
+        distribution: 'temurin'
     - name: Apply patches
       if: ${{ !steps.skip-workflow.outputs.skip }}
       run: ./magma p
