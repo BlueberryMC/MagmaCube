@@ -248,10 +248,10 @@ index 7bc9bbfdaaca5671901413331376367803f046ef..98e8534a9c98e673f3dce9d599d1e161
          }).start();
      }
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index d635ec691ad51e0fe223effa3d05a7763efbba6d..193e89504728aa76282af8fc9de7f083857a6d15 100644
+index ef0b8a64b35b51acec731d7246459e36ef91d717..a2c4ae092937c8a1aae497399e348f8fe9dfc4c6 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
-@@ -24,6 +24,7 @@ import java.nio.file.Path;
+@@ -26,6 +26,7 @@ import java.nio.file.Path;
  import java.nio.file.spi.FileSystemProvider;
  import java.security.AccessController;
  import java.security.PrivilegedActionException;
@@ -259,7 +259,7 @@ index d635ec691ad51e0fe223effa3d05a7763efbba6d..193e89504728aa76282af8fc9de7f083
  import java.time.Duration;
  import java.time.Instant;
  import java.util.Arrays;
-@@ -128,21 +129,21 @@ public class Util {
+@@ -137,21 +138,21 @@ public class Util {
      }
  
      private static int getMaxThreads() {
@@ -286,7 +286,7 @@ index d635ec691ad51e0fe223effa3d05a7763efbba6d..193e89504728aa76282af8fc9de7f083
      }
  
      public static ExecutorService bootstrapExecutor() {
-@@ -253,7 +254,7 @@ public class Util {
+@@ -262,7 +263,7 @@ public class Util {
              String s2 = thread.getName();
              thread.setName(s);
  
@@ -295,7 +295,7 @@ index d635ec691ad51e0fe223effa3d05a7763efbba6d..193e89504728aa76282af8fc9de7f083
              try {
                  var4 = supplier.get();
              } finally {
-@@ -338,18 +339,18 @@ public class Util {
+@@ -347,18 +348,18 @@ public class Util {
      }
  
      public static <K> Strategy<K> identityStrategy() {
@@ -321,7 +321,7 @@ index d635ec691ad51e0fe223effa3d05a7763efbba6d..193e89504728aa76282af8fc9de7f083
                  list3.addAll(list2);
                  return list3;
              }));
-@@ -677,7 +678,7 @@ public class Util {
+@@ -711,7 +712,7 @@ public class Util {
  
          public void openUrl(URL url) {
              try {
@@ -551,10 +551,10 @@ index eac1085032dfd9318d7ff470f0cf35f39f1d11e6..a6dbc8b187405d7884d65d66567dec77
      public static final CycleOption<ChatVisiblity> CHAT_VISIBILITY = CycleOption.create("options.chat.visibility", ChatVisiblity.values(), (chatVisiblity) -> new TranslatableComponent(chatVisiblity.getKey()), (options) -> options.chatVisibility, (options, option, chatVisiblity) -> options.chatVisibility = chatVisiblity);
      private static final Component GRAPHICS_TOOLTIP_FAST = new TranslatableComponent("options.graphics.fast.tooltip");
 diff --git a/src/main/java/net/minecraft/client/Options.java b/src/main/java/net/minecraft/client/Options.java
-index 953997808e915ea6c838ced1c35ac38f82255e31..b79acc9ccbcc4e001b4c7634a87a4d6d707676ee 100644
+index e3e17aeb543e2ee0fe4ebb0b226b79d7f2dd88be..a65643f052be5919667a53e74784b36a04ebee1a 100644
 --- a/src/main/java/net/minecraft/client/Options.java
 +++ b/src/main/java/net/minecraft/client/Options.java
-@@ -297,7 +297,7 @@ public class Options {
+@@ -298,7 +298,7 @@ public class Options {
          }
  
          for(SoundSource soundSource : SoundSource.values()) {
@@ -563,7 +563,7 @@ index 953997808e915ea6c838ced1c35ac38f82255e31..b79acc9ccbcc4e001b4c7634a87a4d6d
          }
  
          for(PlayerModelPart playerModelPart : PlayerModelPart.values()) {
-@@ -686,7 +686,7 @@ public class Options {
+@@ -687,7 +687,7 @@ public class Options {
      }
  
      public String dumpOptionsForReport() {
@@ -870,7 +870,7 @@ index 0c453fe5a7b46d307673f5852e3695059e8a5414..35c862ea64f1a918f0ae211003f233ed
                  }
  
 diff --git a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-index 79e3fed08b5fd42d05ac5b448cc36000134670da..f0a5f7a81a41167bdb5edfa05be9b8631a579439 100644
+index 685e8f6fde9e6105e36b83ce05021bd60d565b4b..63816fb5f0713062008224faa751a1eb7e49cb5d 100644
 --- a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 @@ -925,131 +925,63 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
@@ -2737,7 +2737,7 @@ index c701083fefcd41e419ac697887efd3d346ba6d5b..bcec814d749e5c90f3378e4e6a5c61ad
  
      public ResourceLocation location() {
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 27c90d19b6a7fd2be0f4d61627081aef59ea4699..32412fbbd625b7ae22e62b0f439152187f061f5b 100644
+index 142bee548f21cddf7b2a040ac18b188c10d053c7..3d2b2b9d38ea0ac27edf3c1bc916a33485077537 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -174,17 +174,17 @@ public class Main {
@@ -2964,10 +2964,10 @@ index 595db43a0f044cbedfd4367ac69491f5f7fc032e..b8872e22ff9aa96e4025b167508c9f87
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 20aad61da4b681c52afaf70ff3e1f693d9a3e0e4..b185ab250275d1090395c4c0c0ef533350696d47 100644
+index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de04cc71167 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
-@@ -303,7 +303,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -270,7 +270,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          CompletableFuture<List<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> completableFuture2 = Util.sequence(list);
          CompletableFuture<Either<List<ChunkAccess>, ChunkHolder.ChunkLoadingFailure>> completableFuture3 = completableFuture2.thenApply((listx) -> {
@@ -2976,7 +2976,7 @@ index 20aad61da4b681c52afaf70ff3e1f693d9a3e0e4..b185ab250275d1090395c4c0c0ef5333
              int i4 = 0;
  
              for(final Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure> either : listx) {
-@@ -317,11 +317,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -284,11 +284,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                      });
                  }
  
@@ -2990,7 +2990,7 @@ index 20aad61da4b681c52afaf70ff3e1f693d9a3e0e4..b185ab250275d1090395c4c0c0ef5333
          });
  
          for(ChunkHolder chunkHolder2 : list2) {
-@@ -556,11 +556,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -523,11 +523,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
          CompletableFuture<Either<List<ChunkAccess>, ChunkHolder.ChunkLoadingFailure>> completableFuture = this.getChunkRangeFuture(chunkPos, chunkStatus.getRange(), (i) -> this.getDependencyStatus(chunkStatus, i));
          this.level.getProfiler().incrementCounter((Supplier<String>)(() -> "chunkGenerate " + chunkStatus.getName()));
          Executor executor = (runnable) -> this.worldgenMailbox.tell(ChunkTaskPriorityQueueSorter.message(chunkHolder, runnable));
@@ -3005,7 +3005,7 @@ index 20aad61da4b681c52afaf70ff3e1f693d9a3e0e4..b185ab250275d1090395c4c0c0ef5333
                  } catch (Exception var9) {
                      var9.getStackTrace();
                      CrashReport crashReport = CrashReport.forThrowable(var9, "Exception generating new chunk");
-@@ -612,7 +612,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -579,7 +579,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  if (protoChunk instanceof ImposterProtoChunk) {
                      levelChunk = ((ImposterProtoChunk)protoChunk).getWrapped();
                  } else {
@@ -3014,7 +3014,7 @@ index 20aad61da4b681c52afaf70ff3e1f693d9a3e0e4..b185ab250275d1090395c4c0c0ef5333
                      chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk, false));
                  }
  
-@@ -907,7 +907,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -875,7 +875,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
          }
  
@@ -3023,40 +3023,39 @@ index 20aad61da4b681c52afaf70ff3e1f693d9a3e0e4..b185ab250275d1090395c4c0c0ef5333
          int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
          SectionPos sectionPos = serverPlayer.getLastSectionPos();
          SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -941,17 +941,17 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -909,16 +909,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          int i3 = sectionPos.x();
          int i4 = sectionPos.z();
 -        if (Math.abs(i3 - i) <= this.viewDistance * 2 && Math.abs(i4 - i2) <= this.viewDistance * 2) {
--            int i5 = Math.min(i, i3) - this.viewDistance;
+-            int i5 = Math.min(i, i3) - this.viewDistance - 1;
 +        if (Math.abs(i3 - iIn) <= this.viewDistance * 2 && Math.abs(i4 - i2) <= this.viewDistance * 2) {
-+            int i5 = Math.min(iIn, i3) - this.viewDistance;
-             int i6 = Math.min(i2, i4) - this.viewDistance;
--            int i7 = Math.max(i, i3) + this.viewDistance;
-+            int i7 = Math.max(iIn, i3) + this.viewDistance;
-             int i8 = Math.max(i2, i4) + this.viewDistance;
++            int i5 = Math.min(iIn, i3) - this.viewDistance - 1;
+             int i6 = Math.min(i2, i4) - this.viewDistance - 1;
+-            int i7 = Math.max(i, i3) + this.viewDistance + 1;
++            int i7 = Math.max(iIn, i3) + this.viewDistance + 1;
+             int i8 = Math.max(i2, i4) + this.viewDistance + 1;
  
              for(int i9 = i5; i9 <= i7; ++i9) {
                  for(int i10 = i6; i10 <= i8; ++i10) {
-                     ChunkPos chunkPos = new ChunkPos(i9, i10);
-                     boolean flag4 = isChunkInEuclideanRange(chunkPos, i3, i4, this.viewDistance);
--                    boolean flag5 = isChunkInEuclideanRange(chunkPos, i, i2, this.viewDistance);
-+                    boolean flag5 = isChunkInEuclideanRange(chunkPos, iIn, i2, this.viewDistance);
-                     this.updateChunkTracking(serverPlayer, chunkPos, new MutableObject(), flag4, flag5);
+                     boolean flag4 = isChunkInRange(i9, i10, i3, i4, this.viewDistance);
+-                    boolean flag5 = isChunkInRange(i9, i10, i, i2, this.viewDistance);
++                    boolean flag5 = isChunkInRange(i9, i10, iIn, i2, this.viewDistance);
+                     this.updateChunkTracking(serverPlayer, new ChunkPos(i9, i10), new MutableObject(), flag4, flag5);
                  }
              }
-@@ -967,9 +967,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -933,9 +933,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  }
              }
  
--            for(int i13 = i - this.viewDistance; i13 <= i + this.viewDistance; ++i13) {
-+            for(int i13 = iIn - this.viewDistance; i13 <= iIn + this.viewDistance; ++i13) {
-                 for(int i14 = i2 - this.viewDistance; i14 <= i2 + this.viewDistance; ++i14) {
--                    if (isChunkInEuclideanRange(i13, i14, i, i2, this.viewDistance)) {
-+                    if (isChunkInEuclideanRange(i13, i14, iIn, i2, this.viewDistance)) {
-                         ChunkPos chunkPos3 = new ChunkPos(i13, i14);
+-            for(int i13 = i - this.viewDistance - 1; i13 <= i + this.viewDistance + 1; ++i13) {
++            for(int i13 = iIn - this.viewDistance - 1; i13 <= iIn + this.viewDistance + 1; ++i13) {
+                 for(int i14 = i2 - this.viewDistance - 1; i14 <= i2 + this.viewDistance + 1; ++i14) {
+-                    if (isChunkInRange(i13, i14, i, i2, this.viewDistance)) {
++                    if (isChunkInRange(i13, i14, iIn, i2, this.viewDistance)) {
                          boolean flag8 = false;
                          boolean flag9 = true;
+                         this.updateChunkTracking(serverPlayer, new ChunkPos(i13, i14), new MutableObject(), false, true);
 diff --git a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueue.java b/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueue.java
 index 4563a38cbe68298cbf34c7d7be84041561ea6978..8b9a44282ab3eeddf9999a26034d5a6dd408b6d2 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueue.java
@@ -3171,10 +3170,10 @@ index 9b4e5fed3bf3bbdc801cea9a1112164803da74bd..7e3d1e530e9d2e6f24abf4cdb4ab7149
                  return true;
              } else {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 0ae174f3e23f656e0e0b1ed454c4b495f31497d8..622c6d5400560c0bbac5a61a34d5676829443028 100644
+index bbbdca6af4fa9949a84223822b1331bbd7570ecd..518c82a413a777a7ae5be8215631aad9fe477468 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1341,7 +1341,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1361,7 +1361,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  object2IntOpenHashMap.addTo(s, 1);
              }
  
@@ -4469,10 +4468,10 @@ index c407f82326ff631ac1fb1344a41a5a87e6e07d0f..fed9a916b296910074bea760c4ba5991
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ItemWrittenBookPagesStrictJsonFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ItemWrittenBookPagesStrictJsonFix.java
-index d9af7f13a6f4c9c8667106280b5477dd27618ddd..60fd953c79035011d1641902450c1db3e4230a7d 100644
+index 6cb5056748301b3d82c400700d6fc9ada9f6cfda..8c1832c2c2cb732d447dda4c46b01725def158e7 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/ItemWrittenBookPagesStrictJsonFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/ItemWrittenBookPagesStrictJsonFix.java
-@@ -20,11 +20,11 @@ public class ItemWrittenBookPagesStrictJsonFix extends DataFix {
+@@ -19,11 +19,11 @@ public class ItemWrittenBookPagesStrictJsonFix extends DataFix {
      }
  
      public Dynamic<?> fixTag(Dynamic<?> dynamic) {
@@ -4488,7 +4487,7 @@ index d9af7f13a6f4c9c8667106280b5477dd27618ddd..60fd953c79035011d1641902450c1db3
                          Component component = null;
                          if (!"null".equals(s) && !StringUtils.isEmpty(s)) {
                              if (s.charAt(0) == '"' && s.charAt(s.length() - 1) == '"' || s.charAt(0) == '{' && s.charAt(s.length() - 1) == '}') {
-@@ -60,7 +60,7 @@ public class ItemWrittenBookPagesStrictJsonFix extends DataFix {
+@@ -59,7 +59,7 @@ public class ItemWrittenBookPagesStrictJsonFix extends DataFix {
                              component = TextComponent.EMPTY;
                          }
  
@@ -9589,7 +9588,7 @@ index 1454d50ade65cac9c90a31eaf85014a66f7697e0..eacb549cb0c2fcd0bfe03cd561e3bbea
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/ticks/LevelTicks.java b/src/main/java/net/minecraft/world/ticks/LevelTicks.java
-index ebebfce87ee04ba5d9cd0fce176616fb0dd96d05..63c54a79f175dc6f9e5dbdaa06e409b0f9589ad5 100644
+index 8d34f778a96b7a9974129089cc4eca42564d6c6a..6d70fa1c7c96125b07faee8de23f80747c2e70ed 100644
 --- a/src/main/java/net/minecraft/world/ticks/LevelTicks.java
 +++ b/src/main/java/net/minecraft/world/ticks/LevelTicks.java
 @@ -75,7 +75,7 @@ public class LevelTicks<T> implements LevelTickAccess<T> {

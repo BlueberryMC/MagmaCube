@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index e2271b841f35dad824dc0b4d6c7db33b11babf80..b834992f6802c22ebdc45dbaf769a209fbd0e77b 100644
+index 374fecc1fec7fb31bd0b4eda2ef1de6fcce45027..91abf064c0c3a7dae6435dd922dc3a4d29b47ab3 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -19,7 +19,7 @@ index e2271b841f35dad824dc0b4d6c7db33b11babf80..b834992f6802c22ebdc45dbaf769a209
 @@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
          this.dataPackVersion = 8;
          this.buildTime = new Date();
-         this.releaseTarget = "1.18";
+         this.releaseTarget = "1.18.1";
 +        this.magmaCubeVersion = "debug"; // MagmaCube
      }
  
@@ -87,7 +87,7 @@ index 40d4d30f75d514c00e1cc6a252faae3fea503058..4b8d68438c9ead9ac3306a75ffa19e47
                  fill(poseStack, this.copyrightX, this.height - 1, this.copyrightX + this.copyrightWidth, this.height, 16777215 | i6);
              }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index df77b086743abf66a6d3d4a1e9423c153a1edb60..6b552c2315e86fa2cf5d8ef7e2d79b7439da7e4d 100644
+index 60be6da816a824e06a4370e5f1571cbb40f299af..2495572ee0b0dce2beb87d1c612ad2965e1af99c 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -922,7 +922,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
