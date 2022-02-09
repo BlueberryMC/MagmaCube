@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.blueberrymc.minecraft</groupId>
-    <artifactId>minecraft-parent</artifactId>
-    <version>1.18.1</version>
+    <groupId>net.blueberrymc.magmacube</groupId>
+    <artifactId>magmacube-parent</artifactId>
+    <version>22w03a</version>
     <modules>
         <module>Minecraft</module>
     </modules>
     <packaging>pom</packaging>
 
-    <name>Minecraft-Parent</name>
-    <description>Parent project for the Minecraft Project.</description>
+    <name>MagmaCube-Parent</name>
+    <description>Parent project for the MagmaCube Project.</description>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -39,12 +39,8 @@
 
     <repositories>
         <repository>
-            <id>acrylic-repo</id>
-            <url>https://repo.acrylicstyle.xyz/</url>
-        </repository>
-        <repository>
-            <id>acrylic-repo2</id>
-            <url>https://repo2.acrylicstyle.xyz/</url>
+            <id>blueberrymc-repo</id>
+            <url>https://repo.blueberrymc.net/</url>
         </repository>
     </repositories>
 

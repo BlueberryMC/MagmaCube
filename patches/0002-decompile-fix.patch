@@ -71,7 +71,7 @@ index 5d67e82e1e84949675c52f25f655c57cfc0adb6d..be0cd286660a3b104a267603ecf51c79
  
      private static void toggleFullscreen(NSObject nSObject) {
 diff --git a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
-index 9f32f9f8c0b32ed63e02f70a554e2f5c50972278..3d487f375e5dc3e4deb276ad8a7164e65848c03a 100644
+index 2af5b7e9255c9a2847e3b8b75efb34a71c5ee531..aec550052d87b4efd229723a3f8defa3c1b6b4d5 100644
 --- a/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
 +++ b/src/main/java/com/mojang/blaze3d/vertex/BufferBuilder.java
 @@ -61,7 +61,7 @@ public class BufferBuilder extends DefaultedVertexConsumer implements BufferVert
@@ -122,7 +122,7 @@ index 00b8353961e5737884435e1a72f6fef37527c918..81b15d782de7485dba613eb60ee5fc4c
  }
 \ No newline at end of file
 diff --git a/src/main/java/com/mojang/realmsclient/client/FileUpload.java b/src/main/java/com/mojang/realmsclient/client/FileUpload.java
-index caae2969ff5a080b638a80e486ace7bbbc328ce9..79ff84c70f176148585ebb5ed058f0928c74a486 100644
+index 698735d764d710d351613726a35f7b7ca54415a4..6de8b02512666a9346ff64abd90d3556f7b16167 100644
 --- a/src/main/java/com/mojang/realmsclient/client/FileUpload.java
 +++ b/src/main/java/com/mojang/realmsclient/client/FileUpload.java
 @@ -159,7 +159,7 @@ public class FileUpload {
@@ -135,7 +135,7 @@ index caae2969ff5a080b638a80e486ace7bbbc328ce9..79ff84c70f176148585ebb5ed058f092
  
      public boolean isFinished() {
 diff --git a/src/main/java/com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen.java b/src/main/java/com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen.java
-index 7e0907650b0981f460b8c19245ad84213a9b8102..2af941bf22efd7ff09c55ef60386799ab09abc7a 100644
+index aa0d8950b880ba5c985d6a6fcb000d5967cb5649..03027e85bcf562f822e510e467d9937691220c7d 100644
 --- a/src/main/java/com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen.java
 +++ b/src/main/java/com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen.java
 @@ -76,7 +76,7 @@ public class RealmsBrokenWorldScreen extends RealmsScreen {
@@ -172,7 +172,7 @@ index 7e0907650b0981f460b8c19245ad84213a9b8102..2af941bf22efd7ff09c55ef60386799a
                      this.minecraft.setScreen(this);
                      this.doSwitchOrReset();
 diff --git a/src/main/java/com/mojang/realmsclient/gui/screens/RealmsSelectWorldTemplateScreen.java b/src/main/java/com/mojang/realmsclient/gui/screens/RealmsSelectWorldTemplateScreen.java
-index 7bc9bbfdaaca5671901413331376367803f046ef..98e8534a9c98e673f3dce9d599d1e161fadda880 100644
+index d90f7c57dde46e249780eff56acc552454ab17b5..5141943244bb68e7c0c3efa45ee03f427ba6763a 100644
 --- a/src/main/java/com/mojang/realmsclient/gui/screens/RealmsSelectWorldTemplateScreen.java
 +++ b/src/main/java/com/mojang/realmsclient/gui/screens/RealmsSelectWorldTemplateScreen.java
 @@ -187,43 +187,43 @@ public class RealmsSelectWorldTemplateScreen extends RealmsScreen {
@@ -248,10 +248,10 @@ index 7bc9bbfdaaca5671901413331376367803f046ef..98e8534a9c98e673f3dce9d599d1e161
          }).start();
      }
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index ef0b8a64b35b51acec731d7246459e36ef91d717..a2c4ae092937c8a1aae497399e348f8fe9dfc4c6 100644
+index 8b4e61fb942635cd2c398446a210ddd171d8064f..9d63b50cdec8abae9b6f4c403ffaceb37ad6e92a 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
-@@ -26,6 +26,7 @@ import java.nio.file.Path;
+@@ -25,6 +25,7 @@ import java.nio.file.Path;
  import java.nio.file.spi.FileSystemProvider;
  import java.security.AccessController;
  import java.security.PrivilegedActionException;
@@ -259,7 +259,7 @@ index ef0b8a64b35b51acec731d7246459e36ef91d717..a2c4ae092937c8a1aae497399e348f8f
  import java.time.Duration;
  import java.time.Instant;
  import java.util.Arrays;
-@@ -137,21 +138,21 @@ public class Util {
+@@ -128,21 +129,21 @@ public class Util {
      }
  
      private static int getMaxThreads() {
@@ -273,11 +273,11 @@ index ef0b8a64b35b51acec731d7246459e36ef91d717..a2c4ae092937c8a1aae497399e348f8f
                      return i;
                  }
  
--                LOGGER.error("Wrong {} property value '{}'. Should be an integer value between 1 and {}.", "max.bg.threads", s, 255);
-+                LOGGER.error("Wrong {} property value '{}'. Should be an integer value between 1 and {}.", MAX_THREADS_SYSTEM_PROPERTY, s, DEFAULT_MAX_THREADS);
+-                LOGGER.error("Wrong {} property value '{}'. Should be an integer value between 1 and {}.", new Object[]{"max.bg.threads", s, 255});
++                LOGGER.error("Wrong {} property value '{}'. Should be an integer value between 1 and {}.", new Object[]{"max.bg.threads", s, DEFAULT_MAX_THREADS});
              } catch (NumberFormatException var2) {
--                LOGGER.error("Could not parse {} property value '{}'. Should be an integer value between 1 and {}.", "max.bg.threads", s, 255);
-+                LOGGER.error("Could not parse {} property value '{}'. Should be an integer value between 1 and {}.", MAX_THREADS_SYSTEM_PROPERTY, s, DEFAULT_MAX_THREADS);
+-                LOGGER.error("Could not parse {} property value '{}'. Should be an integer value between 1 and {}.", new Object[]{"max.bg.threads", s, 255});
++                LOGGER.error("Could not parse {} property value '{}'. Should be an integer value between 1 and {}.", new Object[]{"max.bg.threads", s, DEFAULT_MAX_THREADS});
              }
          }
  
@@ -286,7 +286,7 @@ index ef0b8a64b35b51acec731d7246459e36ef91d717..a2c4ae092937c8a1aae497399e348f8f
      }
  
      public static ExecutorService bootstrapExecutor() {
-@@ -262,7 +263,7 @@ public class Util {
+@@ -253,7 +254,7 @@ public class Util {
              String s2 = thread.getName();
              thread.setName(s);
  
@@ -295,7 +295,7 @@ index ef0b8a64b35b51acec731d7246459e36ef91d717..a2c4ae092937c8a1aae497399e348f8f
              try {
                  var4 = supplier.get();
              } finally {
-@@ -347,18 +348,18 @@ public class Util {
+@@ -338,18 +339,18 @@ public class Util {
      }
  
      public static <K> Strategy<K> identityStrategy() {
@@ -321,7 +321,7 @@ index ef0b8a64b35b51acec731d7246459e36ef91d717..a2c4ae092937c8a1aae497399e348f8f
                  list3.addAll(list2);
                  return list3;
              }));
-@@ -711,7 +712,7 @@ public class Util {
+@@ -685,7 +686,7 @@ public class Util {
  
          public void openUrl(URL url) {
              try {
@@ -468,7 +468,7 @@ index 762a8b578ac3805a6d251e81b46acc4c3aee24ad..d0a5166e52c93543b8eeecb501829058
              options.save();
          });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index bff46f1c452b02f3d221be1b5b0cac49d36a9f66..ab0ba1c24978be4f02c03217370bd5524a4e2a38 100644
+index 69327d8271c17f5fd525db930bcf8516dd1feacc..0259409837ee066a5e3d4366d5e31278a73ae95e 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
 @@ -516,7 +516,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
@@ -489,7 +489,7 @@ index bff46f1c452b02f3d221be1b5b0cac49d36a9f66..ab0ba1c24978be4f02c03217370bd552
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2229,13 +2229,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2238,13 +2238,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -506,7 +506,7 @@ index bff46f1c452b02f3d221be1b5b0cac49d36a9f66..ab0ba1c24978be4f02c03217370bd552
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2257,7 +2257,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2266,7 +2266,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -551,7 +551,7 @@ index eac1085032dfd9318d7ff470f0cf35f39f1d11e6..a6dbc8b187405d7884d65d66567dec77
      public static final CycleOption<ChatVisiblity> CHAT_VISIBILITY = CycleOption.create("options.chat.visibility", ChatVisiblity.values(), (chatVisiblity) -> new TranslatableComponent(chatVisiblity.getKey()), (options) -> options.chatVisibility, (options, option, chatVisiblity) -> options.chatVisibility = chatVisiblity);
      private static final Component GRAPHICS_TOOLTIP_FAST = new TranslatableComponent("options.graphics.fast.tooltip");
 diff --git a/src/main/java/net/minecraft/client/Options.java b/src/main/java/net/minecraft/client/Options.java
-index e3e17aeb543e2ee0fe4ebb0b226b79d7f2dd88be..a65643f052be5919667a53e74784b36a04ebee1a 100644
+index 2cad6e9cebcf278c5fc1aadc961dcbe5733f4b04..ce1af577897cccb7c7ab06b804ba6a61796bd316 100644
 --- a/src/main/java/net/minecraft/client/Options.java
 +++ b/src/main/java/net/minecraft/client/Options.java
 @@ -298,7 +298,7 @@ public class Options {
@@ -642,7 +642,7 @@ index b1affb61c23aea93466c45b1ea21b7afb84a7420..2661c93e79a3775d410a2307ca64d30d
  
      public static class Builder<T> {
 diff --git a/src/main/java/net/minecraft/client/gui/font/FontManager.java b/src/main/java/net/minecraft/client/gui/font/FontManager.java
-index 88b8c76e50f0439249db18a907b17315312a14f7..b2edef46a662f12f698d25a9b8b6c5e358d17171 100644
+index 0c1ebab666e43fe6df96809c7a731b5aada7a92a..8cfb498c96d5f2067a4eb3e1939f3217657d3558 100644
 --- a/src/main/java/net/minecraft/client/gui/font/FontManager.java
 +++ b/src/main/java/net/minecraft/client/gui/font/FontManager.java
 @@ -129,7 +129,7 @@ public class FontManager implements AutoCloseable {
@@ -655,18 +655,18 @@ index 88b8c76e50f0439249db18a907b17315312a14f7..b2edef46a662f12f698d25a9b8b6c5e3
                          for(GlyphProvider glyphProvider : Lists.reverse(list)) {
                              if (glyphProvider.getGlyph(ix) != null) {
 diff --git a/src/main/java/net/minecraft/client/gui/font/FontSet.java b/src/main/java/net/minecraft/client/gui/font/FontSet.java
-index 46be8963d9bd0fe53bbe4eade7078752f3c03877..19764e3234661e5510b67f9f53b9965e1526f2f1 100644
+index 16595aeffc788248ecbfdcc6e9e5303b4c1f673a..d109e93cac9161fa78d33f0164511158f2e4d03c 100644
 --- a/src/main/java/net/minecraft/client/gui/font/FontSet.java
 +++ b/src/main/java/net/minecraft/client/gui/font/FontSet.java
-@@ -56,7 +56,7 @@ public class FontSet implements AutoCloseable {
+@@ -59,7 +59,7 @@ public class FontSet implements AutoCloseable {
          }
  
          Set<GlyphProvider> set = Sets.newHashSet();
 -        intSet.forEach((i) -> {
 +        intSet.forEach((java.util.function.IntConsumer) (i) -> {
              for(GlyphProvider glyphProvider : list) {
-                 GlyphInfo glyphInfo = (GlyphInfo)(i == 32 ? SPACE_INFO : glyphProvider.getGlyph(i));
-                 if (glyphInfo != null) {
+                 GlyphInfo glyphInfo = this.getGlyphInfoForSpace(i);
+                 if (glyphInfo == null) {
 diff --git a/src/main/java/net/minecraft/client/gui/narration/NarrationThunk.java b/src/main/java/net/minecraft/client/gui/narration/NarrationThunk.java
 index d1b34189eb5f13c1f3886acd5ead146244bde0dd..1cc84417f43fcb3584388587298958db00a5c158 100644
 --- a/src/main/java/net/minecraft/client/gui/narration/NarrationThunk.java
@@ -756,7 +756,7 @@ index c606c85eba4510e757b35f98fa2ef46ee1178518..606aa7524bcec38055a93d88c764cbcf
              this.updateMode(structureMode);
          }));
 diff --git a/src/main/java/net/minecraft/client/gui/screens/packs/PackSelectionScreen.java b/src/main/java/net/minecraft/client/gui/screens/packs/PackSelectionScreen.java
-index d0687e0ff671698da68a55e4e4314ecd8dae19c3..2588001e4c9ab758cc86132f47741d2197cc66c7 100644
+index aafc9a3b88942bb938fc072cd80f87dfc6a1db6a..2735003432aa53cd0da5086c052d5d6691bab54b 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/packs/PackSelectionScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/packs/PackSelectionScreen.java
 @@ -219,8 +219,8 @@ public class PackSelectionScreen extends Screen {
@@ -784,7 +784,7 @@ index ca140af94b344fad60cd9d9c72ee2e6359947ad7..ef253c9e47a9d3f6e8476f5e41b9d66f
                          EditGameRulesScreen.this.font.split(component4, 150).forEach(builder::add);
                          list = builder.add(component3.getVisualOrderText()).build();
 diff --git a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
-index d168ae161670ef13e6f8f84821423ec8a522fed5..c7bf0a0a9e71c89abbcd996cf0352945c4f72581 100644
+index e717e6271ea77595fa5e937c3e7168c641d74b2c..611ba12388ae332bed8439f1a6b84cf30c4489c1 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 @@ -274,10 +274,10 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.W
@@ -812,7 +812,7 @@ index d168ae161670ef13e6f8f84821423ec8a522fed5..c7bf0a0a9e71c89abbcd996cf0352945
                          }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index d3604f0e912f675bc7038d25282d7f703bd645bc..e5c361d891800862f85345ae63e69a640fc88611 100644
+index a6ecc5803087e4f0b7efdeb9bdfa5c7bb5055627..21a7664eb8642fc4f1c19c11e2a8a1397c210b20 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 @@ -509,7 +509,7 @@ public class ClientPacketListener implements ClientGamePacketListener {
@@ -824,7 +824,7 @@ index d3604f0e912f675bc7038d25282d7f703bd645bc..e5c361d891800862f85345ae63e69a64
      }
  
      public void handleMovePlayer(ClientboundPlayerPositionPacket clientboundPlayerPositionPacket) {
-@@ -1474,10 +1474,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1479,10 +1479,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
                  } else {
                      this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                              this.minecraft.setScreen((Screen)null);
@@ -838,7 +838,7 @@ index d3604f0e912f675bc7038d25282d7f703bd645bc..e5c361d891800862f85345ae63e69a64
                                  }
  
                                  this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
-@@ -1486,13 +1486,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1491,13 +1491,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
                                  this.send(ServerboundResourcePackPacket.Action.DECLINED);
                                  if (flag) {
                                      this.connection.disconnect(new TranslatableComponent("multiplayer.requiredTexturePrompt.disconnect"));
@@ -870,190 +870,120 @@ index 0c453fe5a7b46d307673f5852e3695059e8a5414..35c862ea64f1a918f0ae211003f233ed
                  }
  
 diff --git a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-index 685e8f6fde9e6105e36b83ce05021bd60d565b4b..63816fb5f0713062008224faa751a1eb7e49cb5d 100644
+index 6c655db49811b9260320f096b04ba0b10d561d38..4b46da8d3903cde23301009f63b77278c9ae1462 100644
 --- a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-@@ -925,131 +925,63 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
-             for(Direction direction2 : DIRECTIONS) {
-                 ChunkRenderDispatcher.RenderChunk renderChunk2 = this.getRelativeFrom(blockPos, renderChunk, direction2);
-                 if (renderChunk2 == null) {
--                    if (!this.closeToBorder(blockPos, renderChunk)) {
-+                    if (!closeToBorder(blockPos, renderChunk)) {
-                         this.nextFullUpdateMillis.set(System.currentTimeMillis() + 500L);
-                     }
--                } else if (!flag || !renderChunkInfo.hasDirection(direction2.getOpposite())) {
--                    if (flag && renderChunkInfo.hasSourceDirections()) {
--                        ChunkRenderDispatcher.CompiledChunk compiledChunk = renderChunk.getCompiledChunk();
--                        boolean flag3 = false;
--
+@@ -931,7 +931,7 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+                         ChunkRenderDispatcher.CompiledChunk compiledChunk = renderChunk.getCompiledChunk();
+                         boolean flag3 = false;
+ 
 -                        for(int i2 = 0; i2 < DIRECTIONS.length; ++i2) {
--                            if (renderChunkInfo.hasSourceDirection(i2) && compiledChunk.facesCanSeeEachother(DIRECTIONS[i2].getOpposite(), direction2)) {
--                                flag3 = true;
--                                break;
--                            }
--                        }
--
--                        if (!flag3) {
--                            continue;
--                        }
--                    }
--
--                    if (flag && flag2 && renderChunkInfo.hasSourceDirections() && !renderChunkInfo.hasSourceDirection(direction.ordinal())) {
--                        ChunkRenderDispatcher.RenderChunk renderChunk3 = this.getRelativeFrom(blockPos, renderChunk, direction.getOpposite());
--                        if (renderChunk3 == null) {
--                            continue;
--                        }
--
--                        LevelRenderer.RenderChunkInfo renderChunkInfo2 = renderInfoMap.get(renderChunk3);
--                        if (renderChunkInfo2 == null) {
--                            continue;
-+                    continue;
-+                }
-+                if (flag && renderChunkInfo.hasDirection(direction2.getOpposite())) continue;
-+                if (flag && renderChunkInfo.hasSourceDirections()) {
-+                    ChunkRenderDispatcher.CompiledChunk compiledChunk = renderChunk.getCompiledChunk();
-+                    boolean flag3 = false;
-+                    for (int i2 = 0; i2 < DIRECTIONS.length; i2++) {
-+                        if (renderChunkInfo.hasSourceDirection(i2) && compiledChunk.facesCanSeeEachother(DIRECTIONS[i2].getOpposite(), direction2)) {
-+                            flag3 = true;
-+                            break;
++                        for (int i2 = 0; i2 < DIRECTIONS.length; ++i2) {
+                             if (renderChunkInfo.hasSourceDirection(i2) && compiledChunk.facesCanSeeEachother(DIRECTIONS[i2].getOpposite(), direction)) {
+                                 flag3 = true;
+                                 break;
+@@ -943,11 +943,14 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
                          }
                      }
--
--                    if (flag && flag2) {
--                        BlockPos blockPos3;
--                        byte var10001;
--                        label140: {
--                            label139: {
--                                blockPos3 = renderChunk2.getOrigin();
--                                if (direction2.getAxis() == Direction.Axis.X) {
--                                    if (blockPos2.getX() > blockPos3.getX()) {
--                                        break label139;
--                                    }
--                                } else if (blockPos2.getX() < blockPos3.getX()) {
--                                    break label139;
--                                }
--
--                                var10001 = 0;
--                                break label140;
--                            }
--
--                            var10001 = 16;
--                        }
--
--                        byte var10002;
--                        label132: {
--                            label131: {
--                                if (direction2.getAxis() == Direction.Axis.Y) {
--                                    if (blockPos2.getY() > blockPos3.getY()) {
--                                        break label131;
--                                    }
--                                } else if (blockPos2.getY() < blockPos3.getY()) {
--                                    break label131;
--                                }
--
--                                var10002 = 0;
--                                break label132;
--                            }
--
--                            var10002 = 16;
--                        }
--
--                        byte var10003;
--                        label124: {
--                            label123: {
--                                if (direction2.getAxis() == Direction.Axis.Z) {
--                                    if (blockPos2.getZ() > blockPos3.getZ()) {
--                                        break label123;
--                                    }
--                                } else if (blockPos2.getZ() < blockPos3.getZ()) {
--                                    break label123;
--                                }
--
--                                var10003 = 0;
--                                break label124;
--                            }
--
--                            var10003 = 16;
--                        }
--
--                        BlockPos blockPos4 = blockPos3.offset(var10001, var10002, var10003);
+ 
++                    boolean flag4 = false;
+                     if (flag && flag2) {
+                         BlockPos blockPos3;
+                         byte var10001;
+-                        label126: {
+-                            label125: {
++                        label126:
++                        {
++                            label125:
++                            {
+                                 blockPos3 = renderChunk2.getOrigin();
+                                 if (direction.getAxis() == Direction.Axis.X) {
+                                     if (blockPos2.getX() > blockPos3.getX()) {
+@@ -965,8 +968,10 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+                         }
+ 
+                         byte var10002;
+-                        label118: {
+-                            label117: {
++                        label118:
++                        {
++                            label117:
++                            {
+                                 if (direction.getAxis() == Direction.Axis.Y) {
+                                     if (blockPos2.getY() > blockPos3.getY()) {
+                                         break label117;
+@@ -983,8 +988,10 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+                         }
+ 
+                         byte var10003;
+-                        label110: {
+-                            label109: {
++                        label110:
++                        {
++                            label109:
++                            {
+                                 if (direction.getAxis() == Direction.Axis.Z) {
+                                     if (blockPos2.getZ() > blockPos3.getZ()) {
+                                         break label109;
+@@ -1001,13 +1008,13 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+                         }
+ 
+                         BlockPos blockPos4 = blockPos3.offset(var10001, var10002, var10003);
 -                        Vec3 vec32 = new Vec3((double)blockPos4.getX(), (double)blockPos4.getY(), (double)blockPos4.getZ());
--                        Vec3 vec33 = vec3.subtract(vec32).normalize().scale(CEILED_SECTION_DIAGONAL);
++                        Vec3 vec32 = new Vec3((double) blockPos4.getX(), (double) blockPos4.getY(), (double) blockPos4.getZ());
+                         Vec3 vec33 = vec3.subtract(vec32).normalize().scale(CEILED_SECTION_DIAGONAL);
 -                        boolean flag4 = true;
--
++                        flag4 = true;
+ 
 -                        while(vec3.subtract(vec32).lengthSqr() > 3600.0D) {
--                            vec32 = vec32.add(vec33);
++                        while (vec3.subtract(vec32).lengthSqr() > 3600.0D) {
+                             vec32 = vec32.add(vec33);
 -                            if (vec32.y > (double)this.level.getMaxBuildHeight() || vec32.y < (double)this.level.getMinBuildHeight()) {
--                                break;
--                            }
--
--                            ChunkRenderDispatcher.RenderChunk renderChunk4 = this.viewArea.getRenderChunkAt(new BlockPos(vec32.x, vec32.y, vec32.z));
--                            if (renderChunk4 == null || renderInfoMap.get(renderChunk4) == null) {
--                                flag4 = false;
--                                break;
--                            }
--                        }
++                            if (vec32.y > (double) this.level.getMaxBuildHeight() || vec32.y < (double) this.level.getMinBuildHeight()) {
+                                 break;
+                             }
+ 
+@@ -1017,11 +1024,8 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+                                 break;
+                             }
+                         }
 -
 -                        if (!flag4) {
 -                            continue;
-+                    if (!flag3) continue;
-+                }
-+                if (flag && flag2 && renderChunkInfo.hasSourceDirections() && !renderChunkInfo.hasSourceDirection(direction.ordinal())) {
-+                    ChunkRenderDispatcher.RenderChunk renderChunk3 = getRelativeFrom(blockPos, renderChunk, direction.getOpposite());
-+                    if (renderChunk3 == null) continue;
-+                    RenderChunkInfo renderChunkInfo2 = renderInfoMap.get(renderChunk3);
-+                    if (renderChunkInfo2 == null) continue;
-+                }
-+                if (flag && flag2) {
-+                    BlockPos blockPos3 = renderChunk2.getOrigin();
-+                    BlockPos blockPos4 = blockPos3.offset(
-+                            ((direction2.getAxis() == Direction.Axis.X) ? (blockPos2.getX() > blockPos3.getX()) : (blockPos2.getX() < blockPos3.getX())) ? 16 : 0,
-+                            ((direction2.getAxis() == Direction.Axis.Y) ? (blockPos2.getY() > blockPos3.getY()) : (blockPos2.getY() < blockPos3.getY())) ? 16 : 0,
-+                            ((direction2.getAxis() == Direction.Axis.Z) ? (blockPos2.getZ() > blockPos3.getZ()) : (blockPos2.getZ() < blockPos3.getZ())) ? 16 : 0
-+                    );
-+                    Vec3 vec32 = new Vec3(blockPos4.getX(), blockPos4.getY(), blockPos4.getZ());
-+                    Vec3 vec33 = vec3.subtract(vec32).normalize().scale(CEILED_SECTION_DIAGONAL);
-+                    boolean flag4 = true;
-+                    while (vec3.subtract(vec32).lengthSqr() > 3600.0D) {
-+                        vec32 = vec32.add(vec33);
-+                        if (vec32.y > this.level.getMaxBuildHeight() || vec32.y < this.level.getMinBuildHeight()) break;
-+                        ChunkRenderDispatcher.RenderChunk renderChunk4 = this.viewArea.getRenderChunkAt(new BlockPos(vec32.x, vec32.y, vec32.z));
-+                        if (renderChunk4 == null || renderInfoMap.get(renderChunk4) == null) {
-+                            flag4 = false;
-+                            break;
-                         }
+-                        }
                      }
 +                    if (!flag4) continue;
-+                }
  
--                    LevelRenderer.RenderChunkInfo renderChunkInfo3 = renderInfoMap.get(renderChunk2);
--                    if (renderChunkInfo3 != null) {
--                        renderChunkInfo3.addSourceDirection(direction2);
--                    } else if (!renderChunk2.hasAllNeighbors()) {
--                        if (!this.closeToBorder(blockPos, renderChunk)) {
--                            this.nextFullUpdateMillis.set(System.currentTimeMillis() + 500L);
--                        }
--                    } else {
--                        LevelRenderer.RenderChunkInfo renderChunkInfo4 = new LevelRenderer.RenderChunkInfo(renderChunk2, direction2, renderChunkInfo.step + 1);
--                        renderChunkInfo4.setDirections(renderChunkInfo.directions, direction2);
--                        queue.add(renderChunkInfo4);
--                        renderInfoMap.put(renderChunk2, renderChunkInfo4);
-+                LevelRenderer.RenderChunkInfo renderChunkInfo3 = renderInfoMap.get(renderChunk2);
-+                if (renderChunkInfo3 != null) {
-+                    renderChunkInfo3.addSourceDirection(direction2);
-+                } else if (!renderChunk2.hasAllNeighbors()) {
-+                    if (!this.closeToBorder(blockPos, renderChunk)) {
-+                        this.nextFullUpdateMillis.set(System.currentTimeMillis() + 500L);
+                     LevelRenderer.RenderChunkInfo renderChunkInfo2 = renderInfoMap.get(renderChunk2);
+                     if (renderChunkInfo2 != null) {
+@@ -1799,13 +1803,13 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+                 } else if (this.minecraft.level.effects().skyType() == DimensionSpecialEffects.SkyType.NORMAL) {
+                     RenderSystem.disableTexture();
+                     Vec3 vec3 = this.level.getSkyColor(this.minecraft.gameRenderer.getMainCamera().getPosition(), f);
+-                    float f2 = (float)vec3.x;
++                    float f2In = (float)vec3.x;
+                     float f3 = (float)vec3.y;
+                     float f4 = (float)vec3.z;
+                     FogRenderer.levelFogColor();
+                     BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
+                     RenderSystem.depthMask(false);
+-                    RenderSystem.setShaderColor(f2, f3, f4, 1.0F);
++                    RenderSystem.setShaderColor(f2In, f3, f4, 1.0F);
+                     ShaderInstance shaderInstance = RenderSystem.getShader();
+                     this.skyBuffer.drawWithShader(poseStack.last().pose(), matrix4f, shaderInstance);
+                     RenderSystem.enableBlend();
+@@ -1897,9 +1901,9 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
                      }
-+                } else {
-+                    LevelRenderer.RenderChunkInfo renderChunkInfo4 = new LevelRenderer.RenderChunkInfo(renderChunk2, direction2, renderChunkInfo.step + 1);
-+                    renderChunkInfo4.setDirections(renderChunkInfo.directions, direction2);
-+                    queue.add(renderChunkInfo4);
-+                    renderInfoMap.put(renderChunk2, renderChunkInfo4);
-                 }
-             }
-         }
+ 
+                     if (this.level.effects().hasGround()) {
+-                        RenderSystem.setShaderColor(f2 * 0.2F + 0.04F, f3 * 0.2F + 0.04F, f4 * 0.6F + 0.1F, 1.0F);
++                        RenderSystem.setShaderColor(f2In * 0.2F + 0.04F, f3 * 0.2F + 0.04F, f4 * 0.6F + 0.1F, 1.0F);
+                     } else {
+-                        RenderSystem.setShaderColor(f2, f3, f4, 1.0F);
++                        RenderSystem.setShaderColor(f2In, f3, f4, 1.0F);
+                     }
+ 
+                     RenderSystem.enableTexture();
 diff --git a/src/main/java/net/minecraft/client/renderer/block/model/multipart/KeyValueCondition.java b/src/main/java/net/minecraft/client/renderer/block/model/multipart/KeyValueCondition.java
 index d559ca145678cb3127caffd0d92c2c70be8ea2f3..ebd531cd81b8966d0b738bdb6ce9e56df5be9581 100644
 --- a/src/main/java/net/minecraft/client/renderer/block/model/multipart/KeyValueCondition.java
@@ -1126,11 +1056,11 @@ index 511651e2fe3ed53089d6aadb4fda0fc86746e5ce..f4fab756fb817a47ebb0eac70c441d49
              return (EntityRenderer)this.renderers.get(entity.getType());
          }
 diff --git a/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java b/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java
-index e499e04f41813e93b81d0f3a335b1de38564daa0..50184ff140119827fb920ac3d6eeba163565ab94 100644
+index cebb3e465fd263099210589a95775addf52cbeff..853b5f74213fa89f01cd5183efbd77f412760996 100644
 --- a/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java
 +++ b/src/main/java/net/minecraft/client/renderer/entity/EntityRenderers.java
 @@ -19,7 +19,7 @@ public class EntityRenderers {
-     private static final Logger LOGGER = LogManager.getLogger();
+     private static final Logger LOGGER = LogUtils.getLogger();
      public static final String DEFAULT_PLAYER_MODEL = "default";
      private static final Map<EntityType<?>, EntityRendererProvider<?>> PROVIDERS = Maps.newHashMap();
 -    private static final Map<String, EntityRendererProvider<AbstractClientPlayer>> PLAYER_PROVIDERS = ImmutableMap.of("default", (EntityRendererProvider<>)(context) -> new PlayerRenderer(context, false), "slim", (EntityRendererProvider<>)(context) -> new PlayerRenderer(context, true));
@@ -1139,7 +1069,7 @@ index e499e04f41813e93b81d0f3a335b1de38564daa0..50184ff140119827fb920ac3d6eeba16
      private static <T extends Entity> void register(EntityType<? extends T> entityType, EntityRendererProvider<T> entityRendererProvider) {
          PROVIDERS.put(entityType, entityRendererProvider);
 diff --git a/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java b/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java
-index 5803c70769ed9aac00c34ce9668faa76ce68d680..cb4cf66e10f33e0f5fef3d96958f607f5bd73162 100644
+index 7ac3160a5c0c7c688a96e15eff0eec6dee816b86..c7e1de2ed533d4327de15aafd45a2eb3fdc997d8 100644
 --- a/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java
 +++ b/src/main/java/net/minecraft/client/renderer/texture/HttpTexture.java
 @@ -108,9 +108,9 @@ public class HttpTexture extends SimpleTexture {
@@ -1169,7 +1099,7 @@ index ce8671a6ea9284aa8327b11cd165834e87ebffa4..64258228cf8133f66afcb67952e59211
      private final Set<Stitcher.Holder> texturesToBeStitched = Sets.newHashSetWithExpectedSize(256);
      private final List<Stitcher.Region> storage = Lists.newArrayListWithCapacity(256);
 diff --git a/src/main/java/net/minecraft/client/resources/ClientPackSource.java b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
-index a2840db2937d7b299ced39f5f04012e304451001..83e00c5d5ec212215274d2e9312df080ea7413a2 100644
+index 3cb673f83d3995f0ffa81b9518f629b0bba2a1ed..15818a6845be373ef02fc315d75407103b8751d7 100644
 --- a/src/main/java/net/minecraft/client/resources/ClientPackSource.java
 +++ b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
 @@ -143,8 +143,8 @@ public class ClientPackSource implements RepositorySource {
@@ -1184,7 +1114,7 @@ index a2840db2937d7b299ced39f5f04012e304451001..83e00c5d5ec212215274d2e9312df080
                              } else {
                                  ClientPacketListener clientPacketListener = minecraft.getConnection();
 diff --git a/src/main/java/net/minecraft/client/resources/model/ModelBakery.java b/src/main/java/net/minecraft/client/resources/model/ModelBakery.java
-index 2987942719048a8c7c12ec8701ded90bdcec316e..9a49783602918e8210e625b5df4a55cd988782e6 100644
+index b5f186ab524b670726e03b7bd50aa42e2fa6ef74..7d5cc7daea6bf95279546793d3fe265e30f4cab9 100644
 --- a/src/main/java/net/minecraft/client/resources/model/ModelBakery.java
 +++ b/src/main/java/net/minecraft/client/resources/model/ModelBakery.java
 @@ -326,7 +326,7 @@ public class ModelBakery {
@@ -1275,7 +1205,7 @@ index c858771f860ed9a00f983d51e470be0438839c13..087eda2aaef1ec6441d35ee11f0b76b7
      }
  
 diff --git a/src/main/java/net/minecraft/client/sounds/SoundEngine.java b/src/main/java/net/minecraft/client/sounds/SoundEngine.java
-index 6222076eab7967cdab459ee8473badc6dac0a9d9..8a03b06ba8391c3cf257c774876fc3ad83b4d755 100644
+index 195a62743b7bcd0fd6cf1d76e9eaa203ca1ccb3b..d6582935ac2e6da9e31d5a35851e60462dd4d7e1 100644
 --- a/src/main/java/net/minecraft/client/sounds/SoundEngine.java
 +++ b/src/main/java/net/minecraft/client/sounds/SoundEngine.java
 @@ -116,12 +116,12 @@ public class SoundEngine {
@@ -1295,10 +1225,10 @@ index 6222076eab7967cdab459ee8473badc6dac0a9d9..8a03b06ba8391c3cf257c774876fc3ad
  
                      });
 diff --git a/src/main/java/net/minecraft/commands/Commands.java b/src/main/java/net/minecraft/commands/Commands.java
-index 38db47e2897a5910fb2302fed9b96c5d61f183a0..2595fc709ae7bf30144df7c648831efe8f0bc0c1 100644
+index c2d72a4b2753da2dd002711304f0b8777cf96762..2eb447b33b70a043c6fa22e9343396a7c105b11f 100644
 --- a/src/main/java/net/minecraft/commands/Commands.java
 +++ b/src/main/java/net/minecraft/commands/Commands.java
-@@ -273,7 +273,7 @@ public class Commands {
+@@ -275,7 +275,7 @@ public class Commands {
      private void fillUsableCommands(CommandNode<CommandSourceStack> commandNode, CommandNode<SharedSuggestionProvider> commandNode2, CommandSourceStack commandSourceStack, Map<CommandNode<CommandSourceStack>, CommandNode<SharedSuggestionProvider>> map) {
          for(CommandNode<CommandSourceStack> commandNode3 : commandNode.getChildren()) {
              if (commandNode3.canUse(commandSourceStack)) {
@@ -1333,6 +1263,34 @@ index 303b74bbea129be5d013b81717eb14658aec838b..a4654a902dd662026d2ad1e39ced28ab
              int i = score.getScore();
              score.setScore(score2.getScore());
              score2.setScore(i);
+diff --git a/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java b/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java
+index 76fa4e5cfbf0d00db7a7ab3c82193d2a79c0a3b9..e2aee508eb078c80bfef745c430b61982f5c445a 100644
+--- a/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java
++++ b/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java
+@@ -112,21 +112,5 @@ public class ResourceLocationArgument implements ArgumentType<ResourceLocation>
+         return EXAMPLES;
+     }
+ 
+-    public static record LocatedResource<T>(ResourceLocation a, T b) {
+-        private final ResourceLocation id;
+-        private final T resource;
+-
+-        public LocatedResource(ResourceLocation resourceLocation, T object) {
+-            this.id = resourceLocation;
+-            this.resource = object;
+-        }
+-
+-        public ResourceLocation id() {
+-            return this.id;
+-        }
+-
+-        public T resource() {
+-            return this.resource;
+-        }
+-    }
++    public static record LocatedResource<T>(ResourceLocation id, T resource) {}
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/commands/arguments/blocks/BlockStateParser.java b/src/main/java/net/minecraft/commands/arguments/blocks/BlockStateParser.java
 index 3e102244e775405103adf9038e926e98fbd0a6ef..2d674443d146ca828bfb0580cc40cac02aaef0df 100644
 --- a/src/main/java/net/minecraft/commands/arguments/blocks/BlockStateParser.java
@@ -1358,7 +1316,7 @@ index 3e102244e775405103adf9038e926e98fbd0a6ef..2d674443d146ca828bfb0580cc40cac0
              this.reader.setCursor(i);
              throw ERROR_INVALID_VALUE.createWithContext(this.reader, this.id.toString(), property.getName(), s);
 diff --git a/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java b/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java
-index 359167a86e84f628d25b0c44f30bfb81ee47ab52..3ee50f3619c6bb69ca48083a654e2f6a76d5988d 100644
+index b06124a333f876865a43acd87a1b23d26a7f45d8..8c010d8d3531674f0e0c42b33a65cdf670b6aa7e 100644
 --- a/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java
 +++ b/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java
 @@ -136,7 +136,7 @@ public class ArgumentTypes {
@@ -1380,10 +1338,10 @@ index 359167a86e84f628d25b0c44f30bfb81ee47ab52..3ee50f3619c6bb69ca48083a654e2f6a
              LOGGER.error("Could not serialize argument {} ({})!", argumentType, argumentType.getClass());
              jsonObject.addProperty("type", "unknown");
 diff --git a/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java b/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java
-index fd25df9e5f2dd2cb667c984dc7c82471c0597886..99018f49881c915d88c8728f5f3ae68258c4cc7a 100644
+index 4d3f7e59ca8146d3c9ee659f67834768b7017b9d..dbcdf0484381ccbd0a849a7343ac4f36b3696ca1 100644
 --- a/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java
 +++ b/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java
-@@ -30,7 +30,7 @@ public class SuggestionProviders {
+@@ -32,7 +32,7 @@ public class SuggestionProviders {
              throw new IllegalArgumentException("A command suggestion provider is already registered with the name " + resourceLocation);
          } else {
              PROVIDERS_BY_NAME.put(resourceLocation, suggestionProvider);
@@ -1393,7 +1351,7 @@ index fd25df9e5f2dd2cb667c984dc7c82471c0597886..99018f49881c915d88c8728f5f3ae682
      }
  
 diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
-index 8af3cc9618cf16aff613627ec15d6e7d4a0ffc74..2c7cbb2c11c3bc6f76db3c42414f7a5df151cb80 100644
+index aa193b79798df45973ddef57982e6c51bfb14df2..d399a650b93d87c4984842203bd28f1a6e14ed73 100644
 --- a/src/main/java/net/minecraft/core/BlockPos.java
 +++ b/src/main/java/net/minecraft/core/BlockPos.java
 @@ -238,11 +238,11 @@ public class BlockPos extends Vec3i {
@@ -1477,7 +1435,7 @@ index 8af3cc9618cf16aff613627ec15d6e7d4a0ffc74..2c7cbb2c11c3bc6f76db3c42414f7a5d
                  }
              };
 diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index 11e921d449a0eb93bbfeb743880472a1c5b40475..071159e7fdfdecde98e6df8aa142f8b2ed069c50 100644
+index b76df236f56c0e5e15cfb282dc1958b8cd4f782d..72cbff9bb6f356b99cd1efd5e19969709c71cc8f 100644
 --- a/src/main/java/net/minecraft/core/MappedRegistry.java
 +++ b/src/main/java/net/minecraft/core/MappedRegistry.java
 @@ -219,27 +219,6 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
@@ -1524,7 +1482,7 @@ index c2190c60e178443cd0a49d4cf42b0febebc2f346..4460f34e2589d9987affa1f40e0ba4c7
  
      @SafeVarargs
 diff --git a/src/main/java/net/minecraft/core/Registry.java b/src/main/java/net/minecraft/core/Registry.java
-index 159fd0eadb67fbc380157317b912a5dd385f4034..8b5d5f24e319ce0e7955b31a0aa838ec53f2ef8d 100644
+index ac8bbc6f9096c6dad1aa33f3b21bae3d538f15d4..1e333158ae21734c75e88f2b59d6d9fcd63dcdad 100644
 --- a/src/main/java/net/minecraft/core/Registry.java
 +++ b/src/main/java/net/minecraft/core/Registry.java
 @@ -274,8 +274,8 @@ public abstract class Registry<T> implements Keyable, IdMap<T> {
@@ -1553,7 +1511,7 @@ index 159fd0eadb67fbc380157317b912a5dd385f4034..8b5d5f24e319ce0e7955b31a0aa838ec
  
      static {
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index 6edc1ef8930a9d8aec9e6d92c99348e41a9e4c47..ffd928a33b5b681b78d17d677b7ded410e5728e2 100644
+index e3f175fd82a994b39fb113bf46ceebaa33f1c295..4984d2fa60e5423832b011a01af4b0b36fc45469 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
 @@ -66,7 +66,7 @@ public abstract class RegistryAccess {
@@ -1686,7 +1644,7 @@ index 3fe23a4976ea5f885a43a70b00ba5f40ac27b518..090ff25a63d34d9f183c94c73ab1c15c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/data/BuiltinRegistries.java b/src/main/java/net/minecraft/data/BuiltinRegistries.java
-index 5f690250c9d7df01e99d5a3b4e19408e7ccd62fd..369cccb969be8470e2cbfe66f716b0d041c5a95b 100644
+index 153e942cc3491a6bcaed644f7a0ffc8ce0c2ed82..bd66d67257fee151519412c375b59cd4e9c543b0 100644
 --- a/src/main/java/net/minecraft/data/BuiltinRegistries.java
 +++ b/src/main/java/net/minecraft/data/BuiltinRegistries.java
 @@ -55,8 +55,8 @@ public class BuiltinRegistries {
@@ -1815,7 +1773,7 @@ index a90953b62ef3168e4f49cab6eb1fa3ce1f4ee2ad..68ea7b9aedb81b9d9087c7457274bac8
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
-index ef205228ee3027c181b2abcc9e8cd2d4a9082b34..31fa1eeef7b270889482c7796562ee07456bb437 100644
+index de236b126c4ed4b3a6254dff41219743bb6a67dd..8e20200d649ef528cc56df99ea9cc3055e477913 100644
 --- a/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 +++ b/src/main/java/net/minecraft/data/recipes/RecipeProvider.java
 @@ -60,7 +60,7 @@ public class RecipeProvider implements DataProvider {
@@ -1883,7 +1841,7 @@ index 61f2e62b6a622fb30120963a3dfbf3a8079e89b9..acd4204ec4182a1e45e9b54aa53848da
  
      public static List<PlacementModifier> treePlacement(PlacementModifier placementModifier) {
 diff --git a/src/main/java/net/minecraft/gametest/framework/GameTestBatchRunner.java b/src/main/java/net/minecraft/gametest/framework/GameTestBatchRunner.java
-index 9bd4d4036347fecf036c389976b3da07ec1eb012..8a0440b268befe9800bba0943fb8b573204ce6a5 100644
+index 9737a8e7d6eb47221a9c72808942b7359059df05..c5df8bcdf9ad4db8ae05f7cfd46c72b3bf923fd3 100644
 --- a/src/main/java/net/minecraft/gametest/framework/GameTestBatchRunner.java
 +++ b/src/main/java/net/minecraft/gametest/framework/GameTestBatchRunner.java
 @@ -31,8 +31,8 @@ public class GameTestBatchRunner {
@@ -2027,11 +1985,11 @@ index 8ecb1be8754d4ff11ed204c4e8aad7afd77c253f..7076200441c14904b79db40f1a164d28
  
      public Tag createLongList(LongStream longStream) {
 diff --git a/src/main/java/net/minecraft/nbt/NbtUtils.java b/src/main/java/net/minecraft/nbt/NbtUtils.java
-index 993e5e12a5a9a901ab732c2f451aa0e3ea65981e..8da27ab2299ed77e8a51c6f5c0626b6bb236c68a 100644
+index 2f19d0e63f4d2abc5d0f47439aea2aed526625e3..1dc4002fa705a5bfb26c4376a98759bec40364ce 100644
 --- a/src/main/java/net/minecraft/nbt/NbtUtils.java
 +++ b/src/main/java/net/minecraft/nbt/NbtUtils.java
-@@ -41,8 +41,8 @@ import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
+@@ -41,8 +41,8 @@ import net.minecraft.world.level.material.FluidState;
+ import org.slf4j.Logger;
  
  public final class NbtUtils {
 -    private static final Comparator<ListTag> YXZ_LISTTAG_INT_COMPARATOR = Comparator.comparingInt((listTag) -> listTag.getInt(1)).thenComparingInt((listTag) -> listTag.getInt(0)).thenComparingInt((listTag) -> listTag.getInt(2));
@@ -2048,7 +2006,7 @@ index 993e5e12a5a9a901ab732c2f451aa0e3ea65981e..8da27ab2299ed77e8a51c6f5c0626b6b
 -            return stateHolder.setValue(property, (Comparable)optional.get());
 +            return stateHolder.setValue(property, optional.get());
          } else {
-             LOGGER.warn("Unable to read property: {} with value: {} for blockstate: {}", s, compoundTag.getString(s), compoundTag2.toString());
+             LOGGER.warn("Unable to read property: {} with value: {} for blockstate: {}", new Object[]{s, compoundTag.getString(s), compoundTag2.toString()});
              return stateHolder;
 @@ -519,13 +519,13 @@ public final class NbtUtils {
              ListTag listTag4 = new ListTag();
@@ -2097,93 +2055,96 @@ index 27590ee3be29818f7b751aa8c245f368abf4cdb6..443fb9f4c58e843d4f4ffe2f1a9321fe
                  }
  
                  if (this.hasElementSeparator()) {
-diff --git a/src/main/java/net/minecraft/nbt/visitors/CollectFields.java b/src/main/java/net/minecraft/nbt/visitors/CollectFields.java
-index ccb2a47cb4db92098492e977f232fa248d3d5ad0..d3d41dc5954cbaa92f9fdf0cb5ff300432b6c07b 100644
---- a/src/main/java/net/minecraft/nbt/visitors/CollectFields.java
-+++ b/src/main/java/net/minecraft/nbt/visitors/CollectFields.java
-@@ -79,48 +79,21 @@ public class CollectFields extends CollectToTag {
-         return this.fieldsToGetCount;
+diff --git a/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java b/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java
+index 93bc8427d26e6e379f7337d1cb4490936b51eb63..99ec0038680438dc9c0f69088bd39d4008f354cc 100644
+--- a/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java
++++ b/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java
+@@ -3,11 +3,7 @@ package net.minecraft.nbt.visitors;
+ import java.util.List;
+ import net.minecraft.nbt.TagType;
+ 
+-public record FieldSelector(List<String> a, TagType<?> b, String c) {
+-    private final List<String> path;
+-    private final TagType<?> type;
+-    private final String name;
+-
++public record FieldSelector(List<String> path, TagType<?> type, String name) {
+     public FieldSelector(TagType<?> tagType, String s) {
+         this(List.of(), tagType, s);
+     }
+@@ -19,22 +15,4 @@ public record FieldSelector(List<String> a, TagType<?> b, String c) {
+     public FieldSelector(String s, String s2, TagType<?> tagType, String s3) {
+         this(List.of(s, s2), tagType, s3);
+     }
+-
+-    public FieldSelector(List<String> list, TagType<?> tagType, String s) {
+-        this.path = list;
+-        this.type = tagType;
+-        this.name = s;
+-    }
+-
+-    public List<String> path() {
+-        return this.path;
+-    }
+-
+-    public TagType<?> type() {
+-        return this.type;
+-    }
+-
+-    public String name() {
+-        return this.name;
+-    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/nbt/visitors/FieldTree.java b/src/main/java/net/minecraft/nbt/visitors/FieldTree.java
+index 9807433ec882ca7b2b0284a230445bde4544e629..73d1126134f82092a2e3f3bc973df4a6ff156e72 100644
+--- a/src/main/java/net/minecraft/nbt/visitors/FieldTree.java
++++ b/src/main/java/net/minecraft/nbt/visitors/FieldTree.java
+@@ -4,19 +4,9 @@ import java.util.HashMap;
+ import java.util.Map;
+ import net.minecraft.nbt.TagType;
+ 
+-public record FieldTree(int a, Map<String, TagType<?>> b, Map<String, FieldTree> c) {
+-    private final int depth;
+-    private final Map<String, TagType<?>> selectedFields;
+-    private final Map<String, FieldTree> fieldsToRecurse;
+-
++public record FieldTree(int depth, Map<String, TagType<?>> selectedFields, Map<String, FieldTree> fieldsToRecurse) {
+     private FieldTree(int i) {
+-        this(i, new HashMap(), new HashMap());
+-    }
+-
+-    public FieldTree(int i, Map<String, TagType<?>> map, Map<String, FieldTree> map2) {
+-        this.depth = i;
+-        this.selectedFields = map;
+-        this.fieldsToRecurse = map2;
++        this(i, new HashMap<>(), new HashMap<>());
      }
  
--    static record StackFrame(int a, Map<String, TagType<?>> b, Map<String, CollectFields.StackFrame> c) {
--        private final int depth;
--        final Map<String, TagType<?>> fieldsToGet;
--        final Map<String, CollectFields.StackFrame> fieldsToRecurse;
--
-+    static record StackFrame(int depth, Map<String, TagType<?>> fieldsToGet, Map<String, CollectFields.StackFrame> fieldsToRecurse) {
-         public StackFrame(int i) {
--            this(i, new HashMap(), new HashMap());
--        }
--
--        private StackFrame(int i, Map<String, TagType<?>> map, Map<String, CollectFields.StackFrame> map2) {
--            this.depth = i;
--            this.fieldsToGet = map;
--            this.fieldsToRecurse = map2;
-+            this(i, new HashMap<>(), new HashMap<>());
-         }
- 
-         public void addEntry(CollectFields.WantedField wantedField) {
-             if (this.depth <= wantedField.path.size()) {
--                ((CollectFields.StackFrame)this.fieldsToRecurse.computeIfAbsent((String)wantedField.path.get(this.depth - 1), (s) -> new CollectFields.StackFrame(this.depth + 1))).addEntry(wantedField);
-+                ((CollectFields.StackFrame) this.fieldsToRecurse.computeIfAbsent((String) wantedField.path.get(this.depth - 1), (s) -> new CollectFields.StackFrame(this.depth + 1))).addEntry(wantedField);
-             } else {
-                 this.fieldsToGet.put(wantedField.name, wantedField.type);
-             }
--
--        }
--
--        public int depth() {
--            return this.depth;
--        }
--
--        public Map<String, TagType<?>> fieldsToGet() {
--            return this.fieldsToGet;
--        }
--
--        public Map<String, CollectFields.StackFrame> fieldsToRecurse() {
--            return this.fieldsToRecurse;
-         }
+     public static FieldTree createRoot() {
+@@ -35,16 +25,4 @@ public record FieldTree(int a, Map<String, TagType<?>> b, Map<String, FieldTree>
+     public boolean isSelected(TagType<?> tagType, String s) {
+         return tagType.equals(this.selectedFields().get(s));
      }
- 
--    public static record WantedField(List<String> a, TagType<?> b, String c) {
--        final List<String> path;
--        final TagType<?> type;
--        final String name;
 -
-+    public static record WantedField(List<String> path, TagType<?> type, String name) {
-         public WantedField(TagType<?> tagType, String s) {
-             this(List.of(), tagType, s);
-         }
-@@ -132,23 +105,5 @@ public class CollectFields extends CollectToTag {
-         public WantedField(String s, String s2, TagType<?> tagType, String s3) {
-             this(List.of(s, s2), tagType, s3);
-         }
+-    public int depth() {
+-        return this.depth;
+-    }
 -
--        public WantedField(List<String> list, TagType<?> tagType, String s) {
--            this.path = list;
--            this.type = tagType;
--            this.name = s;
--        }
+-    public Map<String, TagType<?>> selectedFields() {
+-        return this.selectedFields;
+-    }
 -
--        public List<String> path() {
--            return this.path;
--        }
--
--        public TagType<?> type() {
--            return this.type;
--        }
--
--        public String name() {
--            return this.name;
--        }
-     }
+-    public Map<String, FieldTree> fieldsToRecurse() {
+-        return this.fieldsToRecurse;
+-    }
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/network/ConnectionProtocol.java b/src/main/java/net/minecraft/network/ConnectionProtocol.java
-index 7aa5bc5caec46cdc8cdcce440fe6c32e8a41ffb2..db7a24fd73bd40ec1b2a7ed8d1cba8c5863ce2d7 100644
+index 426ff47b140aa1ed85d5d3676628377a710c6de1..b066ba2b0403eb9ee5b38f81a3d77ac97244f5d5 100644
 --- a/src/main/java/net/minecraft/network/ConnectionProtocol.java
 +++ b/src/main/java/net/minecraft/network/ConnectionProtocol.java
-@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
+@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
  import net.minecraft.Util;
  import net.minecraft.network.protocol.Packet;
  import net.minecraft.network.protocol.PacketFlow;
@@ -2191,7 +2152,7 @@ index 7aa5bc5caec46cdc8cdcce440fe6c32e8a41ffb2..db7a24fd73bd40ec1b2a7ed8d1cba8c5
  import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
  import net.minecraft.network.protocol.game.ClientboundAddExperienceOrbPacket;
  import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
-@@ -117,6 +118,7 @@ import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+@@ -118,6 +119,7 @@ import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
  import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
  import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
  import net.minecraft.network.protocol.game.ClientboundUpdateTagsPacket;
@@ -2199,7 +2160,7 @@ index 7aa5bc5caec46cdc8cdcce440fe6c32e8a41ffb2..db7a24fd73bd40ec1b2a7ed8d1cba8c5
  import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
  import net.minecraft.network.protocol.game.ServerboundBlockEntityTagQuery;
  import net.minecraft.network.protocol.game.ServerboundChangeDifficultyPacket;
-@@ -163,26 +165,31 @@ import net.minecraft.network.protocol.game.ServerboundTeleportToEntityPacket;
+@@ -164,26 +166,31 @@ import net.minecraft.network.protocol.game.ServerboundTeleportToEntityPacket;
  import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
  import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
  import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
@@ -2221,7 +2182,7 @@ index 7aa5bc5caec46cdc8cdcce440fe6c32e8a41ffb2..db7a24fd73bd40ec1b2a7ed8d1cba8c5
  import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
  import net.minecraft.network.protocol.status.ServerboundStatusRequestPacket;
  import net.minecraft.util.VisibleForDebug;
- import org.apache.logging.log4j.LogManager;
+ import org.slf4j.Logger;
  
  public enum ConnectionProtocol {
 -    HANDSHAKING(-1, protocol().addFlow(PacketFlow.SERVERBOUND, (new ConnectionProtocol.PacketSet()).addPacket(ClientIntentionPacket.class, ClientIntentionPacket::new))),
@@ -2262,7 +2223,7 @@ index cafc677fb15a93184de892845d45701b2f41bf15..fc4a5039b607c1644c1d715d171b642b
              List<T> list = Lists.newArrayList(collection);
              list.sort(Comparable::compareTo);
 diff --git a/src/main/java/net/minecraft/network/chat/NbtComponent.java b/src/main/java/net/minecraft/network/chat/NbtComponent.java
-index 1e9182ca6d9827541cccd8f66ab546c60e4b96ba..48b6b9db0bbdc23f973caa862df7919ce2c08c56 100644
+index e29370a3dc6b2f5993238478498f9e2663410788..623bf55a7fc8a03720f794f36ae32bfee9924b42 100644
 --- a/src/main/java/net/minecraft/network/chat/NbtComponent.java
 +++ b/src/main/java/net/minecraft/network/chat/NbtComponent.java
 @@ -85,7 +85,7 @@ public abstract class NbtComponent extends BaseComponent implements ContextAware
@@ -2275,12 +2236,12 @@ index 1e9182ca6d9827541cccd8f66ab546c60e4b96ba..48b6b9db0bbdc23f973caa862df7919c
          } else {
              return new TextComponent("");
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundBlockBreakAckPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundBlockBreakAckPacket.java
-index 5683de70b887a8d1a3655353e5994931a0cef289..8dc52ad2a4d55cb17f82b81dc7edc9f51344e61f 100644
+index df76799cc8474384a45592f2755b5967dc706764..a7ee2c462e0227d3723fe443ac5d03b618f77003 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundBlockBreakAckPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundBlockBreakAckPacket.java
-@@ -8,23 +8,18 @@ import net.minecraft.world.level.block.state.BlockState;
- import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
+@@ -8,23 +8,18 @@ import net.minecraft.world.level.block.Block;
+ import net.minecraft.world.level.block.state.BlockState;
+ import org.slf4j.Logger;
  
 -public record ClientboundBlockBreakAckPacket(BlockPos a, BlockState b, ServerboundPlayerActionPacket.Action c, boolean d) implements Packet<ClientGamePacketListener> {
 -    private final BlockPos pos;
@@ -2288,7 +2249,7 @@ index 5683de70b887a8d1a3655353e5994931a0cef289..8dc52ad2a4d55cb17f82b81dc7edc9f5
 -    private final ServerboundPlayerActionPacket.Action action;
 -    private final boolean allGood;
 +public record ClientboundBlockBreakAckPacket(BlockPos pos, BlockState state, ServerboundPlayerActionPacket.Action action, boolean allGood) implements Packet<ClientGamePacketListener> {
-     private static final Logger LOGGER = LogManager.getLogger();
+     private static final Logger LOGGER = LogUtils.getLogger();
  
 -    public ClientboundBlockBreakAckPacket(BlockPos blockPos, BlockState blockState, ServerboundPlayerActionPacket.Action action, boolean flag, String s) {
 -        this(blockPos, blockState, action, flag);
@@ -2659,7 +2620,7 @@ index 5f0d29fdc1aef807f7c32c37e55c35cc9d9f762c..e605e0f2f627fd32547032169f827bad
  
      static final class ReadCache<E> {
 diff --git a/src/main/java/net/minecraft/resources/RegistryResourceAccess.java b/src/main/java/net/minecraft/resources/RegistryResourceAccess.java
-index fb31c40ccd94f15dc889de8cc2fe9f7231252c16..45635dec9e5c9eb9eaf53b02f44433a311d089d2 100644
+index c6d4a74de68de8ed48aac0b69b7c6dca9ca51d2b..e3b1ae09b43a7fd63b7ee396bac88b57b00ca355 100644
 --- a/src/main/java/net/minecraft/resources/RegistryResourceAccess.java
 +++ b/src/main/java/net/minecraft/resources/RegistryResourceAccess.java
 @@ -134,42 +134,14 @@ public interface RegistryResourceAccess {
@@ -2737,7 +2698,7 @@ index c701083fefcd41e419ac697887efd3d346ba6d5b..bcec814d749e5c90f3378e4e6a5c61ad
  
      public ResourceLocation location() {
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 142bee548f21cddf7b2a040ac18b188c10d053c7..3d2b2b9d38ea0ac27edf3c1bc916a33485077537 100644
+index 96fcbf1d3119cfbd0b523c8f020ecc635c20f357..35206d08cfdf77dfe4a50636ee7d7eb5e0a19ed2 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -174,17 +174,17 @@ public class Main {
@@ -2768,10 +2729,10 @@ index 142bee548f21cddf7b2a040ac18b188c10d053c7..3d2b2b9d38ea0ac27edf3c1bc916a334
              Thread thread = new Thread("Server Shutdown Thread") {
                  public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 5d19a706a0f4dce5db99903a546676ee167d49ca..60be6da816a824e06a4370e5f1571cbb40f299af 100644
+index 4b59dc8071009633713dd0d8601c5265ebd9fc64..f5eb59e51a1ac4f377995094a36d663fa62e9658 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -741,7 +741,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -753,7 +753,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
  
@@ -2780,7 +2741,7 @@ index 5d19a706a0f4dce5db99903a546676ee167d49ca..60be6da816a824e06a4370e5f1571cbb
          this.getProfiler().incrementCounter("runTask");
          super.doRunTask(tickTask);
      }
-@@ -1232,7 +1232,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1252,7 +1252,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
      public CompletableFuture<Void> reloadResources(Collection<String> collection) {
@@ -2790,7 +2751,7 @@ index 5d19a706a0f4dce5db99903a546676ee167d49ca..60be6da816a824e06a4370e5f1571cbb
              this.resources = serverResources;
              this.packRepository.setSelected(collection);
 diff --git a/src/main/java/net/minecraft/server/ServerFunctionLibrary.java b/src/main/java/net/minecraft/server/ServerFunctionLibrary.java
-index de25a7202a02410e0ebb7ddd289028c0f585df34..454481969f40fec2b10c9bbc55608ad3ad4c7aa9 100644
+index 355aea77af51ce0cbf344241a15f1e0fea8a5778..58a00839034ea12b65ff8c5a9dd8fa65b7159172 100644
 --- a/src/main/java/net/minecraft/server/ServerFunctionLibrary.java
 +++ b/src/main/java/net/minecraft/server/ServerFunctionLibrary.java
 @@ -86,7 +86,7 @@ public class ServerFunctionLibrary implements PreparableReloadListener {
@@ -2803,7 +2764,7 @@ index de25a7202a02410e0ebb7ddd289028c0f585df34..454481969f40fec2b10c9bbc55608ad3
                          LOGGER.error("Failed to load function {}", resourceLocation, throwable);
                      } else {
 diff --git a/src/main/java/net/minecraft/server/chase/ChaseClient.java b/src/main/java/net/minecraft/server/chase/ChaseClient.java
-index 672eb41c5eaad60e4938506fe8ecf3da3f946de1..9ab1ead4d6e9725ff9217755650129f64bf2566d 100644
+index 09f6ee99ba0c9fa636aa9f40fa3e256912d7405f..a69cfa08ad788d483d31e6f565ea4d88f1876a39 100644
 --- a/src/main/java/net/minecraft/server/chase/ChaseClient.java
 +++ b/src/main/java/net/minecraft/server/chase/ChaseClient.java
 @@ -173,27 +173,5 @@ public class ChaseClient {
@@ -2837,7 +2798,7 @@ index 672eb41c5eaad60e4938506fe8ecf3da3f946de1..9ab1ead4d6e9725ff9217755650129f6
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/chase/ChaseServer.java b/src/main/java/net/minecraft/server/chase/ChaseServer.java
-index 7d4c6700c601c39cb5ed8faecedcb68d5091e9ed..06b6fc3746b88c5c912c521657a8809afdd37c9a 100644
+index 6e3f806940730bef22582606604407fd4d16afbb..a2e6d4a710759c812970bb980e83593347dfc1d6 100644
 --- a/src/main/java/net/minecraft/server/chase/ChaseServer.java
 +++ b/src/main/java/net/minecraft/server/chase/ChaseServer.java
 @@ -142,49 +142,9 @@ public class ChaseServer {
@@ -2934,7 +2895,7 @@ index b4fcb4678ad94bbb293202a31a1015e473117d92..3c5c0b6c60359e459207dd791e9b3cf5
                                  return manipulateData(commandContext, dataProvider, dataManipulator, list);
                              }).then(Commands.argument("sourcePath", NbtPathArgument.nbtPath()).executes((commandContext) -> {
 diff --git a/src/main/java/net/minecraft/server/dedicated/Settings.java b/src/main/java/net/minecraft/server/dedicated/Settings.java
-index 595db43a0f044cbedfd4367ac69491f5f7fc032e..b8872e22ff9aa96e4025b167508c9f87ff8eb815 100644
+index 945e8be448a1b52511562e4a3b51bb6b8ea49457..ffd4ee5ee4d86096227076a81ed848747c6efabd 100644
 --- a/src/main/java/net/minecraft/server/dedicated/Settings.java
 +++ b/src/main/java/net/minecraft/server/dedicated/Settings.java
 @@ -85,7 +85,7 @@ public abstract class Settings<T extends Settings<T>> {
@@ -2964,7 +2925,7 @@ index 595db43a0f044cbedfd4367ac69491f5f7fc032e..b8872e22ff9aa96e4025b167508c9f87
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de04cc71167 100644
+index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de1861bd01 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -270,7 +270,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -2990,7 +2951,7 @@ index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de0
          });
  
          for(ChunkHolder chunkHolder2 : list2) {
-@@ -523,11 +523,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -527,11 +527,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
          CompletableFuture<Either<List<ChunkAccess>, ChunkHolder.ChunkLoadingFailure>> completableFuture = this.getChunkRangeFuture(chunkPos, chunkStatus.getRange(), (i) -> this.getDependencyStatus(chunkStatus, i));
          this.level.getProfiler().incrementCounter((Supplier<String>)(() -> "chunkGenerate " + chunkStatus.getName()));
          Executor executor = (runnable) -> this.worldgenMailbox.tell(ChunkTaskPriorityQueueSorter.message(chunkHolder, runnable));
@@ -3005,7 +2966,7 @@ index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de0
                  } catch (Exception var9) {
                      var9.getStackTrace();
                      CrashReport crashReport = CrashReport.forThrowable(var9, "Exception generating new chunk");
-@@ -579,7 +579,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -583,7 +583,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  if (protoChunk instanceof ImposterProtoChunk) {
                      levelChunk = ((ImposterProtoChunk)protoChunk).getWrapped();
                  } else {
@@ -3014,7 +2975,7 @@ index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de0
                      chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk, false));
                  }
  
-@@ -875,7 +875,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -879,7 +879,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
          }
  
@@ -3023,7 +2984,7 @@ index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de0
          int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
          SectionPos sectionPos = serverPlayer.getLastSectionPos();
          SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -909,16 +909,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -913,16 +913,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          int i3 = sectionPos.x();
          int i4 = sectionPos.z();
@@ -3044,7 +3005,7 @@ index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de0
                      this.updateChunkTracking(serverPlayer, new ChunkPos(i9, i10), new MutableObject(), flag4, flag5);
                  }
              }
-@@ -933,9 +933,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -937,9 +937,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  }
              }
  
@@ -3057,7 +3018,7 @@ index e88aff85035641c3068210f52207c55bff8821dc..3202e5b00f4496712a84de80597a3de0
                          boolean flag9 = true;
                          this.updateChunkTracking(serverPlayer, new ChunkPos(i13, i14), new MutableObject(), false, true);
 diff --git a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueue.java b/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueue.java
-index 4563a38cbe68298cbf34c7d7be84041561ea6978..8b9a44282ab3eeddf9999a26034d5a6dd408b6d2 100644
+index eec3d990ced630be3e153dda0ba32b2ceb82f489..b42bdefb9648aa7a6ef057b366a6fac11521ab66 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueue.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueue.java
 @@ -16,7 +16,7 @@ import net.minecraft.world.level.ChunkPos;
@@ -3070,10 +3031,10 @@ index 4563a38cbe68298cbf34c7d7be84041561ea6978..8b9a44282ab3eeddf9999a26034d5a6d
      private final String name;
      private final LongSet acquired = new LongOpenHashSet();
 diff --git a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java b/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java
-index d8108bfacc673ef1c55f7835f71f2fa2bbdf7fd6..50f12b31bcda8dabcbe10a8485a01797eb87d756 100644
+index 33da26034aadeb5ce8544f43cab5a59a48e70ce5..69e1362c7bfe94c7e993930ffb5a9860863b3f7d 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java
-@@ -40,7 +40,7 @@ public class ChunkTaskPriorityQueueSorter implements ChunkHolder.LevelChangeList
+@@ -44,7 +44,7 @@ public class ChunkTaskPriorityQueueSorter implements ChunkHolder.LevelChangeList
      }
  
      public static ChunkTaskPriorityQueueSorter.Message<Runnable> message(Runnable runnable, long l, IntSupplier intSupplier) {
@@ -3082,7 +3043,7 @@ index d8108bfacc673ef1c55f7835f71f2fa2bbdf7fd6..50f12b31bcda8dabcbe10a8485a01797
                  runnable.run();
                  processorHandle.tell(Unit.INSTANCE);
              }, l, intSupplier);
-@@ -61,12 +61,12 @@ public class ChunkTaskPriorityQueueSorter implements ChunkHolder.LevelChangeList
+@@ -65,12 +65,12 @@ public class ChunkTaskPriorityQueueSorter implements ChunkHolder.LevelChangeList
      public <T> ProcessorHandle<ChunkTaskPriorityQueueSorter.Message<T>> getProcessor(ProcessorHandle<T> processorHandle, boolean flag) {
          return (ProcessorHandle)this.mailbox.ask((processorHandle2) -> new StrictQueue.IntRunnable(0, () -> {
                  this.getQueue(processorHandle);
@@ -3097,7 +3058,7 @@ index d8108bfacc673ef1c55f7835f71f2fa2bbdf7fd6..50f12b31bcda8dabcbe10a8485a01797
      }
  
      public void onLevelChange(ChunkPos chunkPos, IntSupplier intSupplier, int i, IntConsumer intConsumer) {
-@@ -123,9 +123,9 @@ public class ChunkTaskPriorityQueueSorter implements ChunkHolder.LevelChangeList
+@@ -127,9 +127,9 @@ public class ChunkTaskPriorityQueueSorter implements ChunkHolder.LevelChangeList
      private <T> ChunkTaskPriorityQueue<Function<ProcessorHandle<Unit>, T>> getQueue(ProcessorHandle<T> processorHandle) {
          ChunkTaskPriorityQueue<? extends Function<ProcessorHandle<Unit>, ?>> chunkTaskPriorityQueue = (ChunkTaskPriorityQueue)this.queues.get(processorHandle);
          if (chunkTaskPriorityQueue == null) {
@@ -3110,10 +3071,10 @@ index d8108bfacc673ef1c55f7835f71f2fa2bbdf7fd6..50f12b31bcda8dabcbe10a8485a01797
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/DistanceManager.java b/src/main/java/net/minecraft/server/level/DistanceManager.java
-index 2f6895913d779bac8a6a924357bef00ed067966c..3ec0889935db08f7940922a4ae47d45f1c500647 100644
+index 480df96b683442c4662758c56a5b1903f44d7c06..257b47a65a12feea5e8a90cf54602f72e3c1b2dd 100644
 --- a/src/main/java/net/minecraft/server/level/DistanceManager.java
 +++ b/src/main/java/net/minecraft/server/level/DistanceManager.java
-@@ -286,7 +286,7 @@ public abstract class DistanceManager {
+@@ -287,7 +287,7 @@ public abstract class DistanceManager {
                      Entry<SortedArraySet<Ticket<?>>> entry = (Entry)var3.next();
                      ChunkPos chunkPos = new ChunkPos(entry.getLongKey());
  
@@ -3123,10 +3084,10 @@ index 2f6895913d779bac8a6a924357bef00ed067966c..3ec0889935db08f7940922a4ae47d45f
                      }
                  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 9b4e5fed3bf3bbdc801cea9a1112164803da74bd..7e3d1e530e9d2e6f24abf4cdb4ab7149b3026da4 100644
+index 799d6b6800b91f2223ce554fd95662c3a4570321..abbf3939685c67e8d5b38a765e3a7b4548844c5f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-@@ -190,7 +190,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -187,7 +187,7 @@ public class ServerChunkCache extends ChunkSource {
              completableFuture = this.getChunkFutureMainThread(i, i2, chunkStatus, flag);
              this.mainThreadProcessor.managedBlock(completableFuture::isDone);
          } else {
@@ -3135,8 +3096,8 @@ index 9b4e5fed3bf3bbdc801cea9a1112164803da74bd..7e3d1e530e9d2e6f24abf4cdb4ab7149
          }
  
          return completableFuture;
-@@ -482,23 +482,7 @@ public class ServerChunkCache extends ChunkSource {
-         return this.lastSpawnState;
+@@ -484,23 +484,7 @@ public class ServerChunkCache extends ChunkSource {
+         this.distanceManager.removeTicketsOnClosing();
      }
  
 -    static record ChunkAndHolder(LevelChunk a, ChunkHolder b) {
@@ -3160,7 +3121,7 @@ index 9b4e5fed3bf3bbdc801cea9a1112164803da74bd..7e3d1e530e9d2e6f24abf4cdb4ab7149
  
      final class MainThreadExecutor extends BlockableEventLoop<Runnable> {
          MainThreadExecutor(Level level) {
-@@ -526,7 +510,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -528,7 +512,7 @@ public class ServerChunkCache extends ChunkSource {
              super.doRunTask(runnable);
          }
  
@@ -3170,7 +3131,7 @@ index 9b4e5fed3bf3bbdc801cea9a1112164803da74bd..7e3d1e530e9d2e6f24abf4cdb4ab7149
                  return true;
              } else {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index bbbdca6af4fa9949a84223822b1331bbd7570ecd..518c82a413a777a7ae5be8215631aad9fe477468 100644
+index b78e261930a05e3e670fcdf4bba52cbb6ef2e7ee..9102582cf2feb143767e0cedbc62e0ce9fa9244d 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -1361,7 +1361,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -3212,12 +3173,12 @@ index b69f662d756fa09c941882f6507dc0e5123c60d7..954f0f717e1e7fff201531f776905029
              }
          }
 diff --git a/src/main/java/net/minecraft/server/packs/FolderPackResources.java b/src/main/java/net/minecraft/server/packs/FolderPackResources.java
-index 361667bfa1e3bb982087407d4e36917ba5bd00ab..c401c8159f6132f0ce5dbd082add557ef1975870 100644
+index fc7d076ea497956f42b1989e45584c434c963c96..28e0a1ad5add0ec9d5818973d8d4f6d5faa8406a 100644
 --- a/src/main/java/net/minecraft/server/packs/FolderPackResources.java
 +++ b/src/main/java/net/minecraft/server/packs/FolderPackResources.java
-@@ -4,6 +4,7 @@ import com.google.common.base.CharMatcher;
- import com.google.common.collect.Lists;
+@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
  import com.google.common.collect.Sets;
+ import com.mojang.logging.LogUtils;
  import java.io.File;
 +import java.io.FileFilter;
  import java.io.FileInputStream;
@@ -3233,7 +3194,7 @@ index 361667bfa1e3bb982087407d4e36917ba5bd00ab..c401c8159f6132f0ce5dbd082add557e
              for(File file2 : files) {
                  String s = getRelativePath(file, file2);
 diff --git a/src/main/java/net/minecraft/server/packs/resources/ProfiledReloadInstance.java b/src/main/java/net/minecraft/server/packs/resources/ProfiledReloadInstance.java
-index 2ce9f847a26a64c2bcba28dd16886cad8b234d74..ca547793db0b8feed9ae588d7629b753f5567fe1 100644
+index 4be7681b9743ec5ff9e33b9035295a80a06b7fa5..b5a1b3f0fe56264136810aa3032fc121e71b4fd8 100644
 --- a/src/main/java/net/minecraft/server/packs/resources/ProfiledReloadInstance.java
 +++ b/src/main/java/net/minecraft/server/packs/resources/ProfiledReloadInstance.java
 @@ -23,7 +23,7 @@ public class ProfiledReloadInstance extends SimpleReloadInstance<ProfiledReloadI
@@ -3255,7 +3216,7 @@ index 2ce9f847a26a64c2bcba28dd16886cad8b234d74..ca547793db0b8feed9ae588d7629b753
                  return new ProfiledReloadInstance.State(preparableReloadListener.getName(), activeProfiler.getResults(), activeProfiler2.getResults(), atomicLong, atomicLong2);
              }, executor2);
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index bb921a3b547019fc4e1ccdce0b7e0982c20f127c..b12af94d9ca27ae0dde6f486cb571a96ebdcbdcb 100644
+index b0995b32a17d7efe266fe474058089c6687b8edd..a84818958d10184bb845bc36a10aedf4093e0d30 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -319,7 +319,7 @@ public abstract class PlayerList {
@@ -3268,7 +3229,7 @@ index bb921a3b547019fc4e1ccdce0b7e0982c20f127c..b12af94d9ca27ae0dde6f486cb571a96
          }
  
 diff --git a/src/main/java/net/minecraft/server/players/StoredUserList.java b/src/main/java/net/minecraft/server/players/StoredUserList.java
-index 28ec0fc2b73519b2dbc44c82f2fe9300015475eb..759ae4c6cd1a216d0b9855a7f1c9b1d5d199a682 100644
+index ef9d4bea44d2c4b85631abf9be76a088fa2ceed7..72456a6e207afbfa3745fccf94918c6bc6dcaae4 100644
 --- a/src/main/java/net/minecraft/server/players/StoredUserList.java
 +++ b/src/main/java/net/minecraft/server/players/StoredUserList.java
 @@ -142,7 +142,7 @@ public abstract class StoredUserList<K, V extends StoredUserEntry<K>> {
@@ -3281,10 +3242,10 @@ index 28ec0fc2b73519b2dbc44c82f2fe9300015475eb..759ae4c6cd1a216d0b9855a7f1c9b1d5
                  }
              } catch (Throwable var8) {
 diff --git a/src/main/java/net/minecraft/stats/ServerStatsCounter.java b/src/main/java/net/minecraft/stats/ServerStatsCounter.java
-index 3f18770272eb270cdcbab2296a3b4e8af4a7f471..6628462ad43c850155198db1dddbfa7ebe1cac1f 100644
+index 590a129d5cdecc77ba00dac541e605a629ddc69f..b322909f942fa78f547a7f678d61056626b67324 100644
 --- a/src/main/java/net/minecraft/stats/ServerStatsCounter.java
 +++ b/src/main/java/net/minecraft/stats/ServerStatsCounter.java
-@@ -106,13 +106,13 @@ public class ServerStatsCounter extends StatsCounter {
+@@ -106,11 +106,11 @@ public class ServerStatsCounter extends StatsCounter {
                              String s2 = (String)var7.next();
                              if (compoundTag2.contains(s2, 10)) {
                                  Util.ifElse(Registry.STAT_TYPE.getOptional(new ResourceLocation(s2)), (statType) -> {
@@ -3298,11 +3259,8 @@ index 3f18770272eb270cdcbab2296a3b4e8af4a7f471..6628462ad43c850155198db1dddbfa7e
 +                                        if (compoundTag2In.contains(key, 99)) {
 +                                            Util.ifElse(this.getStat(statType, key), (stat) -> this.stats.put(stat, compoundTag2In.getInt(key)), () -> LOGGER.warn("Invalid statistic in {}: Don't know what {} is", this.file, key));
                                          } else {
--                                            LOGGER.warn("Invalid statistic value in {}: Don't know what {} is for key {}", this.file, compoundTag2.get(s2), s2);
-+                                            LOGGER.warn("Invalid statistic value in {}: Don't know what {} is for key {}", this.file, compoundTag2In.get(key), key);
+                                             LOGGER.warn("Invalid statistic value in {}: Don't know what {} is for key {}", new Object[]{this.file, compoundTag2.get(s2), s2});
                                          }
-                                     }
- 
 @@ -175,14 +175,14 @@ public class ServerStatsCounter extends StatsCounter {
              ((JsonObject)map.computeIfAbsent(stat.getType(), (statType) -> new JsonObject())).addProperty(getKey(stat).toString(), entry.getIntValue());
          }
@@ -3322,7 +3280,7 @@ index 3f18770272eb270cdcbab2296a3b4e8af4a7f471..6628462ad43c850155198db1dddbfa7e
          return jsonObject2.toString();
      }
 diff --git a/src/main/java/net/minecraft/tags/Tag.java b/src/main/java/net/minecraft/tags/Tag.java
-index 33809739bc13832354d6091a652838be98b0e5f4..11370d6d126996d92dd21c5abd7530a468cad5fa 100644
+index f578908481b197298efeffc0bce313bc86cff6ab..e613672ec37d3817d1bfa8417df1b78b3c312691 100644
 --- a/src/main/java/net/minecraft/tags/Tag.java
 +++ b/src/main/java/net/minecraft/tags/Tag.java
 @@ -23,7 +23,7 @@ import net.minecraft.util.GsonHelper;
@@ -3335,7 +3293,7 @@ index 33809739bc13832354d6091a652838be98b0e5f4..11370d6d126996d92dd21c5abd7530a4
  
      boolean contains(T var1);
 diff --git a/src/main/java/net/minecraft/tags/TagContainer.java b/src/main/java/net/minecraft/tags/TagContainer.java
-index 1383e28f4f245d89e817361ca6ca928ae90c6ff7..441c52faa46617f0021a31664a7e0a4c0163654c 100644
+index 1c5bfc6379ce289590b182799f63f1a7a6452629..05dcd86166ffd0fa48a55e33ace4a49b67bf31d5 100644
 --- a/src/main/java/net/minecraft/tags/TagContainer.java
 +++ b/src/main/java/net/minecraft/tags/TagContainer.java
 @@ -36,11 +36,11 @@ public class TagContainer {
@@ -3756,10 +3714,10 @@ index 87e7af9d54bb549f2e01b1446a3c1f68a5ae4284..808b7d4556a951a75587790090c2d8dc
          dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema135, "Renamed grimstone blocks to deepslate", createRenamer(immutableMap3)));
          Schema schema136 = dataFixerBuilder.addSchema(2700, SAME_NAMESPACED);
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
-index 6e7c7aaea9cf33ef280f2bca4480cf36ae940ae8..23f0ed04bdb9bf679fa525f7be8c93708071d318 100644
+index 9bb677aeb69b03cf6d397a0a8969cbbeec814817..3c27cf8ee3836c68dc5a68c6df6722cddd5e6a72 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
-@@ -45,10 +45,10 @@ public abstract class AbstractUUIDFix extends DataFix {
+@@ -42,10 +42,10 @@ public abstract class AbstractUUIDFix extends DataFix {
  
      protected static Optional<Dynamic<?>> createUUIDFromString(Dynamic<?> dynamic, String s) {
          return dynamic.get(s).result().flatMap((dynamic2) -> {
@@ -4074,10 +4032,10 @@ index af2ae85e0995e3653cacc8f8696194dd8a28302e..f679d7e59073e89702f12bc7896c6c33
                      } catch (NumberFormatException var4) {
                      }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix.java
-index bbf296da4c7d6b6db0826b942ab664f3c2d10f8e..325f85d4fe6c2ee36e2369f414c81825fa6116a0 100644
+index 2e363df30d9c3db13ff3cc831649ca97768f69f6..97a05e4eca6f396cca3bf58d27d6c4ff504ead50 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix.java
-@@ -561,19 +561,19 @@ public class ChunkPalettedStorageFix extends DataFix {
+@@ -561,22 +561,22 @@ public class ChunkPalettedStorageFix extends DataFix {
              this.level = dynamic;
              this.x = dynamic.get("xPos").asInt(0) << 4;
              this.z = dynamic.get("zPos").asInt(0) << 4;
@@ -4085,25 +4043,429 @@ index bbf296da4c7d6b6db0826b942ab664f3c2d10f8e..325f85d4fe6c2ee36e2369f414c81825
 -                    int i = dynamic.get("x").asInt(0) - this.x & 15;
 -                    int i2 = dynamic.get("y").asInt(0);
 -                    int i3 = dynamic.get("z").asInt(0) - this.z & 15;
-+            dynamic.get("TileEntities").asStreamOpt().result().ifPresent((stream) -> stream.forEach((dynamicIn) -> {
-+                    int i = dynamicIn.get("x").asInt(0) - this.x & 15;
-+                    int i2 = dynamicIn.get("y").asInt(0);
-+                    int i3 = dynamicIn.get("z").asInt(0) - this.z & 15;
-                     int i4 = i2 << 8 | i3 << 4 | i;
+-                    int i4 = i2 << 8 | i3 << 4 | i;
 -                    if (this.blockEntities.put(i4, dynamic) != null) {
-+                    if (this.blockEntities.put(i4, dynamicIn) != null) {
-                         ChunkPalettedStorageFix.LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.x, this.z, i, i2, i3);
-                     }
+-                        ChunkPalettedStorageFix.LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", new Object[]{this.x, this.z, i, i2, i3});
+-                    }
++            dynamic.get("TileEntities").asStreamOpt().result().ifPresent((stream) -> stream.forEach((dynamicIn) -> {
++                int i = dynamicIn.get("x").asInt(0) - this.x & 15;
++                int i2 = dynamicIn.get("y").asInt(0);
++                int i3 = dynamicIn.get("z").asInt(0) - this.z & 15;
++                int i4 = i2 << 8 | i3 << 4 | i;
++                if (this.blockEntities.put(i4, dynamicIn) != null) {
++                    ChunkPalettedStorageFix.LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.x, this.z, i, i2, i3);
++                }
  
-                 }));
+-                }));
++            }));
              boolean flag = dynamic.get("convertedFromAlphaFormat").asBoolean(false);
 -            dynamic.get("Sections").asStreamOpt().result().ifPresent((stream) -> stream.forEach((dynamic) -> {
 -                    ChunkPalettedStorageFix.Section section = new ChunkPalettedStorageFix.Section(dynamic);
+-                    this.sides = section.upgrade(this.sides);
+-                    this.sections[section.y] = section;
+-                }));
 +            dynamic.get("Sections").asStreamOpt().result().ifPresent((stream) -> stream.forEach((dynamicIn) -> {
-+                    ChunkPalettedStorageFix.Section section = new ChunkPalettedStorageFix.Section(dynamicIn);
-                     this.sides = section.upgrade(this.sides);
-                     this.sections[section.y] = section;
-                 }));
++                ChunkPalettedStorageFix.Section section = new ChunkPalettedStorageFix.Section(dynamicIn);
++                this.sides = section.upgrade(this.sides);
++                this.sections[section.y] = section;
++            }));
+ 
+             for(ChunkPalettedStorageFix.Section section : this.sections) {
+                 if (section != null) {
+@@ -586,211 +586,211 @@ public class ChunkPalettedStorageFix extends DataFix {
+                         java.util.Map.Entry<Integer, IntList> entry = (java.util.Map.Entry)var7.next();
+                         int i = section.y << 12;
+                         switch(entry.getKey()) {
+-                        case 2:
+-                            IntListIterator var30 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var30.hasNext()) {
+-                                int i2 = var30.next();
+-                                i2 |= i;
+-                                Dynamic<?> dynamic2 = this.getBlock(i2);
+-                                if ("minecraft:grass_block".equals(ChunkPalettedStorageFix.getName(dynamic2))) {
+-                                    String s = ChunkPalettedStorageFix.getName(this.getBlock(relative(i2, ChunkPalettedStorageFix.Direction.UP)));
+-                                    if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
+-                                        this.setBlock(i2, ChunkPalettedStorageFix.SNOWY_GRASS);
++                            case 2:
++                                IntListIterator var30 = ((IntList)entry.getValue()).iterator();
++
++                                while(var30.hasNext()) {
++                                    int i2 = var30.next();
++                                    i2 |= i;
++                                    Dynamic<?> dynamic2 = this.getBlock(i2);
++                                    if ("minecraft:grass_block".equals(ChunkPalettedStorageFix.getName(dynamic2))) {
++                                        String s = ChunkPalettedStorageFix.getName(this.getBlock(relative(i2, ChunkPalettedStorageFix.Direction.UP)));
++                                        if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
++                                            this.setBlock(i2, ChunkPalettedStorageFix.SNOWY_GRASS);
++                                        }
+                                     }
+                                 }
+-                            }
+-                            break;
+-                        case 3:
+-                            IntListIterator var29 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var29.hasNext()) {
+-                                int i3 = var29.next();
+-                                i3 |= i;
+-                                Dynamic<?> dynamic3 = this.getBlock(i3);
+-                                if ("minecraft:podzol".equals(ChunkPalettedStorageFix.getName(dynamic3))) {
+-                                    String s2 = ChunkPalettedStorageFix.getName(this.getBlock(relative(i3, ChunkPalettedStorageFix.Direction.UP)));
+-                                    if ("minecraft:snow".equals(s2) || "minecraft:snow_layer".equals(s2)) {
+-                                        this.setBlock(i3, ChunkPalettedStorageFix.SNOWY_PODZOL);
++                                break;
++                            case 3:
++                                IntListIterator var29 = ((IntList)entry.getValue()).iterator();
++
++                                while(var29.hasNext()) {
++                                    int i3 = var29.next();
++                                    i3 |= i;
++                                    Dynamic<?> dynamic3 = this.getBlock(i3);
++                                    if ("minecraft:podzol".equals(ChunkPalettedStorageFix.getName(dynamic3))) {
++                                        String s2 = ChunkPalettedStorageFix.getName(this.getBlock(relative(i3, ChunkPalettedStorageFix.Direction.UP)));
++                                        if ("minecraft:snow".equals(s2) || "minecraft:snow_layer".equals(s2)) {
++                                            this.setBlock(i3, ChunkPalettedStorageFix.SNOWY_PODZOL);
++                                        }
+                                     }
+                                 }
+-                            }
+-                            break;
+-                        case 25:
+-                            IntListIterator var28 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var28.hasNext()) {
+-                                int i5 = var28.next();
+-                                i5 |= i;
+-                                Dynamic<?> dynamic5 = this.removeBlockEntity(i5);
+-                                if (dynamic5 != null) {
+-                                    String s4 = Boolean.toString(dynamic5.get("powered").asBoolean(false)) + (byte)Math.min(Math.max(dynamic5.get("note").asInt(0), 0), 24);
+-                                    this.setBlock(i5, ChunkPalettedStorageFix.NOTE_BLOCK_MAP.getOrDefault(s4, ChunkPalettedStorageFix.NOTE_BLOCK_MAP.get("false0")));
++                                break;
++                            case 25:
++                                IntListIterator var28 = ((IntList)entry.getValue()).iterator();
++
++                                while(var28.hasNext()) {
++                                    int i5 = var28.next();
++                                    i5 |= i;
++                                    Dynamic<?> dynamic5 = this.removeBlockEntity(i5);
++                                    if (dynamic5 != null) {
++                                        String s4 = Boolean.toString(dynamic5.get("powered").asBoolean(false)) + (byte)Math.min(Math.max(dynamic5.get("note").asInt(0), 0), 24);
++                                        this.setBlock(i5, ChunkPalettedStorageFix.NOTE_BLOCK_MAP.getOrDefault(s4, ChunkPalettedStorageFix.NOTE_BLOCK_MAP.get("false0")));
++                                    }
+                                 }
+-                            }
+-                            break;
+-                        case 26:
+-                            IntListIterator var27 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var27.hasNext()) {
+-                                int i6 = var27.next();
+-                                i6 |= i;
+-                                Dynamic<?> dynamic6 = this.getBlockEntity(i6);
+-                                Dynamic<?> dynamic7 = this.getBlock(i6);
+-                                if (dynamic6 != null) {
+-                                    int i7 = dynamic6.get("color").asInt(0);
+-                                    if (i7 != 14 && i7 >= 0 && i7 < 16) {
+-                                        String s5 = ChunkPalettedStorageFix.getProperty(dynamic7, "facing") + ChunkPalettedStorageFix.getProperty(dynamic7, "occupied") + ChunkPalettedStorageFix.getProperty(dynamic7, "part") + i7;
+-                                        if (ChunkPalettedStorageFix.BED_BLOCK_MAP.containsKey(s5)) {
+-                                            this.setBlock(i6, ChunkPalettedStorageFix.BED_BLOCK_MAP.get(s5));
++                                break;
++                            case 26:
++                                IntListIterator var27 = ((IntList)entry.getValue()).iterator();
++
++                                while(var27.hasNext()) {
++                                    int i6 = var27.next();
++                                    i6 |= i;
++                                    Dynamic<?> dynamic6 = this.getBlockEntity(i6);
++                                    Dynamic<?> dynamic7 = this.getBlock(i6);
++                                    if (dynamic6 != null) {
++                                        int i7 = dynamic6.get("color").asInt(0);
++                                        if (i7 != 14 && i7 >= 0 && i7 < 16) {
++                                            String s5 = ChunkPalettedStorageFix.getProperty(dynamic7, "facing") + ChunkPalettedStorageFix.getProperty(dynamic7, "occupied") + ChunkPalettedStorageFix.getProperty(dynamic7, "part") + i7;
++                                            if (ChunkPalettedStorageFix.BED_BLOCK_MAP.containsKey(s5)) {
++                                                this.setBlock(i6, ChunkPalettedStorageFix.BED_BLOCK_MAP.get(s5));
++                                            }
+                                         }
+                                     }
+                                 }
+-                            }
+-                            break;
+-                        case 64:
+-                        case 71:
+-                        case 193:
+-                        case 194:
+-                        case 195:
+-                        case 196:
+-                        case 197:
+-                            IntListIterator var26 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var26.hasNext()) {
+-                                int i13 = var26.next();
+-                                i13 |= i;
+-                                Dynamic<?> dynamic13 = this.getBlock(i13);
+-                                if (ChunkPalettedStorageFix.getName(dynamic13).endsWith("_door")) {
+-                                    Dynamic<?> dynamic14 = this.getBlock(i13);
+-                                    if ("lower".equals(ChunkPalettedStorageFix.getProperty(dynamic14, "half"))) {
+-                                        int i14 = relative(i13, ChunkPalettedStorageFix.Direction.UP);
+-                                        Dynamic<?> dynamic15 = this.getBlock(i14);
+-                                        String s13 = ChunkPalettedStorageFix.getName(dynamic14);
+-                                        if (s13.equals(ChunkPalettedStorageFix.getName(dynamic15))) {
+-                                            String s14 = ChunkPalettedStorageFix.getProperty(dynamic14, "facing");
+-                                            String s15 = ChunkPalettedStorageFix.getProperty(dynamic14, "open");
+-                                            String s16 = flag ? "left" : ChunkPalettedStorageFix.getProperty(dynamic15, "hinge");
+-                                            String s17 = flag ? "false" : ChunkPalettedStorageFix.getProperty(dynamic15, "powered");
+-                                            this.setBlock(i13, ChunkPalettedStorageFix.DOOR_MAP.get(s13 + s14 + "lower" + s16 + s15 + s17));
+-                                            this.setBlock(i14, ChunkPalettedStorageFix.DOOR_MAP.get(s13 + s14 + "upper" + s16 + s15 + s17));
++                                break;
++                            case 64:
++                            case 71:
++                            case 193:
++                            case 194:
++                            case 195:
++                            case 196:
++                            case 197:
++                                IntListIterator var26 = ((IntList)entry.getValue()).iterator();
++
++                                while(var26.hasNext()) {
++                                    int i13 = var26.next();
++                                    i13 |= i;
++                                    Dynamic<?> dynamic13 = this.getBlock(i13);
++                                    if (ChunkPalettedStorageFix.getName(dynamic13).endsWith("_door")) {
++                                        Dynamic<?> dynamic14 = this.getBlock(i13);
++                                        if ("lower".equals(ChunkPalettedStorageFix.getProperty(dynamic14, "half"))) {
++                                            int i14 = relative(i13, ChunkPalettedStorageFix.Direction.UP);
++                                            Dynamic<?> dynamic15 = this.getBlock(i14);
++                                            String s13 = ChunkPalettedStorageFix.getName(dynamic14);
++                                            if (s13.equals(ChunkPalettedStorageFix.getName(dynamic15))) {
++                                                String s14 = ChunkPalettedStorageFix.getProperty(dynamic14, "facing");
++                                                String s15 = ChunkPalettedStorageFix.getProperty(dynamic14, "open");
++                                                String s16 = flag ? "left" : ChunkPalettedStorageFix.getProperty(dynamic15, "hinge");
++                                                String s17 = flag ? "false" : ChunkPalettedStorageFix.getProperty(dynamic15, "powered");
++                                                this.setBlock(i13, ChunkPalettedStorageFix.DOOR_MAP.get(s13 + s14 + "lower" + s16 + s15 + s17));
++                                                this.setBlock(i14, ChunkPalettedStorageFix.DOOR_MAP.get(s13 + s14 + "upper" + s16 + s15 + s17));
++                                            }
+                                         }
+                                     }
+                                 }
+-                            }
+-                            break;
+-                        case 86:
+-                            IntListIterator var25 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var25.hasNext()) {
+-                                int i10 = var25.next();
+-                                i10 |= i;
+-                                Dynamic<?> dynamic10 = this.getBlock(i10);
+-                                if ("minecraft:carved_pumpkin".equals(ChunkPalettedStorageFix.getName(dynamic10))) {
+-                                    String s7 = ChunkPalettedStorageFix.getName(this.getBlock(relative(i10, ChunkPalettedStorageFix.Direction.DOWN)));
+-                                    if ("minecraft:grass_block".equals(s7) || "minecraft:dirt".equals(s7)) {
+-                                        this.setBlock(i10, ChunkPalettedStorageFix.PUMPKIN);
++                                break;
++                            case 86:
++                                IntListIterator var25 = ((IntList)entry.getValue()).iterator();
++
++                                while(var25.hasNext()) {
++                                    int i10 = var25.next();
++                                    i10 |= i;
++                                    Dynamic<?> dynamic10 = this.getBlock(i10);
++                                    if ("minecraft:carved_pumpkin".equals(ChunkPalettedStorageFix.getName(dynamic10))) {
++                                        String s7 = ChunkPalettedStorageFix.getName(this.getBlock(relative(i10, ChunkPalettedStorageFix.Direction.DOWN)));
++                                        if ("minecraft:grass_block".equals(s7) || "minecraft:dirt".equals(s7)) {
++                                            this.setBlock(i10, ChunkPalettedStorageFix.PUMPKIN);
++                                        }
+                                     }
+                                 }
+-                            }
+-                            break;
+-                        case 110:
+-                            IntListIterator var24 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var24.hasNext()) {
+-                                int i4 = var24.next();
+-                                i4 |= i;
+-                                Dynamic<?> dynamic4 = this.getBlock(i4);
+-                                if ("minecraft:mycelium".equals(ChunkPalettedStorageFix.getName(dynamic4))) {
+-                                    String s3 = ChunkPalettedStorageFix.getName(this.getBlock(relative(i4, ChunkPalettedStorageFix.Direction.UP)));
+-                                    if ("minecraft:snow".equals(s3) || "minecraft:snow_layer".equals(s3)) {
+-                                        this.setBlock(i4, ChunkPalettedStorageFix.SNOWY_MYCELIUM);
++                                break;
++                            case 110:
++                                IntListIterator var24 = ((IntList)entry.getValue()).iterator();
++
++                                while(var24.hasNext()) {
++                                    int i4 = var24.next();
++                                    i4 |= i;
++                                    Dynamic<?> dynamic4 = this.getBlock(i4);
++                                    if ("minecraft:mycelium".equals(ChunkPalettedStorageFix.getName(dynamic4))) {
++                                        String s3 = ChunkPalettedStorageFix.getName(this.getBlock(relative(i4, ChunkPalettedStorageFix.Direction.UP)));
++                                        if ("minecraft:snow".equals(s3) || "minecraft:snow_layer".equals(s3)) {
++                                            this.setBlock(i4, ChunkPalettedStorageFix.SNOWY_MYCELIUM);
++                                        }
+                                     }
+                                 }
+-                            }
+-                            break;
+-                        case 140:
+-                            IntListIterator var23 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var23.hasNext()) {
+-                                int i11 = var23.next();
+-                                i11 |= i;
+-                                Dynamic<?> dynamic11 = this.removeBlockEntity(i11);
+-                                if (dynamic11 != null) {
+-                                    String s8 = dynamic11.get("Item").asString("") + dynamic11.get("Data").asInt(0);
+-                                    this.setBlock(i11, ChunkPalettedStorageFix.FLOWER_POT_MAP.getOrDefault(s8, ChunkPalettedStorageFix.FLOWER_POT_MAP.get("minecraft:air0")));
+-                                }
+-                            }
+-                            break;
+-                        case 144:
+-                            IntListIterator var22 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var22.hasNext()) {
+-                                int i12 = var22.next();
+-                                i12 |= i;
+-                                Dynamic<?> dynamic12 = this.getBlockEntity(i12);
+-                                if (dynamic12 != null) {
+-                                    String s9 = String.valueOf(dynamic12.get("SkullType").asInt(0));
+-                                    String s10 = ChunkPalettedStorageFix.getProperty(this.getBlock(i12), "facing");
+-                                    String s12;
+-                                    if (!"up".equals(s10) && !"down".equals(s10)) {
+-                                        s12 = s9 + s10;
+-                                    } else {
+-                                        s12 = s9 + String.valueOf(dynamic12.get("Rot").asInt(0));
++                                break;
++                            case 140:
++                                IntListIterator var23 = ((IntList)entry.getValue()).iterator();
++
++                                while(var23.hasNext()) {
++                                    int i11 = var23.next();
++                                    i11 |= i;
++                                    Dynamic<?> dynamic11 = this.removeBlockEntity(i11);
++                                    if (dynamic11 != null) {
++                                        String s8 = dynamic11.get("Item").asString("") + dynamic11.get("Data").asInt(0);
++                                        this.setBlock(i11, ChunkPalettedStorageFix.FLOWER_POT_MAP.getOrDefault(s8, ChunkPalettedStorageFix.FLOWER_POT_MAP.get("minecraft:air0")));
+                                     }
++                                }
++                                break;
++                            case 144:
++                                IntListIterator var22 = ((IntList)entry.getValue()).iterator();
++
++                                while(var22.hasNext()) {
++                                    int i12 = var22.next();
++                                    i12 |= i;
++                                    Dynamic<?> dynamic12 = this.getBlockEntity(i12);
++                                    if (dynamic12 != null) {
++                                        String s9 = String.valueOf(dynamic12.get("SkullType").asInt(0));
++                                        String s10 = ChunkPalettedStorageFix.getProperty(this.getBlock(i12), "facing");
++                                        String s12;
++                                        if (!"up".equals(s10) && !"down".equals(s10)) {
++                                            s12 = s9 + s10;
++                                        } else {
++                                            s12 = s9 + String.valueOf(dynamic12.get("Rot").asInt(0));
++                                        }
+ 
+-                                    dynamic12.remove("SkullType");
+-                                    dynamic12.remove("facing");
+-                                    dynamic12.remove("Rot");
+-                                    this.setBlock(i12, ChunkPalettedStorageFix.SKULL_MAP.getOrDefault(s12, ChunkPalettedStorageFix.SKULL_MAP.get("0north")));
++                                        dynamic12.remove("SkullType");
++                                        dynamic12.remove("facing");
++                                        dynamic12.remove("Rot");
++                                        this.setBlock(i12, ChunkPalettedStorageFix.SKULL_MAP.getOrDefault(s12, ChunkPalettedStorageFix.SKULL_MAP.get("0north")));
++                                    }
+                                 }
+-                            }
+-                            break;
+-                        case 175:
+-                            IntListIterator var21 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var21.hasNext()) {
+-                                int i15 = var21.next();
+-                                i15 |= i;
+-                                Dynamic<?> dynamic16 = this.getBlock(i15);
+-                                if ("upper".equals(ChunkPalettedStorageFix.getProperty(dynamic16, "half"))) {
+-                                    Dynamic<?> dynamic17 = this.getBlock(relative(i15, ChunkPalettedStorageFix.Direction.DOWN));
+-                                    String s18 = ChunkPalettedStorageFix.getName(dynamic17);
+-                                    if ("minecraft:sunflower".equals(s18)) {
+-                                        this.setBlock(i15, ChunkPalettedStorageFix.UPPER_SUNFLOWER);
+-                                    } else if ("minecraft:lilac".equals(s18)) {
+-                                        this.setBlock(i15, ChunkPalettedStorageFix.UPPER_LILAC);
+-                                    } else if ("minecraft:tall_grass".equals(s18)) {
+-                                        this.setBlock(i15, ChunkPalettedStorageFix.UPPER_TALL_GRASS);
+-                                    } else if ("minecraft:large_fern".equals(s18)) {
+-                                        this.setBlock(i15, ChunkPalettedStorageFix.UPPER_LARGE_FERN);
+-                                    } else if ("minecraft:rose_bush".equals(s18)) {
+-                                        this.setBlock(i15, ChunkPalettedStorageFix.UPPER_ROSE_BUSH);
+-                                    } else if ("minecraft:peony".equals(s18)) {
+-                                        this.setBlock(i15, ChunkPalettedStorageFix.UPPER_PEONY);
++                                break;
++                            case 175:
++                                IntListIterator var21 = ((IntList)entry.getValue()).iterator();
++
++                                while(var21.hasNext()) {
++                                    int i15 = var21.next();
++                                    i15 |= i;
++                                    Dynamic<?> dynamic16 = this.getBlock(i15);
++                                    if ("upper".equals(ChunkPalettedStorageFix.getProperty(dynamic16, "half"))) {
++                                        Dynamic<?> dynamic17 = this.getBlock(relative(i15, ChunkPalettedStorageFix.Direction.DOWN));
++                                        String s18 = ChunkPalettedStorageFix.getName(dynamic17);
++                                        if ("minecraft:sunflower".equals(s18)) {
++                                            this.setBlock(i15, ChunkPalettedStorageFix.UPPER_SUNFLOWER);
++                                        } else if ("minecraft:lilac".equals(s18)) {
++                                            this.setBlock(i15, ChunkPalettedStorageFix.UPPER_LILAC);
++                                        } else if ("minecraft:tall_grass".equals(s18)) {
++                                            this.setBlock(i15, ChunkPalettedStorageFix.UPPER_TALL_GRASS);
++                                        } else if ("minecraft:large_fern".equals(s18)) {
++                                            this.setBlock(i15, ChunkPalettedStorageFix.UPPER_LARGE_FERN);
++                                        } else if ("minecraft:rose_bush".equals(s18)) {
++                                            this.setBlock(i15, ChunkPalettedStorageFix.UPPER_ROSE_BUSH);
++                                        } else if ("minecraft:peony".equals(s18)) {
++                                            this.setBlock(i15, ChunkPalettedStorageFix.UPPER_PEONY);
++                                        }
+                                     }
+                                 }
+-                            }
+-                            break;
+-                        case 176:
+-                        case 177:
+-                            IntListIterator var10 = ((IntList)entry.getValue()).iterator();
+-
+-                            while(var10.hasNext()) {
+-                                int i8 = var10.next();
+-                                i8 |= i;
+-                                Dynamic<?> dynamic8 = this.getBlockEntity(i8);
+-                                Dynamic<?> dynamic9 = this.getBlock(i8);
+-                                if (dynamic8 != null) {
+-                                    int i9 = dynamic8.get("Base").asInt(0);
+-                                    if (i9 != 15 && i9 >= 0 && i9 < 16) {
+-                                        String s6 = ChunkPalettedStorageFix.getProperty(dynamic9, entry.getKey() == 176 ? "rotation" : "facing") + "_" + i9;
+-                                        if (ChunkPalettedStorageFix.BANNER_BLOCK_MAP.containsKey(s6)) {
+-                                            this.setBlock(i8, ChunkPalettedStorageFix.BANNER_BLOCK_MAP.get(s6));
++                                break;
++                            case 176:
++                            case 177:
++                                IntListIterator var10 = ((IntList)entry.getValue()).iterator();
++
++                                while(var10.hasNext()) {
++                                    int i8 = var10.next();
++                                    i8 |= i;
++                                    Dynamic<?> dynamic8 = this.getBlockEntity(i8);
++                                    Dynamic<?> dynamic9 = this.getBlock(i8);
++                                    if (dynamic8 != null) {
++                                        int i9 = dynamic8.get("Base").asInt(0);
++                                        if (i9 != 15 && i9 >= 0 && i9 < 16) {
++                                            String s6 = ChunkPalettedStorageFix.getProperty(dynamic9, entry.getKey() == 176 ? "rotation" : "facing") + "_" + i9;
++                                            if (ChunkPalettedStorageFix.BANNER_BLOCK_MAP.containsKey(s6)) {
++                                                this.setBlock(i8, ChunkPalettedStorageFix.BANNER_BLOCK_MAP.get(s6));
++                                            }
+                                         }
+                                     }
+                                 }
+-                            }
+                         }
+                     }
+                 }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ChunkProtoTickListFix.java b/src/main/java/net/minecraft/util/datafix/fixes/ChunkProtoTickListFix.java
 index fde49a4e077b72007a3cc1dc7de3ea57a39798f0..7d6237b1a6c8a7b20130f29e37674dfcd2d569af 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/ChunkProtoTickListFix.java
@@ -4344,10 +4706,10 @@ index 99f3abf08cd8d6118a8f05f16c3753ec8c68eb2f..3aa084bfaedb9633727b54fa6001ee40
  
      public EntityTheRenameningFix(Schema schema, boolean flag) {
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/EntityUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/EntityUUIDFix.java
-index 1e3c6a8bec464897179899ca60d78a86b43ba243..1f832f5bc9db42a618e789cacb6d2d32b1c2107c 100644
+index 3519f81d2b5fe2a381cf3cf38a298ebfd07e175a..a08f9bc5fe0a7666a119e67b4db3b143e39d08e1 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/EntityUUIDFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/EntityUUIDFix.java
-@@ -62,9 +62,9 @@ public class EntityUUIDFix extends AbstractUUIDFix {
+@@ -65,9 +65,9 @@ public class EntityUUIDFix extends AbstractUUIDFix {
      }
  
      private static Dynamic<?> updatePiglin(Dynamic<?> dynamic) {
@@ -4359,7 +4721,7 @@ index 1e3c6a8bec464897179899ca60d78a86b43ba243..1f832f5bc9db42a618e789cacb6d2d32
                      }))));
      }
  
-@@ -117,7 +117,7 @@ public class EntityUUIDFix extends AbstractUUIDFix {
+@@ -120,7 +120,7 @@ public class EntityUUIDFix extends AbstractUUIDFix {
      }
  
      public static Dynamic<?> updateLivingEntity(Dynamic<?> dynamic) {
@@ -4580,10 +4942,10 @@ index fbe410a9a98f78629775a235198bfb4bb940eb2b..6463d3f3efe1aeb27bb6b941180829a2
                      String s4 = (String)list2.get(i4);
                      int i5 = i == 3 ? EntityBlockStateFix.getBlockId("minecraft:" + s4) : NumberUtils.toInt(s4, 0);
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/LevelUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/LevelUUIDFix.java
-index e589cb8e7ce5bfc97142ba3cedc2463b562e8562..f4d575c95d73718613a3513e69189d89d0bff9e5 100644
+index cfda875528ebd1dbcc4c82b67a5eece8e0076ca0..c6f5290e7d21b49f57277663212aaa64e8f0168c 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/LevelUUIDFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/LevelUUIDFix.java
-@@ -23,13 +23,13 @@ public class LevelUUIDFix extends AbstractUUIDFix {
+@@ -27,13 +27,13 @@ public class LevelUUIDFix extends AbstractUUIDFix {
      }
  
      private Dynamic<?> updateDragonFight(Dynamic<?> dynamic) {
@@ -4763,10 +5125,10 @@ index c233f609568e42e10939e3d990805a74dcf735e3..defba40c27926c5e9b9a8b6b8c557114
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/SavedDataUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/SavedDataUUIDFix.java
-index e08b92d89ecdc550b26b4414edcd549435eb2061..329f612e473a5feebabbd7175af574b51c0b2e9e 100644
+index 0b4e8af408be853fd481bd531464aeef99e9cc37..e900319c7cf6a00b2fad77726ba7d8e9d9b14605 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/SavedDataUUIDFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/SavedDataUUIDFix.java
-@@ -11,9 +11,9 @@ public class SavedDataUUIDFix extends AbstractUUIDFix {
+@@ -15,9 +15,9 @@ public class SavedDataUUIDFix extends AbstractUUIDFix {
      }
  
      protected TypeRewriteRule makeRule() {
@@ -4869,7 +5231,7 @@ index 8237b1eac30fc214bbbe7951286360d86b2a931c..157e31cc84e3aba07fd2a7fc0f42064a
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java b/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java
-index e0e127b61356bd6d318fe571483d798f53b5ba92..27ffae56403e601857c6b5b595d14addc4662853 100644
+index 12addbbbcd00cca0462169afc14248eb1f7d98e2..bb463457dfc98fdc5a0766c25acb780fcbc4bc0c 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java
 @@ -69,19 +69,19 @@ public class TrappedChestBlockEntityFix extends DataFix {
@@ -5064,7 +5426,7 @@ index 4c5f62c5b60826da77f9e71170d83bd1174c8831..d112911d628e7abffec2805dec315764
      };
  
 diff --git a/src/main/java/net/minecraft/util/datafix/schemas/V99.java b/src/main/java/net/minecraft/util/datafix/schemas/V99.java
-index f064673a2dc00ef9c5d4380082d0caec9db033a2..679e4154c7690cb139a4371ba4fd4f77c54489a0 100644
+index 6bcc80f11b61372632ebd4462e715177bedda178..2d56b6442aa83d9594cc30fc08d2ae9703c417a2 100644
 --- a/src/main/java/net/minecraft/util/datafix/schemas/V99.java
 +++ b/src/main/java/net/minecraft/util/datafix/schemas/V99.java
 @@ -54,7 +54,7 @@ public class V99 extends Schema {
@@ -5096,7 +5458,7 @@ index f064673a2dc00ef9c5d4380082d0caec9db033a2..679e4154c7690cb139a4371ba4fd4f77
  
                  return dynamic2x;
 diff --git a/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java b/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
-index 6936faa16ec6cdda640428e27ca1f12befa9fefa..6495d793744822484f21b420f0022d8f83c2963c 100644
+index deb32d29ab4148510ecb78395d4c34d53184aa23..ab9d6a72ae6bf3604db146988c4ad5b130d05155 100644
 --- a/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
 +++ b/src/main/java/net/minecraft/util/profiling/FilledProfileResults.java
 @@ -43,7 +43,7 @@ public class FilledProfileResults implements ProfileResults {
@@ -5551,7 +5913,7 @@ index 767bc1069a58fa6421e75c3fcaa7c9dbfb2d6e50..701ebf168b673da1edbe26dd54644077
  
      static enum Timing {
 diff --git a/src/main/java/net/minecraft/util/profiling/jfr/stats/NetworkPacketSummary.java b/src/main/java/net/minecraft/util/profiling/jfr/stats/NetworkPacketSummary.java
-index e21139cd8fa50ba0bec8e4155c29d07323b68125..463c7b5ef5957da2cd2d194c48d597e9920bde0a 100644
+index e1aa56f26007bf13fdcf12526ffc4a0c7a2c3169..23a3a335cd394f516fee098af958a3c935a2591e 100644
 --- a/src/main/java/net/minecraft/util/profiling/jfr/stats/NetworkPacketSummary.java
 +++ b/src/main/java/net/minecraft/util/profiling/jfr/stats/NetworkPacketSummary.java
 @@ -44,41 +44,17 @@ public final class NetworkPacketSummary {
@@ -5902,7 +6264,7 @@ index 26fd1c29d10cd770c468f8b3e6ac7a0f1fc9bebe..92522bfbdb47b3561e5b50793e564b82
      private final int maxInclusive;
  
 diff --git a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
-index 4558d0fc417e04d4add501d97abc3b45e64d1e83..1316db21ee0a659cd29095a3a4dd3f107aaccf97 100644
+index 24fda11bb35954b12bacaa0f2a81bb9ee5e59296..17873029b77b8b6ba4bac7292e66d1b9cb92bcac 100644
 --- a/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
 +++ b/src/main/java/net/minecraft/util/worldupdate/WorldUpgrader.java
 @@ -107,7 +107,7 @@ public class WorldUpgrader {
@@ -5933,10 +6295,10 @@ index 4558d0fc417e04d4add501d97abc3b45e64d1e83..1316db21ee0a659cd29095a3a4dd3f10
              while(var32.hasNext()) {
                  ChunkStorage chunkStorage2 = (ChunkStorage)var32.next();
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 9e8ddefc37fa8493f707c114ffb8446c952f709b..8f955aa897f56ecbaeaa337f0cdd03a2f03e7af5 100644
+index bded345fd0b85e5bd1916418b98a551b30a68741..51253143d53e835d1e047f0bb8b037342d60d1dc 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3272,21 +3272,5 @@ public abstract class LivingEntity extends Entity {
+@@ -3271,21 +3271,5 @@ public abstract class LivingEntity extends Entity {
          this.setDeltaMovement((double)((float)clientboundAddMobPacket.getXd() / 8000.0F), (double)((float)clientboundAddMobPacket.getYd() / 8000.0F), (double)((float)clientboundAddMobPacket.getZd() / 8000.0F));
      }
  
@@ -5987,7 +6349,7 @@ index e3c4a1e49703c0220c3c74ac163be1011adc428f..ae472a139eed4967c9ba4d1353e5436b
  
      static {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/Brain.java b/src/main/java/net/minecraft/world/entity/ai/Brain.java
-index a37a14d5069688aa4966b5e99fd98d723e83d84b..bfbd0f7e99bcb9eb90031d633936158041b67da9 100644
+index 24a65c8d7aa7c51404f8976786b8edb81d145b5b..1461cd5921f95b21b2b76169355b9660160c41c3 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/Brain.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/Brain.java
 @@ -69,14 +69,14 @@ public class Brain<E extends LivingEntity> {
@@ -6046,13 +6408,13 @@ index a37a14d5069688aa4966b5e99fd98d723e83d84b..bfbd0f7e99bcb9eb90031d6339361580
  
          MemoryValue(MemoryModuleType<U> memoryModuleType, Optional<? extends ExpirableValue<U>> optional) {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java b/src/main/java/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
-index 0094171f239125d85017a263efff2f12f1d4bc7f..94022132fd18849a6bdad9809238058f4435c315 100644
+index 3522548e22751b3841e638a1b86d7e54c191e278..e75a120dfdddae4349f4d5c04c907726a63dd875 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
-@@ -74,7 +74,7 @@ import org.apache.logging.log4j.Logger;
+@@ -74,7 +74,7 @@ import org.slf4j.Logger;
  
  public class DefaultAttributes {
-     private static final Logger LOGGER = LogManager.getLogger();
+     private static final Logger LOGGER = LogUtils.getLogger();
 -    private static final Map<EntityType<? extends LivingEntity>, AttributeSupplier> SUPPLIERS = ImmutableMap.builder().put(EntityType.ARMOR_STAND, LivingEntity.createLivingAttributes().build()).put(EntityType.AXOLOTL, Axolotl.createAttributes().build()).put(EntityType.BAT, Bat.createAttributes().build()).put(EntityType.BEE, Bee.createAttributes().build()).put(EntityType.BLAZE, Blaze.createAttributes().build()).put(EntityType.CAT, Cat.createAttributes().build()).put(EntityType.CAVE_SPIDER, CaveSpider.createCaveSpider().build()).put(EntityType.CHICKEN, Chicken.createAttributes().build()).put(EntityType.COD, AbstractFish.createAttributes().build()).put(EntityType.COW, Cow.createAttributes().build()).put(EntityType.CREEPER, Creeper.createAttributes().build()).put(EntityType.DOLPHIN, Dolphin.createAttributes().build()).put(EntityType.DONKEY, AbstractChestedHorse.createBaseChestedHorseAttributes().build()).put(EntityType.DROWNED, Zombie.createAttributes().build()).put(EntityType.ELDER_GUARDIAN, ElderGuardian.createAttributes().build()).put(EntityType.ENDERMAN, EnderMan.createAttributes().build()).put(EntityType.ENDERMITE, Endermite.createAttributes().build()).put(EntityType.ENDER_DRAGON, EnderDragon.createAttributes().build()).put(EntityType.EVOKER, Evoker.createAttributes().build()).put(EntityType.FOX, Fox.createAttributes().build()).put(EntityType.GHAST, Ghast.createAttributes().build()).put(EntityType.GIANT, Giant.createAttributes().build()).put(EntityType.GLOW_SQUID, GlowSquid.createAttributes().build()).put(EntityType.GOAT, Goat.createAttributes().build()).put(EntityType.GUARDIAN, Guardian.createAttributes().build()).put(EntityType.HOGLIN, Hoglin.createAttributes().build()).put(EntityType.HORSE, AbstractHorse.createBaseHorseAttributes().build()).put(EntityType.HUSK, Zombie.createAttributes().build()).put(EntityType.ILLUSIONER, Illusioner.createAttributes().build()).put(EntityType.IRON_GOLEM, IronGolem.createAttributes().build()).put(EntityType.LLAMA, Llama.createAttributes().build()).put(EntityType.MAGMA_CUBE, MagmaCube.createAttributes().build()).put(EntityType.MOOSHROOM, Cow.createAttributes().build()).put(EntityType.MULE, AbstractChestedHorse.createBaseChestedHorseAttributes().build()).put(EntityType.OCELOT, Ocelot.createAttributes().build()).put(EntityType.PANDA, Panda.createAttributes().build()).put(EntityType.PARROT, Parrot.createAttributes().build()).put(EntityType.PHANTOM, Monster.createMonsterAttributes().build()).put(EntityType.PIG, Pig.createAttributes().build()).put(EntityType.PIGLIN, Piglin.createAttributes().build()).put(EntityType.PIGLIN_BRUTE, PiglinBrute.createAttributes().build()).put(EntityType.PILLAGER, Pillager.createAttributes().build()).put(EntityType.PLAYER, Player.createAttributes().build()).put(EntityType.POLAR_BEAR, PolarBear.createAttributes().build()).put(EntityType.PUFFERFISH, AbstractFish.createAttributes().build()).put(EntityType.RABBIT, Rabbit.createAttributes().build()).put(EntityType.RAVAGER, Ravager.createAttributes().build()).put(EntityType.SALMON, AbstractFish.createAttributes().build()).put(EntityType.SHEEP, Sheep.createAttributes().build()).put(EntityType.SHULKER, Shulker.createAttributes().build()).put(EntityType.SILVERFISH, Silverfish.createAttributes().build()).put(EntityType.SKELETON, AbstractSkeleton.createAttributes().build()).put(EntityType.SKELETON_HORSE, SkeletonHorse.createAttributes().build()).put(EntityType.SLIME, Monster.createMonsterAttributes().build()).put(EntityType.SNOW_GOLEM, SnowGolem.createAttributes().build()).put(EntityType.SPIDER, Spider.createAttributes().build()).put(EntityType.SQUID, Squid.createAttributes().build()).put(EntityType.STRAY, AbstractSkeleton.createAttributes().build()).put(EntityType.STRIDER, Strider.createAttributes().build()).put(EntityType.TRADER_LLAMA, Llama.createAttributes().build()).put(EntityType.TROPICAL_FISH, AbstractFish.createAttributes().build()).put(EntityType.TURTLE, Turtle.createAttributes().build()).put(EntityType.VEX, Vex.createAttributes().build()).put(EntityType.VILLAGER, Villager.createAttributes().build()).put(EntityType.VINDICATOR, Vindicator.createAttributes().build()).put(EntityType.WANDERING_TRADER, Mob.createMobAttributes().build()).put(EntityType.WITCH, Witch.createAttributes().build()).put(EntityType.WITHER, WitherBoss.createAttributes().build()).put(EntityType.WITHER_SKELETON, AbstractSkeleton.createAttributes().build()).put(EntityType.WOLF, Wolf.createAttributes().build()).put(EntityType.ZOGLIN, Zoglin.createAttributes().build()).put(EntityType.ZOMBIE, Zombie.createAttributes().build()).put(EntityType.ZOMBIE_HORSE, ZombieHorse.createAttributes().build()).put(EntityType.ZOMBIE_VILLAGER, Zombie.createAttributes().build()).put(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglin.createAttributes().build()).build();
 +    private static final Map<EntityType<? extends LivingEntity>, AttributeSupplier> SUPPLIERS = ImmutableMap.<EntityType<? extends LivingEntity>, AttributeSupplier>builder().put(EntityType.ARMOR_STAND, LivingEntity.createLivingAttributes().build()).put(EntityType.AXOLOTL, Axolotl.createAttributes().build()).put(EntityType.BAT, Bat.createAttributes().build()).put(EntityType.BEE, Bee.createAttributes().build()).put(EntityType.BLAZE, Blaze.createAttributes().build()).put(EntityType.CAT, Cat.createAttributes().build()).put(EntityType.CAVE_SPIDER, CaveSpider.createCaveSpider().build()).put(EntityType.CHICKEN, Chicken.createAttributes().build()).put(EntityType.COD, AbstractFish.createAttributes().build()).put(EntityType.COW, Cow.createAttributes().build()).put(EntityType.CREEPER, Creeper.createAttributes().build()).put(EntityType.DOLPHIN, Dolphin.createAttributes().build()).put(EntityType.DONKEY, AbstractChestedHorse.createBaseChestedHorseAttributes().build()).put(EntityType.DROWNED, Zombie.createAttributes().build()).put(EntityType.ELDER_GUARDIAN, ElderGuardian.createAttributes().build()).put(EntityType.ENDERMAN, EnderMan.createAttributes().build()).put(EntityType.ENDERMITE, Endermite.createAttributes().build()).put(EntityType.ENDER_DRAGON, EnderDragon.createAttributes().build()).put(EntityType.EVOKER, Evoker.createAttributes().build()).put(EntityType.FOX, Fox.createAttributes().build()).put(EntityType.GHAST, Ghast.createAttributes().build()).put(EntityType.GIANT, Giant.createAttributes().build()).put(EntityType.GLOW_SQUID, GlowSquid.createAttributes().build()).put(EntityType.GOAT, Goat.createAttributes().build()).put(EntityType.GUARDIAN, Guardian.createAttributes().build()).put(EntityType.HOGLIN, Hoglin.createAttributes().build()).put(EntityType.HORSE, AbstractHorse.createBaseHorseAttributes().build()).put(EntityType.HUSK, Zombie.createAttributes().build()).put(EntityType.ILLUSIONER, Illusioner.createAttributes().build()).put(EntityType.IRON_GOLEM, IronGolem.createAttributes().build()).put(EntityType.LLAMA, Llama.createAttributes().build()).put(EntityType.MAGMA_CUBE, MagmaCube.createAttributes().build()).put(EntityType.MOOSHROOM, Cow.createAttributes().build()).put(EntityType.MULE, AbstractChestedHorse.createBaseChestedHorseAttributes().build()).put(EntityType.OCELOT, Ocelot.createAttributes().build()).put(EntityType.PANDA, Panda.createAttributes().build()).put(EntityType.PARROT, Parrot.createAttributes().build()).put(EntityType.PHANTOM, Monster.createMonsterAttributes().build()).put(EntityType.PIG, Pig.createAttributes().build()).put(EntityType.PIGLIN, Piglin.createAttributes().build()).put(EntityType.PIGLIN_BRUTE, PiglinBrute.createAttributes().build()).put(EntityType.PILLAGER, Pillager.createAttributes().build()).put(EntityType.PLAYER, Player.createAttributes().build()).put(EntityType.POLAR_BEAR, PolarBear.createAttributes().build()).put(EntityType.PUFFERFISH, AbstractFish.createAttributes().build()).put(EntityType.RABBIT, Rabbit.createAttributes().build()).put(EntityType.RAVAGER, Ravager.createAttributes().build()).put(EntityType.SALMON, AbstractFish.createAttributes().build()).put(EntityType.SHEEP, Sheep.createAttributes().build()).put(EntityType.SHULKER, Shulker.createAttributes().build()).put(EntityType.SILVERFISH, Silverfish.createAttributes().build()).put(EntityType.SKELETON, AbstractSkeleton.createAttributes().build()).put(EntityType.SKELETON_HORSE, SkeletonHorse.createAttributes().build()).put(EntityType.SLIME, Monster.createMonsterAttributes().build()).put(EntityType.SNOW_GOLEM, SnowGolem.createAttributes().build()).put(EntityType.SPIDER, Spider.createAttributes().build()).put(EntityType.SQUID, Squid.createAttributes().build()).put(EntityType.STRAY, AbstractSkeleton.createAttributes().build()).put(EntityType.STRIDER, Strider.createAttributes().build()).put(EntityType.TRADER_LLAMA, Llama.createAttributes().build()).put(EntityType.TROPICAL_FISH, AbstractFish.createAttributes().build()).put(EntityType.TURTLE, Turtle.createAttributes().build()).put(EntityType.VEX, Vex.createAttributes().build()).put(EntityType.VILLAGER, Villager.createAttributes().build()).put(EntityType.VINDICATOR, Vindicator.createAttributes().build()).put(EntityType.WANDERING_TRADER, Mob.createMobAttributes().build()).put(EntityType.WITCH, Witch.createAttributes().build()).put(EntityType.WITHER, WitherBoss.createAttributes().build()).put(EntityType.WITHER_SKELETON, AbstractSkeleton.createAttributes().build()).put(EntityType.WOLF, Wolf.createAttributes().build()).put(EntityType.ZOGLIN, Zoglin.createAttributes().build()).put(EntityType.ZOMBIE, Zombie.createAttributes().build()).put(EntityType.ZOMBIE_HORSE, ZombieHorse.createAttributes().build()).put(EntityType.ZOMBIE_VILLAGER, Zombie.createAttributes().build()).put(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglin.createAttributes().build()).build();
  
@@ -6169,10 +6531,10 @@ index 3d9d3ff8dae4e73450df432844c3a2d8ed2748f2..e2c5665188966a2975004fd5a23d73c4
      protected boolean isMatchingEntity(LivingEntity livingEntity, LivingEntity livingEntity2) {
          return this.isHostile(livingEntity2) && this.isClose(livingEntity, livingEntity2);
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-index dabae60a437a66097352011739f50e58ce7e6486..470921c69180d846cd3e1bb8e0c3d8dec84d3041 100644
+index d74deef5439320e415369777da4741f279bc15d8..b822d24d25e6b33488e4acb8fc4bf4c7ddc0484a 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-@@ -31,7 +31,7 @@ public class PoiSection {
+@@ -30,7 +30,7 @@ public class PoiSection {
      private boolean isValid;
  
      public static Codec<PoiSection> codec(Runnable runnable) {
@@ -6378,10 +6740,10 @@ index d3b6b56fee09304ff6b69cf85adb489c6708b782..671f56e22b7d2c77e95b147b7d8eb135
  
      public boolean canHunt() {
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index 8be0408c1f9272fefb42d3063b28314945c88872..b4572b08d244f0170a4f0b951f5da8da31f1024a 100644
+index 2014d32571a50d59c242c59cd178dfa772e1e2a8..58d9a46cb6830b7ad040f99b23bb7b7611d167c0 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-@@ -132,7 +132,7 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -135,7 +135,7 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
      }
  
      public Brain<Villager> getBrain() {
@@ -6390,7 +6752,7 @@ index 8be0408c1f9272fefb42d3063b28314945c88872..b4572b08d244f0170a4f0b951f5da8da
      }
  
      protected Brain.Provider<Villager> brainProvider() {
-@@ -553,12 +553,12 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -556,12 +556,12 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
      }
  
      private void tellWitnessesThatIWasMurdered(Entity entity) {
@@ -6522,7 +6884,7 @@ index 856f5f2b9893173ba61804865dff51f57754959a..5b6dfe58b340eef792917fd5a2dce747
  
      public HoneycombItem(Item.Properties properties) {
 diff --git a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
-index 32042df6937b8340725c06eaac0f3ec54d059d64..60142dfb9590f291a29078c9085d8bf033898a80 100644
+index 8374eb5c641ec35aa0abed70d3d90351ffc23bbc..c666bf6dd81916a6eb12d951ab81568e5c559de9 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
 @@ -74,7 +74,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
@@ -6645,7 +7007,7 @@ index 32914d98dbb1f55b45f5522fa0d994b060ed5d8c..fe98af3e49242ae3405a0519bb2823d0
              }
          }
 diff --git a/src/main/java/net/minecraft/world/level/GameRules.java b/src/main/java/net/minecraft/world/level/GameRules.java
-index 6f503f858b1d5d9d9ea5922f32d4bc3764ed8ca7..68be4820135396354fb9d90cbf8bcaec8fbf31ff 100644
+index 4e1533d72a7e39cb415168362c462d0520db93f3..24d4be5ca98218dfd29dd204905e005fae11f9fc 100644
 --- a/src/main/java/net/minecraft/world/level/GameRules.java
 +++ b/src/main/java/net/minecraft/world/level/GameRules.java
 @@ -124,8 +124,8 @@ public class GameRules {
@@ -6678,7 +7040,7 @@ index e0b06e5d320e3f5a78a76a45ee04d5450e93e7c6..251e19c288d7d60ead6b034e37d43050
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index a5ff0de8da25a5a0b88aec672325b4b101e6d432..4c42f34321b8da1d7bdb38e2fa07cc6e5a49def8 100644
+index 366a06549f0b4e24dbf00b5291c2d6be32a31f3d..6721d61426975c0c7236ac8afa7b1c094d2a9dd5 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 @@ -80,13 +80,14 @@ public final class NaturalSpawner {
@@ -6749,13 +7111,13 @@ index 71c28d703c2e2f16e616fa53d21df5902a17918c..f8a35738da53369f9a3416b406c3f0e6
              return !LIGHT_RANGE.contains(inclusiveRange) ? DataResult.error("Light values must be withing range " + LIGHT_RANGE) : DataResult.success(inclusiveRange);
          }
 diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
-index 85c195db40658718834972be8c0d0b73d6a80f10..939893d2ad4fcabc083b0aa41966169e62d482e5 100644
+index 358f70c5e564bca6df2ff9e62facc8315e90928e..f68aa092959f94d4779fa6f7a19a200cb0693a27 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Biome.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Biome.java
-@@ -39,8 +39,8 @@ import org.apache.logging.log4j.Logger;
+@@ -36,8 +36,8 @@ import net.minecraft.world.level.material.FluidState;
+ import net.minecraft.world.level.material.Fluids;
  
  public final class Biome {
-     public static final Logger LOGGER = LogManager.getLogger();
 -    public static final Codec<Biome> DIRECT_CODEC;
 -    public static final Codec<Biome> NETWORK_CODEC;
 +    public static final Codec<Biome> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> biome.climateSettings), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> biome.biomeCategory), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> biome.specialEffects), BiomeGenerationSettings.CODEC.forGetter((biome) -> biome.generationSettings), MobSpawnSettings.CODEC.forGetter((biome) -> biome.mobSettings)).apply(instance, Biome::new));
@@ -6763,7 +7125,7 @@ index 85c195db40658718834972be8c0d0b73d6a80f10..939893d2ad4fcabc083b0aa41966169e
      public static final Codec<Supplier<Biome>> CODEC = RegistryFileCodec.create(Registry.BIOME_REGISTRY, DIRECT_CODEC);
      public static final Codec<List<Supplier<Biome>>> LIST_CODEC = RegistryFileCodec.homogeneousList(Registry.BIOME_REGISTRY, DIRECT_CODEC);
      private static final PerlinSimplexNoise TEMPERATURE_NOISE = new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(1234L)), ImmutableList.of(0));
-@@ -254,11 +254,6 @@ public final class Biome {
+@@ -251,11 +251,6 @@ public final class Biome {
          return resourceLocation == null ? super.toString() : resourceLocation.toString();
      }
  
@@ -7374,7 +7736,7 @@ index 0b7b4887214e8b52d3209dc0bfff15826e80ad78..afb2bb920207321340ad6d714f80196f
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-index 64f3c7461820e5ec1c10320ac2ae0952619a5249..035684deec76df194cb2cd29e19736875738dbf8 100644
+index 15eec8951a6c43b5077bf6e2f8706ba10c97d539..278a597793e86e893fa88f0549cb64a42332c63c 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 @@ -401,21 +401,5 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
@@ -7467,7 +7829,7 @@ index a7d7f5a876baa4cbcae753584700b78e8a40dbee..56c457e169217f27166d23fc58e6ff03
          if (!chunkAccess.getStatus().isOrAfter(chunkStatus)) {
              if (chunkAccess instanceof ProtoChunk) {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 01013b5d46bbeb750a597e244e3b86a103a0ff6b..eb56c7a565172738f55ec1a5bb7f549491544702 100644
+index 2b262f967b6a2b7f45e58045d5619f59da77840a..8e58df9c8f261e565a5fd8622f875397a8d4adc0 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 @@ -571,7 +571,7 @@ public class LevelChunk extends ChunkAccess {
@@ -7583,9 +7945,18 @@ index a2da78a99a91b78b4efac195d8be236bc48a53bb..bd90f70696178c5aa248f92f58180317
  
      public abstract static class Strategy {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
-index b8c971afe28557f50124bbf9fb98d8019df96fcb..ff5f48e36f77be5334d38c0e27c5e686637376ca 100644
+index 4582fbbbd06fa277c3a0752f8a565ee7bc42d102..8853ed98c142e20281ac14d9a3a5f9bd9922fec7 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
+@@ -128,7 +128,7 @@ public class ChunkSerializer {
+         ChunkStatus.ChunkType chunkType = getChunkTypeFromTag(compoundTag);
+         BlendingData blendingData;
+         if (compoundTag.contains("blending_data", 10)) {
+-            blendingData = (BlendingData)BlendingData.CODEC.parse(new Dynamic(NbtOps.INSTANCE, compoundTag.getCompound("blending_data"))).resultOrPartial(LOGGER::error).orElse(null);
++            blendingData = (BlendingData)BlendingData.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compoundTag.getCompound("blending_data"))).resultOrPartial(LOGGER::error).orElse(null);
+         } else {
+             blendingData = null;
+         }
 @@ -145,7 +145,7 @@ public class ChunkSerializer {
              chunkAccess = protoChunk;
              protoChunk.setInhabitedTime(l);
@@ -7667,7 +8038,7 @@ index 36eea12c8ba27654a0d6c739fac0e21c352cc6f3..0e57d738d89ecbb8b3c8c68e9b6f9205
  
      }
 diff --git a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
-index b1250e4a1b7771b78481759d49161d8e8f952cb5..cf590c7e623756f46281bfdbf3da4d074dd0656e 100644
+index 74ba6ed677f3e6f5685261abbcb6c7785277d594..6613c48a65069e87370630bda4981f2be29c1410 100644
 --- a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 +++ b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 @@ -223,7 +223,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
@@ -7946,10 +8317,10 @@ index 8d386c32e692658023712870184b33eb034863ca..a85ecef574bf084ca18f633c735e6c23
      private final Map<StructureFeature<?>, StructureFeatureConfiguration> structureConfig;
      private final ImmutableMap<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> configuredStructures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java b/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
-index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b277989116a12c 100644
+index 7b13cab40ec0312061693e3fde91863c437a1be7..9d758abfb9ba15fb823d750e44fa699ffebf40d0 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
-@@ -138,41 +138,35 @@ public class SurfaceRules {
+@@ -144,41 +144,35 @@ public class SurfaceRules {
          }
      }
  
@@ -8003,7 +8374,7 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -180,14 +174,6 @@ public class SurfaceRules {
+@@ -186,14 +180,6 @@ public class SurfaceRules {
          public SurfaceRules.SurfaceRule apply(SurfaceRules.Context context) {
              return this.rule;
          }
@@ -8018,7 +8389,7 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
      }
  
      interface Condition {
-@@ -431,63 +417,39 @@ public class SurfaceRules {
+@@ -437,63 +423,39 @@ public class SurfaceRules {
          }
      }
  
@@ -8096,7 +8467,7 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
          public Codec<? extends SurfaceRules.ConditionSource> codec() {
              return CODEC;
          }
-@@ -495,10 +457,6 @@ public class SurfaceRules {
+@@ -501,10 +463,6 @@ public class SurfaceRules {
          public SurfaceRules.Condition apply(SurfaceRules.Context context) {
              return new SurfaceRules.NotCondition((SurfaceRules.Condition)this.target.apply(context));
          }
@@ -8107,7 +8478,7 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
      }
  
      public interface RuleSource extends Function<SurfaceRules.Context, SurfaceRules.SurfaceRule> {
-@@ -515,12 +473,7 @@ public class SurfaceRules {
+@@ -521,12 +479,7 @@ public class SurfaceRules {
          Codec<? extends SurfaceRules.RuleSource> codec();
      }
  
@@ -8121,7 +8492,7 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
  
          @Nullable
          public BlockState tryApply(int i, int i2, int i3) {
-@@ -533,20 +486,11 @@ public class SurfaceRules {
+@@ -539,20 +492,11 @@ public class SurfaceRules {
  
              return null;
          }
@@ -8143,7 +8514,7 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -564,26 +508,13 @@ public class SurfaceRules {
+@@ -570,26 +514,13 @@ public class SurfaceRules {
                  return new SurfaceRules.SequenceRule(builder.build());
              }
          }
@@ -8171,22 +8542,22 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
      }
  
      static enum Steep implements SurfaceRules.ConditionSource {
-@@ -600,42 +531,25 @@ public class SurfaceRules {
+@@ -606,42 +537,28 @@ public class SurfaceRules {
          }
      }
  
--    static record StoneDepthCheck(int a, boolean c, boolean d, CaveSurface e) implements SurfaceRules.ConditionSource {
+-    static record StoneDepthCheck(int a, boolean c, int d, CaveSurface e) implements SurfaceRules.ConditionSource {
 -        final int offset;
 -        final boolean addSurfaceDepth;
--        final boolean addSurfaceSecondaryDepth;
+-        final int secondaryDepthRange;
 -        private final CaveSurface surfaceType;
-+    static record StoneDepthCheck(int offset, boolean addSurfaceDepth, boolean addSurfaceSecondaryDepth, CaveSurface surfaceType) implements SurfaceRules.ConditionSource {
-         static final Codec<SurfaceRules.StoneDepthCheck> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.INT.fieldOf("offset").forGetter(SurfaceRules.StoneDepthCheck::offset), Codec.BOOL.fieldOf("add_surface_depth").forGetter(SurfaceRules.StoneDepthCheck::addSurfaceDepth), Codec.BOOL.fieldOf("add_surface_secondary_depth").forGetter(SurfaceRules.StoneDepthCheck::addSurfaceSecondaryDepth), CaveSurface.CODEC.fieldOf("surface_type").forGetter(SurfaceRules.StoneDepthCheck::surfaceType)).apply(instance, SurfaceRules.StoneDepthCheck::new));
++    static record StoneDepthCheck(int offset, boolean addSurfaceDepth, int secondaryDepthRange, CaveSurface surfaceType) implements SurfaceRules.ConditionSource {
+         static final Codec<SurfaceRules.StoneDepthCheck> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.INT.fieldOf("offset").forGetter(SurfaceRules.StoneDepthCheck::offset), Codec.BOOL.fieldOf("add_surface_depth").forGetter(SurfaceRules.StoneDepthCheck::addSurfaceDepth), Codec.INT.fieldOf("secondary_depth_range").forGetter(SurfaceRules.StoneDepthCheck::secondaryDepthRange), CaveSurface.CODEC.fieldOf("surface_type").forGetter(SurfaceRules.StoneDepthCheck::surfaceType)).apply(instance, SurfaceRules.StoneDepthCheck::new));
  
--        StoneDepthCheck(int i, boolean flag, boolean flag2, CaveSurface caveSurface) {
+-        StoneDepthCheck(int i, boolean flag, int i2, CaveSurface caveSurface) {
 -            this.offset = i;
 -            this.addSurfaceDepth = flag;
--            this.addSurfaceSecondaryDepth = flag2;
+-            this.secondaryDepthRange = i2;
 -            this.surfaceType = caveSurface;
 -        }
 -
@@ -8206,8 +8577,8 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
 -            return this.addSurfaceDepth;
 -        }
 -
--        public boolean addSurfaceSecondaryDepth() {
--            return this.addSurfaceSecondaryDepth;
+-        public int secondaryDepthRange() {
+-            return this.secondaryDepthRange;
 -        }
 +            final boolean ceiling = (this.surfaceType == CaveSurface.CEILING);
 +            class StoneDepthCondition extends SurfaceRules.LazyYCondition {
@@ -8218,14 +8589,17 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
 -        public CaveSurface surfaceType() {
 -            return this.surfaceType;
 +                protected boolean compute() {
-+                    return ((ceiling ? this.context.stoneDepthBelow : this.context.stoneDepthAbove) <= 1 + SurfaceRules.StoneDepthCheck.this.offset + (SurfaceRules.StoneDepthCheck.this.addSurfaceDepth ? this.context.surfaceDepth : 0) + (SurfaceRules.StoneDepthCheck.this.addSurfaceSecondaryDepth ? this.context.getSurfaceSecondaryDepth() : 0));
++                    int i = ceiling ? this.context.stoneDepthBelow : this.context.stoneDepthAbove;
++                    int i2 = SurfaceRules.StoneDepthCheck.this.addSurfaceDepth ? this.context.surfaceDepth : 0;
++                    int i3 = (SurfaceRules.StoneDepthCheck.this.secondaryDepthRange == 0) ? 0 : (int)Mth.map(this.context.getSurfaceSecondary(), -1.0D, 1.0D, 0.0D, SurfaceRules.StoneDepthCheck.this.secondaryDepthRange);
++                    return (i <= 1 + SurfaceRules.StoneDepthCheck.this.offset + i2 + i3);
 +                }
 +            }
 +            return new StoneDepthCondition(context);
          }
      }
  
-@@ -658,39 +572,17 @@ public class SurfaceRules {
+@@ -664,39 +581,17 @@ public class SurfaceRules {
          }
      }
  
@@ -8267,7 +8641,7 @@ index 729a534745f4560f49b1803bfb5876e220c7fcd3..0bb748bc056ad31f9c8191f273b27798
          public Codec<? extends SurfaceRules.RuleSource> codec() {
              return CODEC;
          }
-@@ -698,112 +590,78 @@ public class SurfaceRules {
+@@ -704,112 +599,78 @@ public class SurfaceRules {
          public SurfaceRules.SurfaceRule apply(SurfaceRules.Context context) {
              return new SurfaceRules.TestRule((SurfaceRules.Condition)this.ifTrue.apply(context), (SurfaceRules.SurfaceRule)this.thenRun.apply(context));
          }
@@ -8455,42 +8829,97 @@ index 6b7bd51abb079b70e1e30193b63e03e6a5f45e26..e6fccfd5fc5a3446c87c4a34eeea7095
 +public record TerrainInfo(double offset, double factor, double jaggedness) {}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-index d13106a1afcb92395f9143243bb28620cbd722a6..cf60074c155b1c1def61a36b590fb600a5f35a90 100644
+index 1a7ecaa0a60d6259418b873361115e299594b47a..4a575ae68e07f1e35ad3648cf98b8314bea4fbd6 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-@@ -35,7 +35,7 @@ import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
+@@ -36,7 +36,7 @@ import org.apache.commons.lang3.StringUtils;
+ import org.slf4j.Logger;
  
  public class WorldGenSettings {
 -    public static final Codec<WorldGenSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.LONG.fieldOf("seed").stable().forGetter(WorldGenSettings::seed), Codec.BOOL.fieldOf("generate_features").orElse(true).stable().forGetter(WorldGenSettings::generateFeatures), Codec.BOOL.fieldOf("bonus_chest").orElse(false).stable().forGetter(WorldGenSettings::generateBonusChest), MappedRegistry.dataPackCodec(Registry.LEVEL_STEM_REGISTRY, Lifecycle.stable(), LevelStem.CODEC).xmap(LevelStem::sortMap, Function.identity()).fieldOf("dimensions").forGetter(WorldGenSettings::dimensions), Codec.STRING.optionalFieldOf("legacy_custom_options").stable().forGetter((worldGenSettings) -> worldGenSettings.legacyCustomOptions)).apply(instance, instance.stable(WorldGenSettings::new))).comapFlatMap(WorldGenSettings::guardExperimental, Function.identity());
 +    public static final Codec<WorldGenSettings> CODEC = RecordCodecBuilder.<WorldGenSettings>create((instance) -> instance.group(Codec.LONG.fieldOf("seed").stable().forGetter(WorldGenSettings::seed), Codec.BOOL.fieldOf("generate_features").orElse(true).stable().forGetter(WorldGenSettings::generateFeatures), Codec.BOOL.fieldOf("bonus_chest").orElse(false).stable().forGetter(WorldGenSettings::generateBonusChest), MappedRegistry.dataPackCodec(Registry.LEVEL_STEM_REGISTRY, Lifecycle.stable(), LevelStem.CODEC).xmap(LevelStem::sortMap, Function.identity()).fieldOf("dimensions").forGetter(WorldGenSettings::dimensions), Codec.STRING.optionalFieldOf("legacy_custom_options").stable().forGetter((worldGenSettings) -> worldGenSettings.legacyCustomOptions)).apply(instance, instance.stable(WorldGenSettings::new))).comapFlatMap(WorldGenSettings::guardExperimental, Function.identity());
-     private static final Logger LOGGER = LogManager.getLogger();
+     private static final Logger LOGGER = LogUtils.getLogger();
      private final long seed;
      private final boolean generateFeatures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java b/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
-index 319408787cef50ecc00773eacb88b6ee7d8356cb..6efb64d3475d966f99ae06fa7aef9fb6505a4e97 100644
+index c4c211c2abd77dd832eb79ed1b68ee98eaa34e18..55959f3af7b22e303b8a0532306d3b4247e719dc 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
-@@ -157,13 +157,13 @@ public class Blender {
+@@ -104,7 +104,7 @@ public class Blender {
+             MutableDouble mutableDouble = new MutableDouble(0.0D);
+             MutableDouble mutableDouble2 = new MutableDouble(0.0D);
+             MutableDouble mutableDouble3 = new MutableDouble(Double.POSITIVE_INFINITY);
+-            this.blendingData.forEach((l, blendingData) -> blendingData.iterateHeights(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), (i3x, i4x, d) -> {
++            this.blendingData.forEach((l, blendingData) -> blendingData.iterateHeights(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), (i3x, i4x, dIn) -> {
+                     double d2 = Mth.length((double)(i3 - i3x), (double)(i4 - i4x));
+                     if (!(d2 > (double)HEIGHT_BLENDING_RANGE_CELLS)) {
+                         if (d2 < mutableDouble3.doubleValue()) {
+@@ -112,7 +112,7 @@ public class Blender {
+                         }
  
-             for(Blender.PositionedBlendingData positionedBlendingData : this.densityData) {
-                 positionedBlendingData.blendingData.iterateDensities(QuartPos.fromSection(positionedBlendingData.chunkX), QuartPos.fromSection(positionedBlendingData.chunkZ), i5 - 1, i5 + 1, (i4x, i5x, i6x, dx) -> {
+                         double d3 = 1.0D / (d2 * d2 * d2 * d2);
+-                        mutableDouble2.add(d * d3);
++                        mutableDouble2.add(dIn * d3);
+                         mutableDouble.add(d3);
+                     }
+                 }));
+@@ -148,18 +148,18 @@ public class Blender {
+             MutableDouble mutableDouble = new MutableDouble(0.0D);
+             MutableDouble mutableDouble2 = new MutableDouble(0.0D);
+             MutableDouble mutableDouble3 = new MutableDouble(Double.POSITIVE_INFINITY);
+-            this.blendingDataForDensityBlending.forEach((l, blendingData) -> blendingData.iterateDensities(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), i5 - 1, i5 + 1, (i4x, i5x, i6x, d) -> {
 -                    double d2 = Mth.length((double)(i4 - i4x), (double)((i5 - i5x) * 2), (double)(i6 - i6x));
 -                    if (!(d2 > 2.0D)) {
 -                        if (d2 < mutableDouble3.doubleValue()) {
 -                            mutableDouble3.setValue(d2);
-+                    double d2In = Mth.length((double)(i4 - i4x), (double)((i5 - i5x) * 2), (double)(i6 - i6x));
-+                    if (!(d2In > 2.0D)) {
-+                        if (d2In < mutableDouble3.doubleValue()) {
-+                            mutableDouble3.setValue(d2In);
-                         }
- 
+-                        }
+-
 -                        double d3 = 1.0D / (d2 * d2 * d2 * d2);
-+                        double d3 = 1.0D / (d2In * d2In * d2In * d2In);
-                         mutableDouble2.add(dx * d3);
-                         mutableDouble.add(d3);
+-                        mutableDouble2.add(d * d3);
+-                        mutableDouble.add(d3);
++            this.blendingDataForDensityBlending.forEach((l, blendingData) -> blendingData.iterateDensities(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), i5 - 1, i5 + 1, (i4x, i5x, i6x, dIn) -> {
++                double d2In = Mth.length((double)(i4 - i4x), (double)((i5 - i5x) * 2), (double)(i6 - i6x));
++                if (!(d2In > 2.0D)) {
++                    if (d2In < mutableDouble3.doubleValue()) {
++                        mutableDouble3.setValue(d2In);
                      }
-@@ -356,7 +356,8 @@ public class Blender {
+-                }));
++
++                    double d3 = 1.0D / (d2In * d2In * d2In * d2In);
++                    mutableDouble2.add(dIn * d3);
++                    mutableDouble.add(d3);
++                }
++            }));
+             if (mutableDouble3.doubleValue() == Double.POSITIVE_INFINITY) {
+                 return d;
+             } else {
+@@ -213,16 +213,16 @@ public class Blender {
+         double d2 = (double)i2 + SHIFT_NOISE.getValue((double)i2, (double)i, 0.0D) * 12.0D;
+         MutableDouble mutableDouble = new MutableDouble(Double.POSITIVE_INFINITY);
+         MutableObject<Biome> mutableObject = new MutableObject();
+-        this.blendingData.forEach((l, blendingData) -> blendingData.iterateBiomes(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), (i, i2, biome) -> {
+-                double d3 = Mth.length(d - (double)i, d2 - (double)i2);
+-                if (!(d3 > (double)HEIGHT_BLENDING_RANGE_CELLS)) {
+-                    if (d3 < mutableDouble.doubleValue()) {
+-                        mutableObject.setValue(biome);
+-                        mutableDouble.setValue(d3);
+-                    }
+-
++        this.blendingData.forEach((l, blendingData) -> blendingData.iterateBiomes(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), (ix, i2x, biome) -> {
++            double d3 = Mth.length(d - (double)ix, d2 - (double)i2x);
++            if (!(d3 > (double)HEIGHT_BLENDING_RANGE_CELLS)) {
++                if (d3 < mutableDouble.doubleValue()) {
++                    mutableObject.setValue(biome);
++                    mutableDouble.setValue(d3);
+                 }
+-            }));
++
++            }
++        }));
+         if (mutableDouble.doubleValue() == Double.POSITIVE_INFINITY) {
+             return null;
+         } else {
+@@ -335,7 +335,8 @@ public class Blender {
  
          double d3 = d;
          double d4 = d2;
@@ -8500,41 +8929,11 @@ index 319408787cef50ecc00773eacb88b6ee7d8356cb..6efb64d3475d966f99ae06fa7aef9fb6
      }
  
      private static double distanceToCube(double d, double d2, double d3, double d4, double d5, double d6) {
-@@ -374,27 +375,5 @@ public class Blender {
-         double getDistance(double var1, double var3, double var5);
-     }
- 
--    static record PositionedBlendingData(int a, int b, BlendingData c) {
--        final int chunkX;
--        final int chunkZ;
--        final BlendingData blendingData;
--
--        PositionedBlendingData(int i, int i2, BlendingData blendingData) {
--            this.chunkX = i;
--            this.chunkZ = i2;
--            this.blendingData = blendingData;
--        }
--
--        public int chunkX() {
--            return this.chunkX;
--        }
--
--        public int chunkZ() {
--            return this.chunkZ;
--        }
--
--        public BlendingData blendingData() {
--            return this.blendingData;
--        }
--    }
-+    static record PositionedBlendingData(int chunkX, int chunkZ, BlendingData blendingData) {}
- }
-\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java b/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
-index bd89869a340db7fab59512ebbda2234b35ea4960..d48a7e890efd4aad878f70bf7b61b907f41ce342 100644
+index 1f8efa76197fcf9f2b253c9d47f19014a18a93d3..b89094f990a50341d63dada469a32adb937cf573 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
-@@ -58,7 +58,7 @@ public class BlendingData {
+@@ -60,7 +60,7 @@ public class BlendingData {
      private final transient double[][] densities;
      private final transient double[] floorDensities;
      private static final Codec<double[]> DOUBLE_ARRAY_CODEC = Codec.DOUBLE.listOf().xmap(Doubles::toArray, Doubles::asList);
@@ -8543,6 +8942,27 @@ index bd89869a340db7fab59512ebbda2234b35ea4960..d48a7e890efd4aad878f70bf7b61b907
  
      private static DataResult<BlendingData> validateArraySize(BlendingData blendingData) {
          return blendingData.heights.length != CELL_COLUMN_COUNT ? DataResult.error("heights has to be of length " + CELL_COLUMN_COUNT) : DataResult.success(blendingData);
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/CoralFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/CoralFeature.java
+index 4f434475a6ad3a1467ca04f61107b192be5faab6..43a6f9c2a5aa4faa8c0a7c045583f2b3a0221edc 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/feature/CoralFeature.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/feature/CoralFeature.java
+@@ -46,12 +46,12 @@ public abstract class CoralFeature extends Feature<NoneFeatureConfiguration> {
+                     BlockPos blockPos3 = blockPos.relative(direction);
+                     if (levelAccessor.getBlockState(blockPos3).is(Blocks.WATER)) {
+                         BlockTags.WALL_CORALS.getRandomElement(random).ifPresent((block) -> {
+-                            BlockState blockState = block.defaultBlockState();
+-                            if (blockState.hasProperty(BaseCoralWallFanBlock.FACING)) {
+-                                blockState = blockState.setValue(BaseCoralWallFanBlock.FACING, direction);
++                            BlockState blockStateIn = block.defaultBlockState();
++                            if (blockStateIn.hasProperty(BaseCoralWallFanBlock.FACING)) {
++                                blockStateIn = blockStateIn.setValue(BaseCoralWallFanBlock.FACING, direction);
+                             }
+ 
+-                            levelAccessor.setBlock(blockPos3, blockState, 2);
++                            levelAccessor.setBlock(blockPos3, blockStateIn, 2);
+                         });
+                     }
+                 }
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/EndCityFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/EndCityFeature.java
 index 53e733482d7d0b8872f9a2f4f5ad27bf1e733304..0aa396618e977f82e25b46bdddd1321f8fa4a096 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/EndCityFeature.java
@@ -8557,7 +8977,7 @@ index 53e733482d7d0b8872f9a2f4f5ad27bf1e733304..0aa396618e977f82e25b46bdddd1321f
                  List<StructurePiece> list = Lists.newArrayList();
                  EndCityPieces.startHouseTower(contextx.structureManager(), blockPos, rotation, list, contextx.random());
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/FeatureCountTracker.java b/src/main/java/net/minecraft/world/level/levelgen/feature/FeatureCountTracker.java
-index 73013e49fa2aa410c9cf8711db6a20741bf10b03..4f30ecd5bbc10c5c3e6cf79dbfb030a8ac4aafc4 100644
+index 3982871f9330fed7329766ec4bc482f4657c1d60..612e3aad3003fd3607ad4bdb18ec1d6967092e62 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/FeatureCountTracker.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/FeatureCountTracker.java
 @@ -60,39 +60,7 @@ public class FeatureCountTracker {
@@ -8646,7 +9066,7 @@ index caf42500aa52d65cedcc7b8a2d84431461feef03..e0ae7a231bf0b9259fe7b3f717fce42d
                  properties.cold = isCold(blockPos4, context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(blockPos4.getX()), QuartPos.fromBlock(blockPos4.getY()), QuartPos.fromBlock(blockPos4.getZ())));
              }
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index 7512cb25d7855ea85096827354c7b3f7da0ae4df..1f0e6ae5f05a2dfc8488dd3b9e5ea3ae9ae0c1e0 100644
+index 3f02532ed21fd750f468114627c0a0c941269158..64a9cd640aed11876647b01d72998c0c51155987 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 @@ -109,7 +109,7 @@ public class StructureFeature<C extends FeatureConfiguration> {
@@ -8901,7 +9321,7 @@ index ddc21b901f30a59fb3be0f14ab4cfd2fca488982..763643f5df58a47f8068d10a2f1c834b
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-index 0c1a2e874e8858b43483177a1189da01155a1b19..0575818161e77049982ba0807c6905162ec934e8 100644
+index d32c62bb2192981818efb7d3108fdafd96dcbcbc..d8d91465d186e5106d728e7c6f5dad6f5062e90c 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
 @@ -75,7 +75,7 @@ public class JigsawPlacement {
@@ -8933,12 +9353,12 @@ index 0c1a2e874e8858b43483177a1189da01155a1b19..0575818161e77049982ba0807c690516
                                      }).max().orElse(0);
                                  } else {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java
-index f55893ecc5ff1b1e69cb68da5e23e056d1177809..6c9fddc1d7ffc1bcb3ce2d980679c665925935af 100644
+index 136eabb67119f6d6eebe59d991f1485772cfae51..18c6c9fb915e559a0ee7a754ce80145741b6c805 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java
-@@ -29,7 +29,7 @@ import org.apache.logging.log4j.Logger;
+@@ -29,7 +29,7 @@ import org.slf4j.Logger;
  public class StructureTemplatePool {
-     private static final Logger LOGGER = LogManager.getLogger();
+     private static final Logger LOGGER = LogUtils.getLogger();
      private static final int SIZE_UNSET = Integer.MIN_VALUE;
 -    public static final Codec<StructureTemplatePool> DIRECT_CODEC;
 +    public static final Codec<StructureTemplatePool> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(ResourceLocation.CODEC.fieldOf("name").forGetter(StructureTemplatePool::getName), ResourceLocation.CODEC.fieldOf("fallback").forGetter(StructureTemplatePool::getFallback), Codec.mapPair(StructurePoolElement.CODEC.fieldOf("element"), Codec.intRange(1, 150).fieldOf("weight")).codec().listOf().fieldOf("elements").forGetter((structureTemplatePool) -> structureTemplatePool.rawTemplates)).apply(instance, StructureTemplatePool::new));
@@ -8970,13 +9390,13 @@ index fb9f76cb35a02900d075889de14b18925250493e..d49af1bfd6acdc963f49ddaf5c9b357e
                      int i3 = i2 % 8;
                      int i4 = i2 / 8;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator.java b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator.java
-index f27cb19cf6942aed7049aaeb7dbde728983891a7..ad7d16c8b81842d6a74c46d4d90fae7ca1feadc6 100644
+index e872b300ea503881a1365a789fa90c2784578aa7..e24de5b61ae142ce3d75b0ab5b410785b83146b3 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator.java
-@@ -40,9 +40,9 @@ public class BeehiveDecorator extends TreeDecorator {
-                 if (Feature.isAir(levelSimulatedReader, blockPos2) && Feature.isAir(levelSimulatedReader, blockPos2.relative(Direction.SOUTH))) {
-                     biConsumer.accept(blockPos2, Blocks.BEE_NEST.defaultBlockState().setValue(BeehiveBlock.FACING, Direction.SOUTH));
-                     levelSimulatedReader.getBlockEntity(blockPos2, BlockEntityType.BEEHIVE).ifPresent((beehiveBlockEntity) -> {
+@@ -44,9 +44,9 @@ public class BeehiveDecorator extends TreeDecorator {
+                 if (!optional.isEmpty()) {
+                     biConsumer.accept((BlockPos)optional.get(), Blocks.BEE_NEST.defaultBlockState().setValue(BeehiveBlock.FACING, WORLDGEN_FACING));
+                     levelSimulatedReader.getBlockEntity((BlockPos)optional.get(), BlockEntityType.BEEHIVE).ifPresent((beehiveBlockEntity) -> {
 -                        int i = 2 + random.nextInt(2);
 +                        int iIn = 2 + random.nextInt(2);
  
@@ -8986,13 +9406,13 @@ index f27cb19cf6942aed7049aaeb7dbde728983891a7..ad7d16c8b81842d6a74c46d4d90fae7c
                              compoundTag.putString("id", Registry.ENTITY_TYPE.getKey(EntityType.BEE).toString());
                              beehiveBlockEntity.storeBee(compoundTag, random.nextInt(599), false);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
-index 99ac965bafb6897963109dfede97f631fa65f263..926e96e17a28fa5b2cab11d4c3312bd1f6a50c65 100644
+index cef5eb1ce84ab349ba335d01c9d5c244f57f53a9..93ec704da11bd4a0acae56486802775a5ae12044 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
-@@ -32,7 +32,7 @@ import org.apache.logging.log4j.Logger;
+@@ -32,7 +32,7 @@ import org.slf4j.Logger;
  
  public class FlatLevelGeneratorSettings {
-     private static final Logger LOGGER = LogManager.getLogger();
+     private static final Logger LOGGER = LogUtils.getLogger();
 -    public static final Codec<FlatLevelGeneratorSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.biomes), StructureSettings.CODEC.fieldOf("structures").forGetter(FlatLevelGeneratorSettings::structureSettings), FlatLayerInfo.CODEC.listOf().fieldOf("layers").forGetter(FlatLevelGeneratorSettings::getLayersInfo), Codec.BOOL.fieldOf("lakes").orElse(false).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.addLakes), Codec.BOOL.fieldOf("features").orElse(false).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.decoration), Biome.CODEC.optionalFieldOf("biome").orElseGet(Optional::empty).forGetter((flatLevelGeneratorSettings) -> Optional.of(flatLevelGeneratorSettings.biome))).apply(instance, FlatLevelGeneratorSettings::new)).comapFlatMap(FlatLevelGeneratorSettings::validateHeight, Function.identity()).stable();
 +    public static final Codec<FlatLevelGeneratorSettings> CODEC = RecordCodecBuilder.<FlatLevelGeneratorSettings>create((instance) -> instance.group(RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.biomes), StructureSettings.CODEC.fieldOf("structures").forGetter(FlatLevelGeneratorSettings::structureSettings), FlatLayerInfo.CODEC.listOf().fieldOf("layers").forGetter(FlatLevelGeneratorSettings::getLayersInfo), Codec.BOOL.fieldOf("lakes").orElse(false).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.addLakes), Codec.BOOL.fieldOf("features").orElse(false).forGetter((flatLevelGeneratorSettings) -> flatLevelGeneratorSettings.decoration), Biome.CODEC.optionalFieldOf("biome").orElseGet(Optional::empty).forGetter((flatLevelGeneratorSettings) -> Optional.of(flatLevelGeneratorSettings.biome))).apply(instance, FlatLevelGeneratorSettings::new)).comapFlatMap(FlatLevelGeneratorSettings::validateHeight, Function.identity()).stable();
      private final Registry<Biome> biomes;
@@ -9061,8 +9481,30 @@ index 63dd2c443efe85be88c4e9eef2dd2e8915424d0b..efaed4bd304b39d78c20b8577484d818
          protected static final int GRIDROOM_WIDTH = 8;
          protected static final int GRIDROOM_DEPTH = 8;
          protected static final int GRIDROOM_HEIGHT = 4;
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java
+index 61f88d2b0c2c75ff4246c89c8a54bac571dcae18..cf78579edad1c452d53441da79622b82e3fb4857 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java
+@@ -66,7 +66,7 @@ public class RuinedPortalPiece extends TemplateStructurePiece {
+     public RuinedPortalPiece(StructureManager structureManager, CompoundTag compoundTag) {
+         super(StructurePieceType.RUINED_PORTAL, compoundTag, structureManager, (resourceLocation) -> makeSettings(structureManager, compoundTag, resourceLocation));
+         this.verticalPlacement = RuinedPortalPiece.VerticalPlacement.byName(compoundTag.getString("VerticalPlacement"));
+-        this.properties = (RuinedPortalPiece.Properties)RuinedPortalPiece.Properties.CODEC.parse(new Dynamic(NbtOps.INSTANCE, compoundTag.get("Properties"))).getOrThrow(true, LOGGER::error);
++        this.properties = (RuinedPortalPiece.Properties)RuinedPortalPiece.Properties.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compoundTag.get("Properties"))).getOrThrow(true, LOGGER::error);
+     }
+ 
+     protected void addAdditionalSaveData(StructurePieceSerializationContext structurePieceSerializationContext, CompoundTag compoundTag) {
+@@ -80,7 +80,7 @@ public class RuinedPortalPiece extends TemplateStructurePiece {
+     private static StructurePlaceSettings makeSettings(StructureManager structureManager, CompoundTag compoundTag, ResourceLocation resourceLocation) {
+         StructureTemplate structureTemplate = structureManager.getOrCreate(resourceLocation);
+         BlockPos blockPos = new BlockPos(structureTemplate.getSize().getX() / 2, 0, structureTemplate.getSize().getZ() / 2);
+-        return makeSettings(Mirror.valueOf(compoundTag.getString("Mirror")), Rotation.valueOf(compoundTag.getString("Rotation")), RuinedPortalPiece.VerticalPlacement.byName(compoundTag.getString("VerticalPlacement")), blockPos, (RuinedPortalPiece.Properties)RuinedPortalPiece.Properties.CODEC.parse(new Dynamic(NbtOps.INSTANCE, compoundTag.get("Properties"))).getOrThrow(true, LOGGER::error));
++        return makeSettings(Mirror.valueOf(compoundTag.getString("Mirror")), Rotation.valueOf(compoundTag.getString("Rotation")), RuinedPortalPiece.VerticalPlacement.byName(compoundTag.getString("VerticalPlacement")), blockPos, (RuinedPortalPiece.Properties)RuinedPortalPiece.Properties.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compoundTag.get("Properties"))).getOrThrow(true, LOGGER::error));
+     }
+ 
+     private static StructurePlaceSettings makeSettings(Mirror mirror, Rotation rotation, RuinedPortalPiece.VerticalPlacement verticalPlacement, BlockPos blockPos, RuinedPortalPiece.Properties properties) {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
-index 5e3231fcb5abae537a142bceac311f0ddd179aa2..39944dd846cd91e9ae05fb919b0a003d7d3d80ba 100644
+index 5e048200a9873c98ae4aaa8b7ef3fbab7452bcc7..f7d80282da60f50bfe58b2125e798429b3bd32e1 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 @@ -47,7 +47,7 @@ public abstract class StructurePiece {
@@ -9232,17 +9674,17 @@ index 0485a8d34525bcbc8004585cc22859c46bfca322..105cbb446d6ddc2581f2688e397ba13c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
-index 0fc3d8fe94fc7d4f0ca352800a6365c4b22f5d7f..831f7943eb238272e46dddef31d263ef26b23173 100644
+index 9258eefe1405160348aeb2ccbc24da273ff5a6fb..2f256a15e6a33168d24717e437ddf11b386ce241 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
-@@ -17,14 +17,13 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
- import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
+@@ -17,14 +17,13 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
+ import net.minecraft.world.level.levelgen.structure.StructurePiece;
+ import org.slf4j.Logger;
  
 -public record PiecesContainer(List<StructurePiece> a) {
 -    private final List<StructurePiece> pieces;
 +public record PiecesContainer(List<StructurePiece> pieces) {
-     private static final Logger LOGGER = LogManager.getLogger();
+     private static final Logger LOGGER = LogUtils.getLogger();
      private static final ResourceLocation JIGSAW_RENAME = new ResourceLocation("jigsaw");
 -    private static final Map<ResourceLocation, ResourceLocation> RENAMES = ImmutableMap.builder().put(new ResourceLocation("nvi"), JIGSAW_RENAME).put(new ResourceLocation("pcp"), JIGSAW_RENAME).put(new ResourceLocation("bastionremnant"), JIGSAW_RENAME).put(new ResourceLocation("runtime"), JIGSAW_RENAME).build();
 +    private static final Map<ResourceLocation, ResourceLocation> RENAMES = ImmutableMap.<ResourceLocation, ResourceLocation>builder().put(new ResourceLocation("nvi"), JIGSAW_RENAME).put(new ResourceLocation("pcp"), JIGSAW_RENAME).put(new ResourceLocation("bastionremnant"), JIGSAW_RENAME).put(new ResourceLocation("runtime"), JIGSAW_RENAME).build();
@@ -9432,10 +9874,10 @@ index 7cadd6ef88f0904ce5748e269f6713840d416739..a97e8481af27dc6692b8d187ab751098
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index b3c6e50f24802d6e4f1a7e0f08a7c27dfefc22c1..a6ce6879fada021fafccd30aee6cf124dfe10034 100644
+index 1aaea0c6ae06d58fb4120a03ae9d02604005f292..beb7c3ec47bc8ba60ef840e7604f74d61f1da3ea 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-@@ -83,20 +83,20 @@ public class LevelStorageSource {
+@@ -86,20 +86,20 @@ public class LevelStorageSource {
  
      private static <T> Pair<WorldGenSettings, Lifecycle> readWorldGenSettings(Dynamic<T> dynamic, DataFixer dataFixer, int i) {
          Dynamic<T> dynamic2 = dynamic.get("WorldGenSettings").orElseEmptyMap();
@@ -9510,7 +9952,7 @@ index 595502c2cbc893dec5666131b1a1224a5c695a55..2c1ca826c513cbeb11188bcd5ddc3187
  
                  return true;
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction.java b/src/main/java/net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction.java
-index aef3f37a8af7680c2cfb0e76f835f02ecd9d588c..96742404c21ae2fd4f3a72c11e7ed9aa9b7540ed 100644
+index f0f0de0f97f66da84adff83f3b35d9fc5c883933..60e87cb0b444c4a4e7a79945d845d4bf6cdb54b1 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction.java
 +++ b/src/main/java/net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction.java
 @@ -47,7 +47,7 @@ public class EnchantRandomlyFunction extends LootItemConditionalFunction {
@@ -9557,7 +9999,7 @@ index e6ca1917505a7163ba288c431f927d23972b37b7..2f21f574c2ae5f60ce798e9681445fe0
              jsonObject.add("patterns", jsonArray);
              jsonObject.addProperty("append", setBannerPatternFunction.append);
 diff --git a/src/main/java/net/minecraft/world/level/timers/TimerQueue.java b/src/main/java/net/minecraft/world/level/timers/TimerQueue.java
-index 251bad05e5aa60e4e3db45f6c8f71bdccec6f414..ca61c096b945773414748ed9bcd0bf9c83ce5aa6 100644
+index 325c558b6fcd738579d5e2cdcb6f5595d325162f..3ebc89f4bcfa87d4bc68696556ef2d89812d7f79 100644
 --- a/src/main/java/net/minecraft/world/level/timers/TimerQueue.java
 +++ b/src/main/java/net/minecraft/world/level/timers/TimerQueue.java
 @@ -28,7 +28,7 @@ public class TimerQueue<T> {

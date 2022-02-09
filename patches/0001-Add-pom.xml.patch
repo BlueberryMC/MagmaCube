@@ -6,33 +6,33 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..6600788fb4994a12190c78161e44d0b0ebbdee0f
+index 0000000000000000000000000000000000000000..5d9aed0bd9b1ec2253298accbc27c47d124dfc82
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,369 @@
+@@ -0,0 +1,374 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<project xmlns="http://maven.apache.org/POM/4.0.0"
 +         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 +         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 +    <parent>
-+        <artifactId>minecraft-parent</artifactId>
-+        <groupId>net.blueberrymc.minecraft</groupId>
-+        <version>1.18.1</version>
++        <artifactId>magmacube-parent</artifactId>
++        <groupId>net.blueberrymc.magmacube</groupId>
++        <version>22w03a</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
 +    <properties>
-+        <text2speech.version>1.11.3</text2speech.version>
++        <text2speech.version>1.12.4</text2speech.version>
 +        <maven.compiler.source>17</maven.compiler.source>
 +        <maven.compiler.target>17</maven.compiler.target>
-+        <log4j.version>2.14.1</log4j.version>
++        <log4j.version>2.17.1</log4j.version>
 +        <lwjgl.version>3.2.2</lwjgl.version>
 +    </properties>
 +
-+    <artifactId>minecraft</artifactId>
++    <artifactId>magmacube</artifactId>
 +
 +    <build>
-+        <finalName>Minecraft</finalName>
++        <finalName>MagmaCube</finalName>
 +        <plugins>
 +            <plugin>
 +                <groupId>org.apache.maven.plugins</groupId>
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..6600788fb4994a12190c78161e44d0b0
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.2.38</version>
++            <version>3.3.39</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -127,7 +127,7 @@ index 0000000000000000000000000000000000000000..6600788fb4994a12190c78161e44d0b0
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>datafixerupper</artifactId>
-+            <version>4.0.26</version>
++            <version>4.1.27</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
@@ -343,7 +343,12 @@ index 0000000000000000000000000000000000000000..6600788fb4994a12190c78161e44d0b0
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>blocklist</artifactId>
-+            <version>1.0.6</version>
++            <version>1.0.10</version>
++        </dependency>
++        <dependency>
++            <groupId>com.mojang</groupId>
++            <artifactId>logging</artifactId>
++            <version>1.0.0</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>

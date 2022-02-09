@@ -4,7 +4,7 @@ basedir="$(cd "$1" && pwd -P)"
 git="git -c commit.gpgsign=false"
 apply="$git am --3way --ignore-whitespace"
 windows="$([[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]] && echo "true" || echo "false")"
-mkdir -p "$basedir/Minecraft-Patches"
+mkdir -p "$basedir/patches"
 echo "Resetting Minecraft..."
 cd "$basedir/Minecraft" || exit 1
 $git init
@@ -17,9 +17,9 @@ echo "  Applying patches to Minecraft..."
 $git am --abort >/dev/null 2>&1
 if [[ $windows == "true" ]]; then
   echo "  Using workaround for Windows ARG_MAX constraint"
-  find "$basedir/Minecraft-Patches/"*.patch -print0 | xargs -0 $apply
+  find "$basedir/patches/"*.patch -print0 | xargs -0 $apply
 else
-  $apply "$basedir/Minecraft-Patches/"*.patch
+  $apply "$basedir/patches/"*.patch
 fi
 if [ "$?" != "0" ]; then
   sleep 1s

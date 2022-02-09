@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 374fecc1fec7fb31bd0b4eda2ef1de6fcce45027..91abf064c0c3a7dae6435dd922dc3a4d29b47ab3 100644
+index b2f877c355302ee55ecf3f70dcbb939bf603f973..c0e1a55a3371f5cb6e55959abdf14e1e71bce1f9 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -19,7 +19,7 @@ index 374fecc1fec7fb31bd0b4eda2ef1de6fcce45027..91abf064c0c3a7dae6435dd922dc3a4d
 @@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
          this.dataPackVersion = 8;
          this.buildTime = new Date();
-         this.releaseTarget = "1.18.1";
+         this.releaseTarget = "1.18.2";
 +        this.magmaCubeVersion = "debug"; // MagmaCube
      }
  
@@ -33,7 +33,7 @@ index 374fecc1fec7fb31bd0b4eda2ef1de6fcce45027..91abf064c0c3a7dae6435dd922dc3a4d
  
      public static WorldVersion tryDetectVersion() {
 diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
-index 77f13c0c2ec82fbf82e400a035bbb249fe359afb..74e8f78d68f387fc5d99e42999b7a63a8103f77c 100644
+index 04e68a7fed2381d420567c4b52577c94cb43cc2a..da5ac7b22dd629ec1fffcdabc35743c161c5d611 100644
 --- a/src/main/java/net/minecraft/SystemReport.java
 +++ b/src/main/java/net/minecraft/SystemReport.java
 @@ -26,6 +26,7 @@ public class SystemReport {
@@ -63,7 +63,7 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 40d4d30f75d514c00e1cc6a252faae3fea503058..4b8d68438c9ead9ac3306a75ffa19e478882d323 100644
+index 8e42740f0d90402c3ecd5ccb524de68af12fe725..9b617d09f753ba7f62e3266b9507ade64c1579c0 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 @@ -100,7 +100,7 @@ public class TitleScreen extends Screen {
@@ -87,10 +87,10 @@ index 40d4d30f75d514c00e1cc6a252faae3fea503058..4b8d68438c9ead9ac3306a75ffa19e47
                  fill(poseStack, this.copyrightX, this.height - 1, this.copyrightX + this.copyrightWidth, this.height, 16777215 | i6);
              }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 60be6da816a824e06a4370e5f1571cbb40f299af..2495572ee0b0dce2beb87d1c612ad2965e1af99c 100644
+index f5eb59e51a1ac4f377995094a36d663fa62e9658..fc97a3fc59f7ed9920b9d459731ac75baa1f27f7 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -922,7 +922,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -934,7 +934,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {

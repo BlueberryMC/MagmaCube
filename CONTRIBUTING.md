@@ -16,4 +16,4 @@ We merge pull requests that makes sense.
 ## How to rebuild patches (Saving patches)
 - Every single commit is a single patch file.
 - Commit files before rebuilding patches.
-- Just do `./magma rebuild`. This does not modify project, it only modifies the Minecraft-Patches directory.
+- Just do `./magma rebuild`. This does not modify project, it only modifies the patches directory.
