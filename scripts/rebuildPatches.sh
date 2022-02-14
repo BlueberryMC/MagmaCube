@@ -18,4 +18,4 @@ for patch in *.patch; do
     $git checkout -- "$patch" >/dev/null
   fi
 done
-echo "  Patches saved for Minecraft to patches/"
+echo "  Patches saved to patches/"
