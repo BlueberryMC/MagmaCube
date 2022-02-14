@@ -248,7 +248,7 @@ index d90f7c57dde46e249780eff56acc552454ab17b5..5141943244bb68e7c0c3efa45ee03f42
          }).start();
      }
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 8b4e61fb942635cd2c398446a210ddd171d8064f..9d63b50cdec8abae9b6f4c403ffaceb37ad6e92a 100644
+index 082f6aed66183fcd5a8f0043aea275c922821de3..a918d719901a64f0f66a3f301e1f6e4772fbd2d7 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -25,6 +25,7 @@ import java.nio.file.Path;
@@ -321,7 +321,7 @@ index 8b4e61fb942635cd2c398446a210ddd171d8064f..9d63b50cdec8abae9b6f4c403ffaceb3
                  list3.addAll(list2);
                  return list3;
              }));
-@@ -685,7 +686,7 @@ public class Util {
+@@ -681,7 +682,7 @@ public class Util {
  
          public void openUrl(URL url) {
              try {
@@ -870,7 +870,7 @@ index 0c453fe5a7b46d307673f5852e3695059e8a5414..35c862ea64f1a918f0ae211003f233ed
                  }
  
 diff --git a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
-index 6c655db49811b9260320f096b04ba0b10d561d38..4b46da8d3903cde23301009f63b77278c9ae1462 100644
+index 96491baa0b500cf45c762d2f3993644a3640af39..b4a8996a5ff4a634c1fb01d80a869469cfb4f8ec 100644
 --- a/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 +++ b/src/main/java/net/minecraft/client/renderer/LevelRenderer.java
 @@ -931,7 +931,7 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
@@ -882,54 +882,90 @@ index 6c655db49811b9260320f096b04ba0b10d561d38..4b46da8d3903cde23301009f63b77278
                              if (renderChunkInfo.hasSourceDirection(i2) && compiledChunk.facesCanSeeEachother(DIRECTIONS[i2].getOpposite(), direction)) {
                                  flag3 = true;
                                  break;
-@@ -943,11 +943,14 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+@@ -943,71 +943,44 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
                          }
                      }
  
 +                    boolean flag4 = false;
                      if (flag && flag2) {
-                         BlockPos blockPos3;
-                         byte var10001;
+-                        BlockPos blockPos3;
+-                        byte var10001;
 -                        label126: {
 -                            label125: {
-+                        label126:
-+                        {
-+                            label125:
-+                            {
-                                 blockPos3 = renderChunk2.getOrigin();
-                                 if (direction.getAxis() == Direction.Axis.X) {
-                                     if (blockPos2.getX() > blockPos3.getX()) {
-@@ -965,8 +968,10 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+-                                blockPos3 = renderChunk2.getOrigin();
+-                                if (direction.getAxis() == Direction.Axis.X) {
+-                                    if (blockPos2.getX() > blockPos3.getX()) {
+-                                        break label125;
+-                                    }
+-                                } else if (blockPos2.getX() < blockPos3.getX()) {
+-                                    break label125;
+-                                }
+-
+-                                var10001 = 0;
+-                                break label126;
++                        BlockPos blockPos3 = renderChunk2.getOrigin();
++                        int offX = 0;
++                        if (direction.getAxis() == Direction.Axis.X) {
++                            if (blockPos2.getX() > blockPos3.getX()) {
++                                offX = 16;
+                             }
+-
+-                            var10001 = 16;
++                        } else if (blockPos2.getX() < blockPos3.getX()) {
++                            offX = 16;
                          }
  
-                         byte var10002;
+-                        byte var10002;
 -                        label118: {
 -                            label117: {
-+                        label118:
-+                        {
-+                            label117:
-+                            {
-                                 if (direction.getAxis() == Direction.Axis.Y) {
-                                     if (blockPos2.getY() > blockPos3.getY()) {
-                                         break label117;
-@@ -983,8 +988,10 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+-                                if (direction.getAxis() == Direction.Axis.Y) {
+-                                    if (blockPos2.getY() > blockPos3.getY()) {
+-                                        break label117;
+-                                    }
+-                                } else if (blockPos2.getY() < blockPos3.getY()) {
+-                                    break label117;
+-                                }
+-
+-                                var10002 = 0;
+-                                break label118;
++                        int offY = 0;
++                        if (direction.getAxis() == Direction.Axis.Y) {
++                            if (blockPos2.getY() > blockPos3.getY()) {
++                                offY = 16;
+                             }
+-
+-                            var10002 = 16;
++                        } else if (blockPos2.getY() < blockPos3.getY()) {
++                            offY = 16;
                          }
  
-                         byte var10003;
+-                        byte var10003;
 -                        label110: {
 -                            label109: {
-+                        label110:
-+                        {
-+                            label109:
-+                            {
-                                 if (direction.getAxis() == Direction.Axis.Z) {
-                                     if (blockPos2.getZ() > blockPos3.getZ()) {
-                                         break label109;
-@@ -1001,13 +1008,13 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+-                                if (direction.getAxis() == Direction.Axis.Z) {
+-                                    if (blockPos2.getZ() > blockPos3.getZ()) {
+-                                        break label109;
+-                                    }
+-                                } else if (blockPos2.getZ() < blockPos3.getZ()) {
+-                                    break label109;
+-                                }
+-
+-                                var10003 = 0;
+-                                break label110;
++                        int offZ = 0;
++                        if (direction.getAxis() == Direction.Axis.Z) {
++                            if (blockPos2.getZ() > blockPos3.getZ()) {
++                                offZ = 16;
+                             }
+-
+-                            var10003 = 16;
++                        } else if (blockPos2.getZ() < blockPos3.getZ()) {
++                            offZ = 16;
                          }
  
-                         BlockPos blockPos4 = blockPos3.offset(var10001, var10002, var10003);
+-                        BlockPos blockPos4 = blockPos3.offset(var10001, var10002, var10003);
 -                        Vec3 vec32 = new Vec3((double)blockPos4.getX(), (double)blockPos4.getY(), (double)blockPos4.getZ());
++                        BlockPos blockPos4 = blockPos3.offset(offX, offY, offZ);
 +                        Vec3 vec32 = new Vec3((double) blockPos4.getX(), (double) blockPos4.getY(), (double) blockPos4.getZ());
                          Vec3 vec33 = vec3.subtract(vec32).normalize().scale(CEILED_SECTION_DIAGONAL);
 -                        boolean flag4 = true;
@@ -943,7 +979,7 @@ index 6c655db49811b9260320f096b04ba0b10d561d38..4b46da8d3903cde23301009f63b77278
                                  break;
                              }
  
-@@ -1017,11 +1024,8 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+@@ -1017,10 +990,7 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
                                  break;
                              }
                          }
@@ -951,12 +987,11 @@ index 6c655db49811b9260320f096b04ba0b10d561d38..4b46da8d3903cde23301009f63b77278
 -                        if (!flag4) {
 -                            continue;
 -                        }
++                        if (!flag4) continue;
                      }
-+                    if (!flag4) continue;
  
                      LevelRenderer.RenderChunkInfo renderChunkInfo2 = renderInfoMap.get(renderChunk2);
-                     if (renderChunkInfo2 != null) {
-@@ -1799,13 +1803,13 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+@@ -1802,13 +1772,13 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
                  } else if (this.minecraft.level.effects().skyType() == DimensionSpecialEffects.SkyType.NORMAL) {
                      RenderSystem.disableTexture();
                      Vec3 vec3 = this.level.getSkyColor(this.minecraft.gameRenderer.getMainCamera().getPosition(), f);
@@ -972,7 +1007,7 @@ index 6c655db49811b9260320f096b04ba0b10d561d38..4b46da8d3903cde23301009f63b77278
                      ShaderInstance shaderInstance = RenderSystem.getShader();
                      this.skyBuffer.drawWithShader(poseStack.last().pose(), matrix4f, shaderInstance);
                      RenderSystem.enableBlend();
-@@ -1897,9 +1901,9 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
+@@ -1900,9 +1870,9 @@ public class LevelRenderer implements ResourceManagerReloadListener, AutoCloseab
                      }
  
                      if (this.level.effects().hasGround()) {
@@ -984,6 +1019,19 @@ index 6c655db49811b9260320f096b04ba0b10d561d38..4b46da8d3903cde23301009f63b77278
                      }
  
                      RenderSystem.enableTexture();
+diff --git a/src/main/java/net/minecraft/client/renderer/block/LiquidBlockRenderer.java b/src/main/java/net/minecraft/client/renderer/block/LiquidBlockRenderer.java
+index 5f71b68b41fdbcd07bf5bff98ab7575cbafbe4c1..8f60cece7e8116740d0945394b018760741aac00 100644
+--- a/src/main/java/net/minecraft/client/renderer/block/LiquidBlockRenderer.java
++++ b/src/main/java/net/minecraft/client/renderer/block/LiquidBlockRenderer.java
+@@ -321,7 +321,7 @@ public class LiquidBlockRenderer {
+             floats[1] += 10.0F;
+         } else if (f >= 0.0F) {
+             floats[0] += f;
+-            int var10002 = floats[1]++;
++            floats[1]++;
+         }
+ 
+     }
 diff --git a/src/main/java/net/minecraft/client/renderer/block/model/multipart/KeyValueCondition.java b/src/main/java/net/minecraft/client/renderer/block/model/multipart/KeyValueCondition.java
 index d559ca145678cb3127caffd0d92c2c70be8ea2f3..ebd531cd81b8966d0b738bdb6ce9e56df5be9581 100644
 --- a/src/main/java/net/minecraft/client/renderer/block/model/multipart/KeyValueCondition.java
@@ -1511,7 +1559,7 @@ index ac8bbc6f9096c6dad1aa33f3b21bae3d538f15d4..1e333158ae21734c75e88f2b59d6d9fc
  
      static {
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index e3f175fd82a994b39fb113bf46ceebaa33f1c295..4984d2fa60e5423832b011a01af4b0b36fc45469 100644
+index a8a52ec44ba2d9fad5a7a36494feddea674b6b1e..6369276fa9e290853e437aa5bf5e4bc1dea4a08e 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
 @@ -66,7 +66,7 @@ public abstract class RegistryAccess {
@@ -2056,7 +2104,7 @@ index 27590ee3be29818f7b751aa8c245f368abf4cdb6..443fb9f4c58e843d4f4ffe2f1a9321fe
  
                  if (this.hasElementSeparator()) {
 diff --git a/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java b/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java
-index 93bc8427d26e6e379f7337d1cb4490936b51eb63..99ec0038680438dc9c0f69088bd39d4008f354cc 100644
+index f5e6e8671bc69a3a391f1f2be1c8f41ee033f37b..a41772d129801ebeb808640894977a0ca7270853 100644
 --- a/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java
 +++ b/src/main/java/net/minecraft/nbt/visitors/FieldSelector.java
 @@ -3,11 +3,7 @@ package net.minecraft.nbt.visitors;
@@ -2069,12 +2117,12 @@ index 93bc8427d26e6e379f7337d1cb4490936b51eb63..99ec0038680438dc9c0f69088bd39d40
 -    private final String name;
 -
 +public record FieldSelector(List<String> path, TagType<?> type, String name) {
-     public FieldSelector(TagType<?> tagType, String s) {
-         this(List.of(), tagType, s);
+     public FieldSelector(TagType<?> type, String name) {
+         this(List.of(), type, name);
      }
 @@ -19,22 +15,4 @@ public record FieldSelector(List<String> a, TagType<?> b, String c) {
-     public FieldSelector(String s, String s2, TagType<?> tagType, String s3) {
-         this(List.of(s, s2), tagType, s3);
+     public FieldSelector(String firstPath, String secondPath, TagType<?> type, String name) {
+         this(List.of(firstPath, secondPath), type, name);
      }
 -
 -    public FieldSelector(List<String> list, TagType<?> tagType, String s) {
@@ -2097,7 +2145,7 @@ index 93bc8427d26e6e379f7337d1cb4490936b51eb63..99ec0038680438dc9c0f69088bd39d40
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/nbt/visitors/FieldTree.java b/src/main/java/net/minecraft/nbt/visitors/FieldTree.java
-index 9807433ec882ca7b2b0284a230445bde4544e629..73d1126134f82092a2e3f3bc973df4a6ff156e72 100644
+index ed868f8bd2b826c108980bd94a2237c27c03694e..e6bc09a5db572da1050de681b5b66b4fa9a59e4a 100644
 --- a/src/main/java/net/minecraft/nbt/visitors/FieldTree.java
 +++ b/src/main/java/net/minecraft/nbt/visitors/FieldTree.java
 @@ -4,19 +4,9 @@ import java.util.HashMap;
@@ -2110,15 +2158,15 @@ index 9807433ec882ca7b2b0284a230445bde4544e629..73d1126134f82092a2e3f3bc973df4a6
 -    private final Map<String, FieldTree> fieldsToRecurse;
 -
 +public record FieldTree(int depth, Map<String, TagType<?>> selectedFields, Map<String, FieldTree> fieldsToRecurse) {
-     private FieldTree(int i) {
--        this(i, new HashMap(), new HashMap());
+     private FieldTree(int depth) {
+-        this(depth, new HashMap(), new HashMap());
 -    }
 -
 -    public FieldTree(int i, Map<String, TagType<?>> map, Map<String, FieldTree> map2) {
 -        this.depth = i;
 -        this.selectedFields = map;
 -        this.fieldsToRecurse = map2;
-+        this(i, new HashMap<>(), new HashMap<>());
++        this(depth, new HashMap<>(), new HashMap<>());
      }
  
      public static FieldTree createRoot() {
@@ -2925,10 +2973,10 @@ index 945e8be448a1b52511562e4a3b51bb6b8ea49457..ffd4ee5ee4d86096227076a81ed84874
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de1861bd01 100644
+index 337e0907f3bb42b055545768f620c558f69b5df7..8be4940bc74bf26c5e083b1f1f5b8fab1909b878 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
-@@ -270,7 +270,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -275,7 +275,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          CompletableFuture<List<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> completableFuture2 = Util.sequence(list);
          CompletableFuture<Either<List<ChunkAccess>, ChunkHolder.ChunkLoadingFailure>> completableFuture3 = completableFuture2.thenApply((listx) -> {
@@ -2937,7 +2985,7 @@ index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de
              int i4 = 0;
  
              for(final Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure> either : listx) {
-@@ -284,11 +284,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -293,11 +293,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                      });
                  }
  
@@ -2951,7 +2999,7 @@ index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de
          });
  
          for(ChunkHolder chunkHolder2 : list2) {
-@@ -527,11 +527,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -557,11 +557,11 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
          CompletableFuture<Either<List<ChunkAccess>, ChunkHolder.ChunkLoadingFailure>> completableFuture = this.getChunkRangeFuture(chunkPos, chunkStatus.getRange(), (i) -> this.getDependencyStatus(chunkStatus, i));
          this.level.getProfiler().incrementCounter((Supplier<String>)(() -> "chunkGenerate " + chunkStatus.getName()));
          Executor executor = (runnable) -> this.worldgenMailbox.tell(ChunkTaskPriorityQueueSorter.message(chunkHolder, runnable));
@@ -2966,7 +3014,7 @@ index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de
                  } catch (Exception var9) {
                      var9.getStackTrace();
                      CrashReport crashReport = CrashReport.forThrowable(var9, "Exception generating new chunk");
-@@ -583,7 +583,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -613,7 +613,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  if (protoChunk instanceof ImposterProtoChunk) {
                      levelChunk = ((ImposterProtoChunk)protoChunk).getWrapped();
                  } else {
@@ -2975,7 +3023,7 @@ index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de
                      chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk, false));
                  }
  
-@@ -879,7 +879,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -920,7 +920,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
          }
  
@@ -2984,7 +3032,7 @@ index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de
          int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
          SectionPos sectionPos = serverPlayer.getLastSectionPos();
          SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -913,16 +913,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -954,16 +954,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          int i3 = sectionPos.x();
          int i4 = sectionPos.z();
@@ -3005,7 +3053,7 @@ index 583ef250ee8865428f4088ad9192ac10e1a59459..277cb67b56dfd9ebcd700c18b73036de
                      this.updateChunkTracking(serverPlayer, new ChunkPos(i9, i10), new MutableObject(), flag4, flag5);
                  }
              }
-@@ -937,9 +937,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -978,9 +978,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  }
              }
  
@@ -3131,7 +3179,7 @@ index 799d6b6800b91f2223ce554fd95662c3a4570321..abbf3939685c67e8d5b38a765e3a7b45
                  return true;
              } else {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index b78e261930a05e3e670fcdf4bba52cbb6ef2e7ee..9102582cf2feb143767e0cedbc62e0ce9fa9244d 100644
+index d5aeaab6b38ea7e39844ea88133d2021c9572eb5..2a97c7450bbea98fa934ee1dae5f6ee4b408e3b7 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -1361,7 +1361,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -3689,30 +3737,30 @@ index b17fcd036873b57cc9fd203905482f59ccfe82ef..a18d1aa96ddcba1e1665efc8fa8f0b0b
      }
  
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index 87e7af9d54bb549f2e01b1446a3c1f68a5ae4284..808b7d4556a951a75587790090c2d8dc74b2aee3 100644
+index 8b903da7a3966290e7e2c9713be976cd8b3c4c0d..46f800e9236d377eaa88b531b9bfc39d9520a64d 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-@@ -562,17 +562,17 @@ public class DataFixers {
-         dataFixerBuilder.addFixer(new AddNewChoices(schema131, "Added Glow Squid", References.ENTITY));
-         dataFixerBuilder.addFixer(new AddNewChoices(schema131, "Added Glow Item Frame", References.ENTITY));
-         Schema schema132 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
+@@ -565,17 +565,17 @@ public class DataFixers {
+         dataFixerBuilder.addFixer(new AddNewChoices(schema132, "Added Glow Squid", References.ENTITY));
+         dataFixerBuilder.addFixer(new AddNewChoices(schema132, "Added Glow Item Frame", References.ENTITY));
+         Schema schema133 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
 -        ImmutableMap<String, String> immutableMap = ImmutableMap.builder().put("minecraft:weathered_copper_block", "minecraft:oxidized_copper_block").put("minecraft:semi_weathered_copper_block", "minecraft:weathered_copper_block").put("minecraft:lightly_weathered_copper_block", "minecraft:exposed_copper_block").put("minecraft:weathered_cut_copper", "minecraft:oxidized_cut_copper").put("minecraft:semi_weathered_cut_copper", "minecraft:weathered_cut_copper").put("minecraft:lightly_weathered_cut_copper", "minecraft:exposed_cut_copper").put("minecraft:weathered_cut_copper_stairs", "minecraft:oxidized_cut_copper_stairs").put("minecraft:semi_weathered_cut_copper_stairs", "minecraft:weathered_cut_copper_stairs").put("minecraft:lightly_weathered_cut_copper_stairs", "minecraft:exposed_cut_copper_stairs").put("minecraft:weathered_cut_copper_slab", "minecraft:oxidized_cut_copper_slab").put("minecraft:semi_weathered_cut_copper_slab", "minecraft:weathered_cut_copper_slab").put("minecraft:lightly_weathered_cut_copper_slab", "minecraft:exposed_cut_copper_slab").put("minecraft:waxed_semi_weathered_copper", "minecraft:waxed_weathered_copper").put("minecraft:waxed_lightly_weathered_copper", "minecraft:waxed_exposed_copper").put("minecraft:waxed_semi_weathered_cut_copper", "minecraft:waxed_weathered_cut_copper").put("minecraft:waxed_lightly_weathered_cut_copper", "minecraft:waxed_exposed_cut_copper").put("minecraft:waxed_semi_weathered_cut_copper_stairs", "minecraft:waxed_weathered_cut_copper_stairs").put("minecraft:waxed_lightly_weathered_cut_copper_stairs", "minecraft:waxed_exposed_cut_copper_stairs").put("minecraft:waxed_semi_weathered_cut_copper_slab", "minecraft:waxed_weathered_cut_copper_slab").put("minecraft:waxed_lightly_weathered_cut_copper_slab", "minecraft:waxed_exposed_cut_copper_slab").build();
 +        ImmutableMap<String, String> immutableMap = ImmutableMap.<String, String>builder().put("minecraft:weathered_copper_block", "minecraft:oxidized_copper_block").put("minecraft:semi_weathered_copper_block", "minecraft:weathered_copper_block").put("minecraft:lightly_weathered_copper_block", "minecraft:exposed_copper_block").put("minecraft:weathered_cut_copper", "minecraft:oxidized_cut_copper").put("minecraft:semi_weathered_cut_copper", "minecraft:weathered_cut_copper").put("minecraft:lightly_weathered_cut_copper", "minecraft:exposed_cut_copper").put("minecraft:weathered_cut_copper_stairs", "minecraft:oxidized_cut_copper_stairs").put("minecraft:semi_weathered_cut_copper_stairs", "minecraft:weathered_cut_copper_stairs").put("minecraft:lightly_weathered_cut_copper_stairs", "minecraft:exposed_cut_copper_stairs").put("minecraft:weathered_cut_copper_slab", "minecraft:oxidized_cut_copper_slab").put("minecraft:semi_weathered_cut_copper_slab", "minecraft:weathered_cut_copper_slab").put("minecraft:lightly_weathered_cut_copper_slab", "minecraft:exposed_cut_copper_slab").put("minecraft:waxed_semi_weathered_copper", "minecraft:waxed_weathered_copper").put("minecraft:waxed_lightly_weathered_copper", "minecraft:waxed_exposed_copper").put("minecraft:waxed_semi_weathered_cut_copper", "minecraft:waxed_weathered_cut_copper").put("minecraft:waxed_lightly_weathered_cut_copper", "minecraft:waxed_exposed_cut_copper").put("minecraft:waxed_semi_weathered_cut_copper_stairs", "minecraft:waxed_weathered_cut_copper_stairs").put("minecraft:waxed_lightly_weathered_cut_copper_stairs", "minecraft:waxed_exposed_cut_copper_stairs").put("minecraft:waxed_semi_weathered_cut_copper_slab", "minecraft:waxed_weathered_cut_copper_slab").put("minecraft:waxed_lightly_weathered_cut_copper_slab", "minecraft:waxed_exposed_cut_copper_slab").build();
-         dataFixerBuilder.addFixer(ItemRenameFix.create(schema132, "Renamed copper block items to new oxidized terms", createRenamer(immutableMap)));
-         dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema132, "Renamed copper blocks to new oxidized terms", createRenamer(immutableMap)));
-         Schema schema133 = dataFixerBuilder.addSchema(2691, SAME_NAMESPACED);
+         dataFixerBuilder.addFixer(ItemRenameFix.create(schema133, "Renamed copper block items to new oxidized terms", createRenamer(immutableMap)));
+         dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema133, "Renamed copper blocks to new oxidized terms", createRenamer(immutableMap)));
+         Schema schema134 = dataFixerBuilder.addSchema(2691, SAME_NAMESPACED);
 -        ImmutableMap<String, String> immutableMap2 = ImmutableMap.builder().put("minecraft:waxed_copper", "minecraft:waxed_copper_block").put("minecraft:oxidized_copper_block", "minecraft:oxidized_copper").put("minecraft:weathered_copper_block", "minecraft:weathered_copper").put("minecraft:exposed_copper_block", "minecraft:exposed_copper").build();
 +        ImmutableMap<String, String> immutableMap2 = ImmutableMap.<String, String>builder().put("minecraft:waxed_copper", "minecraft:waxed_copper_block").put("minecraft:oxidized_copper_block", "minecraft:oxidized_copper").put("minecraft:weathered_copper_block", "minecraft:weathered_copper").put("minecraft:exposed_copper_block", "minecraft:exposed_copper").build();
-         dataFixerBuilder.addFixer(ItemRenameFix.create(schema133, "Rename copper item suffixes", createRenamer(immutableMap2)));
-         dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema133, "Rename copper blocks suffixes", createRenamer(immutableMap2)));
-         Schema schema134 = dataFixerBuilder.addSchema(2693, SAME_NAMESPACED);
-         dataFixerBuilder.addFixer(new AddFlagIfNotPresentFix(schema134, References.WORLD_GEN_SETTINGS, "has_increased_height_already", false));
-         Schema schema135 = dataFixerBuilder.addSchema(2696, SAME_NAMESPACED);
+         dataFixerBuilder.addFixer(ItemRenameFix.create(schema134, "Rename copper item suffixes", createRenamer(immutableMap2)));
+         dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema134, "Rename copper blocks suffixes", createRenamer(immutableMap2)));
+         Schema schema135 = dataFixerBuilder.addSchema(2693, SAME_NAMESPACED);
+         dataFixerBuilder.addFixer(new AddFlagIfNotPresentFix(schema135, References.WORLD_GEN_SETTINGS, "has_increased_height_already", false));
+         Schema schema136 = dataFixerBuilder.addSchema(2696, SAME_NAMESPACED);
 -        ImmutableMap<String, String> immutableMap3 = ImmutableMap.builder().put("minecraft:grimstone", "minecraft:deepslate").put("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab").put("minecraft:grimstone_stairs", "minecraft:cobbled_deepslate_stairs").put("minecraft:grimstone_wall", "minecraft:cobbled_deepslate_wall").put("minecraft:polished_grimstone", "minecraft:polished_deepslate").put("minecraft:polished_grimstone_slab", "minecraft:polished_deepslate_slab").put("minecraft:polished_grimstone_stairs", "minecraft:polished_deepslate_stairs").put("minecraft:polished_grimstone_wall", "minecraft:polished_deepslate_wall").put("minecraft:grimstone_tiles", "minecraft:deepslate_tiles").put("minecraft:grimstone_tile_slab", "minecraft:deepslate_tile_slab").put("minecraft:grimstone_tile_stairs", "minecraft:deepslate_tile_stairs").put("minecraft:grimstone_tile_wall", "minecraft:deepslate_tile_wall").put("minecraft:grimstone_bricks", "minecraft:deepslate_bricks").put("minecraft:grimstone_brick_slab", "minecraft:deepslate_brick_slab").put("minecraft:grimstone_brick_stairs", "minecraft:deepslate_brick_stairs").put("minecraft:grimstone_brick_wall", "minecraft:deepslate_brick_wall").put("minecraft:chiseled_grimstone", "minecraft:chiseled_deepslate").build();
 +        ImmutableMap<String, String> immutableMap3 = ImmutableMap.<String, String>builder().put("minecraft:grimstone", "minecraft:deepslate").put("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab").put("minecraft:grimstone_stairs", "minecraft:cobbled_deepslate_stairs").put("minecraft:grimstone_wall", "minecraft:cobbled_deepslate_wall").put("minecraft:polished_grimstone", "minecraft:polished_deepslate").put("minecraft:polished_grimstone_slab", "minecraft:polished_deepslate_slab").put("minecraft:polished_grimstone_stairs", "minecraft:polished_deepslate_stairs").put("minecraft:polished_grimstone_wall", "minecraft:polished_deepslate_wall").put("minecraft:grimstone_tiles", "minecraft:deepslate_tiles").put("minecraft:grimstone_tile_slab", "minecraft:deepslate_tile_slab").put("minecraft:grimstone_tile_stairs", "minecraft:deepslate_tile_stairs").put("minecraft:grimstone_tile_wall", "minecraft:deepslate_tile_wall").put("minecraft:grimstone_bricks", "minecraft:deepslate_bricks").put("minecraft:grimstone_brick_slab", "minecraft:deepslate_brick_slab").put("minecraft:grimstone_brick_stairs", "minecraft:deepslate_brick_stairs").put("minecraft:grimstone_brick_wall", "minecraft:deepslate_brick_wall").put("minecraft:chiseled_grimstone", "minecraft:chiseled_deepslate").build();
-         dataFixerBuilder.addFixer(ItemRenameFix.create(schema135, "Renamed grimstone block items to deepslate", createRenamer(immutableMap3)));
-         dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema135, "Renamed grimstone blocks to deepslate", createRenamer(immutableMap3)));
-         Schema schema136 = dataFixerBuilder.addSchema(2700, SAME_NAMESPACED);
+         dataFixerBuilder.addFixer(ItemRenameFix.create(schema136, "Renamed grimstone block items to deepslate", createRenamer(immutableMap3)));
+         dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema136, "Renamed grimstone blocks to deepslate", createRenamer(immutableMap3)));
+         Schema schema137 = dataFixerBuilder.addSchema(2700, SAME_NAMESPACED);
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java b/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
 index 9bb677aeb69b03cf6d397a0a8969cbbeec814817..3c27cf8ee3836c68dc5a68c6df6722cddd5e6a72 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/AbstractUUIDFix.java
@@ -6349,10 +6397,10 @@ index e3c4a1e49703c0220c3c74ac163be1011adc428f..ae472a139eed4967c9ba4d1353e5436b
  
      static {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/Brain.java b/src/main/java/net/minecraft/world/entity/ai/Brain.java
-index 24a65c8d7aa7c51404f8976786b8edb81d145b5b..1461cd5921f95b21b2b76169355b9660160c41c3 100644
+index 3fec9b953622fc6f818641245a27f946306f8445..31e8b1a8ca33e13be3f0e93c3273890c7140ca48 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/Brain.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/Brain.java
-@@ -69,14 +69,14 @@ public class Brain<E extends LivingEntity> {
+@@ -68,14 +68,14 @@ public class Brain<E extends LivingEntity> {
              }
  
              public <T> DataResult<Brain<E>> decode(DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
@@ -6371,7 +6419,7 @@ index 24a65c8d7aa7c51404f8976786b8edb81d145b5b..1461cd5921f95b21b2b76169355b9660
              }
  
              private <T, U> DataResult<Brain.MemoryValue<U>> captureRead(MemoryModuleType<U> memoryModuleType, DynamicOps<T> dynamicOps, T object) {
-@@ -157,7 +157,7 @@ public class Brain<E extends LivingEntity> {
+@@ -156,7 +156,7 @@ public class Brain<E extends LivingEntity> {
      }
  
      public <U> Optional<U> getMemory(MemoryModuleType<U> memoryModuleType) {
@@ -6380,7 +6428,7 @@ index 24a65c8d7aa7c51404f8976786b8edb81d145b5b..1461cd5921f95b21b2b76169355b9660
      }
  
      public <U> long getTimeUntilExpiry(MemoryModuleType<U> memoryModuleType) {
-@@ -321,7 +321,7 @@ public class Brain<E extends LivingEntity> {
+@@ -320,7 +320,7 @@ public class Brain<E extends LivingEntity> {
          UnmodifiableIterator var5 = immutableList.iterator();
  
          while(var5.hasNext()) {
@@ -6389,7 +6437,7 @@ index 24a65c8d7aa7c51404f8976786b8edb81d145b5b..1461cd5921f95b21b2b76169355b9660
              ((this.availableBehaviorsByPriority.computeIfAbsent((Integer)pair.getFirst(), (integer) -> Maps.newHashMap())).computeIfAbsent(activity, (activityx) -> Sets.newLinkedHashSet())).add((Behavior)pair.getSecond());
          }
  
-@@ -429,7 +429,7 @@ public class Brain<E extends LivingEntity> {
+@@ -428,7 +428,7 @@ public class Brain<E extends LivingEntity> {
      }
  
      private boolean isEmptyCollection(Object object) {
@@ -6398,7 +6446,7 @@ index 24a65c8d7aa7c51404f8976786b8edb81d145b5b..1461cd5921f95b21b2b76169355b9660
      }
  
      ImmutableList<? extends Pair<Integer, ? extends Behavior<? super E>>> createPriorityPairs(int i, ImmutableList<? extends Behavior<? super E>> immutableList) {
-@@ -450,7 +450,7 @@ public class Brain<E extends LivingEntity> {
+@@ -449,7 +449,7 @@ public class Brain<E extends LivingEntity> {
          private final Optional<? extends ExpirableValue<U>> value;
  
          static <U> Brain.MemoryValue<U> createUnchecked(MemoryModuleType<U> memoryModuleType, Optional<? extends ExpirableValue<?>> optional) {
@@ -6501,10 +6549,10 @@ index b28687daf30f72a039cba0b9edc4d3037bcabd0b..323178b8626b6333a597c3b50c75ac48
              }
          };
 diff --git a/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java b/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
-index da4bd7b4c6eae20c47888a5054809c490d5e0023..999564610b92e013500eb865c1495772ceb0c6ab 100644
+index b8e93cd18c1306dba8744a984789365c7474b94c..d995a2a55e0322556464ba0e8fc5daf04988bd74 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
-@@ -91,9 +91,9 @@ public class GossipContainer {
+@@ -90,9 +90,9 @@ public class GossipContainer {
      public void transferFrom(GossipContainer gossipContainer, Random random, int i) {
          Collection<GossipContainer.GossipEntry> collection = gossipContainer.selectGossipsForTransfer(random, i);
          collection.forEach((gossipEntry) -> {
@@ -6557,7 +6605,7 @@ index 4f2768f40bff55acc05068a2a8c4243516f4b8f0..3dd2b31e3f31b01d58260169144b02fd
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index 978b25fe86883f27d4835c4c6363cc296a16b08a..00f9d5b38aa26fe61592b4c5397f93f1a4e262ba 100644
+index 440257821bda1eed79ae56e227923f10c09bf06a..19a0dbf9d993691a24f6a5f27d4b05d2412df475 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
 @@ -145,9 +145,9 @@ public class Fox extends Animal {
@@ -6609,10 +6657,10 @@ index d432c3b91ad909912603a8b0e9e1c048379f7629..bb6baf151198f7333ab322a2a37880f8
  
      protected void sendDebugPackets() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-index 68f61fde5914dbd75cb6f38dc026f9f58913ca6a..827a660db844df706252c2e5b3f335a3f1b3d1db 100644
+index dc9f6171f0ac70370e09220f5a99d1e192ed2721..a92a58c951a33f23875d7e5e16e638a3b3f7b432 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
-@@ -124,7 +124,7 @@ public class Goat extends Animal {
+@@ -119,7 +119,7 @@ public class Goat extends Animal {
      }
  
      public Brain<Goat> getBrain() {
@@ -6884,10 +6932,10 @@ index 856f5f2b9893173ba61804865dff51f57754959a..5b6dfe58b340eef792917fd5a2dce747
  
      public HoneycombItem(Item.Properties properties) {
 diff --git a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
-index 8374eb5c641ec35aa0abed70d3d90351ffc23bbc..c666bf6dd81916a6eb12d951ab81568e5c559de9 100644
+index de07725515b6afd754a517181efef947e5d52c77..0eb1f9c2d6ed00047b410e350eb0cfa8a889fc3a 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
-@@ -74,7 +74,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
+@@ -73,7 +73,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
      }
  
      public <C extends Container, T extends Recipe<C>> List<T> getAllRecipesFor(RecipeType<T> recipeType) {
@@ -6896,7 +6944,7 @@ index 8374eb5c641ec35aa0abed70d3d90351ffc23bbc..c666bf6dd81916a6eb12d951ab81568e
      }
  
      public <C extends Container, T extends Recipe<C>> List<T> getRecipesFor(RecipeType<T> recipeType, C container, Level level) {
-@@ -82,7 +82,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
+@@ -81,7 +81,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
      }
  
      private <C extends Container, T extends Recipe<C>> Map<ResourceLocation, Recipe<C>> byType(RecipeType<T> recipeType) {
@@ -6905,7 +6953,7 @@ index 8374eb5c641ec35aa0abed70d3d90351ffc23bbc..c666bf6dd81916a6eb12d951ab81568e
      }
  
      public <C extends Container, T extends Recipe<C>> NonNullList<ItemStack> getRemainingItemsFor(RecipeType<T> recipeType, C container, Level level) {
-@@ -101,7 +101,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
+@@ -100,7 +100,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
      }
  
      public Optional<? extends Recipe<?>> byKey(ResourceLocation resourceLocation) {
@@ -7040,7 +7088,7 @@ index e0b06e5d320e3f5a78a76a45ee04d5450e93e7c6..251e19c288d7d60ead6b034e37d43050
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 366a06549f0b4e24dbf00b5291c2d6be32a31f3d..6721d61426975c0c7236ac8afa7b1c094d2a9dd5 100644
+index 2d6b999a113049e1b9e0fb33cb9e2546c6308793..7c81f013a092efc1d836008410a77cdcb12fc715 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 @@ -80,13 +80,14 @@ public final class NaturalSpawner {
@@ -7789,7 +7837,7 @@ index 671f833f25c38624443bbdad8b06069c7779c1e0..45a78318e68e373e169246944116e235
                                  structureFeatureManager.setStartForFeature(sectionPos, structureFeature, structureStart4, chunkAccess);
                                  continue label48;
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
-index a7d7f5a876baa4cbcae753584700b78e8a40dbee..56c457e169217f27166d23fc58e6ff0336f55a8e 100644
+index 1c27bceaeb48ae97e0f65385b776941c2eda24f0..e3913f77b19442736e15d6ef4cffaa0feb54df9c 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
 @@ -43,21 +43,24 @@ public class ChunkStatus {
@@ -9735,7 +9783,7 @@ index b2be92a87da95e916d39ae7a2952422a27be53cf..b4152f47ad3e31db882264e1e68aeb79
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java b/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
-index 3622092c7fb3b1b551e4b3924bd45d304b57779a..523a25ab40146eb36bc5150f567b1531206274ab 100644
+index 648ef2505e9df60755b41e9805a802e36ff08e71..5429160ba536ad643d81ff466d13406311a86e81 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
 @@ -130,7 +130,7 @@ public class StructureTemplate {
@@ -9874,7 +9922,7 @@ index 7cadd6ef88f0904ce5748e269f6713840d416739..a97e8481af27dc6692b8d187ab751098
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index 1aaea0c6ae06d58fb4120a03ae9d02604005f292..beb7c3ec47bc8ba60ef840e7604f74d61f1da3ea 100644
+index a95532f192153d44970b2940c689cc6ea41dff56..8f1ad07637d8e6970fc19d987120d0effa49d283 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 @@ -86,20 +86,20 @@ public class LevelStorageSource {
