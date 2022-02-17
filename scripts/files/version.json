@@ -107,10 +107,10 @@
   },
   "assetIndex": {
     "id": "1.18",
-    "sha1": "77ed3c6d51997991b61b8e5a80688602a816115a",
+    "sha1": "cb628cc0e2e76461209692e4d74b5c6fdd0fab9e",
     "size": 348331,
-    "totalSize": 466466695,
-    "url": "https://launchermeta.mojang.com/v1/packages/77ed3c6d51997991b61b8e5a80688602a816115a/1.18.json"
+    "totalSize": 466540516,
+    "url": "https://launchermeta.mojang.com/v1/packages/cb628cc0e2e76461209692e4d74b5c6fdd0fab9e/1.18.json"
   },
   "assets": "1.18",
   "logging": {
@@ -133,40 +133,40 @@
     {
       "downloads": {
         "artifact": {
-          "path": "com/mojang/text2speech/1.11.4/text2speech-1.11.4.jar",
-          "sha1": "f378f889797edd7df8d32272c06ca80a1b6b0f58",
-          "size": 13164,
-          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.11.4/text2speech-1.11.4.jar"
+          "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar",
+          "sha1": "1f618f522dbdd93218c270bcfd8f8dd84be31717",
+          "size": 12874,
+          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar"
         }
       },
-      "name": "com.mojang:text2speech:1.11.4"
+      "name": "com.mojang:text2speech:1.12.4"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "com/mojang/text2speech/1.11.4/text2speech-1.11.4.jar",
-          "sha1": "f378f889797edd7df8d32272c06ca80a1b6b0f58",
-          "size": 13164,
-          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.11.4/text2speech-1.11.4.jar"
+          "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar",
+          "sha1": "1f618f522dbdd93218c270bcfd8f8dd84be31717",
+          "size": 12874,
+          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar"
         },
         "classifiers": {
           "natives-linux": {
-            "path": "com/mojang/text2speech/1.11.4/text2speech-1.11.4-natives-linux.jar",
-            "sha1": "ac641755a2a841d1fca9e660194f42523ee5cfe0",
+            "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-linux.jar",
+            "sha1": "9571b1360a268311d7fa625614186965914f0215",
             "size": 7833,
-            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.11.4/text2speech-1.11.4-natives-linux.jar"
+            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-linux.jar"
           },
           "natives-windows": {
-            "path": "com/mojang/text2speech/1.11.4/text2speech-1.11.4-natives-windows.jar",
-            "sha1": "c0b242c0091be5acbf303263c7eeeaedd70544c7",
+            "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-windows.jar",
+            "sha1": "7e37c535186a058d730ec03491182fae2efb57be",
             "size": 81379,
-            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.11.4/text2speech-1.11.4-natives-windows.jar"
+            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-windows.jar"
           },
           "sources": {
-            "path": "com/mojang/text2speech/1.11.4/text2speech-1.11.4-sources.jar",
-            "sha1": "772a37dd77417571e6f119a8d306f0c14c2ee410",
-            "size": 5332,
-            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.11.4/text2speech-1.11.4-sources.jar"
+            "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4-sources.jar",
+            "sha1": "2c08f3a985dfc7f86dcd705a360e5e1a13eac068",
+            "size": 5242,
+            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4-sources.jar"
           }
         }
       },
@@ -175,7 +175,7 @@
           "META-INF/"
         ]
       },
-      "name": "com.mojang:text2speech:1.11.4",
+      "name": "com.mojang:text2speech:1.12.4",
       "natives": {
         "linux": "natives-linux",
         "windows": "natives-windows"
@@ -229,10 +229,10 @@
       ]
     }
   ],
-  "id": "22w06a-deobf",
+  "id": "22w07a-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2022-02-14T00:00:00+00:00",
-  "time": "2022-02-14T00:00:00+00:00",
+  "releaseTime": "2022-02-17T00:00:00+00:00",
+  "time": "2022-02-17T00:00:00+00:00",
   "type": "snapshot"
 }
