@@ -438,10 +438,10 @@ index 762a8b578ac3805a6d251e81b46acc4c3aee24ad..d0a5166e52c93543b8eeecb501829058
              options.save();
          });
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index f25a2ad900481efea22c14b88db8e52a0b8eb4cf..75a344eba5c0e3a2d692a2e82304f01057f7dee3 100644
+index a6b3c4051c411255ec7d7216b02fe0d6330ee0b8..951482470eb4f04416ff03c01c4c9e68f89bc420 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -516,7 +516,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -517,7 +517,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen = this.window.isFullscreen();
              }
          } else {
@@ -450,7 +450,7 @@ index f25a2ad900481efea22c14b88db8e52a0b8eb4cf..75a344eba5c0e3a2d692a2e82304f010
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -962,7 +962,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -971,7 +971,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -459,7 +459,7 @@ index f25a2ad900481efea22c14b88db8e52a0b8eb4cf..75a344eba5c0e3a2d692a2e82304f010
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2223,13 +2223,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2232,13 +2232,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -476,7 +476,7 @@ index f25a2ad900481efea22c14b88db8e52a0b8eb4cf..75a344eba5c0e3a2d692a2e82304f010
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2251,7 +2251,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2260,7 +2260,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -543,7 +543,7 @@ index 2cad6e9cebcf278c5fc1aadc961dcbe5733f4b04..ce1af577897cccb7c7ab06b804ba6a61
      }
  
 diff --git a/src/main/java/net/minecraft/client/PeriodicNotificationManager.java b/src/main/java/net/minecraft/client/PeriodicNotificationManager.java
-index 1c6c57fef95ff8ae52eb91d63ea31d2367916df4..6a6bc15f21daf8f90301ea44de859147683371c4 100644
+index 7d77a35de1466fa8efe9328afce55b8125ea9174..a282f9371ba3e1dbfcaf964006c3c6b4ef6b9845 100644
 --- a/src/main/java/net/minecraft/client/PeriodicNotificationManager.java
 +++ b/src/main/java/net/minecraft/client/PeriodicNotificationManager.java
 @@ -31,7 +31,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
@@ -555,7 +555,7 @@ index 1c6c57fef95ff8ae52eb91d63ea31d2367916df4..6a6bc15f21daf8f90301ea44de859147
      private static final Logger LOGGER = LogUtils.getLogger();
      private final ResourceLocation notifications;
      private final Object2BooleanFunction<String> selector;
-@@ -135,34 +135,7 @@ public class PeriodicNotificationManager extends SimplePreparableReloadListener<
+@@ -135,33 +135,12 @@ public class PeriodicNotificationManager extends SimplePreparableReloadListener<
          return list.stream().mapToLong((notification) -> notification.delay).min().orElse(0L);
      }
  
@@ -566,7 +566,7 @@ index 1c6c57fef95ff8ae52eb91d63ea31d2367916df4..6a6bc15f21daf8f90301ea44de859147
 -        final String message;
 -
 -        public Notification(long l, long l2, String s, String s2) {
--            this.delay = l;
+-            this.delay = l != 0L ? l : l2;
 -            this.period = l2;
 -            this.title = s;
 -            this.message = s2;
@@ -586,11 +586,15 @@ index 1c6c57fef95ff8ae52eb91d63ea31d2367916df4..6a6bc15f21daf8f90301ea44de859147
 -
 -        public String message() {
 -            return this.message;
--        }
 +    public static record Notification(long delay, long period, String title, String message) {
++        public Notification(long delay, long period, String title, String message) {
++            this.delay = delay != 0L ? delay : period;
++            this.period = period;
++            this.title = title;
++            this.message = message;
+         }
      }
  
-     static class NotificationTask extends TimerTask {
 diff --git a/src/main/java/net/minecraft/client/gui/Font.java b/src/main/java/net/minecraft/client/gui/Font.java
 index e6286e22864e1fa019a7ea9eaee238a96aa8e9fd..acd74e224159ef69b6190f59b93c07bffeb2c7fa 100644
 --- a/src/main/java/net/minecraft/client/gui/Font.java
@@ -1545,19 +1549,81 @@ index e8441f102e40efc52902d75cbbd8c5097c46340a..54eff2a92c61da5281d152a6d870b569
  
      public static enum Kind {
 diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index fd759dd252f28240c5d2c7e742b1f31e014644d2..a30dd386f84f9eec08de2ccfb7df8f6dd4ecc2d8 100644
+index 9804e7d0a53252fa4aa6328959a534835d6e760e..e419e07858f1aa9b567a0da67c64d58c687a4948 100644
 --- a/src/main/java/net/minecraft/core/MappedRegistry.java
 +++ b/src/main/java/net/minecraft/core/MappedRegistry.java
-@@ -189,7 +189,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+@@ -104,13 +104,13 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+ 
+         Holder.Reference<T> reference;
+         if (this.customHolderProvider != null) {
+-            reference = (Holder.Reference)this.customHolderProvider.apply(object);
+-            Holder.Reference<T> reference2 = (Holder.Reference)this.byKey.put(resourceKey, reference);
++            reference = this.customHolderProvider.apply(object);
++            Holder.Reference<T> reference2 = this.byKey.put(resourceKey, reference);
+             if (reference2 != null && reference2 != reference) {
+                 throw new IllegalStateException("Invalid holder present for key " + resourceKey);
+             }
+         } else {
+-            reference = (Holder.Reference)this.byKey.computeIfAbsent(resourceKey, (resourceKeyx) -> Holder.Reference.createStandAlone(this, resourceKeyx));
++            reference = this.byKey.computeIfAbsent(resourceKey, (resourceKeyx) -> Holder.Reference.createStandAlone(this, resourceKeyx));
+         }
+ 
+         this.byLocation.put(resourceKey.location(), reference);
+@@ -128,7 +128,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+         this.validateWrite(resourceKey);
+         Validate.notNull(resourceKey);
+         Validate.notNull(object);
+-        Holder<T> holder = (Holder)this.byKey.get(resourceKey);
++        Holder<T> holder = this.byKey.get(resourceKey);
+         T object2 = (T)(holder != null && holder.isBound() ? holder.value() : null);
+         int i;
+         if (object2 == null) {
+@@ -149,12 +149,12 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+ 
+     @Nullable
+     public ResourceLocation getKey(T object) {
+-        Holder.Reference<T> reference = (Holder.Reference)this.byValue.get(object);
++        Holder.Reference<T> reference = this.byValue.get(object);
+         return reference != null ? reference.key().location() : null;
      }
  
-     public Iterator<T> iterator() {
--        return this.byId.stream().mapMulti((reference, consumer) -> {
-+        return (Iterator<T>) this.byId.stream().mapMulti((reference, consumer) -> {
-             if (reference != null) {
-                 consumer.accept(reference.value());
-             }
-@@ -199,7 +199,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+     public Optional<ResourceKey<T>> getResourceKey(T object) {
+-        return Optional.ofNullable((Holder.Reference)this.byValue.get(object)).map(Holder.Reference::key);
++        return Optional.ofNullable(this.byValue.get(object)).map(Holder.Reference::key);
+     }
+ 
+     public int getId(@Nullable T object) {
+@@ -163,24 +163,24 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+ 
+     @Nullable
+     public T get(@Nullable ResourceKey<T> resourceKey) {
+-        return getValueFromNullable((Holder.Reference)this.byKey.get(resourceKey));
++        return getValueFromNullable(this.byKey.get(resourceKey));
+     }
+ 
+     @Nullable
+     public T byId(int i) {
+-        return (T)(i >= 0 && i < this.byId.size() ? getValueFromNullable((Holder.Reference)this.byId.get(i)) : null);
++        return (T)(i >= 0 && i < this.byId.size() ? getValueFromNullable(this.byId.get(i)) : null);
+     }
+ 
+     public Optional<Holder<T>> getHolder(int i) {
+-        return i >= 0 && i < this.byId.size() ? Optional.ofNullable((Holder)this.byId.get(i)) : Optional.empty();
++        return i >= 0 && i < this.byId.size() ? Optional.ofNullable(this.byId.get(i)) : Optional.empty();
+     }
+ 
+     public Optional<Holder<T>> getHolder(ResourceKey<T> resourceKey) {
+-        return Optional.ofNullable((Holder)this.byKey.get(resourceKey));
++        return Optional.ofNullable(this.byKey.get(resourceKey));
+     }
+ 
+     public Holder<T> getOrCreateHolder(ResourceKey<T> resourceKey) {
+-        return (Holder)this.byKey.computeIfAbsent(resourceKey, (resourceKeyx) -> {
++        return this.byKey.computeIfAbsent(resourceKey, (resourceKeyx) -> {
+             if (this.customHolderProvider != null) {
+                 throw new IllegalStateException("This registry can't create new holders without value");
+             } else {
+@@ -208,7 +208,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
  
      @Nullable
      public T get(@Nullable ResourceLocation resourceLocation) {
@@ -1566,6 +1632,77 @@ index fd759dd252f28240c5d2c7e742b1f31e014644d2..a30dd386f84f9eec08de2ccfb7df8f6d
          return getValueFromNullable(reference);
      }
  
+@@ -234,14 +234,14 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+     }
+ 
+     public Stream<Pair<TagKey<T>, HolderSet.Named<T>>> getTags() {
+-        return this.tags.entrySet().stream().map((entry) -> Pair.of((TagKey)entry.getKey(), (HolderSet.Named)entry.getValue()));
++        return this.tags.entrySet().stream().map((entry) -> Pair.of(entry.getKey(), entry.getValue()));
+     }
+ 
+     public HolderSet.Named<T> getOrCreateTag(TagKey<T> tagKey) {
+-        HolderSet.Named<T> named = (HolderSet.Named)this.tags.get(tagKey);
++        HolderSet.Named<T> named = this.tags.get(tagKey);
+         if (named == null) {
+             named = this.createTag(tagKey);
+-            Map<TagKey<T>, HolderSet.Named<T>> map = new IdentityHashMap(this.tags);
++            Map<TagKey<T>, HolderSet.Named<T>> map = new IdentityHashMap<>(this.tags);
+             map.put(tagKey, named);
+             this.tags = map;
+         }
+@@ -275,7 +275,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+ 
+     public Registry<T> freeze() {
+         this.frozen = true;
+-        List<ResourceLocation> list = this.byLocation.entrySet().stream().filter((entry) -> !((Holder.Reference)entry.getValue()).isBound()).map(Entry::getKey).sorted().toList();
++        List<ResourceLocation> list = this.byLocation.entrySet().stream().filter((entry) -> !entry.getValue().isBound()).map(Entry::getKey).sorted().toList();
+         if (!list.isEmpty()) {
+             throw new IllegalStateException("Unbound values in registry: " + list);
+         } else {
+@@ -296,19 +296,19 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+         if (this.customHolderProvider == null) {
+             throw new IllegalStateException("This registry can't create intrusive holders");
+         } else if (!this.frozen && this.intrusiveHolderCache != null) {
+-            return (Holder.Reference)this.intrusiveHolderCache.computeIfAbsent(object, (objectx) -> Holder.Reference.createIntrusive(this, (T)objectx));
++            return this.intrusiveHolderCache.computeIfAbsent(object, (objectx) -> Holder.Reference.createIntrusive(this, (T)objectx));
+         } else {
+             throw new IllegalStateException("Registry is already frozen");
+         }
+     }
+ 
+     public Optional<HolderSet.Named<T>> getTag(TagKey<T> tagKey) {
+-        return Optional.ofNullable((HolderSet.Named)this.tags.get(tagKey));
++        return Optional.ofNullable(this.tags.get(tagKey));
+     }
+ 
+     public void bindTags(Map<TagKey<T>, List<Holder<T>>> map) {
+-        Map<Holder.Reference<T>, List<TagKey<T>>> map2 = new IdentityHashMap();
+-        this.byKey.values().forEach((reference) -> map2.put(reference, new ArrayList()));
++        Map<Holder.Reference<T>, List<TagKey<T>>> map2 = new IdentityHashMap<>();
++        this.byKey.values().forEach((reference) -> map2.put(reference, new ArrayList<>()));
+         map.forEach((tagKey, list) -> {
+             for(Holder<T> holder : list) {
+                 if (!holder.isValidInRegistry(this)) {
+@@ -319,7 +319,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+                     throw new IllegalStateException("Found direct holder " + holder + " value in tag " + tagKey);
+                 }
+ 
+-                Holder.Reference<T> reference = (Holder.Reference)holder;
++                Holder.Reference<T> reference = (Holder.Reference<T>)holder;
+                 (map2.get(reference)).add(tagKey);
+             }
+ 
+@@ -329,8 +329,8 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+             LOGGER.warn("Not all defined tags for registry {} are present in data pack: {}", this.key(), set.stream().map((tagKey) -> tagKey.location().toString()).sorted().collect(Collectors.joining(", ")));
+         }
+ 
+-        Map<TagKey<T>, HolderSet.Named<T>> map3 = new IdentityHashMap(this.tags);
+-        map.forEach((tagKey, list) -> ((HolderSet.Named)map3.computeIfAbsent(tagKey, this::createTag)).bind(list));
++        Map<TagKey<T>, HolderSet.Named<T>> map3 = new IdentityHashMap<>(this.tags);
++        map.forEach((tagKey, list) -> map3.computeIfAbsent(tagKey, this::createTag).bind(list));
+         map2.forEach(Holder.Reference::bindTags);
+         this.tags = map3;
+     }
 diff --git a/src/main/java/net/minecraft/core/NonNullList.java b/src/main/java/net/minecraft/core/NonNullList.java
 index c2190c60e178443cd0a49d4cf42b0febebc2f346..4460f34e2589d9987affa1f40e0ba4c7e2ba3c4d 100644
 --- a/src/main/java/net/minecraft/core/NonNullList.java
@@ -1580,7 +1717,7 @@ index c2190c60e178443cd0a49d4cf42b0febebc2f346..4460f34e2589d9987affa1f40e0ba4c7
  
      @SafeVarargs
 diff --git a/src/main/java/net/minecraft/core/Registry.java b/src/main/java/net/minecraft/core/Registry.java
-index f3f9d5ea9ce0540fd287fb3e8ae904a81ee39f4a..650594c12f18c401b465356a4fa3424cfeca8327 100644
+index 1f5832c966aa926c068b44490f531e209d97eea5..9ac723b6f5786985d2ef5709f9c393e37cf67dea 100644
 --- a/src/main/java/net/minecraft/core/Registry.java
 +++ b/src/main/java/net/minecraft/core/Registry.java
 @@ -237,8 +237,8 @@ public abstract class Registry<T> implements Keyable, IdMap<T> {
@@ -1628,7 +1765,7 @@ index f3f9d5ea9ce0540fd287fb3e8ae904a81ee39f4a..650594c12f18c401b465356a4fa3424c
          };
      }
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index 561708b73cb6e8b7c8dd52429218bafd71dadc63..cf26c2c46518b2f72b5cdee751c706a2505786a4 100644
+index 33f0ce82f67933ffe5ca4e082ec9ebc5b3dd36be..3cec1f05622347942dd31b95459c31f79330f00e 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
 @@ -42,7 +42,20 @@ import org.slf4j.Logger;
@@ -1871,7 +2008,7 @@ index 3fe23a4976ea5f885a43a70b00ba5f40ac27b518..090ff25a63d34d9f183c94c73ab1c15c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/data/BuiltinRegistries.java b/src/main/java/net/minecraft/data/BuiltinRegistries.java
-index 2229bc98913f2910b780e93b755361cee3cce78b..c5a4730b5faedc2f2dd6d0f5c7e9ba5ba24eb663 100644
+index 94ba9a1aee9f371af3987dcb75ba55c25ec5727d..9ef70a35c23143b4944bf94b08bff49a5d6c6dc2 100644
 --- a/src/main/java/net/minecraft/data/BuiltinRegistries.java
 +++ b/src/main/java/net/minecraft/data/BuiltinRegistries.java
 @@ -59,12 +59,12 @@ public class BuiltinRegistries {
@@ -1890,10 +2027,10 @@ index 2229bc98913f2910b780e93b755361cee3cce78b..c5a4730b5faedc2f2dd6d0f5c7e9ba5b
  
      public static <T> Holder<T> register(Registry<T> registry, String s, T object) {
 diff --git a/src/main/java/net/minecraft/data/info/RegistryDumpReport.java b/src/main/java/net/minecraft/data/info/RegistryDumpReport.java
-index aa8263159a9c8f72932f0033823d397f35207524..ef803ccc0242559925583469c39e274b963ac109 100644
+index dd07c40b98c2d5e84e240bf5f1f94f3e4fecd06f..37fcd35d96cfb01a8c31174e0685574970a62496 100644
 --- a/src/main/java/net/minecraft/data/info/RegistryDumpReport.java
 +++ b/src/main/java/net/minecraft/data/info/RegistryDumpReport.java
-@@ -35,7 +35,7 @@ public class RegistryDumpReport implements DataProvider {
+@@ -35,14 +35,14 @@ public class RegistryDumpReport implements DataProvider {
              jsonObject.addProperty("default", resourceLocation.toString());
          }
  
@@ -1901,7 +2038,17 @@ index aa8263159a9c8f72932f0033823d397f35207524..ef803ccc0242559925583469c39e274b
 +        int i = ((Registry) Registry.REGISTRY).getId(registry);
          jsonObject.addProperty("protocol_id", i);
          JsonObject jsonObject2 = new JsonObject();
- 
+         registry.holders().forEach((reference) -> {
+             T object = (T)reference.value();
+-            int i = registry.getId(object);
+-            JsonObject jsonObject2 = new JsonObject();
+-            jsonObject2.addProperty("protocol_id", i);
++            int iIn = registry.getId(object);
++            JsonObject jsonObject2In = new JsonObject();
++            jsonObject2In.addProperty("protocol_id", iIn);
+             jsonObject2.add(reference.key().location().toString(), jsonObject2);
+         });
+         jsonObject.add("entries", jsonObject2);
 diff --git a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java b/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
 index b5cae59ce25c648a8c3189fc0727a1e82a565e72..5231a72d8c09766ca41ca596f60672816fb46a1a 100644
 --- a/src/main/java/net/minecraft/data/models/BlockModelGenerators.java
@@ -2011,41 +2158,6 @@ index a2a479170b463f98a2742bd1c2ad3320140bffe0..8b9dbad948dcd63b8d12add9cc47503d
      }
  
      private static void generateRecipes(Consumer<FinishedRecipe> consumer, BlockFamily blockFamily) {
-diff --git a/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java b/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java
-index d27dbe21bd774f21ce5c7116180012b8e2cae34c..f5056c213b4ba78c798f80554b079f18b58ba507 100644
---- a/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java
-+++ b/src/main/java/net/minecraft/data/worldgen/StructureFeatures.java
-@@ -75,18 +75,18 @@ public class StructureFeatures {
-     }
- 
-     public static void registerStructures(StructureFeatures.StructureConfigConsumer structureConfigConsumer) {
--        Set<ResourceKey<Biome>> set = ImmutableSet.builder().add(Biomes.DEEP_FROZEN_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN).build();
--        Set<ResourceKey<Biome>> set2 = ImmutableSet.builder().add(Biomes.FROZEN_OCEAN).add(Biomes.OCEAN).add(Biomes.COLD_OCEAN).add(Biomes.LUKEWARM_OCEAN).add(Biomes.WARM_OCEAN).addAll(set).build();
--        Set<ResourceKey<Biome>> set3 = ImmutableSet.builder().add(Biomes.BEACH).add(Biomes.SNOWY_BEACH).build();
--        Set<ResourceKey<Biome>> set4 = ImmutableSet.builder().add(Biomes.RIVER).add(Biomes.FROZEN_RIVER).build();
--        Set<ResourceKey<Biome>> set5 = ImmutableSet.builder().add(Biomes.MEADOW).add(Biomes.FROZEN_PEAKS).add(Biomes.JAGGED_PEAKS).add(Biomes.STONY_PEAKS).add(Biomes.SNOWY_SLOPES).build();
--        Set<ResourceKey<Biome>> set6 = ImmutableSet.builder().add(Biomes.BADLANDS).add(Biomes.ERODED_BADLANDS).add(Biomes.WOODED_BADLANDS).build();
--        Set<ResourceKey<Biome>> set7 = ImmutableSet.builder().add(Biomes.WINDSWEPT_HILLS).add(Biomes.WINDSWEPT_FOREST).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).build();
--        Set<ResourceKey<Biome>> set8 = ImmutableSet.builder().add(Biomes.TAIGA).add(Biomes.SNOWY_TAIGA).add(Biomes.OLD_GROWTH_PINE_TAIGA).add(Biomes.OLD_GROWTH_SPRUCE_TAIGA).build();
--        Set<ResourceKey<Biome>> set9 = ImmutableSet.builder().add(Biomes.BAMBOO_JUNGLE).add(Biomes.JUNGLE).add(Biomes.SPARSE_JUNGLE).build();
--        Set<ResourceKey<Biome>> set10 = ImmutableSet.builder().add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(Biomes.DARK_FOREST).add(Biomes.GROVE).build();
--        Set<ResourceKey<Biome>> set11 = ImmutableSet.builder().add(Biomes.NETHER_WASTES).add(Biomes.BASALT_DELTAS).add(Biomes.SOUL_SAND_VALLEY).add(Biomes.CRIMSON_FOREST).add(Biomes.WARPED_FOREST).build();
--        Set<ResourceKey<Biome>> set12 = ImmutableSet.builder().add(Biomes.THE_VOID).add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS).add(Biomes.SNOWY_PLAINS).add(Biomes.ICE_SPIKES).add(Biomes.DESERT).add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.DARK_FOREST).add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(Biomes.OLD_GROWTH_PINE_TAIGA).add(Biomes.OLD_GROWTH_SPRUCE_TAIGA).add(Biomes.TAIGA).add(Biomes.SNOWY_TAIGA).add(Biomes.SAVANNA).add(Biomes.SAVANNA_PLATEAU).add(Biomes.WINDSWEPT_HILLS).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).add(Biomes.WINDSWEPT_FOREST).add(Biomes.WINDSWEPT_SAVANNA).add(Biomes.JUNGLE).add(Biomes.SPARSE_JUNGLE).add(Biomes.BAMBOO_JUNGLE).add(Biomes.BADLANDS).add(Biomes.ERODED_BADLANDS).add(Biomes.WOODED_BADLANDS).add(Biomes.MEADOW).add(Biomes.GROVE).add(Biomes.SNOWY_SLOPES).add(Biomes.FROZEN_PEAKS).add(Biomes.JAGGED_PEAKS).add(Biomes.STONY_PEAKS).add(Biomes.MUSHROOM_FIELDS).add(Biomes.DRIPSTONE_CAVES).add(Biomes.LUSH_CAVES).build();
-+        Set<ResourceKey<Biome>> set = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.DEEP_FROZEN_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN).build();
-+        Set<ResourceKey<Biome>> set2 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.FROZEN_OCEAN).add(Biomes.OCEAN).add(Biomes.COLD_OCEAN).add(Biomes.LUKEWARM_OCEAN).add(Biomes.WARM_OCEAN).addAll(set).build();
-+        Set<ResourceKey<Biome>> set3 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.BEACH).add(Biomes.SNOWY_BEACH).build();
-+        Set<ResourceKey<Biome>> set4 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.RIVER).add(Biomes.FROZEN_RIVER).build();
-+        Set<ResourceKey<Biome>> set5 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.MEADOW).add(Biomes.FROZEN_PEAKS).add(Biomes.JAGGED_PEAKS).add(Biomes.STONY_PEAKS).add(Biomes.SNOWY_SLOPES).build();
-+        Set<ResourceKey<Biome>> set6 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.BADLANDS).add(Biomes.ERODED_BADLANDS).add(Biomes.WOODED_BADLANDS).build();
-+        Set<ResourceKey<Biome>> set7 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.WINDSWEPT_HILLS).add(Biomes.WINDSWEPT_FOREST).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).build();
-+        Set<ResourceKey<Biome>> set8 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.TAIGA).add(Biomes.SNOWY_TAIGA).add(Biomes.OLD_GROWTH_PINE_TAIGA).add(Biomes.OLD_GROWTH_SPRUCE_TAIGA).build();
-+        Set<ResourceKey<Biome>> set9 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.BAMBOO_JUNGLE).add(Biomes.JUNGLE).add(Biomes.SPARSE_JUNGLE).build();
-+        Set<ResourceKey<Biome>> set10 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(Biomes.DARK_FOREST).add(Biomes.GROVE).build();
-+        Set<ResourceKey<Biome>> set11 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.NETHER_WASTES).add(Biomes.BASALT_DELTAS).add(Biomes.SOUL_SAND_VALLEY).add(Biomes.CRIMSON_FOREST).add(Biomes.WARPED_FOREST).build();
-+        Set<ResourceKey<Biome>> set12 = ImmutableSet.<ResourceKey<Biome>>builder().add(Biomes.THE_VOID).add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS).add(Biomes.SNOWY_PLAINS).add(Biomes.ICE_SPIKES).add(Biomes.DESERT).add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.DARK_FOREST).add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(Biomes.OLD_GROWTH_PINE_TAIGA).add(Biomes.OLD_GROWTH_SPRUCE_TAIGA).add(Biomes.TAIGA).add(Biomes.SNOWY_TAIGA).add(Biomes.SAVANNA).add(Biomes.SAVANNA_PLATEAU).add(Biomes.WINDSWEPT_HILLS).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).add(Biomes.WINDSWEPT_FOREST).add(Biomes.WINDSWEPT_SAVANNA).add(Biomes.JUNGLE).add(Biomes.SPARSE_JUNGLE).add(Biomes.BAMBOO_JUNGLE).add(Biomes.BADLANDS).add(Biomes.ERODED_BADLANDS).add(Biomes.WOODED_BADLANDS).add(Biomes.MEADOW).add(Biomes.GROVE).add(Biomes.SNOWY_SLOPES).add(Biomes.FROZEN_PEAKS).add(Biomes.JAGGED_PEAKS).add(Biomes.STONY_PEAKS).add(Biomes.MUSHROOM_FIELDS).add(Biomes.DRIPSTONE_CAVES).add(Biomes.LUSH_CAVES).build();
-         register(structureConfigConsumer, BURIED_TREASURE, set3);
-         register(structureConfigConsumer, DESERT_PYRAMID, Biomes.DESERT);
-         register(structureConfigConsumer, IGLOO, Biomes.SNOWY_TAIGA);
 diff --git a/src/main/java/net/minecraft/data/worldgen/placement/PlacementUtils.java b/src/main/java/net/minecraft/data/worldgen/placement/PlacementUtils.java
 index f59634970605295e019f607bf33f3fbf9aca38b0..f57417b184189a4cc3e987b7efe14f48d9428199 100644
 --- a/src/main/java/net/minecraft/data/worldgen/placement/PlacementUtils.java
@@ -3032,7 +3144,7 @@ index cd54237a02ff0a183fb2d92b38540c540e21db77..edcbaab9e2d0e741d5dbde9532068263
                          LOGGER.error("Failed to load function {}", resourceLocation, throwable);
                      } else {
 diff --git a/src/main/java/net/minecraft/server/WorldStem.java b/src/main/java/net/minecraft/server/WorldStem.java
-index a26a6b983174d27c5ae02c351990bfff0f081796..9496ea5d00330936cac2e2e46433091ab362c8c4 100644
+index a0ba297f939564c4a4951c900dc86dcb55dd3465..935d5f4c250e162a61022561ae368e321ddaa399 100644
 --- a/src/main/java/net/minecraft/server/WorldStem.java
 +++ b/src/main/java/net/minecraft/server/WorldStem.java
 @@ -21,19 +21,12 @@ import net.minecraft.world.level.DataPackConfig;
@@ -3059,9 +3171,9 @@ index a26a6b983174d27c5ae02c351990bfff0f081796..9496ea5d00330936cac2e2e46433091a
 +        WorldData worldData
 +) implements AutoCloseable {
      public static CompletableFuture<WorldStem> load(WorldStem.InitConfig initConfig, WorldStem.DataPackConfigSupplier dataPackConfigSupplier, WorldStem.WorldDataSupplier worldDataSupplier, Executor executor, Executor executor2) {
-         DataPackConfig dataPackConfig = (DataPackConfig)dataPackConfigSupplier.get();
-         DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(initConfig.packRepository(), dataPackConfig, initConfig.safeMode());
-@@ -58,22 +51,6 @@ public record WorldStem(CloseableResourceManager a, ReloadableServerResources b,
+         try {
+             DataPackConfig dataPackConfig = (DataPackConfig)dataPackConfigSupplier.get();
+@@ -62,22 +55,6 @@ public record WorldStem(CloseableResourceManager a, ReloadableServerResources b,
          this.dataPackResources.updateRegistryTags(this.registryAccess);
      }
  
@@ -3084,7 +3196,7 @@ index a26a6b983174d27c5ae02c351990bfff0f081796..9496ea5d00330936cac2e2e46433091a
      @FunctionalInterface
      public interface DataPackConfigSupplier extends Supplier<DataPackConfig> {
          static WorldStem.DataPackConfigSupplier loadFromWorld(LevelStorageSource.LevelStorageAccess levelStorageAccess) {
-@@ -88,34 +65,7 @@ public record WorldStem(CloseableResourceManager a, ReloadableServerResources b,
+@@ -92,34 +69,7 @@ public record WorldStem(CloseableResourceManager a, ReloadableServerResources b,
          }
      }
  
@@ -3757,12 +3869,12 @@ index c337a6dc8cc16260f2038439027065ad77839128..487da6925055ec72c437165a15053e8d
      }
  
 diff --git a/src/main/java/net/minecraft/util/CubicSpline.java b/src/main/java/net/minecraft/util/CubicSpline.java
-index 5353c0a668979b6a0361f733a07ab5cb8333d50e..ce757c9c91efef66ce049a4aed4a2062ffaaed10 100644
+index 22bce1869204b315082fad64aa016358cdf2e441..7949a82c4b3615db27cc8243ddba1b508bf93bf8 100644
 --- a/src/main/java/net/minecraft/util/CubicSpline.java
 +++ b/src/main/java/net/minecraft/util/CubicSpline.java
-@@ -18,45 +18,24 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
-     @VisibleForDebug
-     String parityString();
+@@ -22,45 +22,24 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+ 
+     float max();
  
 +    record Point<C>(float location, CubicSpline<C> value, float derivative) {
 +    }
@@ -3814,7 +3926,7 @@ index 5353c0a668979b6a0361f733a07ab5cb8333d50e..ce757c9c91efef66ce049a4aed4a2062
                  }
  
                  return new CubicSpline.Multipoint(toFloatFunction, floats, builder.build(), floats2);
-@@ -104,7 +83,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+@@ -108,7 +87,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
          }
  
          public CubicSpline.Builder<C> addPoint(float f, float f2, float f3) {
@@ -3823,7 +3935,7 @@ index 5353c0a668979b6a0361f733a07ab5cb8333d50e..ce757c9c91efef66ce049a4aed4a2062
          }
  
          public CubicSpline.Builder<C> addPoint(float f, CubicSpline<C> cubicSpline, float f2) {
-@@ -128,13 +107,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+@@ -132,13 +111,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
      }
  
      @VisibleForDebug
@@ -3838,9 +3950,9 @@ index 5353c0a668979b6a0361f733a07ab5cb8333d50e..ce757c9c91efef66ce049a4aed4a2062
          public float apply(C object) {
              return this.value;
          }
-@@ -142,28 +115,13 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
-         public String parityString() {
-             return String.format("k=%.3f", this.value);
+@@ -154,28 +127,13 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+         public float max() {
+             return this.value;
          }
 -
 -        public float value() {
@@ -3871,9 +3983,9 @@ index 5353c0a668979b6a0361f733a07ab5cb8333d50e..ce757c9c91efef66ce049a4aed4a2062
          }
  
          public float apply(C object) {
-@@ -198,21 +156,5 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
-         private String toString(float[] floats) {
-             return "[" + (String)IntStream.range(0, floats.length).mapToDouble((i) -> (double)floats[i]).mapToObj((d) -> String.format(Locale.ROOT, "%.3f", d)).collect(Collectors.joining(", ")) + "]";
+@@ -218,21 +176,5 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+         public float max() {
+             return (float)this.values().stream().mapToDouble(CubicSpline::max).max().orElseThrow();
          }
 -
 -        public ToFloatFunction<C> coordinate() {
@@ -4127,10 +4239,10 @@ index b17fcd036873b57cc9fd203905482f59ccfe82ef..a18d1aa96ddcba1e1665efc8fa8f0b0b
      }
  
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index 3583128c243399a8d36f61c752548da1020eaac8..0806a0f1c1771bc729f924b9276fd3e160f2e420 100644
+index 9b88c0645dd49cbb1541bf03226ae27d50d6d585..09aac0ce7e320397386eb39fcf9755c4f42368ad 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-@@ -566,17 +566,17 @@ public class DataFixers {
+@@ -567,17 +567,17 @@ public class DataFixers {
          dataFixerBuilder.addFixer(new AddNewChoices(schema132, "Added Glow Squid", References.ENTITY));
          dataFixerBuilder.addFixer(new AddNewChoices(schema132, "Added Glow Item Frame", References.ENTITY));
          Schema schema133 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
@@ -5472,6 +5584,23 @@ index 518c64d127f65bbb8f9d1bebfd38ee43bd11ec83..002e4b17d647cbdef70d1e0b275de9a4
      }
  }
 \ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/datafix/fixes/OverreachingTickFix.java b/src/main/java/net/minecraft/util/datafix/fixes/OverreachingTickFix.java
+index 3e5170fa5b84db9e3dd96f6dcf4b3577f2bf24c6..87fcaca84f958f7ace494f3feac556f2fde88882 100644
+--- a/src/main/java/net/minecraft/util/datafix/fixes/OverreachingTickFix.java
++++ b/src/main/java/net/minecraft/util/datafix/fixes/OverreachingTickFix.java
+@@ -25,9 +25,9 @@ public class OverreachingTickFix extends DataFix {
+             return typed.update(DSL.remainderFinder(), (dynamic) -> {
+                 int i = dynamic.get("xPos").asInt(0);
+                 int i2 = dynamic.get("zPos").asInt(0);
+-                Optional<? extends Dynamic<?>> optional2 = dynamic.get("fluid_ticks").get().result();
+-                dynamic = extractOverreachingTicks(dynamic, i, i2, optional2, "neighbor_block_ticks");
+-                return extractOverreachingTicks(dynamic, i, i2, optional2, "neighbor_fluid_ticks");
++                Optional<? extends Dynamic<?>> optional2In = dynamic.get("fluid_ticks").get().result();
++                dynamic = extractOverreachingTicks(dynamic, i, i2, optional2In, "neighbor_block_ticks");
++                return extractOverreachingTicks(dynamic, i, i2, optional2In, "neighbor_fluid_ticks");
+             });
+         });
+     }
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/PoiTypeRename.java b/src/main/java/net/minecraft/util/datafix/fixes/PoiTypeRename.java
 index a38fc4a8565c6290d0f81eee7bf3b9ff6b76bb30..d1c0b71c12f072177115c66895ecfe808996169d 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/PoiTypeRename.java
@@ -5669,10 +5798,10 @@ index 8237b1eac30fc214bbbe7951286360d86b2a931c..157e31cc84e3aba07fd2a7fc0f42064a
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/StructureSettingsFlattenFix.java b/src/main/java/net/minecraft/util/datafix/fixes/StructureSettingsFlattenFix.java
-index 9af01514a766487cd600c31b3dc536fbd4e1a098..7c97c845045e3b441a8510147e7ed89df2990592 100644
+index c96be79bef782b3931d786e1bab196eba5e013e9..4506362a583e7af1f00dfa87aa6cf461ef52d57b 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/StructureSettingsFlattenFix.java
 +++ b/src/main/java/net/minecraft/util/datafix/fixes/StructureSettingsFlattenFix.java
-@@ -26,11 +26,11 @@ public class StructureSettingsFlattenFix extends DataFix {
+@@ -27,11 +27,11 @@ public class StructureSettingsFlattenFix extends DataFix {
  
      private static Pair<Dynamic<?>, Dynamic<?>> fixDimension(Pair<Dynamic<?>, Dynamic<?>> pair) {
          Dynamic<?> dynamic = pair.getSecond();
@@ -5681,11 +5810,12 @@ index 9af01514a766487cd600c31b3dc536fbd4e1a098..7c97c845045e3b441a8510147e7ed89d
      }
  
      private static Dynamic<?> fixStructures(Dynamic<?> dynamic) {
--        Dynamic<?> dynamic2 = (dynamic.get("structures").result().get()).updateMapValues((pair) -> pair.mapSecond((dynamic2) -> dynamic2.set("type", dynamic.createString("minecraft:random_spread"))));
-+        Dynamic<?> dynamic2 = (dynamic.get("structures").result().get()).updateMapValues((pair) -> pair.mapSecond((dynamic2In) -> dynamic2In.set("type", dynamic.createString("minecraft:random_spread"))));
-         Dynamic<?> dynamic3 = (dynamic.get("stronghold").result().get()).set("type", dynamic.createString("minecraft:concentric_rings"));
-         return dynamic2.set("minecraft:stronghold", dynamic3);
+-        Dynamic<?> dynamic2 = dynamic.get("structures").orElseEmptyMap().updateMapValues((pair) -> pair.mapSecond((dynamic2) -> dynamic2.set("type", dynamic.createString("minecraft:random_spread"))));
++        Dynamic<?> dynamic2 = dynamic.get("structures").orElseEmptyMap().updateMapValues((pair) -> pair.mapSecond((dynamic2In) -> dynamic2In.set("type", dynamic.createString("minecraft:random_spread"))));
+         return DataFixUtils.orElse(dynamic.get("stronghold").result().map((dynamic3) -> dynamic2.set("minecraft:stronghold", dynamic3.set("type", dynamic.createString("minecraft:concentric_rings")))), dynamic2);
      }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java b/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java
 index 12addbbbcd00cca0462169afc14248eb1f7d98e2..bb463457dfc98fdc5a0766c25acb780fcbc4bc0c 100644
 --- a/src/main/java/net/minecraft/util/datafix/fixes/TrappedChestBlockEntityFix.java
@@ -7245,7 +7375,7 @@ index 6d2f4d61b5b35e151caf85b7880647ad5362cba2..34363197b004de9821a39942674bc261
          hashMap.put(VillagerProfession.CLERIC, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.ROTTEN_FLESH, 32, 16, 2), new VillagerTrades.ItemsForEmeralds(Items.REDSTONE, 1, 2, 1)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.GOLD_INGOT, 3, 12, 10), new VillagerTrades.ItemsForEmeralds(Items.LAPIS_LAZULI, 1, 1, 5)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.RABBIT_FOOT, 2, 12, 20), new VillagerTrades.ItemsForEmeralds(Blocks.GLOWSTONE, 4, 1, 12, 10)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.SCUTE, 4, 12, 30), new VillagerTrades.EmeraldForItems(Items.GLASS_BOTTLE, 9, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.ENDER_PEARL, 5, 1, 15)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.NETHER_WART, 22, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.EXPERIENCE_BOTTLE, 3, 1, 30)})));
          hashMap.put(VillagerProfession.ARMORER, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.LAVA_BUCKET, 1, 12, 20), new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 20), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 14, 3, 15, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 8, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 8, 3, 30, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 16, 3, 30, 0.2F)})));
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 850a2be148172a1360a11051ffdce26c4389594b..c1230d25ec4abc6c7372102fcb9aff579d8d0e25 100644
+index 5c9117efcc017ec29075c679fdc5c703266f2f1b..56486bd8ad083292058ae1eb68d28cee0ce9280a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -123,7 +123,7 @@ public abstract class Player extends LivingEntity {
@@ -7594,7 +7724,7 @@ index 3d9a6ac3f5dce3a5a56ea746cd0549418b6f917b..4b1cf765c1001ad159d0c01c0c954d2d
          @Nullable
          public Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
-index 2b230f5aece9980209a594c2036072c37bfbf419..80ff863475d7d1792177266381665463527765e3 100644
+index d1c9df5dbd9598332bfa0ab8440b174dcac13b2b..acb43695b098a1525b6eba9205f19411a6c23fe5 100644
 --- a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
 @@ -59,37 +59,13 @@ public abstract class BiomeSource implements BiomeResolver {
@@ -7678,10 +7808,10 @@ index 2b230f5aece9980209a594c2036072c37bfbf419..80ff863475d7d1792177266381665463
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/biome/Climate.java b/src/main/java/net/minecraft/world/level/biome/Climate.java
-index 614402358b51289f942a6ef46ab7787b4091c343..3c46347c7d0e4a826ef9b072c6fe57dab474f27a 100644
+index af4e9c3f92921c5d47550fedc6571ab68d5b510b..63586e4c6047ec4dc62f32f97a4ed3429f777835 100644
 --- a/src/main/java/net/minecraft/world/level/biome/Climate.java
 +++ b/src/main/java/net/minecraft/world/level/biome/Climate.java
-@@ -54,16 +54,9 @@ public class Climate {
+@@ -60,16 +60,9 @@ public class Climate {
          long distance(Climate.RTree.Node<T> var1, long[] var2);
      }
  
@@ -7699,7 +7829,7 @@ index 614402358b51289f942a6ef46ab7787b4091c343..3c46347c7d0e4a826ef9b072c6fe57da
          public static Climate.Parameter point(float f) {
              return span(f, f);
          }
-@@ -103,27 +96,11 @@ public class Climate {
+@@ -109,27 +102,11 @@ public class Climate {
          public Climate.Parameter span(@Nullable Climate.Parameter parameter) {
              return parameter == null ? this : new Climate.Parameter(Math.min(this.min, parameter.min()), Math.max(this.max, parameter.max()));
          }
@@ -7729,7 +7859,7 @@ index 614402358b51289f942a6ef46ab7787b4091c343..3c46347c7d0e4a826ef9b072c6fe57da
          }
  
          public T findValue(Climate.TargetPoint targetPoint) {
-@@ -158,26 +135,9 @@ public class Climate {
+@@ -164,26 +141,9 @@ public class Climate {
          }
      }
  
@@ -7757,7 +7887,7 @@ index 614402358b51289f942a6ef46ab7787b4091c343..3c46347c7d0e4a826ef9b072c6fe57da
          long fitness(Climate.TargetPoint targetPoint) {
              return Mth.square(this.temperature.distance(targetPoint.temperature)) + Mth.square(this.humidity.distance(targetPoint.humidity)) + Mth.square(this.continentalness.distance(targetPoint.continentalness)) + Mth.square(this.erosion.distance(targetPoint.erosion)) + Mth.square(this.depth.distance(targetPoint.depth)) + Mth.square(this.weirdness.distance(targetPoint.weirdness)) + Mth.square(this.offset);
          }
-@@ -185,34 +145,6 @@ public class Climate {
+@@ -191,34 +151,6 @@ public class Climate {
          protected List<Climate.Parameter> parameterSpace() {
              return ImmutableList.of(this.temperature, this.humidity, this.continentalness, this.erosion, this.depth, this.weirdness, new Climate.Parameter(this.offset, this.offset));
          }
@@ -7792,7 +7922,34 @@ index 614402358b51289f942a6ef46ab7787b4091c343..3c46347c7d0e4a826ef9b072c6fe57da
      }
  
      protected static final class RTree<T> {
-@@ -481,69 +413,15 @@ public class Climate {
+@@ -433,25 +365,7 @@ public class Climate {
+         }
+     }
+ 
+-    public static record Sampler(DensityFunction a, DensityFunction b, DensityFunction c, DensityFunction d, DensityFunction e, DensityFunction f, List<Climate.ParameterPoint> g) {
+-        private final DensityFunction temperature;
+-        private final DensityFunction humidity;
+-        private final DensityFunction continentalness;
+-        private final DensityFunction erosion;
+-        private final DensityFunction depth;
+-        private final DensityFunction weirdness;
+-        private final List<Climate.ParameterPoint> spawnTarget;
+-
+-        public Sampler(DensityFunction densityFunction, DensityFunction densityFunction2, DensityFunction densityFunction3, DensityFunction densityFunction4, DensityFunction densityFunction5, DensityFunction densityFunction6, List<Climate.ParameterPoint> list) {
+-            this.temperature = densityFunction;
+-            this.humidity = densityFunction2;
+-            this.continentalness = densityFunction3;
+-            this.erosion = densityFunction4;
+-            this.depth = densityFunction5;
+-            this.weirdness = densityFunction6;
+-            this.spawnTarget = list;
+-        }
+-
++    public static record Sampler(DensityFunction temperature, DensityFunction humidity, DensityFunction continentalness, DensityFunction erosion, DensityFunction depth, DensityFunction weirdness, List<Climate.ParameterPoint> spawnTarget) {
+         public Climate.TargetPoint sample(int i, int i2, int i3) {
+             int i4 = QuartPos.toBlock(i);
+             int i5 = QuartPos.toBlock(i2);
+@@ -539,69 +453,15 @@ public class Climate {
              return new Climate.SpawnFinder.Result(new BlockPos(i, 0, i2), l + l2);
          }
  
@@ -7866,11 +8023,11 @@ index 614402358b51289f942a6ef46ab7787b4091c343..3c46347c7d0e4a826ef9b072c6fe57da
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-index 50049f114d5122a5fda3fc610f994b9572ccd4a9..50ea03a327208534c31cdbd97fc29c7281ec2732 100644
+index 942ae0aaba2d8cb7903c790293f8e8d3b315f9b2..9da2505f366758d1a388fb7878932a7cbfb50bdd 100644
 --- a/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/MultiNoiseBiomeSource.java
-@@ -28,7 +28,7 @@ import net.minecraft.world.level.levelgen.TerrainInfo;
- import net.minecraft.world.level.levelgen.blending.Blender;
+@@ -24,7 +24,7 @@ import net.minecraft.util.ExtraCodecs;
+ import net.minecraft.util.VisibleForDebug;
  
  public class MultiNoiseBiomeSource extends BiomeSource {
 -    public static final MapCodec<MultiNoiseBiomeSource> DIRECT_CODEC;
@@ -7878,8 +8035,8 @@ index 50049f114d5122a5fda3fc610f994b9572ccd4a9..50ea03a327208534c31cdbd97fc29c72
      public static final Codec<MultiNoiseBiomeSource> CODEC = Codec.mapEither(MultiNoiseBiomeSource.PresetInstance.CODEC, DIRECT_CODEC).xmap((either) -> (MultiNoiseBiomeSource)either.map(MultiNoiseBiomeSource.PresetInstance::biomeSource, Function.identity()), (multiNoiseBiomeSource) -> (Either)multiNoiseBiomeSource.preset().map(Either::left).orElseGet(() -> Either.right(multiNoiseBiomeSource))).codec();
      private final Climate.ParameterList<Holder<Biome>> parameters;
      private final Optional<MultiNoiseBiomeSource.PresetInstance> preset;
-@@ -90,13 +90,9 @@ public class MultiNoiseBiomeSource extends BiomeSource {
-         }
+@@ -79,13 +79,9 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+         list.add("Biome builder PV: " + OverworldBiomeBuilder.getDebugStringForPeaksAndValleys(d) + " C: " + overworldBiomeBuilder.getDebugStringForContinentalness((double)f) + " E: " + overworldBiomeBuilder.getDebugStringForErosion((double)f2) + " T: " + overworldBiomeBuilder.getDebugStringForTemperature((double)f3) + " H: " + overworldBiomeBuilder.getDebugStringForHumidity((double)f4));
      }
  
 -    static {
@@ -7893,7 +8050,7 @@ index 50049f114d5122a5fda3fc610f994b9572ccd4a9..50ea03a327208534c31cdbd97fc29c72
          public static final MultiNoiseBiomeSource.Preset OVERWORLD = new MultiNoiseBiomeSource.Preset(new ResourceLocation("overworld"), (registry) -> {
              Builder<Pair<Climate.ParameterPoint, Holder<Biome>>> builder = ImmutableList.builder();
              (new OverworldBiomeBuilder()).addBiomes((pair) -> builder.add(pair.mapSecond(registry::getOrCreateHolder)));
-@@ -125,26 +121,11 @@ public class MultiNoiseBiomeSource extends BiomeSource {
+@@ -114,26 +110,11 @@ public class MultiNoiseBiomeSource extends BiomeSource {
          }
      }
  
@@ -7923,7 +8080,7 @@ index 50049f114d5122a5fda3fc610f994b9572ccd4a9..50ea03a327208534c31cdbd97fc29c72
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java b/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java
-index 40b84db550c88f80892fafe34636eb98f75a2f3d..89426466cd585af7a396c074be6ac1170a93e2ff 100644
+index c34dc739bd6740ef73d9d173389d8626c68c76ab..0b539162868b7227b81116d09b5c886170a00aeb 100644
 --- a/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java
 +++ b/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java
 @@ -302,33 +302,5 @@ public final class TerrainShaper {
@@ -8200,10 +8357,10 @@ index 0b7b4887214e8b52d3209dc0bfff15826e80ad78..afb2bb920207321340ad6d714f80196f
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-index 44fce4c1f2694b7360fe991f1199ffe4c5e34b2c..bb06f8e8664e7551ff87056fef7200b8385ae581 100644
+index 8e7793d8313e018bd4570e3f45db44eb2dc7ee18..a0e1dc5a1e0e58c0ac5b5530364598aec774e14a 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-@@ -402,21 +402,5 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
+@@ -403,21 +403,5 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
          return this;
      }
  
@@ -8228,11 +8385,20 @@ index 44fce4c1f2694b7360fe991f1199ffe4c5e34b2c..bb06f8e8664e7551ff87056fef7200b8
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-index 7fe8cbacf1bb3f68a11933445ef26a1f02fc9ec7..ad32864bceedd0e84e28ab72219074b5599f92ff 100644
+index c84ac6294cceaefbdb8cef2394d2d539e6f49656..f4bc1a54ef06fe28251cef2d7e8daf046ef31c73 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-@@ -283,9 +283,9 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
-                 this.biomeSource.possibleBiomes().map(Holder::value).forEach(set::add);
+@@ -108,7 +108,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+     private void generateRingPositions(StructureFeature<?> structureFeature, ConcentricRingsStructurePlacement concentricRingsStructurePlacement) {
+         if (concentricRingsStructurePlacement.count() != 0) {
+             List<Holder.Reference<ConfiguredStructureFeature<?, ?>>> list = this.getAllConfigurationsFor(structureFeature);
+-            Set<Holder<Biome>> set = list.stream().flatMap((reference) -> ((ConfiguredStructureFeature)reference.value()).biomes().stream()).distinct().collect(Collectors.toSet());
++            Set<Holder<Biome>> set = list.stream().flatMap((reference) -> reference.value().biomes().stream()).distinct().collect(Collectors.toSet());
+             ArrayList<ChunkPos> arrayList = new ArrayList();
+             this.ringPositions.put(concentricRingsStructurePlacement, arrayList);
+             int i = concentricRingsStructurePlacement.distance();
+@@ -285,9 +285,9 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+                 this.biomeSource.possibleBiomes().stream().map(Holder::value).forEach(set::add);
              } else {
                  ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPosx) -> {
 -                    ChunkAccess chunkAccess = worldGenLevel.getChunk(chunkPosx.x, chunkPosx.z);
@@ -8243,15 +8409,6 @@ index 7fe8cbacf1bb3f68a11933445ef26a1f02fc9ec7..ad32864bceedd0e84e28ab72219074b5
                          levelChunkSection.getBiomes().getAll((holder) -> set.add((Biome)holder.value()));
                      }
  
-@@ -416,7 +416,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
-                             Optional<ConfiguredStructureFeature<?, ?>> optional = registry.getOptional((ResourceKey)entry.getKey());
-                             if (!optional.isEmpty()) {
-                                 Predicate<ResourceKey<Biome>> predicate = Set.copyOf(entry.getValue())::contains;
--                                StructureStart<?> structureStart2 = ((ConfiguredStructureFeature)optional.get()).generate(registryAccess, this, this.biomeSource, structureManager, l, chunkPos, i, chunkAccess, (holder) -> this.adjustBiome(holder).is(predicate));
-+                                StructureStart<?> structureStart2 = optional.get().generate(registryAccess, this, this.biomeSource, structureManager, l, chunkPos, i, chunkAccess, (holder) -> this.adjustBiome(holder).is(predicate));
-                                 if (structureStart2.isValid()) {
-                                     structureFeatureManager.setStartForFeature(sectionPos, structureFeature, structureStart2, chunkAccess);
-                                     continue label45;
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java b/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
 index 1c27bceaeb48ae97e0f65385b776941c2eda24f0..e3913f77b19442736e15d6ef4cffaa0feb54df9c 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkStatus.java
@@ -8471,10 +8628,10 @@ index 62cde55b37519c86e37122d4ecfe171196dde526..014ee2c1dbd21048f6423e240bd3ed87
                              levelChunk.setBlockEntity(blockEntity);
                          }
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index f72cf328c89a4949ea7691157d1555f5be8e1b6c..6108c3a48f96b79d7188012ce6b3ab9db28ff23a 100644
+index 0d5b866918ed59dc30ed054fa4ef39052b7cf3c2..605413d3f30da4a7cc9bc7a1954e1ec9f53607c1 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-@@ -41,7 +41,7 @@ public class DimensionType {
+@@ -42,7 +42,7 @@ public class DimensionType {
      public static final ResourceLocation OVERWORLD_EFFECTS = new ResourceLocation("overworld");
      public static final ResourceLocation NETHER_EFFECTS = new ResourceLocation("the_nether");
      public static final ResourceLocation END_EFFECTS = new ResourceLocation("the_end");
@@ -8483,7 +8640,7 @@ index f72cf328c89a4949ea7691157d1555f5be8e1b6c..6108c3a48f96b79d7188012ce6b3ab9d
      private static final int MOON_PHASES = 8;
      public static final float[] MOON_BRIGHTNESS_PER_PHASE = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
      public static final ResourceKey<DimensionType> OVERWORLD_LOCATION = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("overworld"));
-@@ -286,8 +286,4 @@ public class DimensionType {
+@@ -288,8 +288,4 @@ public class DimensionType {
              return this.hasSkylight == dimensionType.hasSkylight && this.hasCeiling == dimensionType.hasCeiling && this.ultraWarm == dimensionType.ultraWarm && this.natural == dimensionType.natural && this.coordinateScale == dimensionType.coordinateScale && this.createDragonFight == dimensionType.createDragonFight && this.piglinSafe == dimensionType.piglinSafe && this.bedWorks == dimensionType.bedWorks && this.respawnAnchorWorks == dimensionType.respawnAnchorWorks && this.hasRaids == dimensionType.hasRaids && this.minY == dimensionType.minY && this.height == dimensionType.height && this.logicalHeight == dimensionType.logicalHeight && Float.compare(dimensionType.ambientLight, this.ambientLight) == 0 && this.fixedTime.equals(dimensionType.fixedTime) && this.infiniburn.equals(dimensionType.infiniburn) && this.effectsLocation.equals(dimensionType.effectsLocation);
          }
      }
@@ -8575,6 +8732,707 @@ index c565b92b29154ace6ab6119aa4ee73aacbf5ede2..7b3cb0b82ed5e543f7593beabd613918
      }
  }
 \ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/DensityFunction.java b/src/main/java/net/minecraft/world/level/levelgen/DensityFunction.java
+index fed79c226af8fac4b316f050584c894bc6d92f5a..c6b79e688051dc0bc7f522a5cf4cdd963fd7dcd9 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/DensityFunction.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/DensityFunction.java
+@@ -70,28 +70,7 @@ public interface DensityFunction {
+         }
+     }
+ 
+-    public static record SinglePointContext(int a, int b, int c) implements DensityFunction.FunctionContext {
+-        private final int blockX;
+-        private final int blockY;
+-        private final int blockZ;
+-
+-        public SinglePointContext(int i, int i2, int i3) {
+-            this.blockX = i;
+-            this.blockY = i2;
+-            this.blockZ = i3;
+-        }
+-
+-        public int blockX() {
+-            return this.blockX;
+-        }
+-
+-        public int blockY() {
+-            return this.blockY;
+-        }
+-
+-        public int blockZ() {
+-            return this.blockZ;
+-        }
++    public static record SinglePointContext(int blockX, int blockY, int blockZ) implements DensityFunction.FunctionContext {
+     }
+ 
+     public interface Visitor extends Function<DensityFunction, DensityFunction> {
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java b/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java
+index d6b472673a7ddc7eda1acb35010d90612213df88..e8964e0d81583cbdf5f2874651db8aac30c73e18 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java
+@@ -159,22 +159,9 @@ public final class DensityFunctions {
+         return add(mul(densityFunction2, densityFunction5), mul(densityFunction3, densityFunction4));
+     }
+ 
+-    static record Ap2(DensityFunctions.Ap2.Type a, DensityFunction b, DensityFunction c, double d, double e) implements DensityFunction {
+-        private final DensityFunctions.Ap2.Type type;
+-        private final DensityFunction f1;
+-        private final DensityFunction f2;
+-        private final double minValue;
+-        private final double maxValue;
++    static record Ap2(DensityFunctions.Ap2.Type type, DensityFunction f1, DensityFunction f2, double minValue, double maxValue) implements DensityFunction {
+         private static final Logger LOGGER = LogUtils.getLogger();
+ 
+-        private Ap2(DensityFunctions.Ap2.Type type, DensityFunction densityFunction, DensityFunction densityFunction2, double d, double d2) {
+-            this.type = type;
+-            this.f1 = densityFunction;
+-            this.f2 = densityFunction2;
+-            this.minValue = d;
+-            this.maxValue = d2;
+-        }
+-
+         public static DensityFunction create(DensityFunctions.Ap2.Type type, DensityFunction densityFunction, DensityFunction densityFunction2) {
+             double d = densityFunction.minValue();
+             double d2 = densityFunction2.minValue();
+@@ -308,26 +295,6 @@ public final class DensityFunctions {
+             return (DensityFunction)visitor.apply(create(this.type, this.f1.mapAll(visitor), this.f2.mapAll(visitor)));
+         }
+ 
+-        public double minValue() {
+-            return this.minValue;
+-        }
+-
+-        public double maxValue() {
+-            return this.maxValue;
+-        }
+-
+-        public DensityFunctions.Ap2.Type type() {
+-            return this.type;
+-        }
+-
+-        public DensityFunction f1() {
+-            return this.f1;
+-        }
+-
+-        public DensityFunction f2() {
+-            return this.f2;
+-        }
+-
+         static enum Type {
+             ADD,
+             MUL,
+@@ -356,13 +323,7 @@ public final class DensityFunctions {
+         }
+     }
+ 
+-    static record BlendDensity(DensityFunction a) implements DensityFunctions.TransformerWithContext {
+-        private final DensityFunction input;
+-
+-        BlendDensity(DensityFunction densityFunction) {
+-            this.input = densityFunction;
+-        }
+-
++    static record BlendDensity(DensityFunction input) implements DensityFunctions.TransformerWithContext {
+         public double transform(DensityFunction.FunctionContext functionContext, double d) {
+             return functionContext.getBlender().blendDensity(functionContext, d);
+         }
+@@ -378,10 +339,6 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return Double.POSITIVE_INFINITY;
+         }
+-
+-        public DensityFunction input() {
+-            return this.input;
+-        }
+     }
+ 
+     protected static enum BlendOffset implements DensityFunction.SimpleFunction {
+@@ -404,17 +361,7 @@ public final class DensityFunctions {
+         }
+     }
+ 
+-    protected static record Clamp(DensityFunction a, double b, double c) implements DensityFunctions.PureTransformer {
+-        private final DensityFunction input;
+-        private final double minValue;
+-        private final double maxValue;
+-
+-        protected Clamp(DensityFunction densityFunction, double d, double d2) {
+-            this.input = densityFunction;
+-            this.minValue = d;
+-            this.maxValue = d2;
+-        }
+-
++    protected static record Clamp(DensityFunction input, double minValue, double maxValue) implements DensityFunctions.PureTransformer {
+         public double transform(double d) {
+             return Mth.clamp(d, this.minValue, this.maxValue);
+         }
+@@ -422,28 +369,11 @@ public final class DensityFunctions {
+         public DensityFunction mapAll(DensityFunction.Visitor visitor) {
+             return new DensityFunctions.Clamp(this.input.mapAll(visitor), this.minValue, this.maxValue);
+         }
+-
+-        public DensityFunction input() {
+-            return this.input;
+-        }
+-
+-        public double minValue() {
+-            return this.minValue;
+-        }
+-
+-        public double maxValue() {
+-            return this.maxValue;
+-        }
+     }
+ 
+-    static record Constant(double a) implements DensityFunction.SimpleFunction {
+-        final double value;
++    static record Constant(double value) implements DensityFunction.SimpleFunction {
+         static final DensityFunctions.Constant ZERO = new DensityFunctions.Constant(0.0D);
+ 
+-        Constant(double d) {
+-            this.value = d;
+-        }
+-
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.value;
+         }
+@@ -459,10 +389,6 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return this.value;
+         }
+-
+-        public double value() {
+-            return this.value;
+-        }
+     }
+ 
+     static final class EndIslandDensityFunction implements DensityFunction.SimpleFunction {
+@@ -487,19 +413,7 @@ public final class DensityFunctions {
+         }
+     }
+ 
+-    protected static record Mapped(DensityFunctions.Mapped.Type a, DensityFunction b, double c, double d) implements DensityFunctions.PureTransformer {
+-        private final DensityFunctions.Mapped.Type type;
+-        private final DensityFunction input;
+-        private final double minValue;
+-        private final double maxValue;
+-
+-        protected Mapped(DensityFunctions.Mapped.Type type, DensityFunction densityFunction, double d, double d2) {
+-            this.type = type;
+-            this.input = densityFunction;
+-            this.minValue = d;
+-            this.maxValue = d2;
+-        }
+-
++    protected static record Mapped(DensityFunctions.Mapped.Type type, DensityFunction input, double minValue, double maxValue) implements DensityFunctions.PureTransformer {
+         private static double transform(DensityFunctions.Mapped.Type type, double d) {
+             double var10000;
+             switch(type) {
+@@ -541,22 +455,6 @@ public final class DensityFunctions {
+             return this.type != DensityFunctions.Mapped.Type.ABS && this.type != DensityFunctions.Mapped.Type.SQUARE ? new DensityFunctions.Mapped(this.type, densityFunction, d2, d3) : new DensityFunctions.Mapped(this.type, densityFunction, Math.max(0.0D, d), Math.max(d2, d3));
+         }
+ 
+-        public DensityFunctions.Mapped.Type type() {
+-            return this.type;
+-        }
+-
+-        public DensityFunction input() {
+-            return this.input;
+-        }
+-
+-        public double minValue() {
+-            return this.minValue;
+-        }
+-
+-        public double maxValue() {
+-            return this.maxValue;
+-        }
+-
+         static enum Type {
+             ABS,
+             SQUARE,
+@@ -567,15 +465,7 @@ public final class DensityFunctions {
+         }
+     }
+ 
+-    protected static record Marker(DensityFunctions.Marker.Type a, DensityFunction b) implements DensityFunction {
+-        private final DensityFunctions.Marker.Type type;
+-        private final DensityFunction function;
+-
+-        protected Marker(DensityFunctions.Marker.Type type, DensityFunction densityFunction) {
+-            this.type = type;
+-            this.function = densityFunction;
+-        }
+-
++    protected static record Marker(DensityFunctions.Marker.Type type, DensityFunction function) implements DensityFunction {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.function.compute(functionContext);
+         }
+@@ -596,14 +486,6 @@ public final class DensityFunctions {
+             return this.function.maxValue();
+         }
+ 
+-        public DensityFunctions.Marker.Type type() {
+-            return this.type;
+-        }
+-
+-        public DensityFunction function() {
+-            return this.function;
+-        }
+-
+         static enum Type {
+             Interpolated,
+             FlatCache,
+@@ -613,21 +495,7 @@ public final class DensityFunctions {
+         }
+     }
+ 
+-    static record MulOrAdd(DensityFunctions.MulOrAdd.Type a, DensityFunction b, double c, double d, double e) implements DensityFunctions.PureTransformer {
+-        private final DensityFunctions.MulOrAdd.Type type;
+-        private final DensityFunction input;
+-        private final double minValue;
+-        private final double maxValue;
+-        private final double argument;
+-
+-        MulOrAdd(DensityFunctions.MulOrAdd.Type type, DensityFunction densityFunction, double d, double d2, double d3) {
+-            this.type = type;
+-            this.input = densityFunction;
+-            this.minValue = d;
+-            this.maxValue = d2;
+-            this.argument = d3;
+-        }
+-
++    static record MulOrAdd(DensityFunctions.MulOrAdd.Type type, DensityFunction input, double minValue, double maxValue, double argument) implements DensityFunctions.PureTransformer {
+         public double transform(double d) {
+             double var10000;
+             switch(this.type) {
+@@ -664,39 +532,13 @@ public final class DensityFunctions {
+             return new DensityFunctions.MulOrAdd(this.type, densityFunction, d3, d4, this.argument);
+         }
+ 
+-        public DensityFunctions.MulOrAdd.Type type() {
+-            return this.type;
+-        }
+-
+-        public DensityFunction input() {
+-            return this.input;
+-        }
+-
+-        public double minValue() {
+-            return this.minValue;
+-        }
+-
+-        public double maxValue() {
+-            return this.maxValue;
+-        }
+-
+-        public double argument() {
+-            return this.argument;
+-        }
+-
+         static enum Type {
+             MUL,
+             ADD;
+         }
+     }
+ 
+-    static record Noise(NormalNoise a, double b, double c) implements DensityFunction.SimpleFunction {
+-        private final NormalNoise noise;
+-        /** @deprecated */
+-        @Deprecated
+-        private final double xzScale;
+-        private final double yScale;
+-
++    static record Noise(NormalNoise noise, @Deprecated double xzScale, double yScale) implements DensityFunction.SimpleFunction {
+         public Noise(NormalNoise normalNoise, double d) {
+             this(normalNoise, 1.0D, d);
+         }
+@@ -705,12 +547,6 @@ public final class DensityFunctions {
+             this(normalNoise, 1.0D, 1.0D);
+         }
+ 
+-        Noise(NormalNoise normalNoise, @Deprecated double d, double d2) {
+-            this.noise = normalNoise;
+-            this.xzScale = d;
+-            this.yScale = d2;
+-        }
+-
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.noise.getValue((double)functionContext.blockX() * this.xzScale, (double)functionContext.blockY() * this.yScale, (double)functionContext.blockZ() * this.xzScale);
+         }
+@@ -722,20 +558,6 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return this.noise.maxValue();
+         }
+-
+-        public NormalNoise noise() {
+-            return this.noise;
+-        }
+-
+-        /** @deprecated */
+-        @Deprecated
+-        public double xzScale() {
+-            return this.xzScale;
+-        }
+-
+-        public double yScale() {
+-            return this.yScale;
+-        }
+     }
+ 
+     interface PureTransformer extends DensityFunction {
+@@ -757,21 +579,7 @@ public final class DensityFunctions {
+         double transform(double var1);
+     }
+ 
+-    static record RangeChoice(DensityFunction a, double b, double c, DensityFunction d, DensityFunction e) implements DensityFunction {
+-        private final DensityFunction input;
+-        private final double minInclusive;
+-        private final double maxExclusive;
+-        private final DensityFunction whenInRange;
+-        private final DensityFunction whenOutOfRange;
+-
+-        RangeChoice(DensityFunction densityFunction, double d, double d2, DensityFunction densityFunction2, DensityFunction densityFunction3) {
+-            this.input = densityFunction;
+-            this.minInclusive = d;
+-            this.maxExclusive = d2;
+-            this.whenInRange = densityFunction2;
+-            this.whenOutOfRange = densityFunction3;
+-        }
+-
++    static record RangeChoice(DensityFunction input, double minInclusive, double maxExclusive, DensityFunction whenInRange, DensityFunction whenOutOfRange) implements DensityFunction {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             double d = this.input.compute(functionContext);
+             return d >= this.minInclusive && d < this.maxExclusive ? this.whenInRange.compute(functionContext) : this.whenOutOfRange.compute(functionContext);
+@@ -802,106 +610,36 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return Math.max(this.whenInRange.maxValue(), this.whenOutOfRange.maxValue());
+         }
+-
+-        public DensityFunction input() {
+-            return this.input;
+-        }
+-
+-        public double minInclusive() {
+-            return this.minInclusive;
+-        }
+-
+-        public double maxExclusive() {
+-            return this.maxExclusive;
+-        }
+-
+-        public DensityFunction whenInRange() {
+-            return this.whenInRange;
+-        }
+-
+-        public DensityFunction whenOutOfRange() {
+-            return this.whenOutOfRange;
+-        }
+     }
+ 
+-    static record Shift0(NormalNoise a) implements DensityFunctions.ShiftNoise {
+-        private final NormalNoise offsetNoise;
+-
+-        Shift0(NormalNoise normalNoise) {
+-            this.offsetNoise = normalNoise;
+-        }
+-
++    static record Shift0(NormalNoise offsetNoise) implements DensityFunctions.ShiftNoise {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.compute((double)functionContext.blockX(), (double)functionContext.blockY(), (double)functionContext.blockZ());
+         }
+-
+-        public NormalNoise offsetNoise() {
+-            return this.offsetNoise;
+-        }
+     }
+ 
+-    static record Shift1(NormalNoise a) implements DensityFunctions.ShiftNoise {
+-        private final NormalNoise offsetNoise;
+-
+-        Shift1(NormalNoise normalNoise) {
+-            this.offsetNoise = normalNoise;
+-        }
+-
++    static record Shift1(NormalNoise offsetNoise) implements DensityFunctions.ShiftNoise {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.compute((double)functionContext.blockY(), (double)functionContext.blockZ(), (double)functionContext.blockX());
+         }
+-
+-        public NormalNoise offsetNoise() {
+-            return this.offsetNoise;
+-        }
+     }
+ 
+-    static record Shift2(NormalNoise a) implements DensityFunctions.ShiftNoise {
+-        private final NormalNoise offsetNoise;
+-
+-        Shift2(NormalNoise normalNoise) {
+-            this.offsetNoise = normalNoise;
+-        }
+-
++    static record Shift2(NormalNoise offsetNoise) implements DensityFunctions.ShiftNoise {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.compute((double)functionContext.blockZ(), (double)functionContext.blockX(), (double)functionContext.blockY());
+         }
+-
+-        public NormalNoise offsetNoise() {
+-            return this.offsetNoise;
+-        }
+     }
+ 
+-    static record ShiftA(NormalNoise a) implements DensityFunctions.ShiftNoise {
+-        private final NormalNoise offsetNoise;
+-
+-        ShiftA(NormalNoise normalNoise) {
+-            this.offsetNoise = normalNoise;
+-        }
+-
++    static record ShiftA(NormalNoise offsetNoise) implements DensityFunctions.ShiftNoise {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.compute((double)functionContext.blockX(), 0.0D, (double)functionContext.blockZ());
+         }
+-
+-        public NormalNoise offsetNoise() {
+-            return this.offsetNoise;
+-        }
+     }
+ 
+-    static record ShiftB(NormalNoise a) implements DensityFunctions.ShiftNoise {
+-        private final NormalNoise offsetNoise;
+-
+-        ShiftB(NormalNoise normalNoise) {
+-            this.offsetNoise = normalNoise;
+-        }
+-
++    static record ShiftB(NormalNoise offsetNoise) implements DensityFunctions.ShiftNoise {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return this.compute((double)functionContext.blockZ(), (double)functionContext.blockX(), 0.0D);
+         }
+-
+-        public NormalNoise offsetNoise() {
+-            return this.offsetNoise;
+-        }
+     }
+ 
+     interface ShiftNoise extends DensityFunction.SimpleFunction {
+@@ -920,23 +658,7 @@ public final class DensityFunctions {
+         }
+     }
+ 
+-    static record ShiftedNoise(DensityFunction a, DensityFunction b, DensityFunction c, double d, double e, NormalNoise f) implements DensityFunction {
+-        private final DensityFunction shiftX;
+-        private final DensityFunction shiftY;
+-        private final DensityFunction shiftZ;
+-        private final double xzScale;
+-        private final double yScale;
+-        private final NormalNoise noise;
+-
+-        ShiftedNoise(DensityFunction densityFunction, DensityFunction densityFunction2, DensityFunction densityFunction3, double d, double d2, NormalNoise normalNoise) {
+-            this.shiftX = densityFunction;
+-            this.shiftY = densityFunction2;
+-            this.shiftZ = densityFunction3;
+-            this.xzScale = d;
+-            this.yScale = d2;
+-            this.noise = normalNoise;
+-        }
+-
++    static record ShiftedNoise(DensityFunction shiftX, DensityFunction shiftY, DensityFunction shiftZ, double xzScale, double yScale, NormalNoise noise) implements DensityFunction {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             double d = (double)functionContext.blockX() * this.xzScale + this.shiftX.compute(functionContext);
+             double d2 = (double)functionContext.blockY() * this.yScale + this.shiftY.compute(functionContext);
+@@ -959,41 +681,9 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return this.noise.maxValue();
+         }
+-
+-        public DensityFunction shiftX() {
+-            return this.shiftX;
+-        }
+-
+-        public DensityFunction shiftY() {
+-            return this.shiftY;
+-        }
+-
+-        public DensityFunction shiftZ() {
+-            return this.shiftZ;
+-        }
+-
+-        public double xzScale() {
+-            return this.xzScale;
+-        }
+-
+-        public double yScale() {
+-            return this.yScale;
+-        }
+-
+-        public NormalNoise noise() {
+-            return this.noise;
+-        }
+     }
+ 
+-    static record Slide(NoiseSettings a, DensityFunction b) implements DensityFunctions.TransformerWithContext {
+-        private final NoiseSettings settings;
+-        private final DensityFunction input;
+-
+-        Slide(NoiseSettings noiseSettings, DensityFunction densityFunction) {
+-            this.settings = noiseSettings;
+-            this.input = densityFunction;
+-        }
+-
++    static record Slide(NoiseSettings settings, DensityFunction input) implements DensityFunctions.TransformerWithContext {
+         public double transform(DensityFunction.FunctionContext functionContext, double d) {
+             return NoiseRouterData.applySlide(this.settings, d, (double)functionContext.blockY());
+         }
+@@ -1009,33 +699,9 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return Math.max(this.input.maxValue(), Math.max(this.settings.bottomSlideSettings().target(), this.settings.topSlideSettings().target()));
+         }
+-
+-        public NoiseSettings settings() {
+-            return this.settings;
+-        }
+-
+-        public DensityFunction input() {
+-            return this.input;
+-        }
+     }
+ 
+-    static record TerrainShaperSpline(DensityFunction a, DensityFunction b, DensityFunction c, ToFloatFunction<TerrainShaper.Point> d, double e, double f) implements DensityFunction {
+-        private final DensityFunction continentalness;
+-        private final DensityFunction erosion;
+-        private final DensityFunction weirdness;
+-        private final ToFloatFunction<TerrainShaper.Point> spline;
+-        private final double minValue;
+-        private final double maxValue;
+-
+-        TerrainShaperSpline(DensityFunction densityFunction, DensityFunction densityFunction2, DensityFunction densityFunction3, ToFloatFunction<TerrainShaper.Point> toFloatFunction, double d, double d2) {
+-            this.continentalness = densityFunction;
+-            this.erosion = densityFunction2;
+-            this.weirdness = densityFunction3;
+-            this.spline = toFloatFunction;
+-            this.minValue = d;
+-            this.maxValue = d2;
+-        }
+-
++    static record TerrainShaperSpline(DensityFunction continentalness, DensityFunction erosion, DensityFunction weirdness, ToFloatFunction<TerrainShaper.Point> spline, double minValue, double maxValue) implements DensityFunction {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return Mth.clamp((double)this.spline.apply(TerrainShaper.makePoint((float)this.continentalness.compute(functionContext), (float)this.erosion.compute(functionContext), (float)this.weirdness.compute(functionContext))), this.minValue, this.maxValue);
+         }
+@@ -1050,30 +716,6 @@ public final class DensityFunctions {
+         public DensityFunction mapAll(DensityFunction.Visitor visitor) {
+             return (DensityFunction)visitor.apply(new DensityFunctions.TerrainShaperSpline(this.continentalness.mapAll(visitor), this.erosion.mapAll(visitor), this.weirdness.mapAll(visitor), this.spline, this.minValue, this.maxValue));
+         }
+-
+-        public DensityFunction continentalness() {
+-            return this.continentalness;
+-        }
+-
+-        public DensityFunction erosion() {
+-            return this.erosion;
+-        }
+-
+-        public DensityFunction weirdness() {
+-            return this.weirdness;
+-        }
+-
+-        public ToFloatFunction<TerrainShaper.Point> spline() {
+-            return this.spline;
+-        }
+-
+-        public double minValue() {
+-            return this.minValue;
+-        }
+-
+-        public double maxValue() {
+-            return this.maxValue;
+-        }
+     }
+ 
+     interface TransformerWithContext extends DensityFunction {
+@@ -1095,19 +737,7 @@ public final class DensityFunctions {
+         double transform(DensityFunction.FunctionContext var1, double var2);
+     }
+ 
+-    static record WeirdScaledSampler(DensityFunction a, NormalNoise b, Double2DoubleFunction c, double d) implements DensityFunctions.TransformerWithContext {
+-        private final DensityFunction input;
+-        private final NormalNoise noise;
+-        private final Double2DoubleFunction rarityValueMapper;
+-        private final double maxRarity;
+-
+-        WeirdScaledSampler(DensityFunction densityFunction, NormalNoise normalNoise, Double2DoubleFunction double2DoubleFunction, double d) {
+-            this.input = densityFunction;
+-            this.noise = normalNoise;
+-            this.rarityValueMapper = double2DoubleFunction;
+-            this.maxRarity = d;
+-        }
+-
++    static record WeirdScaledSampler(DensityFunction input, NormalNoise noise, Double2DoubleFunction rarityValueMapper, double maxRarity) implements DensityFunctions.TransformerWithContext {
+         public double transform(DensityFunction.FunctionContext functionContext, double d) {
+             double d2 = this.rarityValueMapper.get(d);
+             return d2 * Math.abs(this.noise.getValue((double)functionContext.blockX() / d2, (double)functionContext.blockY() / d2, (double)functionContext.blockZ() / d2));
+@@ -1125,37 +755,9 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return this.maxRarity * this.noise.maxValue();
+         }
+-
+-        public DensityFunction input() {
+-            return this.input;
+-        }
+-
+-        public NormalNoise noise() {
+-            return this.noise;
+-        }
+-
+-        public Double2DoubleFunction rarityValueMapper() {
+-            return this.rarityValueMapper;
+-        }
+-
+-        public double maxRarity() {
+-            return this.maxRarity;
+-        }
+     }
+ 
+-    static record YClampedGradient(int a, int b, double c, double d) implements DensityFunction.SimpleFunction {
+-        private final int fromY;
+-        private final int toY;
+-        private final double fromValue;
+-        private final double toValue;
+-
+-        YClampedGradient(int i, int i2, double d, double d2) {
+-            this.fromY = i;
+-            this.toY = i2;
+-            this.fromValue = d;
+-            this.toValue = d2;
+-        }
+-
++    static record YClampedGradient(int fromY, int toY, double fromValue, double toValue) implements DensityFunction.SimpleFunction {
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return Mth.clampedMap((double)functionContext.blockY(), (double)this.fromY, (double)this.toY, this.fromValue, this.toValue);
+         }
+@@ -1167,21 +769,5 @@ public final class DensityFunctions {
+         public double maxValue() {
+             return Math.max(this.fromValue, this.toValue);
+         }
+-
+-        public int fromY() {
+-            return this.fromY;
+-        }
+-
+-        public int toY() {
+-            return this.toY;
+-        }
+-
+-        public double fromValue() {
+-            return this.fromValue;
+-        }
+-
+-        public double toValue() {
+-            return this.toValue;
+-        }
+     }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 index 893ff711594f60c4b6cb2da12e0937ee8ae612b1..b55fa04e438bf0bd3d9ad4ff2d292ff4939909f9 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
@@ -8596,67 +9454,146 @@ index 893ff711594f60c4b6cb2da12e0937ee8ae612b1..b55fa04e438bf0bd3d9ad4ff2d292ff4
          register(OVERWORLD, overworld(false, false));
          register(LARGE_BIOMES, overworld(false, true));
          register(AMPLIFIED, overworld(true, false));
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
-index 7c84017a527d7cddc176b4ffe1f29149f23065ec..54ec3fadc4a082c0de53c2eac38dbb5511390383 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSampler.java
-@@ -88,7 +88,7 @@ public class NoiseSampler implements Climate.Sampler {
-     public NoiseSampler(NoiseSettings noiseSettings, boolean flag, long l, Registry<NormalNoise.NoiseParameters> registry, WorldgenRandom.Algorithm algorithm) {
-         this.noiseSettings = noiseSettings;
-         this.isNoiseCavesEnabled = flag;
--        this.baseNoise = (noiseChunk) -> noiseChunk.createNoiseInterpolator((i, i2, i3) -> this.calculateBaseNoise(i, i2, i3, noiseChunk.noiseData(QuartPos.fromBlock(i), QuartPos.fromBlock(i3)).terrainInfo(), noiseChunk.getBlender()));
-+        this.baseNoise = (noiseChunk) -> noiseChunk.createNoiseInterpolator((iIn, i2In, i3In) -> this.calculateBaseNoise(iIn, i2In, i3In, noiseChunk.noiseData(QuartPos.fromBlock(iIn), QuartPos.fromBlock(i3In)).terrainInfo(), noiseChunk.getBlender()));
-         if (noiseSettings.islandNoiseOverride()) {
-             RandomSource randomSource = algorithm.newInstance(l);
-             randomSource.consumeCount(17292);
-@@ -507,46 +507,7 @@ public class NoiseSampler implements Climate.Sampler {
-         }
-     }
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseRouter.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseRouter.java
+index 728a65f387f0a4f78d4d5f3dcbba4a0212011fa4..3c914434a8a36b059c4a3453d3a891f5eecc3b31 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/NoiseRouter.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseRouter.java
+@@ -3,116 +3,22 @@ package net.minecraft.world.level.levelgen;
+ import java.util.List;
+ import net.minecraft.world.level.biome.Climate;
  
--    public static record FlatNoiseData(double a, double b, double c, double d, double e, TerrainInfo f) {
--        private final double shiftedX;
--        private final double shiftedZ;
--        private final double continentalness;
--        private final double weirdness;
--        private final double erosion;
--        private final TerrainInfo terrainInfo;
+-public record NoiseRouter(DensityFunction a, DensityFunction b, DensityFunction c, DensityFunction d, PositionalRandomFactory e, PositionalRandomFactory f, DensityFunction g, DensityFunction h, DensityFunction i, DensityFunction j, DensityFunction k, DensityFunction l, DensityFunction m, DensityFunction n, DensityFunction o, DensityFunction p, DensityFunction q, List<Climate.ParameterPoint> r) {
+-    private final DensityFunction barrierNoise;
+-    private final DensityFunction fluidLevelFloodednessNoise;
+-    private final DensityFunction fluidLevelSpreadNoise;
+-    private final DensityFunction lavaNoise;
+-    private final PositionalRandomFactory aquiferPositionalRandomFactory;
+-    private final PositionalRandomFactory oreVeinsPositionalRandomFactory;
+-    private final DensityFunction temperature;
+-    private final DensityFunction humidity;
+-    private final DensityFunction continentalness;
+-    private final DensityFunction erosion;
+-    private final DensityFunction depth;
+-    private final DensityFunction weirdness;
+-    private final DensityFunction initialDensityNoJaggedness;
+-    private final DensityFunction fullNoise;
+-    private final DensityFunction veinToggle;
+-    private final DensityFunction veinRidged;
+-    private final DensityFunction veinGap;
+-    private final List<Climate.ParameterPoint> spawnTarget;
 -
--        public FlatNoiseData(double d, double d2, double d3, double d4, double d5, TerrainInfo terrainInfo) {
--            this.shiftedX = d;
--            this.shiftedZ = d2;
--            this.continentalness = d3;
--            this.weirdness = d4;
--            this.erosion = d5;
--            this.terrainInfo = terrainInfo;
--        }
+-    public NoiseRouter(DensityFunction densityFunction, DensityFunction densityFunction2, DensityFunction densityFunction3, DensityFunction densityFunction4, PositionalRandomFactory positionalRandomFactory, PositionalRandomFactory positionalRandomFactory2, DensityFunction densityFunction5, DensityFunction densityFunction6, DensityFunction densityFunction7, DensityFunction densityFunction8, DensityFunction densityFunction9, DensityFunction densityFunction10, DensityFunction densityFunction11, DensityFunction densityFunction12, DensityFunction densityFunction13, DensityFunction densityFunction14, DensityFunction densityFunction15, List<Climate.ParameterPoint> list) {
+-        this.barrierNoise = densityFunction;
+-        this.fluidLevelFloodednessNoise = densityFunction2;
+-        this.fluidLevelSpreadNoise = densityFunction3;
+-        this.lavaNoise = densityFunction4;
+-        this.aquiferPositionalRandomFactory = positionalRandomFactory;
+-        this.oreVeinsPositionalRandomFactory = positionalRandomFactory2;
+-        this.temperature = densityFunction5;
+-        this.humidity = densityFunction6;
+-        this.continentalness = densityFunction7;
+-        this.erosion = densityFunction8;
+-        this.depth = densityFunction9;
+-        this.weirdness = densityFunction10;
+-        this.initialDensityNoJaggedness = densityFunction11;
+-        this.fullNoise = densityFunction12;
+-        this.veinToggle = densityFunction13;
+-        this.veinRidged = densityFunction14;
+-        this.veinGap = densityFunction15;
+-        this.spawnTarget = list;
+-    }
 -
--        public double shiftedX() {
--            return this.shiftedX;
--        }
+-    public DensityFunction barrierNoise() {
+-        return this.barrierNoise;
+-    }
 -
--        public double shiftedZ() {
--            return this.shiftedZ;
--        }
+-    public DensityFunction fluidLevelFloodednessNoise() {
+-        return this.fluidLevelFloodednessNoise;
+-    }
 -
--        public double continentalness() {
--            return this.continentalness;
--        }
+-    public DensityFunction fluidLevelSpreadNoise() {
+-        return this.fluidLevelSpreadNoise;
+-    }
 -
--        public double weirdness() {
--            return this.weirdness;
--        }
+-    public DensityFunction lavaNoise() {
+-        return this.lavaNoise;
+-    }
 -
--        public double erosion() {
--            return this.erosion;
--        }
+-    public PositionalRandomFactory aquiferPositionalRandomFactory() {
+-        return this.aquiferPositionalRandomFactory;
+-    }
 -
--        public TerrainInfo terrainInfo() {
--            return this.terrainInfo;
--        }
-+    public static record FlatNoiseData(double shiftedX, double shiftedZ, double continentalness, double weirdness, double erosion, TerrainInfo terrainInfo) {
-     }
- 
-     static final class QuantizedSpaghettiRarity {
+-    public PositionalRandomFactory oreVeinsPositionalRandomFactory() {
+-        return this.oreVeinsPositionalRandomFactory;
+-    }
+-
+-    public DensityFunction temperature() {
+-        return this.temperature;
+-    }
+-
+-    public DensityFunction humidity() {
+-        return this.humidity;
+-    }
+-
+-    public DensityFunction continentalness() {
+-        return this.continentalness;
+-    }
+-
+-    public DensityFunction erosion() {
+-        return this.erosion;
+-    }
+-
+-    public DensityFunction depth() {
+-        return this.depth;
+-    }
+-
+-    public DensityFunction weirdness() {
+-        return this.weirdness;
+-    }
+-
+-    public DensityFunction initialDensityNoJaggedness() {
+-        return this.initialDensityNoJaggedness;
+-    }
+-
+-    public DensityFunction fullNoise() {
+-        return this.fullNoise;
+-    }
+-
+-    public DensityFunction veinToggle() {
+-        return this.veinToggle;
+-    }
+-
+-    public DensityFunction veinRidged() {
+-        return this.veinRidged;
+-    }
+-
+-    public DensityFunction veinGap() {
+-        return this.veinGap;
+-    }
+-
+-    public List<Climate.ParameterPoint> spawnTarget() {
+-        return this.spawnTarget;
+-    }
++public record NoiseRouter(DensityFunction barrierNoise,
++                          DensityFunction fluidLevelFloodednessNoise,
++                          DensityFunction fluidLevelSpreadNoise,
++                          DensityFunction lavaNoise,
++                          PositionalRandomFactory aquiferPositionalRandomFactory,
++                          PositionalRandomFactory oreVeinsPositionalRandomFactory,
++                          DensityFunction temperature,
++                          DensityFunction humidity,
++                          DensityFunction continentalness,
++                          DensityFunction erosion,
++                          DensityFunction depth,
++                          DensityFunction weirdness,
++                          DensityFunction initialDensityNoJaggedness,
++                          DensityFunction fullNoise,
++                          DensityFunction veinToggle,
++                          DensityFunction veinRidged,
++                          DensityFunction veinGap,
++                          List<Climate.ParameterPoint> spawnTarget) {
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
 index 89f381fb2f008100ae5b95753d533803a8f702df..13cd43766f7b51c3b74ea0a02ec329a9df880940 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
@@ -8760,6 +9697,30 @@ index 89f381fb2f008100ae5b95753d533803a8f702df..13cd43766f7b51c3b74ea0a02ec329a9
 -    }
  }
 \ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSlider.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSlider.java
+index 2a92c738feeec8a9fbd7203d319fb7fe838e98b8..86cd90969aa597e51c2d1883463caf3da5b5a9fe 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSlider.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSlider.java
+@@ -5,18 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
+ import net.minecraft.util.ExtraCodecs;
+ import net.minecraft.util.Mth;
+ 
+-public record NoiseSlider(double b, int c, int d) {
+-    private final double target;
+-    private final int size;
+-    private final int offset;
++public record NoiseSlider(double target, int size, int offset) {
+     public static final Codec<NoiseSlider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.DOUBLE.fieldOf("target").forGetter((noiseSlider) -> noiseSlider.target), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("size").forGetter((noiseSlider) -> noiseSlider.size), Codec.INT.fieldOf("offset").forGetter((noiseSlider) -> noiseSlider.offset)).apply(instance, NoiseSlider::new));
+ 
+-    public NoiseSlider(double d, int i, int i2) {
+-        this.target = d;
+-        this.size = i;
+-        this.offset = i2;
+-    }
+-
+     public double applySlide(double d, double d2) {
+         if (this.size <= 0) {
+             return d;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/RandomSupport.java b/src/main/java/net/minecraft/world/level/levelgen/RandomSupport.java
 index a42eda1dc2aa514c66e7786d7783a92a5503c48a..3eec7c9104962d6ea11e797ceb8353e99951cd0b 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/RandomSupport.java
@@ -8789,10 +9750,10 @@ index a42eda1dc2aa514c66e7786d7783a92a5503c48a..3eec7c9104962d6ea11e797ceb8353e9
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/StructureSettings.java b/src/main/java/net/minecraft/world/level/levelgen/StructureSettings.java
-index 7f78bfadc2b25c067bbfc8d4af23a32caee86dd5..5e224e40e02e901f6932a4992a970cea5749bb1e 100644
+index c492a4a1513372f933630b29850a83f6f6f83bae..8c553773f31bbaef693861927922468d5aa9c143 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/StructureSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/StructureSettings.java
-@@ -25,9 +25,9 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
+@@ -17,9 +17,9 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
  
  public class StructureSettings {
      public static final Codec<StructureSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.simpleMap(Registry.STRUCTURE_FEATURE.byNameCodec(), StructurePlacement.CODEC, Registry.STRUCTURE_FEATURE).forGetter((structureSettings) -> structureSettings.structureConfig)).apply(instance, StructureSettings::new));
@@ -8802,8 +9763,8 @@ index 7f78bfadc2b25c067bbfc8d4af23a32caee86dd5..5e224e40e02e901f6932a4992a970cea
 -    public static final ImmutableMap<StructureFeature<?>, StructurePlacement> DEFAULTS_AND_STRONGHOLDS = ImmutableMap.builder().putAll(DEFAULTS).put(StructureFeature.STRONGHOLD, DEFAULT_STRONGHOLD).build();
 +    public static final ImmutableMap<StructureFeature<?>, StructurePlacement> DEFAULTS_AND_STRONGHOLDS = ImmutableMap.<StructureFeature<?>, StructurePlacement>builder().putAll(DEFAULTS).put(StructureFeature.STRONGHOLD, DEFAULT_STRONGHOLD).build();
      private final Map<StructureFeature<?>, StructurePlacement> structureConfig;
-     private final ImmutableMap<StructureFeature<?>, ImmutableMultimap<ResourceKey<ConfiguredStructureFeature<?, ?>>, ResourceKey<Biome>>> configuredStructures;
  
+     public StructureSettings(Map<StructureFeature<?>, StructurePlacement> map) {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java b/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
 index ca96a1718c54218ca02c3edfef0c44a4c243ac4e..bb1b0142aaabc69efce6d658875dbddeb0311101 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/SurfaceRules.java
@@ -9265,44 +10226,11 @@ index ca96a1718c54218ca02c3edfef0c44a4c243ac4e..bb1b0142aaabc69efce6d658875dbdde
      }
  }
 \ No newline at end of file
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/TerrainInfo.java b/src/main/java/net/minecraft/world/level/levelgen/TerrainInfo.java
-index 6b7bd51abb079b70e1e30193b63e03e6a5f45e26..e6fccfd5fc5a3446c87c4a34eeea7095d7e49156 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/TerrainInfo.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/TerrainInfo.java
-@@ -1,25 +1,3 @@
- package net.minecraft.world.level.levelgen;
- 
--public record TerrainInfo(double a, double b, double c) {
--    private final double offset;
--    private final double factor;
--    private final double jaggedness;
--
--    public TerrainInfo(double d, double d2, double d3) {
--        this.offset = d;
--        this.factor = d2;
--        this.jaggedness = d3;
--    }
--
--    public double offset() {
--        return this.offset;
--    }
--
--    public double factor() {
--        return this.factor;
--    }
--
--    public double jaggedness() {
--        return this.jaggedness;
--    }
--}
-\ No newline at end of file
-+public record TerrainInfo(double offset, double factor, double jaggedness) {}
-\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-index 43f784b310559d53093f110837d5b190287940bf..02c9c02b3db57e05fc44f445f43a04c8d61e6748 100644
+index 01c68e6e3c85956b368600865f383749a2842e80..4bba50630f084df0c845640ed70d4b195df80ad9 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-@@ -38,7 +38,7 @@ import org.apache.commons.lang3.StringUtils;
+@@ -40,7 +40,7 @@ import org.apache.commons.lang3.StringUtils;
  import org.slf4j.Logger;
  
  public class WorldGenSettings {
@@ -9312,10 +10240,10 @@ index 43f784b310559d53093f110837d5b190287940bf..02c9c02b3db57e05fc44f445f43a04c8
      private final long seed;
      private final boolean generateFeatures;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java b/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
-index ef5b3bb0a774cd1313cdd17483eb6db736c9893a..885574bbddde1e7fecc283626d10ae6449d30347 100644
+index e255b2de9e526a51ee477e6a388eb6a701da1f22..76a234cce086f77749f51e22a545ba45e9239122 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/blending/Blender.java
-@@ -105,7 +105,7 @@ public class Blender {
+@@ -103,7 +103,7 @@ public class Blender {
              MutableDouble mutableDouble = new MutableDouble(0.0D);
              MutableDouble mutableDouble2 = new MutableDouble(0.0D);
              MutableDouble mutableDouble3 = new MutableDouble(Double.POSITIVE_INFINITY);
@@ -9324,7 +10252,7 @@ index ef5b3bb0a774cd1313cdd17483eb6db736c9893a..885574bbddde1e7fecc283626d10ae64
                      double d2 = Mth.length((double)(i3 - i3x), (double)(i4 - i4x));
                      if (!(d2 > (double)HEIGHT_BLENDING_RANGE_CELLS)) {
                          if (d2 < mutableDouble3.doubleValue()) {
-@@ -113,7 +113,7 @@ public class Blender {
+@@ -111,7 +111,7 @@ public class Blender {
                          }
  
                          double d3 = 1.0D / (d2 * d2 * d2 * d2);
@@ -9333,12 +10261,12 @@ index ef5b3bb0a774cd1313cdd17483eb6db736c9893a..885574bbddde1e7fecc283626d10ae64
                          mutableDouble.add(d3);
                      }
                  }));
-@@ -149,18 +149,18 @@ public class Blender {
+@@ -144,18 +144,18 @@ public class Blender {
              MutableDouble mutableDouble = new MutableDouble(0.0D);
              MutableDouble mutableDouble2 = new MutableDouble(0.0D);
              MutableDouble mutableDouble3 = new MutableDouble(Double.POSITIVE_INFINITY);
--            this.blendingDataForDensityBlending.forEach((l, blendingData) -> blendingData.iterateDensities(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), i5 - 1, i5 + 1, (i4x, i5x, i6x, d) -> {
--                    double d2 = Mth.length((double)(i4 - i4x), (double)((i5 - i5x) * 2), (double)(i6 - i6x));
+-            this.blendingDataForDensityBlending.forEach((l, blendingData) -> blendingData.iterateDensities(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), i2 - 1, i2 + 1, (i4, i5, i6, d) -> {
+-                    double d2 = Mth.length((double)(i - i4), (double)((i2 - i5) * 2), (double)(i3 - i6));
 -                    if (!(d2 > 2.0D)) {
 -                        if (d2 < mutableDouble3.doubleValue()) {
 -                            mutableDouble3.setValue(d2);
@@ -9347,8 +10275,8 @@ index ef5b3bb0a774cd1313cdd17483eb6db736c9893a..885574bbddde1e7fecc283626d10ae64
 -                        double d3 = 1.0D / (d2 * d2 * d2 * d2);
 -                        mutableDouble2.add(d * d3);
 -                        mutableDouble.add(d3);
-+            this.blendingDataForDensityBlending.forEach((l, blendingData) -> blendingData.iterateDensities(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), i5 - 1, i5 + 1, (i4x, i5x, i6x, dIn) -> {
-+                double d2In = Mth.length((double)(i4 - i4x), (double)((i5 - i5x) * 2), (double)(i6 - i6x));
++            this.blendingDataForDensityBlending.forEach((l, blendingData) -> blendingData.iterateDensities(QuartPos.fromSection(ChunkPos.getX(l)), QuartPos.fromSection(ChunkPos.getZ(l)), i2 - 1, i2 + 1, (i4, i5, i6, dIn) -> {
++                double d2In = Mth.length((double)(i - i4), (double)((i2 - i5) * 2), (double)(i3 - i6));
 +                if (!(d2In > 2.0D)) {
 +                    if (d2In < mutableDouble3.doubleValue()) {
 +                        mutableDouble3.setValue(d2In);
@@ -9363,7 +10291,7 @@ index ef5b3bb0a774cd1313cdd17483eb6db736c9893a..885574bbddde1e7fecc283626d10ae64
              if (mutableDouble3.doubleValue() == Double.POSITIVE_INFINITY) {
                  return d;
              } else {
-@@ -214,16 +214,16 @@ public class Blender {
+@@ -209,16 +209,16 @@ public class Blender {
          double d2 = (double)i2 + SHIFT_NOISE.getValue((double)i2, (double)i, 0.0D) * 12.0D;
          MutableDouble mutableDouble = new MutableDouble(Double.POSITIVE_INFINITY);
          MutableObject<Holder<Biome>> mutableObject = new MutableObject();
@@ -9389,7 +10317,7 @@ index ef5b3bb0a774cd1313cdd17483eb6db736c9893a..885574bbddde1e7fecc283626d10ae64
          if (mutableDouble.doubleValue() == Double.POSITIVE_INFINITY) {
              return null;
          } else {
-@@ -336,7 +336,8 @@ public class Blender {
+@@ -331,7 +331,8 @@ public class Blender {
  
          double d3 = d;
          double d4 = d2;
@@ -9399,6 +10327,30 @@ index ef5b3bb0a774cd1313cdd17483eb6db736c9893a..885574bbddde1e7fecc283626d10ae64
      }
  
      private static double distanceToCube(double d, double d2, double d3, double d4, double d5, double d6) {
+@@ -341,22 +342,7 @@ public class Blender {
+         return Mth.length(Math.max(0.0D, d7), Math.max(0.0D, d8), Math.max(0.0D, d9));
+     }
+ 
+-    public static record BlendingOutput(double a, double b) {
+-        private final double alpha;
+-        private final double blendingOffset;
+-
+-        public BlendingOutput(double d, double d2) {
+-            this.alpha = d;
+-            this.blendingOffset = d2;
+-        }
+-
+-        public double alpha() {
+-            return this.alpha;
+-        }
+-
+-        public double blendingOffset() {
+-            return this.blendingOffset;
+-        }
++    public static record BlendingOutput(double alpha, double blendingOffset) {
+     }
+ 
+     interface CellValueGetter {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java b/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
 index d580ceea6b29f7c544cbdfa1ee8d5774f9b3ef1b..e316dfb24ca4a0a47f910413524db61b4da2c519 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/blending/BlendingData.java
@@ -9613,10 +10565,10 @@ index e3b080fbd6c6a19eb3ab17b82d91f33eae019e19..a804c5398811e3f4a09e10471945d428
                  properties.cold = isCold(blockPos4, context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(blockPos4.getX()), QuartPos.fromBlock(blockPos4.getY()), QuartPos.fromBlock(blockPos4.getZ())));
              }
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-index 51e85d48fbc6fb29b24c62c034e9bd9a90a0187a..e5f9cb80cf7af5876712b1b1c1e972d20859aad2 100644
+index 044e2657c297bafb44334e5ce3f71ad7870c0da1..e944232b12d7cb6fb95fde6e681380937b78ab63 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/StructureFeature.java
-@@ -104,7 +104,7 @@ public class StructureFeature<C extends FeatureConfiguration> {
+@@ -108,7 +108,7 @@ public class StructureFeature<C extends FeatureConfiguration> {
      @Nullable
      public static StructureStart<?> loadStaticStart(StructurePieceSerializationContext structurePieceSerializationContext, CompoundTag compoundTag, long l) {
          String s = compoundTag.getString("id");
@@ -9841,62 +10793,6 @@ index ddc21b901f30a59fb3be0f14ab4cfd2fca488982..763643f5df58a47f8068d10a2f1c834b
 -    }
  }
 \ No newline at end of file
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-index 18464af22ac0852cc93620ad033d7b4a0d56227e..befba8c1c5764cc65ec99181d725970eb8312816 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/JigsawPlacement.java
-@@ -76,7 +76,7 @@ public class JigsawPlacement {
-             } else {
-                 int i5 = boundingBox.minY() + poolElementStructurePiece.getGroundLevelDelta();
-                 poolElementStructurePiece.move(0, i3 - i5, 0);
--                return Optional.of((PieceGenerator<>)(structurePiecesBuilder, contextx) -> {
-+                return Optional.of((structurePiecesBuilder, contextx) -> {
-                     List<PoolElementStructurePiece> list = Lists.newArrayList();
-                     list.add(poolElementStructurePiece);
-                     if (jigsawConfiguration.maxDepth() > 0) {
-@@ -200,12 +200,12 @@ public class JigsawPlacement {
-                                         if (!boundingBox2.isInside(structureBlockInfox.pos.relative(JigsawBlock.getFrontFacing(structureBlockInfox.state)))) {
-                                             return 0;
-                                         } else {
--                                            ResourceLocation resourceLocation = new ResourceLocation(structureBlockInfox.nbt.getString("pool"));
--                                            Optional<StructureTemplatePool> optional = this.pools.getOptional(resourceLocation);
--                                            Optional<StructureTemplatePool> optional2 = optional.flatMap((structureTemplatePool) -> this.pools.getOptional(structureTemplatePool.getFallback()));
--                                            int i = optional.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
--                                            int i2 = optional2.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
--                                            return Math.max(i, i2);
-+                                            ResourceLocation resourceLocationIn = new ResourceLocation(structureBlockInfox.nbt.getString("pool"));
-+                                            Optional<StructureTemplatePool> optionalIn = this.pools.getOptional(resourceLocationIn);
-+                                            Optional<StructureTemplatePool> optionalIn2 = optionalIn.flatMap((structureTemplatePool) -> this.pools.getOptional(structureTemplatePool.getFallback()));
-+                                            int ix = optionalIn.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
-+                                            int i2x = optionalIn2.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
-+                                            return Math.max(ix, i2x);
-                                         }
-                                     }).max().orElse(0);
-                                 } else {
-diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java
-index 51047e794b1b692917c87513732887fb53eb6f1d..59823f641b4790d167ca9ae848beaa4e1601fd22 100644
---- a/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java
-+++ b/src/main/java/net/minecraft/world/level/levelgen/feature/structures/StructureTemplatePool.java
-@@ -29,7 +29,7 @@ import org.slf4j.Logger;
- public class StructureTemplatePool {
-     private static final Logger LOGGER = LogUtils.getLogger();
-     private static final int SIZE_UNSET = Integer.MIN_VALUE;
--    public static final Codec<StructureTemplatePool> DIRECT_CODEC;
-+    public static final Codec<StructureTemplatePool> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(ResourceLocation.CODEC.fieldOf("name").forGetter(StructureTemplatePool::getName), ResourceLocation.CODEC.fieldOf("fallback").forGetter(StructureTemplatePool::getFallback), Codec.mapPair(StructurePoolElement.CODEC.fieldOf("element"), Codec.intRange(1, 150).fieldOf("weight")).codec().listOf().fieldOf("elements").forGetter((structureTemplatePool) -> structureTemplatePool.rawTemplates)).apply(instance, StructureTemplatePool::new));
-     public static final Codec<Holder<StructureTemplatePool>> CODEC = RegistryFileCodec.create(Registry.TEMPLATE_POOL_REGISTRY, DIRECT_CODEC);
-     private final ResourceLocation name;
-     private final List<Pair<StructurePoolElement, Integer>> rawTemplates;
-@@ -98,10 +98,6 @@ public class StructureTemplatePool {
-         return this.templates.size();
-     }
- 
--    static {
--        DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(ResourceLocation.CODEC.fieldOf("name").forGetter(StructureTemplatePool::getName), ResourceLocation.CODEC.fieldOf("fallback").forGetter(StructureTemplatePool::getFallback), Codec.mapPair(StructurePoolElement.CODEC.fieldOf("element"), Codec.intRange(1, 150).fieldOf("weight")).codec().listOf().fieldOf("elements").forGetter((structureTemplatePool) -> structureTemplatePool.rawTemplates)).apply(instance, StructureTemplatePool::new));
--    }
--
-     public static enum Projection implements StringRepresentable {
-         TERRAIN_MATCHING("terrain_matching", ImmutableList.of(new GravityProcessor(Heightmap.Types.WORLD_SURFACE_WG, -1))),
-         RIGID("rigid", ImmutableList.of());
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator.java b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator.java
 index fb9f76cb35a02900d075889de14b18925250493e..d49af1bfd6acdc963f49ddaf5c9b357ecb87fba1 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator.java
@@ -9961,6 +10857,35 @@ index fd194708d1fb7ad7a17098776afa6d46311fb348..6043701b98811623d50ca47a987ee211
      private final VerticalAnchor value;
  
      public static ConstantHeight of(VerticalAnchor verticalAnchor) {
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/material/MaterialRuleList.java b/src/main/java/net/minecraft/world/level/levelgen/material/MaterialRuleList.java
+index 165765d1a8ef23d54524977483d77a6cf9301c6a..f71e4e53d88629e5bc06cb476197b8dfa70ec211 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/material/MaterialRuleList.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/material/MaterialRuleList.java
+@@ -6,13 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
+ import net.minecraft.world.level.levelgen.DensityFunction;
+ import net.minecraft.world.level.levelgen.NoiseChunk;
+ 
+-public record MaterialRuleList(List<NoiseChunk.BlockStateFiller> a) implements NoiseChunk.BlockStateFiller {
+-    private final List<NoiseChunk.BlockStateFiller> materialRuleList;
+-
+-    public MaterialRuleList(List<NoiseChunk.BlockStateFiller> list) {
+-        this.materialRuleList = list;
+-    }
+-
++public record MaterialRuleList(List<NoiseChunk.BlockStateFiller> materialRuleList) implements NoiseChunk.BlockStateFiller {
+     @Nullable
+     public BlockState calculate(DensityFunction.FunctionContext functionContext) {
+         for(NoiseChunk.BlockStateFiller blockStateFiller : this.materialRuleList) {
+@@ -24,8 +18,4 @@ public record MaterialRuleList(List<NoiseChunk.BlockStateFiller> a) implements N
+ 
+         return null;
+     }
+-
+-    public List<NoiseChunk.BlockStateFiller> materialRuleList() {
+-        return this.materialRuleList;
+-    }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/placement/PlacedFeature.java b/src/main/java/net/minecraft/world/level/levelgen/placement/PlacedFeature.java
 index 32d5667a5110035e1fc88864f5bc2415246c94e6..2d7038bf12c74b64ba6a22e207a231fd52c3334f 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/placement/PlacedFeature.java
@@ -10030,7 +10955,7 @@ index 968364765338847b86aaee814ab825cd39782afe..cdc201305acf09e47cce07310b07541b
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java b/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
-index 63dd2c443efe85be88c4e9eef2dd2e8915424d0b..efaed4bd304b39d78c20b8577484d818c32effb2 100644
+index e0f53a55b0fd01d16bc90885437f1ec645fe5c91..bbf66d300f75e01efe6242e37e567ff10f988133 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/OceanMonumentPieces.java
 @@ -1314,7 +1314,7 @@ public class OceanMonumentPieces {
@@ -10043,7 +10968,7 @@ index 63dd2c443efe85be88c4e9eef2dd2e8915424d0b..efaed4bd304b39d78c20b8577484d818
          protected static final int GRIDROOM_DEPTH = 8;
          protected static final int GRIDROOM_HEIGHT = 4;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java
-index 8b2d3d3a3e9a786ce7bb38c6c1d967038faa3467..6718b7ec30ac126fafb2aa7678fc3ced66d91d25 100644
+index 40ec51b7d9643bbc576e5839f6a82fa3e9f3ef0f..4888fa3b75001111185ede01334408a8ce38f525 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/RuinedPortalPiece.java
 @@ -66,7 +66,7 @@ public class RuinedPortalPiece extends TemplateStructurePiece {
@@ -10065,7 +10990,7 @@ index 8b2d3d3a3e9a786ce7bb38c6c1d967038faa3467..6718b7ec30ac126fafb2aa7678fc3ced
  
      private static StructurePlaceSettings makeSettings(Mirror mirror, Rotation rotation, RuinedPortalPiece.VerticalPlacement verticalPlacement, BlockPos blockPos, RuinedPortalPiece.Properties properties) {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
-index 5e048200a9873c98ae4aaa8b7ef3fbab7452bcc7..f7d80282da60f50bfe58b2125e798429b3bd32e1 100644
+index 0da0c5894297455e620ba549b46c953a867c4759..0f9872f54b686b514d475af03a785d46bfb65ca5 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/StructurePiece.java
 @@ -47,7 +47,7 @@ public abstract class StructurePiece {
@@ -10235,10 +11160,10 @@ index 8856c60c657ebe7013e4b5df599c389c11bcd8d6..3e60ae970a11c9fec4f6bb3f4eed8fa2
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
-index 9258eefe1405160348aeb2ccbc24da273ff5a6fb..2f256a15e6a33168d24717e437ddf11b386ce241 100644
+index a4aadc14bd5e549436771c9378b53ba82909c570..537d00400f83beddd9cd7e1c4723ef1bcc651cec 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/pieces/PiecesContainer.java
-@@ -17,14 +17,13 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
+@@ -16,14 +16,13 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
  import net.minecraft.world.level.levelgen.structure.StructurePiece;
  import org.slf4j.Logger;
  
@@ -10370,6 +11295,62 @@ index 14e6326f4f65422abc1d5e077935e87f9cea2e88..ad43e4e34f62a02798f62eed30fed47a
      }
  
      public ChunkPos getPotentialFeatureChunk(long l, int i, int i2) {
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement.java b/src/main/java/net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement.java
+index d21d9a8ebd071364773cd25a2802a5dd1b18a222..91043bfb03f0a2f9a2adc1d9bb3e66b4b1cb7b8f 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement.java
+@@ -76,7 +76,7 @@ public class JigsawPlacement {
+             } else {
+                 int i5 = boundingBox.minY() + poolElementStructurePiece.getGroundLevelDelta();
+                 poolElementStructurePiece.move(0, i3 - i5, 0);
+-                return Optional.of((PieceGenerator<>)(structurePiecesBuilder, contextx) -> {
++                return Optional.of((structurePiecesBuilder, contextx) -> {
+                     List<PoolElementStructurePiece> list = Lists.newArrayList();
+                     list.add(poolElementStructurePiece);
+                     if (jigsawConfiguration.maxDepth() > 0) {
+@@ -200,12 +200,12 @@ public class JigsawPlacement {
+                                         if (!boundingBox2.isInside(structureBlockInfox.pos.relative(JigsawBlock.getFrontFacing(structureBlockInfox.state)))) {
+                                             return 0;
+                                         } else {
+-                                            ResourceLocation resourceLocation = new ResourceLocation(structureBlockInfox.nbt.getString("pool"));
+-                                            Optional<StructureTemplatePool> optional = this.pools.getOptional(resourceLocation);
+-                                            Optional<StructureTemplatePool> optional2 = optional.flatMap((structureTemplatePool) -> this.pools.getOptional(structureTemplatePool.getFallback()));
+-                                            int i = optional.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
+-                                            int i2 = optional2.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
+-                                            return Math.max(i, i2);
++                                            ResourceLocation resourceLocationIn = new ResourceLocation(structureBlockInfox.nbt.getString("pool"));
++                                            Optional<StructureTemplatePool> optionalIn = this.pools.getOptional(resourceLocationIn);
++                                            Optional<StructureTemplatePool> optionalIn2 = optionalIn.flatMap((structureTemplatePool) -> this.pools.getOptional(structureTemplatePool.getFallback()));
++                                            int ix = optionalIn.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
++                                            int i2x = optionalIn2.map((structureTemplatePool) -> structureTemplatePool.getMaxSize(this.structureManager)).orElse(0);
++                                            return Math.max(ix, i2x);
+                                         }
+                                     }).max().orElse(0);
+                                 } else {
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool.java b/src/main/java/net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool.java
+index 3fac4005968d01c429103d88df6665ce80db618d..2e7c463b8fd4df85b8583f43f502aa6dcfbd6a03 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool.java
+@@ -29,7 +29,7 @@ import org.slf4j.Logger;
+ public class StructureTemplatePool {
+     private static final Logger LOGGER = LogUtils.getLogger();
+     private static final int SIZE_UNSET = Integer.MIN_VALUE;
+-    public static final Codec<StructureTemplatePool> DIRECT_CODEC;
++    public static final Codec<StructureTemplatePool> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(ResourceLocation.CODEC.fieldOf("name").forGetter(StructureTemplatePool::getName), ResourceLocation.CODEC.fieldOf("fallback").forGetter(StructureTemplatePool::getFallback), Codec.mapPair(StructurePoolElement.CODEC.fieldOf("element"), Codec.intRange(1, 150).fieldOf("weight")).codec().listOf().fieldOf("elements").forGetter((structureTemplatePool) -> structureTemplatePool.rawTemplates)).apply(instance, StructureTemplatePool::new));
+     public static final Codec<Holder<StructureTemplatePool>> CODEC = RegistryFileCodec.create(Registry.TEMPLATE_POOL_REGISTRY, DIRECT_CODEC);
+     private final ResourceLocation name;
+     private final List<Pair<StructurePoolElement, Integer>> rawTemplates;
+@@ -98,10 +98,6 @@ public class StructureTemplatePool {
+         return this.templates.size();
+     }
+ 
+-    static {
+-        DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(ResourceLocation.CODEC.fieldOf("name").forGetter(StructureTemplatePool::getName), ResourceLocation.CODEC.fieldOf("fallback").forGetter(StructureTemplatePool::getFallback), Codec.mapPair(StructurePoolElement.CODEC.fieldOf("element"), Codec.intRange(1, 150).fieldOf("weight")).codec().listOf().fieldOf("elements").forGetter((structureTemplatePool) -> structureTemplatePool.rawTemplates)).apply(instance, StructureTemplatePool::new));
+-    }
+-
+     public static enum Projection implements StringRepresentable {
+         TERRAIN_MATCHING("terrain_matching", ImmutableList.of(new GravityProcessor(Heightmap.Types.WORLD_SURFACE_WG, -1))),
+         RIGID("rigid", ImmutableList.of());
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java b/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
 index 3c52974e01653648886fa25c9018884342856166..4508041542a28f3eea268806a88cf6aa7010370f 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
@@ -10679,27 +11660,27 @@ index 8d34f778a96b7a9974129089cc4eca42564d6c6a..6d70fa1c7c96125b07faee8de23f8074
              levelChunkTicks.schedule(scheduledTick);
          }
 diff --git a/src/main/java/net/minecraft/world/ticks/SavedTick.java b/src/main/java/net/minecraft/world/ticks/SavedTick.java
-index 3812dae0f931f52e0548540f62c804215ece70b5..1025faa988bf8579db41b1bec082f2e043b83865 100644
+index 4698dcf5e997fcaad666bf84f866f06dae6f0c38..2d90418bab686fff98e17c0805c2aed64f3bd539 100644
 --- a/src/main/java/net/minecraft/world/ticks/SavedTick.java
 +++ b/src/main/java/net/minecraft/world/ticks/SavedTick.java
 @@ -10,11 +10,7 @@ import net.minecraft.nbt.CompoundTag;
  import net.minecraft.nbt.ListTag;
  import net.minecraft.world.level.ChunkPos;
  
--record SavedTick<T>(T b, BlockPos c, int d, TickPriority e) {
+-public record SavedTick<T>(T b, BlockPos c, int d, TickPriority e) {
 -    private final T type;
 -    private final BlockPos pos;
 -    private final int delay;
 -    private final TickPriority priority;
-+record SavedTick<T>(T type, BlockPos pos, int delay, TickPriority priority) {
++public record SavedTick<T>(T type, BlockPos pos, int delay, TickPriority priority) {
      private static final String TAG_ID = "i";
      private static final String TAG_X = "x";
      private static final String TAG_Y = "y";
-@@ -37,13 +33,6 @@ record SavedTick<T>(T b, BlockPos c, int d, TickPriority e) {
+@@ -37,13 +33,6 @@ public record SavedTick<T>(T b, BlockPos c, int d, TickPriority e) {
          }
      };
  
--    SavedTick(T object, BlockPos blockPos, int i, TickPriority tickPriority) {
+-    public SavedTick(T object, BlockPos blockPos, int i, TickPriority tickPriority) {
 -        this.type = object;
 -        this.pos = blockPos;
 -        this.delay = i;
@@ -10709,16 +11690,7 @@ index 3812dae0f931f52e0548540f62c804215ece70b5..1025faa988bf8579db41b1bec082f2e0
      public static <T> void loadTickList(ListTag listTag, Function<String, Optional<T>> function, ChunkPos chunkPos, Consumer<SavedTick<T>> consumer) {
          long l = chunkPos.toLong();
  
-@@ -52,7 +41,7 @@ record SavedTick<T>(T b, BlockPos c, int d, TickPriority e) {
-             (function.apply(compoundTag.getString("i"))).ifPresent((object) -> {
-                 BlockPos blockPos = new BlockPos(compoundTag.getInt("x"), compoundTag.getInt("y"), compoundTag.getInt("z"));
-                 if (ChunkPos.asLong(blockPos) == l) {
--                    consumer.accept(new SavedTick<Object>(object, blockPos, compoundTag.getInt("t"), TickPriority.byValue(compoundTag.getInt("p"))));
-+                    consumer.accept(new SavedTick<>(object, blockPos, compoundTag.getInt("t"), TickPriority.byValue(compoundTag.getInt("p"))));
-                 }
- 
-             });
-@@ -86,20 +75,4 @@ record SavedTick<T>(T b, BlockPos c, int d, TickPriority e) {
+@@ -92,20 +81,4 @@ public record SavedTick<T>(T b, BlockPos c, int d, TickPriority e) {
      public static <T> SavedTick<T> probe(T object, BlockPos blockPos) {
          return new SavedTick<>(object, blockPos, 0, TickPriority.NORMAL);
      }
