@@ -248,10 +248,10 @@ index d90f7c57dde46e249780eff56acc552454ab17b5..5141943244bb68e7c0c3efa45ee03f42
          }).start();
      }
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 8b50d6411e146555df09f5c6dfc97e7a35dd6348..97e7b70fe16fdc7a802771c724994be2ec469d9c 100644
+index 8be1852f58865ae85457c37c5f5b989cb258ae75..137d9f9af14b7e7f9f599b01d933b55d6a63cdba 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
-@@ -25,6 +25,7 @@ import java.nio.file.Path;
+@@ -26,6 +26,7 @@ import java.nio.file.Path;
  import java.nio.file.spi.FileSystemProvider;
  import java.security.AccessController;
  import java.security.PrivilegedActionException;
@@ -259,7 +259,7 @@ index 8b50d6411e146555df09f5c6dfc97e7a35dd6348..97e7b70fe16fdc7a802771c724994be2
  import java.time.Duration;
  import java.time.Instant;
  import java.util.Arrays;
-@@ -128,21 +129,21 @@ public class Util {
+@@ -134,21 +135,21 @@ public class Util {
      }
  
      private static int getMaxThreads() {
@@ -286,7 +286,7 @@ index 8b50d6411e146555df09f5c6dfc97e7a35dd6348..97e7b70fe16fdc7a802771c724994be2
      }
  
      public static ExecutorService bootstrapExecutor() {
-@@ -253,7 +254,7 @@ public class Util {
+@@ -259,7 +260,7 @@ public class Util {
              String s2 = thread.getName();
              thread.setName(s);
  
@@ -295,7 +295,7 @@ index 8b50d6411e146555df09f5c6dfc97e7a35dd6348..97e7b70fe16fdc7a802771c724994be2
              try {
                  var4 = supplier.get();
              } finally {
-@@ -338,7 +339,7 @@ public class Util {
+@@ -344,7 +345,7 @@ public class Util {
      }
  
      public static <K> Strategy<K> identityStrategy() {
@@ -304,7 +304,7 @@ index 8b50d6411e146555df09f5c6dfc97e7a35dd6348..97e7b70fe16fdc7a802771c724994be2
      }
  
      public static <V> CompletableFuture<List<V>> sequence(List<? extends CompletableFuture<V>> list) {
-@@ -682,7 +683,7 @@ public class Util {
+@@ -688,7 +689,7 @@ public class Util {
  
          public void openUrl(URL url) {
              try {
@@ -735,10 +735,10 @@ index 1f88364b9929dc12f05535dd2297844a0f6efc0f..16189cf8f3ea7941c7aab3ee3eade99f
      public void update(Consumer<NarrationElementOutput> consumer) {
          ++this.generation;
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index b508ceeac2d38e8ee8fe9be319166aec3ebb72ce..21a0e34bc8c1760f1d97e053de38082acdf30062 100644
+index 47ac3fa1ac866085d027bdfe09ed2503645b5206..6b72e301a30fe9ae71f9b2fd468edb7fa587c8c4 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -405,33 +405,6 @@ public class TitleScreen extends Screen {
+@@ -396,33 +396,6 @@ public class TitleScreen extends Screen {
          this.minecraft.setScreen(this);
      }
  
@@ -1620,10 +1620,10 @@ index aa193b79798df45973ddef57982e6c51bfb14df2..d399a650b93d87c4984842203bd28f1a
                  }
              };
 diff --git a/src/main/java/net/minecraft/core/Holder.java b/src/main/java/net/minecraft/core/Holder.java
-index 292ee9896cb7f5d7226ed811f1a3d02f18a8588c..81a121b7246300cdb96dad2ba75fd21bf9647eb5 100644
+index e8441f102e40efc52902d75cbbd8c5097c46340a..54eff2a92c61da5281d152a6d870b56972967852 100644
 --- a/src/main/java/net/minecraft/core/Holder.java
 +++ b/src/main/java/net/minecraft/core/Holder.java
-@@ -40,16 +40,10 @@ public interface Holder<T> {
+@@ -39,16 +39,10 @@ public interface Holder<T> {
      }
  
      static <T> Holder<T> hackyErase(Holder<? extends T> holder) {
@@ -1642,7 +1642,7 @@ index 292ee9896cb7f5d7226ed811f1a3d02f18a8588c..81a121b7246300cdb96dad2ba75fd21b
          public boolean isBound() {
              return true;
          }
-@@ -93,10 +87,6 @@ public interface Holder<T> {
+@@ -92,10 +86,6 @@ public interface Holder<T> {
          public Stream<TagKey<T>> tags() {
              return Stream.of();
          }
@@ -1654,7 +1654,7 @@ index 292ee9896cb7f5d7226ed811f1a3d02f18a8588c..81a121b7246300cdb96dad2ba75fd21b
  
      public static enum Kind {
 diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index 9804e7d0a53252fa4aa6328959a534835d6e760e..e419e07858f1aa9b567a0da67c64d58c687a4948 100644
+index 5405e813c826b59525bb82c34393faf221ce517a..ef71d7e95cf3b46896977aababfd9bcc1321532a 100644
 --- a/src/main/java/net/minecraft/core/MappedRegistry.java
 +++ b/src/main/java/net/minecraft/core/MappedRegistry.java
 @@ -104,13 +104,13 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
@@ -1759,10 +1759,10 @@ index 9804e7d0a53252fa4aa6328959a534835d6e760e..e419e07858f1aa9b567a0da67c64d58c
  
      public Registry<T> freeze() {
          this.frozen = true;
--        List<ResourceLocation> list = this.byLocation.entrySet().stream().filter((entry) -> !((Holder.Reference)entry.getValue()).isBound()).map(Entry::getKey).sorted().toList();
-+        List<ResourceLocation> list = this.byLocation.entrySet().stream().filter((entry) -> !entry.getValue().isBound()).map(Entry::getKey).sorted().toList();
+-        List<ResourceLocation> list = this.byKey.entrySet().stream().filter((entry) -> !((Holder.Reference)entry.getValue()).isBound()).map((entry) -> ((ResourceKey)entry.getKey()).location()).sorted().toList();
++        List<ResourceLocation> list = this.byKey.entrySet().stream().filter((entry) -> !entry.getValue().isBound()).map((entry) -> ((ResourceKey)entry.getKey()).location()).sorted().toList();
          if (!list.isEmpty()) {
-             throw new IllegalStateException("Unbound values in registry: " + list);
+             throw new IllegalStateException("Unbound values in registry " + this.key() + ": " + list);
          } else {
 @@ -296,19 +296,19 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
          if (this.customHolderProvider == null) {
@@ -1870,7 +1870,7 @@ index a6552528caabb12648902d56142871ca0c4d8519..53f31f76e7c60398899928c235769e2f
          };
      }
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index fb5051ddd0bd1b637250c0034fde96732cb3c816..03b92d1846339fd0403342d2b48a2e4240aaf859 100644
+index f7e48404e29818b51a6c9e27f73ebede7612629f..fcb136b4d8cca03630fab0eb9a28ebfda68eef9b 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
 @@ -44,7 +44,22 @@ import org.slf4j.Logger;
@@ -1942,7 +1942,7 @@ index fb5051ddd0bd1b637250c0034fde96732cb3c816..03b92d1846339fd0403342d2b48a2e42
              }
  
              public Stream<RegistryAccess.RegistryEntry<?>> ownedRegistries() {
-@@ -180,32 +194,13 @@ public interface RegistryAccess {
+@@ -180,7 +194,7 @@ public interface RegistryAccess {
      }
  
      static <E> WritableRegistry<?> createRegistry(ResourceKey<? extends Registry<?>> resourceKey) {
@@ -1951,7 +1951,8 @@ index fb5051ddd0bd1b637250c0034fde96732cb3c816..03b92d1846339fd0403342d2b48a2e42
      }
  
      default RegistryAccess.Frozen freeze() {
-         return new RegistryAccess.ImmutableRegistryAccess(this.ownedRegistries().map(RegistryAccess.RegistryEntry::freeze));
+@@ -191,25 +205,6 @@ public interface RegistryAccess {
+         return (Lifecycle)this.ownedRegistries().map((registryEntry) -> registryEntry.value.elementsLifecycle()).reduce(Lifecycle.stable(), Lifecycle::add);
      }
  
 -    static {
@@ -1976,7 +1977,7 @@ index fb5051ddd0bd1b637250c0034fde96732cb3c816..03b92d1846339fd0403342d2b48a2e42
      public interface Frozen extends RegistryAccess {
          default RegistryAccess.Frozen freeze() {
              return this;
-@@ -232,45 +227,13 @@ public interface RegistryAccess {
+@@ -236,45 +231,13 @@ public interface RegistryAccess {
          }
      }
  
@@ -2013,7 +2014,7 @@ index fb5051ddd0bd1b637250c0034fde96732cb3c816..03b92d1846339fd0403342d2b48a2e42
  
 -    public static record RegistryEntry<T>(ResourceKey<? extends Registry<T>> a, Registry<T> b) {
 -        final ResourceKey<? extends Registry<T>> key;
--        private final Registry<T> value;
+-        final Registry<T> value;
 -
 -        public RegistryEntry(ResourceKey<? extends Registry<T>> resourceKey, Registry<T> registry) {
 -            this.key = resourceKey;
@@ -2024,7 +2025,7 @@ index fb5051ddd0bd1b637250c0034fde96732cb3c816..03b92d1846339fd0403342d2b48a2e42
          private static <T, R extends Registry<? extends T>> RegistryAccess.RegistryEntry<T> fromMapEntry(Entry<? extends ResourceKey<? extends Registry<?>>, R> entry) {
              return fromUntyped((ResourceKey)entry.getKey(), (Registry)entry.getValue());
          }
-@@ -280,20 +243,12 @@ public interface RegistryAccess {
+@@ -284,20 +247,12 @@ public interface RegistryAccess {
          }
  
          private static <T> RegistryAccess.RegistryEntry<T> fromUntyped(ResourceKey<? extends Registry<?>> resourceKey, Registry<?> registry) {
@@ -3176,7 +3177,7 @@ index 4e0028e0c2b1be52899fadc7e889531916976ad2..6208807e35366da82705e35a39b287e0
  
      public ResourceLocation location() {
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 891761e5bd03dac6fea7bb3a864180eccc0fa3e8..54a03b7dc7b332651f91ca40bf72127a15fdb122 100644
+index d5f079da34464ec8b9e234728a235c8f2f39e320..c4742a0799531fd9f5653d9907e23aba2d8b56f3 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -180,17 +180,17 @@ public class Main {
@@ -3270,7 +3271,7 @@ index cd54237a02ff0a183fb2d92b38540c540e21db77..edcbaab9e2d0e741d5dbde9532068263
                          LOGGER.error("Failed to load function {}", resourceLocation, throwable);
                      } else {
 diff --git a/src/main/java/net/minecraft/server/WorldStem.java b/src/main/java/net/minecraft/server/WorldStem.java
-index a0ba297f939564c4a4951c900dc86dcb55dd3465..935d5f4c250e162a61022561ae368e321ddaa399 100644
+index df378ee7ebc97f1b0c85cb838971cf6ba8624878..7c21dab8f26e8fe185076debe22306c2f7f8a5e8 100644
 --- a/src/main/java/net/minecraft/server/WorldStem.java
 +++ b/src/main/java/net/minecraft/server/WorldStem.java
 @@ -21,19 +21,12 @@ import net.minecraft.world.level.DataPackConfig;
@@ -3503,7 +3504,7 @@ index b4fcb4678ad94bbb293202a31a1015e473117d92..3c5c0b6c60359e459207dd791e9b3cf5
                                  return manipulateData(commandContext, dataProvider, dataManipulator, list);
                              }).then(Commands.argument("sourcePath", NbtPathArgument.nbtPath()).executes((commandContext) -> {
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
-index 54865ee79799c709303c9804f344426ce6110f07..648a04fe6f0168dcc9c34d240886fde77f3f214a 100644
+index a31c97256109af9a2d7ef0642d731f4b5ad36542..c4962e2991729b80f9a6da31f952430b15e572ed 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
 @@ -92,33 +92,6 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
@@ -3779,10 +3780,10 @@ index 799d6b6800b91f2223ce554fd95662c3a4570321..abbf3939685c67e8d5b38a765e3a7b45
                  return true;
              } else {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 4b48248b4f4604815a0136b013b8a47e8d861a1d..b507f530f0783ac699852201aabf5c077d7e221b 100644
+index 961244e3d8660e05b82825616db847ad5b5585ee..ca6bfb54ea1a7fba9107e1853c4c4453e8d2b1c7 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1365,7 +1365,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1366,7 +1366,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  object2IntOpenHashMap.addTo(s, 1);
              }
  
@@ -4055,16 +4056,18 @@ index c337a6dc8cc16260f2038439027065ad77839128..487da6925055ec72c437165a15053e8d
      }
  
 diff --git a/src/main/java/net/minecraft/util/CubicSpline.java b/src/main/java/net/minecraft/util/CubicSpline.java
-index 22bce1869204b315082fad64aa016358cdf2e441..7949a82c4b3615db27cc8243ddba1b508bf93bf8 100644
+index 5f321cb77abb82d827b772d78e83d0befbf0f9b6..985a4d56cdbe9746456ef26a29c0f44bfb3737bd 100644
 --- a/src/main/java/net/minecraft/util/CubicSpline.java
 +++ b/src/main/java/net/minecraft/util/CubicSpline.java
-@@ -22,45 +22,24 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+@@ -22,47 +22,26 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
  
      float max();
  
 +    record Point<C>(float location, CubicSpline<C> value, float derivative) {
 +    }
 +
+     CubicSpline<C> mapAll(CubicSpline.CoordinateVisitor<C> var1);
+ 
      static <C> Codec<CubicSpline<C>> codec(Codec<ToFloatFunction<C>> codec) {
          MutableObject<Codec<CubicSpline<C>>> mutableObject = new MutableObject();
          Codec<Point<C>> codec2 = RecordCodecBuilder.create((instance) -> instance.group(Codec.FLOAT.fieldOf("location").forGetter(Point::location), ExtraCodecs.lazyInitializedCodec(mutableObject::getValue).fieldOf("value").forGetter(Point::value), Codec.FLOAT.fieldOf("derivative").forGetter(Point::derivative)).apply(instance, (f, cubicSpline, f2) -> {
@@ -4112,7 +4115,7 @@ index 22bce1869204b315082fad64aa016358cdf2e441..7949a82c4b3615db27cc8243ddba1b50
                  }
  
                  return new CubicSpline.Multipoint(toFloatFunction, floats, builder.build(), floats2);
-@@ -108,7 +87,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+@@ -110,7 +89,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
          }
  
          public CubicSpline.Builder<C> addPoint(float f, float f2, float f3) {
@@ -4121,7 +4124,7 @@ index 22bce1869204b315082fad64aa016358cdf2e441..7949a82c4b3615db27cc8243ddba1b50
          }
  
          public CubicSpline.Builder<C> addPoint(float f, CubicSpline<C> cubicSpline, float f2) {
-@@ -132,13 +111,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+@@ -134,13 +113,7 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
      }
  
      @VisibleForDebug
@@ -4136,14 +4139,18 @@ index 22bce1869204b315082fad64aa016358cdf2e441..7949a82c4b3615db27cc8243ddba1b50
          public float apply(C object) {
              return this.value;
          }
-@@ -154,28 +127,13 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
-         public float max() {
-             return this.value;
+@@ -160,10 +133,6 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+         public CubicSpline<C> mapAll(CubicSpline.CoordinateVisitor<C> coordinateVisitor) {
+             return this;
          }
 -
 -        public float value() {
 -            return this.value;
 -        }
+     }
+ 
+     public interface CoordinateVisitor<C> {
+@@ -171,21 +140,10 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
      }
  
      @VisibleForDebug
@@ -4169,9 +4176,9 @@ index 22bce1869204b315082fad64aa016358cdf2e441..7949a82c4b3615db27cc8243ddba1b50
          }
  
          public float apply(C object) {
-@@ -218,21 +176,5 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
-         public float max() {
-             return (float)this.values().stream().mapToDouble(CubicSpline::max).max().orElseThrow();
+@@ -232,21 +190,5 @@ public interface CubicSpline<C> extends ToFloatFunction<C> {
+         public CubicSpline<C> mapAll(CubicSpline.CoordinateVisitor<C> coordinateVisitor) {
+             return new CubicSpline.Multipoint<>(coordinateVisitor.visit(this.coordinate), this.locations, this.values().stream().map((cubicSpline) -> cubicSpline.mapAll(coordinateVisitor)).toList(), this.derivatives);
          }
 -
 -        public ToFloatFunction<C> coordinate() {
@@ -7966,10 +7973,10 @@ index 3d9a6ac3f5dce3a5a56ea746cd0549418b6f917b..4b1cf765c1001ad159d0c01c0c954d2d
          @Nullable
          public Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
-index 409fe03f25b023cf35ad3e27c78cd4534414e769..7a91e80cd196e179d4d54f0ae17b9b56a5712527 100644
+index 9a38b3a21c3f389eedd4ed7b263868d416416214..8feba4d38d9b99eb49584df04ed7f64628ac8fbd 100644
 --- a/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/BiomeSource.java
-@@ -60,37 +60,13 @@ public abstract class BiomeSource implements BiomeResolver {
+@@ -60,30 +60,6 @@ public abstract class BiomeSource implements BiomeResolver {
          Map<FeatureData, Set<FeatureData>> map = new TreeMap(comparator);
          int i = 0;
  
@@ -7997,18 +8004,19 @@ index 409fe03f25b023cf35ad3e27c78cd4534414e769..7a91e80cd196e179d4d54f0ae17b9b56
 -            }
 -        }
 -
-         for(Biome biome : list) {
+         for(Holder<Biome> holder : list) {
+             Biome biome = holder.value();
              List<FeatureData> list2 = Lists.newArrayList();
-             List<HolderSet<PlacedFeature>> list3 = biome.getGenerationSettings().features();
+@@ -91,7 +67,7 @@ public abstract class BiomeSource implements BiomeResolver {
              i = Math.max(i, list3.size());
  
              for(int i2 = 0; i2 < list3.size(); ++i2) {
--                for(Holder<PlacedFeature> holder : (HolderSet)list3.get(i2)) {
-+                for(Holder<PlacedFeature> holder : list3.get(i2)) {
-                     PlacedFeature placedFeature = (PlacedFeature)holder.value();
+-                for(Holder<PlacedFeature> holder2 : (HolderSet)list3.get(i2)) {
++                for(Holder<PlacedFeature> holder2 : list3.get(i2)) {
+                     PlacedFeature placedFeature = (PlacedFeature)holder2.value();
                      list2.add(new FeatureData(object2IntMap.computeIfAbsent(placedFeature, (object) -> mutableInt.getAndIncrement()), i2, placedFeature));
                  }
-@@ -108,12 +84,12 @@ public abstract class BiomeSource implements BiomeResolver {
+@@ -109,12 +85,12 @@ public abstract class BiomeSource implements BiomeResolver {
          Set<FeatureData> set3 = new TreeSet(comparator);
          List<FeatureData> list4 = Lists.newArrayList();
  
@@ -8023,7 +8031,17 @@ index 409fe03f25b023cf35ad3e27c78cd4534414e769..7a91e80cd196e179d4d54f0ae17b9b56
                  if (!flag) {
                      throw new IllegalStateException("Feature order cycle found");
                  }
-@@ -261,21 +237,9 @@ public abstract class BiomeSource implements BiomeResolver {
+@@ -148,7 +124,8 @@ public abstract class BiomeSource implements BiomeResolver {
+         Builder<BiomeSource.StepFeatureData> builder = ImmutableList.builder();
+ 
+         for(int i5 = 0; i5 < i; ++i5) {
+-            List<PlacedFeature> list6 = list4.stream().filter((var1) -> var1.step() == i5).map(FeatureData::feature).collect(Collectors.toList());
++            int finalI = i5;
++            List<PlacedFeature> list6 = list4.stream().filter((var1) -> var1.step() == finalI).map(FeatureData::feature).collect(Collectors.toList());
+             int i7 = list6.size();
+             Object2IntMap<PlacedFeature> object2IntMap2 = new Object2IntOpenCustomHashMap(i7, Util.identityStrategy());
+ 
+@@ -261,21 +238,9 @@ public abstract class BiomeSource implements BiomeResolver {
          Registry.register(Registry.BIOME_SOURCE, "the_end", TheEndBiomeSource.CODEC);
      }
  
@@ -8322,19 +8340,20 @@ index 942ae0aaba2d8cb7903c790293f8e8d3b315f9b2..9da2505f366758d1a388fb7878932a7c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java b/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java
-index 50cadd9a4aa8245d38734fc28d60c71ba403e832..da77b07a4a6e3038b1e408b1edfa2f27cdc9ed5a 100644
+index e0f9230317fd7211ffea8fe65db92fbc98f6d280..a83ebd9822526bda4197f3da9ab7b5b9a430acc7 100644
 --- a/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java
 +++ b/src/main/java/net/minecraft/world/level/biome/TerrainShaper.java
-@@ -16,21 +16,12 @@ import net.minecraft.util.StringRepresentable;
- import net.minecraft.util.ToFloatFunction;
- import net.minecraft.util.VisibleForDebug;
+@@ -18,22 +18,13 @@ import net.minecraft.util.VisibleForDebug;
+ import net.minecraft.world.level.levelgen.DensityFunction;
+ import org.jetbrains.annotations.VisibleForTesting;
  
--public record TerrainShaper(CubicSpline<TerrainShaper.Point> b, CubicSpline<TerrainShaper.Point> c, CubicSpline<TerrainShaper.Point> d) {
+-public record TerrainShaper(CubicSpline<TerrainShaper.Point> c, CubicSpline<TerrainShaper.Point> d, CubicSpline<TerrainShaper.Point> e) {
 -    private final CubicSpline<TerrainShaper.Point> offsetSampler;
 -    private final CubicSpline<TerrainShaper.Point> factorSampler;
 -    private final CubicSpline<TerrainShaper.Point> jaggednessSampler;
 +public record TerrainShaper(CubicSpline<TerrainShaper.Point> offsetSampler, CubicSpline<TerrainShaper.Point> factorSampler, CubicSpline<TerrainShaper.Point> jaggednessSampler) {
      private static final Codec<CubicSpline<TerrainShaper.Point>> SPLINE_CODEC = CubicSpline.codec(TerrainShaper.Coordinate.WIDE_CODEC);
+     public static final Codec<CubicSpline<TerrainShaper.PointCustom>> SPLINE_CUSTOM_CODEC = CubicSpline.codec(TerrainShaper.CoordinateCustom.WIDE_CODEC);
      public static final Codec<TerrainShaper> CODEC = RecordCodecBuilder.create((instance) -> instance.group(SPLINE_CODEC.fieldOf("offset").forGetter(TerrainShaper::offsetSampler), SPLINE_CODEC.fieldOf("factor").forGetter(TerrainShaper::factorSampler), SPLINE_CODEC.fieldOf("jaggedness").forGetter((terrainShaper) -> terrainShaper.jaggednessSampler)).apply(instance, TerrainShaper::new));
      private static final float GLOBAL_OFFSET = -0.50375F;
      private static final ToFloatFunction<Float> NO_TRANSFORM = (f) -> f;
@@ -8348,7 +8367,28 @@ index 50cadd9a4aa8245d38734fc28d60c71ba403e832..da77b07a4a6e3038b1e408b1edfa2f27
      private static float getAmplifiedOffset(float f) {
          return f < 0.0F ? f : f * 2.0F;
      }
-@@ -302,33 +293,5 @@ public record TerrainShaper(CubicSpline<TerrainShaper.Point> b, CubicSpline<Terr
+@@ -309,8 +300,7 @@ public record TerrainShaper(CubicSpline<TerrainShaper.Point> c, CubicSpline<Terr
+         }
+     }
+ 
+-    public static record CoordinateCustom(Holder<DensityFunction> a) implements ToFloatFunction<TerrainShaper.PointCustom> {
+-        private final Holder<DensityFunction> function;
++    public static record CoordinateCustom(Holder<DensityFunction> function) implements ToFloatFunction<TerrainShaper.PointCustom> {
+         static final Codec<ToFloatFunction<TerrainShaper.PointCustom>> WIDE_CODEC = DensityFunction.CODEC.flatComapMap(TerrainShaper.CoordinateCustom::new, (toFloatFunction) -> {
+             DataResult var10000;
+             if (toFloatFunction instanceof TerrainShaper.CoordinateCustom) {
+@@ -323,10 +313,6 @@ public record TerrainShaper(CubicSpline<TerrainShaper.Point> c, CubicSpline<Terr
+             return var10000;
+         });
+ 
+-        public CoordinateCustom(Holder<DensityFunction> holder) {
+-            this.function = holder;
+-        }
+-
+         public float apply(TerrainShaper.PointCustom pointCustom) {
+             return (float)this.function.value().compute(pointCustom.context());
+         }
+@@ -340,45 +326,8 @@ public record TerrainShaper(CubicSpline<TerrainShaper.Point> c, CubicSpline<Terr
          }
      }
  
@@ -8381,7 +8421,20 @@ index 50cadd9a4aa8245d38734fc28d60c71ba403e832..da77b07a4a6e3038b1e408b1edfa2f27
 -            return this.weirdness;
 -        }
 -    }
+-
+-    public static record PointCustom(DensityFunction.FunctionContext a) {
+-        private final DensityFunction.FunctionContext context;
+-
+-        public PointCustom(DensityFunction.FunctionContext functionContext) {
+-            this.context = functionContext;
+-        }
 +    public static record Point(float continents, float erosion, float ridges, float weirdness) {}
+ 
+-        public DensityFunction.FunctionContext context() {
+-            return this.context;
+-        }
++    public static record PointCustom(DensityFunction.FunctionContext context) {
+     }
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/block/BaseEntityBlock.java b/src/main/java/net/minecraft/world/level/block/BaseEntityBlock.java
@@ -8650,10 +8703,10 @@ index 8f6699468daca93ff4d790cfa46c157df9c09ac8..f8931051a591d1dadc7130153894629c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-index 07b3a389475eeedfafe5895f6ae4d9491d45596f..30f6287c0fd01f28c134d9468ba21c3303fd4dda 100644
+index 1b80119d051f385177149c075d47a08bd3ff7782..361de27adeea809226561ac27df30f6e53e4e0b5 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-@@ -202,7 +202,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -208,7 +208,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
  
      @Nullable
      public Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> findNearestMapFeature(ServerLevel serverLevel, HolderSet<ConfiguredStructureFeature<?, ?>> holderSet, BlockPos blockPos, int i, boolean flag) {
@@ -8662,7 +8715,7 @@ index 07b3a389475eeedfafe5895f6ae4d9491d45596f..30f6287c0fd01f28c134d9468ba21c33
          if (set.isEmpty()) {
              return null;
          } else {
-@@ -217,7 +217,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -223,7 +223,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
                  for(Holder<ConfiguredStructureFeature<?, ?>> holder : holderSet) {
                      if (!set2.stream().noneMatch(holder.value().biomes()::contains)) {
                          for(StructurePlacement structurePlacement : this.getPlacementsForFeature(holder)) {
@@ -8671,7 +8724,7 @@ index 07b3a389475eeedfafe5895f6ae4d9491d45596f..30f6287c0fd01f28c134d9468ba21c33
                          }
                      }
                  }
-@@ -353,9 +353,9 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -359,9 +359,9 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
                  this.biomeSource.possibleBiomes().stream().map(Holder::value).forEach(set::add);
              } else {
                  ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPosx) -> {
@@ -8902,7 +8955,7 @@ index 7c06dfb80a93b484aa733b059529ab30317621d9..71f5bd2ba1a087203a4a728bc4f0f370
                              levelChunk.setBlockEntity(blockEntity);
                          }
 diff --git a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
-index 4cdcc90a2ba7cc3f46b71545fa1515061edd892e..6eb641de2d60179cc8d137a85d86ffa32a6416a6 100644
+index 84c67cc60a7440d35e59908d7f1ccb140ab7d1eb..467c41732984dfa6638b0f49974d4632d002568b 100644
 --- a/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 +++ b/src/main/java/net/minecraft/world/level/dimension/DimensionType.java
 @@ -42,7 +42,7 @@ public class DimensionType {
@@ -8914,9 +8967,9 @@ index 4cdcc90a2ba7cc3f46b71545fa1515061edd892e..6eb641de2d60179cc8d137a85d86ffa3
      private static final int MOON_PHASES = 8;
      public static final float[] MOON_BRIGHTNESS_PER_PHASE = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
      public static final ResourceKey<DimensionType> OVERWORLD_LOCATION = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("overworld"));
-@@ -288,8 +288,4 @@ public class DimensionType {
-             return this.hasSkylight == dimensionType.hasSkylight && this.hasCeiling == dimensionType.hasCeiling && this.ultraWarm == dimensionType.ultraWarm && this.natural == dimensionType.natural && this.coordinateScale == dimensionType.coordinateScale && this.createDragonFight == dimensionType.createDragonFight && this.piglinSafe == dimensionType.piglinSafe && this.bedWorks == dimensionType.bedWorks && this.respawnAnchorWorks == dimensionType.respawnAnchorWorks && this.hasRaids == dimensionType.hasRaids && this.minY == dimensionType.minY && this.height == dimensionType.height && this.logicalHeight == dimensionType.logicalHeight && Float.compare(dimensionType.ambientLight, this.ambientLight) == 0 && this.fixedTime.equals(dimensionType.fixedTime) && this.infiniburn.equals(dimensionType.infiniburn) && this.effectsLocation.equals(dimensionType.effectsLocation);
-         }
+@@ -274,8 +274,4 @@ public class DimensionType {
+     public ResourceLocation effectsLocation() {
+         return this.effectsLocation;
      }
 -
 -    static {
@@ -9041,10 +9094,10 @@ index d68d0d1079f5da629a1f71c350e5a77ac405c830..8d4e5fc9b8d530a140a365da170b7076
  
      public interface Visitor extends Function<DensityFunction, DensityFunction> {
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java b/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java
-index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a105c3050 100644
+index d7200aadcfec81ef5dd87c90abd4e4426f405dd9..9e7421134d4588e96030ed3b474362b919b3020e 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/DensityFunctions.java
-@@ -232,21 +232,7 @@ public final class DensityFunctions {
+@@ -235,21 +235,7 @@ public final class DensityFunctions {
          return add(mul(densityFunction2, densityFunction5), mul(densityFunction3, densityFunction4));
      }
  
@@ -9067,7 +9120,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              double d = this.argument1.compute(functionContext);
              double var10000;
-@@ -309,26 +295,6 @@ public final class DensityFunctions {
+@@ -312,26 +298,6 @@ public final class DensityFunctions {
          public DensityFunction mapAll(DensityFunction.Visitor visitor) {
              return (DensityFunction)visitor.apply(DensityFunctions.TwoArgumentSimpleFunction.create(this.type, this.argument1.mapAll(visitor), this.argument2.mapAll(visitor)));
          }
@@ -9094,7 +9147,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
      }
  
      protected static enum BeardifierMarker implements DensityFunctions.BeardifierOrMarker {
-@@ -385,14 +351,9 @@ public final class DensityFunctions {
+@@ -388,14 +354,9 @@ public final class DensityFunctions {
          }
      }
  
@@ -9110,7 +9163,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double transform(DensityFunction.FunctionContext functionContext, double d) {
              return functionContext.getBlender().blendDensity(functionContext, d);
          }
-@@ -412,10 +373,6 @@ public final class DensityFunctions {
+@@ -415,10 +376,6 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9121,7 +9174,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
      }
  
      protected static enum BlendOffset implements DensityFunction.SimpleFunction {
-@@ -444,19 +401,10 @@ public final class DensityFunctions {
+@@ -447,19 +404,10 @@ public final class DensityFunctions {
          }
      }
  
@@ -9142,7 +9195,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double transform(double d) {
              return Mth.clamp(d, this.minValue, this.maxValue);
          }
-@@ -468,29 +416,12 @@ public final class DensityFunctions {
+@@ -471,29 +419,12 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9173,7 +9226,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              return this.value;
          }
-@@ -510,10 +441,6 @@ public final class DensityFunctions {
+@@ -513,10 +444,6 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9184,7 +9237,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
      }
  
      protected static final class EndIslandDensityFunction implements DensityFunction.SimpleFunction {
-@@ -543,13 +470,7 @@ public final class DensityFunctions {
+@@ -546,13 +473,7 @@ public final class DensityFunctions {
          }
      }
  
@@ -9199,7 +9252,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              return this.function.value().compute(functionContext);
          }
-@@ -573,25 +494,9 @@ public final class DensityFunctions {
+@@ -576,25 +497,9 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              throw new UnsupportedOperationException("Calling .codec() on HolderHolder");
          }
@@ -9226,7 +9279,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public static DensityFunctions.Mapped create(DensityFunctions.Mapped.Type type, DensityFunction densityFunction) {
              double d = densityFunction.minValue();
              double d2 = transform(type, d);
-@@ -640,22 +545,6 @@ public final class DensityFunctions {
+@@ -643,22 +548,6 @@ public final class DensityFunctions {
              return this.type.codec;
          }
  
@@ -9249,7 +9302,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          static enum Type implements StringRepresentable {
              ABS("abs"),
              SQUARE("square"),
-@@ -677,15 +566,7 @@ public final class DensityFunctions {
+@@ -680,15 +569,7 @@ public final class DensityFunctions {
          }
      }
  
@@ -9266,7 +9319,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              return this.wrapped.compute(functionContext);
          }
-@@ -706,14 +587,6 @@ public final class DensityFunctions {
+@@ -709,14 +590,6 @@ public final class DensityFunctions {
              return this.wrapped.maxValue();
          }
  
@@ -9281,11 +9334,11 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          static enum Type implements StringRepresentable {
              Interpolated("interpolated"),
              FlatCache("flat_cache"),
-@@ -744,21 +617,7 @@ public final class DensityFunctions {
+@@ -747,21 +620,7 @@ public final class DensityFunctions {
          }
      }
  
--    static record MulOrAdd(DensityFunctions.MulOrAdd.Type e, DensityFunction f, double g, double h, double i) implements DensityFunctions.PureTransformer, DensityFunctions.TwoArgumentSimpleFunction {
+-    static record MulOrAdd(DensityFunctions.MulOrAdd.Type e, DensityFunction f, double g, double h, double i) implements DensityFunctions.TwoArgumentSimpleFunction, DensityFunctions.PureTransformer {
 -        private final DensityFunctions.MulOrAdd.Type specificType;
 -        private final DensityFunction input;
 -        private final double minValue;
@@ -9300,11 +9353,11 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
 -            this.argument = d3;
 -        }
 -
-+    static record MulOrAdd(DensityFunctions.MulOrAdd.Type specificType, DensityFunction input, double minValue, double maxValue, double argument) implements DensityFunctions.PureTransformer, DensityFunctions.TwoArgumentSimpleFunction {
++    static record MulOrAdd(DensityFunctions.MulOrAdd.Type specificType, DensityFunction input, double minValue, double maxValue, double argument) implements DensityFunctions.TwoArgumentSimpleFunction, DensityFunctions.PureTransformer {
          public DensityFunctions.TwoArgumentSimpleFunction.Type type() {
              return this.specificType == DensityFunctions.MulOrAdd.Type.MUL ? DensityFunctions.TwoArgumentSimpleFunction.Type.MUL : DensityFunctions.TwoArgumentSimpleFunction.Type.ADD;
          }
-@@ -807,50 +666,16 @@ public final class DensityFunctions {
+@@ -810,50 +669,16 @@ public final class DensityFunctions {
              return new DensityFunctions.MulOrAdd(this.specificType, densityFunction, d3, d4, this.argument);
          }
  
@@ -9357,7 +9410,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public static DensityFunctions.Noise createUnseeded(Holder<NormalNoise.NoiseParameters> holder, @Deprecated double d, double d2) {
              return new DensityFunctions.Noise(holder, (NormalNoise)null, d, d2);
          }
-@@ -870,29 +695,6 @@ public final class DensityFunctions {
+@@ -873,29 +698,6 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9387,7 +9440,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
      }
  
      interface PureTransformer extends DensityFunction {
-@@ -914,23 +716,10 @@ public final class DensityFunctions {
+@@ -917,23 +719,10 @@ public final class DensityFunctions {
          double transform(double var1);
      }
  
@@ -9412,7 +9465,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              double d = this.input.compute(functionContext);
              return d >= this.minInclusive && d < this.maxExclusive ? this.whenInRange.compute(functionContext) : this.whenOutOfRange.compute(functionContext);
-@@ -965,39 +754,11 @@ public final class DensityFunctions {
+@@ -968,39 +757,11 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9453,7 +9506,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              return this.compute((double)functionContext.blockX(), (double)functionContext.blockY(), (double)functionContext.blockZ());
          }
-@@ -1020,17 +781,9 @@ public final class DensityFunctions {
+@@ -1023,17 +784,9 @@ public final class DensityFunctions {
          }
      }
  
@@ -9472,7 +9525,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              return this.compute((double)functionContext.blockX(), 0.0D, (double)functionContext.blockZ());
          }
-@@ -1042,28 +795,11 @@ public final class DensityFunctions {
+@@ -1045,28 +798,11 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9502,7 +9555,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              return this.compute((double)functionContext.blockZ(), (double)functionContext.blockX(), 0.0D);
          }
-@@ -1075,15 +811,6 @@ public final class DensityFunctions {
+@@ -1078,15 +814,6 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9518,7 +9571,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
      }
  
      interface ShiftNoise extends DensityFunction.SimpleFunction {
-@@ -1109,28 +836,10 @@ public final class DensityFunctions {
+@@ -1112,28 +839,10 @@ public final class DensityFunctions {
          DensityFunctions.ShiftNoise withNewNoise(NormalNoise var1);
      }
  
@@ -9549,7 +9602,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public static DensityFunctions.ShiftedNoise createUnseeded(DensityFunction densityFunction, DensityFunction densityFunction2, DensityFunction densityFunction3, double d, double d2, Holder<NormalNoise.NoiseParameters> holder) {
              return new DensityFunctions.ShiftedNoise(densityFunction, densityFunction2, densityFunction3, d, d2, holder, (NormalNoise)null);
          }
-@@ -1165,52 +874,11 @@ public final class DensityFunctions {
+@@ -1168,52 +877,11 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9603,7 +9656,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double transform(DensityFunction.FunctionContext functionContext, double d) {
              return this.settings == null ? d : NoiseRouterData.applySlide(this.settings, d, (double)functionContext.blockY());
          }
-@@ -1230,39 +898,12 @@ public final class DensityFunctions {
+@@ -1233,30 +901,12 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9618,6 +9671,27 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
 -        }
      }
  
+-    public static record Spline(CubicSpline<TerrainShaper.PointCustom> e, double f, double g) implements DensityFunction {
+-        private final CubicSpline<TerrainShaper.PointCustom> spline;
+-        private final double minValue;
+-        private final double maxValue;
++    public static record Spline(CubicSpline<TerrainShaper.PointCustom> spline, double minValue, double maxValue) implements DensityFunction {
+         private static final MapCodec<DensityFunctions.Spline> DATA_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(TerrainShaper.SPLINE_CUSTOM_CODEC.fieldOf("spline").forGetter(DensityFunctions.Spline::spline), DensityFunctions.NOISE_VALUE_CODEC.fieldOf("min_value").forGetter(DensityFunctions.Spline::minValue), DensityFunctions.NOISE_VALUE_CODEC.fieldOf("max_value").forGetter(DensityFunctions.Spline::maxValue)).apply(instance, DensityFunctions.Spline::new));
+         public static final Codec<DensityFunctions.Spline> CODEC = DensityFunctions.makeCodec(DATA_CODEC);
+ 
+-        public Spline(CubicSpline<TerrainShaper.PointCustom> cubicSpline, double d, double d2) {
+-            this.spline = cubicSpline;
+-            this.minValue = d;
+-            this.maxValue = d2;
+-        }
+-
+         public double compute(DensityFunction.FunctionContext functionContext) {
+             return Mth.clamp((double)this.spline.apply(TerrainShaper.makePoint(functionContext)), this.minValue, this.maxValue);
+         }
+@@ -1298,28 +948,10 @@ public final class DensityFunctions {
+ 
+     /** @deprecated */
+     @Deprecated
 -    public static record TerrainShaperSpline(DensityFunction e, DensityFunction f, DensityFunction g, @Nullable TerrainShaper h, DensityFunctions.TerrainShaperSpline.SplineType i, double j, double k) implements DensityFunction {
 -        private final DensityFunction continentalness;
 -        private final DensityFunction erosion;
@@ -9645,10 +9719,39 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public static DensityFunctions.TerrainShaperSpline createUnseeded(DensityFunction densityFunction, DensityFunction densityFunction2, DensityFunction densityFunction3, DensityFunctions.TerrainShaperSpline.SplineType splineType, double d, double d2) {
              return new DensityFunctions.TerrainShaperSpline(densityFunction, densityFunction2, densityFunction3, (TerrainShaper)null, splineType, d, d2);
          }
-@@ -1315,10 +956,6 @@ public final class DensityFunctions {
-             return this.maxValue;
+@@ -1343,39 +975,6 @@ public final class DensityFunctions {
+             return CODEC;
          }
  
+-        public DensityFunction continentalness() {
+-            return this.continentalness;
+-        }
+-
+-        public DensityFunction erosion() {
+-            return this.erosion;
+-        }
+-
+-        public DensityFunction weirdness() {
+-            return this.weirdness;
+-        }
+-
+-        @Nullable
+-        public TerrainShaper shaper() {
+-            return this.shaper;
+-        }
+-
+-        public DensityFunctions.TerrainShaperSpline.SplineType spline() {
+-            return this.spline;
+-        }
+-
+-        public double minValue() {
+-            return this.minValue;
+-        }
+-
+-        public double maxValue() {
+-            return this.maxValue;
+-        }
+-
 -        static {
 -            DATA_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(DensityFunction.HOLDER_HELPER_CODEC.fieldOf("continentalness").forGetter(DensityFunctions.TerrainShaperSpline::continentalness), DensityFunction.HOLDER_HELPER_CODEC.fieldOf("erosion").forGetter(DensityFunctions.TerrainShaperSpline::erosion), DensityFunction.HOLDER_HELPER_CODEC.fieldOf("weirdness").forGetter(DensityFunctions.TerrainShaperSpline::weirdness), DensityFunctions.TerrainShaperSpline.SplineType.CODEC.fieldOf("spline").forGetter(DensityFunctions.TerrainShaperSpline::spline), DensityFunctions.NOISE_VALUE_CODEC.fieldOf("min_value").forGetter(DensityFunctions.TerrainShaperSpline::minValue), DensityFunctions.NOISE_VALUE_CODEC.fieldOf("max_value").forGetter(DensityFunctions.TerrainShaperSpline::maxValue)).apply(instance, DensityFunctions.TerrainShaperSpline::createUnseeded));
 -        }
@@ -9656,7 +9759,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          interface Spline {
              float apply(TerrainShaper var1, TerrainShaper.Point var2);
          }
-@@ -1460,22 +1097,10 @@ public final class DensityFunctions {
+@@ -1517,22 +1116,10 @@ public final class DensityFunctions {
          }
      }
  
@@ -9681,7 +9784,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public static DensityFunctions.WeirdScaledSampler createUnseeded(DensityFunction densityFunction, Holder<NormalNoise.NoiseParameters> holder, DensityFunctions.WeirdScaledSampler.RarityValueMapper rarityValueMapper) {
              return new DensityFunctions.WeirdScaledSampler(densityFunction, holder, (NormalNoise)null, rarityValueMapper);
          }
-@@ -1506,27 +1131,6 @@ public final class DensityFunctions {
+@@ -1563,27 +1150,6 @@ public final class DensityFunctions {
              return CODEC;
          }
  
@@ -9709,7 +9812,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public static enum RarityValueMapper implements StringRepresentable {
              TYPE1("type_1", NoiseRouterData.QuantizedSpaghettiRarity::getSpaghettiRarity3D, 2.0D),
              TYPE2("type_2", NoiseRouterData.QuantizedSpaghettiRarity::getSphaghettiRarity2D, 3.0D);
-@@ -1549,21 +1153,10 @@ public final class DensityFunctions {
+@@ -1606,21 +1172,10 @@ public final class DensityFunctions {
          }
      }
  
@@ -9732,7 +9835,7 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
          public double compute(DensityFunction.FunctionContext functionContext) {
              return Mth.clampedMap((double)functionContext.blockY(), (double)this.fromY, (double)this.toY, this.fromValue, this.toValue);
          }
-@@ -1579,21 +1172,5 @@ public final class DensityFunctions {
+@@ -1636,21 +1191,5 @@ public final class DensityFunctions {
          public Codec<? extends DensityFunction> codec() {
              return CODEC;
          }
@@ -9756,10 +9859,10 @@ index bc59f6dc96e5258a2e7735a0fe1edefa95eecf72..2c2d896ec2944a8ad109974facec875a
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index fb8128aeb9e1a148fdf546c8f0fb318e08dbb934..457aeccf196255d6070e2462d917e11b740c24ca 100644
+index 934f13afcb3485f7337c1e3a5d96eb1d732fe4ca..5975a6c6f969d2369481a3be49b4273480415d37 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-@@ -15,18 +15,22 @@ import net.minecraft.world.level.block.Blocks;
+@@ -13,18 +13,22 @@ import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.state.BlockState;
  import net.minecraft.world.level.levelgen.synth.NormalNoise;
  
@@ -9794,7 +9897,7 @@ index fb8128aeb9e1a148fdf546c8f0fb318e08dbb934..457aeccf196255d6070e2462d917e11b
      public static final Codec<Holder<NoiseGeneratorSettings>> CODEC = RegistryFileCodec.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, DIRECT_CODEC);
      public static final ResourceKey<NoiseGeneratorSettings> OVERWORLD = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, new ResourceLocation("overworld"));
      public static final ResourceKey<NoiseGeneratorSettings> LARGE_BIOMES = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, new ResourceLocation("large_biomes"));
-@@ -36,33 +40,6 @@ public record NoiseGeneratorSettings(NoiseSettings j, BlockState k, BlockState l
+@@ -34,33 +38,6 @@ public record NoiseGeneratorSettings(NoiseSettings j, BlockState k, BlockState l
      public static final ResourceKey<NoiseGeneratorSettings> CAVES = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, new ResourceLocation("caves"));
      public static final ResourceKey<NoiseGeneratorSettings> FLOATING_ISLANDS = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, new ResourceLocation("floating_islands"));
  
@@ -9828,7 +9931,7 @@ index fb8128aeb9e1a148fdf546c8f0fb318e08dbb934..457aeccf196255d6070e2462d917e11b
      public WorldgenRandom.Algorithm getRandomSource() {
          return this.useLegacyRandomSource ? WorldgenRandom.Algorithm.LEGACY : WorldgenRandom.Algorithm.XOROSHIRO;
      }
-@@ -80,7 +57,7 @@ public record NoiseGeneratorSettings(NoiseSettings j, BlockState k, BlockState l
+@@ -74,7 +51,7 @@ public record NoiseGeneratorSettings(NoiseSettings j, BlockState k, BlockState l
      }
  
      public static Holder<NoiseGeneratorSettings> bootstrap() {
@@ -9837,7 +9940,7 @@ index fb8128aeb9e1a148fdf546c8f0fb318e08dbb934..457aeccf196255d6070e2462d917e11b
      }
  
      private static NoiseGeneratorSettings end() {
-@@ -104,40 +81,7 @@ public record NoiseGeneratorSettings(NoiseSettings j, BlockState k, BlockState l
+@@ -98,40 +75,7 @@ public record NoiseGeneratorSettings(NoiseSettings j, BlockState k, BlockState l
          return new NoiseGeneratorSettings(NoiseSettings.FLOATING_ISLANDS_NOISE_SETTINGS, Blocks.STONE.defaultBlockState(), Blocks.WATER.defaultBlockState(), NoiseRouterData.overworldWithoutCaves(NoiseSettings.FLOATING_ISLANDS_NOISE_SETTINGS), SurfaceRuleData.overworldLike(false, false, false), -64, false, false, false, true);
      }
  
@@ -10882,7 +10985,7 @@ index e67b04d25473657da57316ad7b32593a83074977..1789f131927f48328f303e53102cf391
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
-index 81cc1f19ef21748b83874be94c7cd8adaa237598..d87b5234ff6bd9bef97f19bee00c7b0427d721f9 100644
+index fd768ee0345ed4758c3472d2753d975d1ada1d5d..062c0960e41ce6fb5673b26674fcfeb543bf5fd8 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/WorldGenSettings.java
 @@ -35,7 +35,7 @@ import org.apache.commons.lang3.StringUtils;
@@ -11478,7 +11581,7 @@ index e872b300ea503881a1365a789fa90c2784578aa7..e24de5b61ae142ce3d75b0ab5b410785
                              compoundTag.putString("id", Registry.ENTITY_TYPE.getKey(EntityType.BEE).toString());
                              beehiveBlockEntity.storeBee(compoundTag, random.nextInt(599), false);
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
-index 57751a56edfb8302645030935bc9f5045c49455b..5f836871a6525cc4fd131778f0b737d2c8e1b6c8 100644
+index a68ea95b3a7d40c99d624a146e4fef5069015bbc..f9ef3c099db60cdd8a88b78d2c1026775b33d23d 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings.java
 @@ -32,7 +32,7 @@ import org.slf4j.Logger;
@@ -12264,7 +12367,7 @@ index 7cadd6ef88f0904ce5748e269f6713840d416739..a97e8481af27dc6692b8d187ab751098
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index 6bfd7380a673a07c140d5ea8e28138a5b9bf099f..215d9f79de3d6174e17d4ba0d49f0bbc995c5250 100644
+index e41e2fdb2bbd86b631be1b752f8514b52e95d752..4199afd2acf0544480b010af6422661c07cb9995 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 @@ -86,20 +86,20 @@ public class LevelStorageSource {
