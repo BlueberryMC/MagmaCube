@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 481c99fa6548ce04c3d6843ea824ce7009751d51..bc504fc36809867f97b25b411496ab66ca4569da 100644
+index 8180bb0d00da86d6a638d4b6cc50f4052ca8327e..6b8726115f24e2fa767b78ef464881cce9f18797 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -17,7 +17,7 @@ index 481c99fa6548ce04c3d6843ea824ce7009751d51..bc504fc36809867f97b25b411496ab66
      private DetectedVersion() {
          this.id = UUID.randomUUID().toString().replaceAll("-", "");
 @@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
-         this.dataPackVersion = 8;
+         this.dataPackVersion = 9;
          this.buildTime = new Date();
          this.releaseTarget = "1.18.2";
 +        this.magmaCubeVersion = "debug"; // MagmaCube
@@ -63,10 +63,10 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 7aa96dc56f3da43292af205552eff11538689140..114ebe087cca8b8457dd0e03dd7ddd8fd06f937f 100644
+index 21a0e34bc8c1760f1d97e053de38082acdf30062..eb81db3889a0ab7c061d7ebe52f42a01f00f8d67 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -100,7 +100,7 @@ public class TitleScreen extends Screen {
+@@ -124,7 +124,7 @@ public class TitleScreen extends Screen {
              this.splash = this.minecraft.getSplashManager().getSplash();
          }
  
@@ -75,7 +75,7 @@ index 7aa96dc56f3da43292af205552eff11538689140..114ebe087cca8b8457dd0e03dd7ddd8f
          this.copyrightX = this.width - this.copyrightWidth - 2;
          int i = 24;
          int i2 = this.height / 4 + 48;
-@@ -291,8 +291,9 @@ public class TitleScreen extends Screen {
+@@ -333,8 +333,9 @@ public class TitleScreen extends Screen {
                  s = s + I18n.get("menu.modded");
              }
  
