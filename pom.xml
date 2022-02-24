@@ -6,7 +6,7 @@
 
     <groupId>net.blueberrymc.magmacube</groupId>
     <artifactId>magmacube-parent</artifactId>
-    <version>1.18.2-pre2</version>
+    <version>1.18.2-pre3</version>
     <modules>
         <module>Minecraft</module>
     </modules>

@@ -248,7 +248,7 @@ index d90f7c57dde46e249780eff56acc552454ab17b5..5141943244bb68e7c0c3efa45ee03f42
          }).start();
      }
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 8be1852f58865ae85457c37c5f5b989cb258ae75..137d9f9af14b7e7f9f599b01d933b55d6a63cdba 100644
+index 410d4199259938ce53af8acdabf890a3c3c5b6e0..f2e26c169c83f1eb61de9d64fb8dfc024ead0d49 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -26,6 +26,7 @@ import java.nio.file.Path;
@@ -304,7 +304,7 @@ index 8be1852f58865ae85457c37c5f5b989cb258ae75..137d9f9af14b7e7f9f599b01d933b55d
      }
  
      public static <V> CompletableFuture<List<V>> sequence(List<? extends CompletableFuture<V>> list) {
-@@ -688,7 +689,7 @@ public class Util {
+@@ -696,7 +697,7 @@ public class Util {
  
          public void openUrl(URL url) {
              try {
@@ -1358,15 +1358,15 @@ index c2d72a4b2753da2dd002711304f0b8777cf96762..2eb447b33b70a043c6fa22e9343396a7
                  if (argumentBuilder.getCommand() != null) {
                      argumentBuilder.executes((commandContext) -> 0);
 diff --git a/src/main/java/net/minecraft/commands/arguments/ObjectiveArgument.java b/src/main/java/net/minecraft/commands/arguments/ObjectiveArgument.java
-index eaa952aa99e20741a033f81ca3f2b9bd7a3a261f..6aa2c46dfb45a90166a7d181fa24a42b7750ea3a 100644
+index d8316a9918023eaa9b9d02b7e6655839518f9f2b..48bde4590f87c5ab17afae10ef8120f37dd1627d 100644
 --- a/src/main/java/net/minecraft/commands/arguments/ObjectiveArgument.java
 +++ b/src/main/java/net/minecraft/commands/arguments/ObjectiveArgument.java
-@@ -54,7 +54,7 @@ public class ObjectiveArgument implements ArgumentType<String> {
-             return SharedSuggestionProvider.suggest(((CommandSourceStack)commandContext.getSource()).getServer().getScoreboard().getObjectiveNames(), suggestionsBuilder);
-         } else if (commandContext.getSource() instanceof SharedSuggestionProvider) {
-             SharedSuggestionProvider sharedSuggestionProvider = (SharedSuggestionProvider)commandContext.getSource();
--            return sharedSuggestionProvider.customSuggestion(commandContext, suggestionsBuilder);
-+            return sharedSuggestionProvider.customSuggestion((CommandContext<SharedSuggestionProvider>) commandContext, suggestionsBuilder);
+@@ -56,7 +56,7 @@ public class ObjectiveArgument implements ArgumentType<String> {
+             return SharedSuggestionProvider.suggest(commandSourceStack.getServer().getScoreboard().getObjectiveNames(), suggestionsBuilder);
+         } else if (object instanceof SharedSuggestionProvider) {
+             SharedSuggestionProvider sharedSuggestionProvider = (SharedSuggestionProvider)object;
+-            return sharedSuggestionProvider.customSuggestion(commandContext);
++            return sharedSuggestionProvider.customSuggestion((CommandContext<SharedSuggestionProvider>) commandContext);
          } else {
              return Suggestions.empty();
          }
@@ -1383,39 +1383,11 @@ index 303b74bbea129be5d013b81717eb14658aec838b..a4654a902dd662026d2ad1e39ced28ab
              int i = score.getScore();
              score.setScore(score2.getScore());
              score2.setScore(i);
-diff --git a/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java b/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java
-index ed82acc8e63a7c79be1cbf98532bbf654bce7800..0f7a50c6bdf97b2aa1c0aecb4386ff43235ddd87 100644
---- a/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java
-+++ b/src/main/java/net/minecraft/commands/arguments/ResourceLocationArgument.java
-@@ -100,21 +100,5 @@ public class ResourceLocationArgument implements ArgumentType<ResourceLocation>
-         return EXAMPLES;
-     }
- 
--    public static record LocatedResource<T>(ResourceLocation a, T b) {
--        private final ResourceLocation id;
--        private final T resource;
--
--        public LocatedResource(ResourceLocation resourceLocation, T object) {
--            this.id = resourceLocation;
--            this.resource = object;
--        }
--
--        public ResourceLocation id() {
--            return this.id;
--        }
--
--        public T resource() {
--            return this.resource;
--        }
--    }
-+    public static record LocatedResource<T>(ResourceLocation id, T resource) {}
- }
-\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/commands/arguments/ResourceOrTagLocationArgument.java b/src/main/java/net/minecraft/commands/arguments/ResourceOrTagLocationArgument.java
-index ec1463372c14612d6b537998226e1d09967dae9f..e4cde4b3605d43da1c4b89ebf1a56e092684b8f0 100644
+index 08af89a1d14ec553169e7e53e50847d806c00f94..2f96563e7505d3e45d943535041761c742d03ba9 100644
 --- a/src/main/java/net/minecraft/commands/arguments/ResourceOrTagLocationArgument.java
 +++ b/src/main/java/net/minecraft/commands/arguments/ResourceOrTagLocationArgument.java
-@@ -90,13 +90,7 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
+@@ -87,13 +87,7 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
          return EXAMPLES;
      }
  
@@ -1430,7 +1402,7 @@ index ec1463372c14612d6b537998226e1d09967dae9f..e4cde4b3605d43da1c4b89ebf1a56e09
          public Either<ResourceKey<T>, TagKey<T>> unwrap() {
              return Either.left(this.key);
          }
-@@ -112,10 +106,6 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
+@@ -109,10 +103,6 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
          public String asPrintable() {
              return this.key.location().toString();
          }
@@ -1441,7 +1413,7 @@ index ec1463372c14612d6b537998226e1d09967dae9f..e4cde4b3605d43da1c4b89ebf1a56e09
      }
  
      public interface Result<T> extends Predicate<Holder<T>> {
-@@ -141,13 +131,7 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
+@@ -138,13 +128,7 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
          }
      }
  
@@ -1456,7 +1428,7 @@ index ec1463372c14612d6b537998226e1d09967dae9f..e4cde4b3605d43da1c4b89ebf1a56e09
          public Either<ResourceKey<T>, TagKey<T>> unwrap() {
              return Either.right(this.key);
          }
-@@ -163,9 +147,5 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
+@@ -160,9 +144,5 @@ public class ResourceOrTagLocationArgument<T> implements ArgumentType<ResourceOr
          public String asPrintable() {
              return "#" + this.key.location();
          }
@@ -1492,10 +1464,10 @@ index ab7d76f4e2de6323c55e2eb17f84bf91c31c9ef1..9db2c7965bbc414aeb7623fb9d19529f
              this.reader.setCursor(i);
              throw ERROR_INVALID_VALUE.createWithContext(this.reader, this.id.toString(), property.getName(), s);
 diff --git a/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java b/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java
-index 19885edb54ac33d68580d0d08e2d8003e8911be0..232b99552cc672d821062bd30e95ce4371509cd9 100644
+index 7d78577c02ae1f2706d44c83fd71d242e588d824..a9433279e7a2cd0d3889ea73d876f6496cb534b9 100644
 --- a/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java
 +++ b/src/main/java/net/minecraft/commands/synchronization/ArgumentTypes.java
-@@ -128,7 +128,7 @@ public class ArgumentTypes {
+@@ -130,7 +130,7 @@ public class ArgumentTypes {
      }
  
      private static <T extends ArgumentType<?>> Class<T> fixClassType(Class<? super T> clazz) {
@@ -1504,7 +1476,7 @@ index 19885edb54ac33d68580d0d08e2d8003e8911be0..232b99552cc672d821062bd30e95ce43
      }
  
      @Nullable
-@@ -142,7 +142,7 @@ public class ArgumentTypes {
+@@ -144,7 +144,7 @@ public class ArgumentTypes {
      }
  
      public static <T extends ArgumentType<?>> void serialize(FriendlyByteBuf friendlyByteBuf, T argumentType) {
@@ -1513,7 +1485,7 @@ index 19885edb54ac33d68580d0d08e2d8003e8911be0..232b99552cc672d821062bd30e95ce43
          if (entry == null) {
              LOGGER.error("Could not serialize {} ({}) - will not be sent to client!", argumentType, argumentType.getClass());
              friendlyByteBuf.writeResourceLocation(new ResourceLocation(""));
-@@ -165,7 +165,7 @@ public class ArgumentTypes {
+@@ -167,7 +167,7 @@ public class ArgumentTypes {
      }
  
      private static <T extends ArgumentType<?>> void serializeToJson(JsonObject jsonObject, T argumentType) {
@@ -1523,10 +1495,10 @@ index 19885edb54ac33d68580d0d08e2d8003e8911be0..232b99552cc672d821062bd30e95ce43
              LOGGER.error("Could not serialize argument {} ({})!", argumentType, argumentType.getClass());
              jsonObject.addProperty("type", "unknown");
 diff --git a/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java b/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java
-index ac26daf5ca5a34c3fc9812da5b3a848068d0f3e2..3f89f175bf86c9814febb7ca5fd298383589020f 100644
+index 090721f932b65fac0e08a461281a14091a03b76f..63e9679f428ad64e289e77d71762cc8f2caa8c4b 100644
 --- a/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java
 +++ b/src/main/java/net/minecraft/commands/synchronization/SuggestionProviders.java
-@@ -30,7 +30,7 @@ public class SuggestionProviders {
+@@ -29,7 +29,7 @@ public class SuggestionProviders {
              throw new IllegalArgumentException("A command suggestion provider is already registered with the name " + resourceLocation);
          } else {
              PROVIDERS_BY_NAME.put(resourceLocation, suggestionProvider);
@@ -1870,7 +1842,7 @@ index a6552528caabb12648902d56142871ca0c4d8519..53f31f76e7c60398899928c235769e2f
          };
      }
 diff --git a/src/main/java/net/minecraft/core/RegistryAccess.java b/src/main/java/net/minecraft/core/RegistryAccess.java
-index f7e48404e29818b51a6c9e27f73ebede7612629f..fcb136b4d8cca03630fab0eb9a28ebfda68eef9b 100644
+index e54d07fa051bd386adf73b438c71625716623a26..8d110ac7a140d2351b955eeb0b3db3b065d627b9 100644
 --- a/src/main/java/net/minecraft/core/RegistryAccess.java
 +++ b/src/main/java/net/minecraft/core/RegistryAccess.java
 @@ -44,7 +44,22 @@ import org.slf4j.Logger;
@@ -1883,9 +1855,9 @@ index f7e48404e29818b51a6c9e27f73ebede7612629f..fcb136b4d8cca03630fab0eb9a28ebfd
 +        put(builder, Registry.DIMENSION_TYPE_REGISTRY, DimensionType.DIRECT_CODEC, DimensionType.DIRECT_CODEC);
 +        put(builder, Registry.BIOME_REGISTRY, Biome.DIRECT_CODEC, Biome.NETWORK_CODEC);
 +        put(builder, Registry.CONFIGURED_CARVER_REGISTRY, ConfiguredWorldCarver.DIRECT_CODEC);
-+        put(builder, Registry.CONFIGURED_FEATURE_REGISTRY, ConfiguredFeature.DIRECT_CODEC, ConfiguredFeature.NETWORK_CODEC);
++        put(builder, Registry.CONFIGURED_FEATURE_REGISTRY, ConfiguredFeature.DIRECT_CODEC);
 +        put(builder, Registry.PLACED_FEATURE_REGISTRY, PlacedFeature.DIRECT_CODEC);
-+        put(builder, Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, ConfiguredStructureFeature.DIRECT_CODEC, ConfiguredStructureFeature.NETWORK_CODEC);
++        put(builder, Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, ConfiguredStructureFeature.DIRECT_CODEC);
 +        put(builder, Registry.STRUCTURE_SET_REGISTRY, StructureSet.DIRECT_CODEC);
 +        put(builder, Registry.PROCESSOR_LIST_REGISTRY, StructureProcessorType.DIRECT_CODEC);
 +        put(builder, Registry.TEMPLATE_POOL_REGISTRY, StructureTemplatePool.DIRECT_CODEC);
@@ -1961,9 +1933,9 @@ index f7e48404e29818b51a6c9e27f73ebede7612629f..fcb136b4d8cca03630fab0eb9a28ebfd
 -            put(builder, Registry.DIMENSION_TYPE_REGISTRY, DimensionType.DIRECT_CODEC, DimensionType.DIRECT_CODEC);
 -            put(builder, Registry.BIOME_REGISTRY, Biome.DIRECT_CODEC, Biome.NETWORK_CODEC);
 -            put(builder, Registry.CONFIGURED_CARVER_REGISTRY, ConfiguredWorldCarver.DIRECT_CODEC);
--            put(builder, Registry.CONFIGURED_FEATURE_REGISTRY, ConfiguredFeature.DIRECT_CODEC, ConfiguredFeature.NETWORK_CODEC);
+-            put(builder, Registry.CONFIGURED_FEATURE_REGISTRY, ConfiguredFeature.DIRECT_CODEC);
 -            put(builder, Registry.PLACED_FEATURE_REGISTRY, PlacedFeature.DIRECT_CODEC);
--            put(builder, Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, ConfiguredStructureFeature.DIRECT_CODEC, ConfiguredStructureFeature.NETWORK_CODEC);
+-            put(builder, Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, ConfiguredStructureFeature.DIRECT_CODEC);
 -            put(builder, Registry.STRUCTURE_SET_REGISTRY, StructureSet.DIRECT_CODEC);
 -            put(builder, Registry.PROCESSOR_LIST_REGISTRY, StructureProcessorType.DIRECT_CODEC);
 -            put(builder, Registry.TEMPLATE_POOL_REGISTRY, StructureTemplatePool.DIRECT_CODEC);
@@ -7422,11 +7394,11 @@ index ca067e3e4bc146d0326ba14b686cd680635ec7a8..808878b013cfbae80d124b670046e734
      private EatBlockGoal eatBlockGoal;
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
-index 2825bb206c59eb29d4d86e19136afd97d8c9cfb4..b8de4e8382ed831397c2a12b7b6e90c9c60b1150 100644
+index a033a3bbb2ceabc0a5dd09af48fcb9cfca8ef207..58c9a639f1be1d0de13fa5ffab5b8019569720a1 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
-@@ -67,7 +67,7 @@ import net.minecraft.world.phys.Vec3;
- public class Axolotl extends Animal implements LerpingModel, Bucketable {
+@@ -70,7 +70,7 @@ public class Axolotl extends Animal implements LerpingModel, Bucketable {
+     private static final Logger LOGGER = LogUtils.getLogger();
      public static final int TOTAL_PLAYDEAD_TIME = 200;
      protected static final ImmutableList<? extends SensorType<? extends Sensor<? super Axolotl>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_ADULT, SensorType.HURT_BY, SensorType.AXOLOTL_ATTACKABLES, SensorType.AXOLOTL_TEMPTATIONS);
 -    protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT, new MemoryModuleType[]{MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, MemoryModuleType.IS_TEMPTED, MemoryModuleType.HAS_HUNTING_COOLDOWN});
@@ -7434,7 +7406,7 @@ index 2825bb206c59eb29d4d86e19136afd97d8c9cfb4..b8de4e8382ed831397c2a12b7b6e90c9
      private static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(Axolotl.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Boolean> DATA_PLAYING_DEAD = SynchedEntityData.defineId(Axolotl.class, EntityDataSerializers.BOOLEAN);
      private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Axolotl.class, EntityDataSerializers.BOOLEAN);
-@@ -410,7 +410,7 @@ public class Axolotl extends Animal implements LerpingModel, Bucketable {
+@@ -419,7 +419,7 @@ public class Axolotl extends Animal implements LerpingModel, Bucketable {
      }
  
      public Brain<Axolotl> getBrain() {
@@ -7875,10 +7847,10 @@ index e0b06e5d320e3f5a78a76a45ee04d5450e93e7c6..251e19c288d7d60ead6b034e37d43050
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index ed45beade6148ff3b08ab3ab8d73042bd443309e..7d1b461be59634522b5aaeeea6dc61bb2d61e686 100644
+index eb380b13f7f36654cf6e92559555e8fe07fb10f2..f66fa7c4071a83dbe062207cc3034bd101638b3e 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-@@ -81,13 +81,14 @@ public final class NaturalSpawner {
+@@ -82,13 +82,14 @@ public final class NaturalSpawner {
              MobCategory mobCategory = entity.getType().getCategory();
              if (mobCategory != MobCategory.MISC) {
                  BlockPos blockPos = entity.blockPosition();
@@ -8703,10 +8675,10 @@ index 8f6699468daca93ff4d790cfa46c157df9c09ac8..f8931051a591d1dadc7130153894629c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-index 1b80119d051f385177149c075d47a08bd3ff7782..361de27adeea809226561ac27df30f6e53e4e0b5 100644
+index 2107672aaefd096ca309a61b03d1185ad2352129..82a25f5e43bafd736707ceb4c6ddcc78b5d27a66 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-@@ -208,7 +208,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -210,7 +210,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
  
      @Nullable
      public Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> findNearestMapFeature(ServerLevel serverLevel, HolderSet<ConfiguredStructureFeature<?, ?>> holderSet, BlockPos blockPos, int i, boolean flag) {
@@ -8715,7 +8687,7 @@ index 1b80119d051f385177149c075d47a08bd3ff7782..361de27adeea809226561ac27df30f6e
          if (set.isEmpty()) {
              return null;
          } else {
-@@ -223,7 +223,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -225,7 +225,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
                  for(Holder<ConfiguredStructureFeature<?, ?>> holder : holderSet) {
                      if (!set2.stream().noneMatch(holder.value().biomes()::contains)) {
                          for(StructurePlacement structurePlacement : this.getPlacementsForFeature(holder)) {
@@ -8724,7 +8696,7 @@ index 1b80119d051f385177149c075d47a08bd3ff7782..361de27adeea809226561ac27df30f6e
                          }
                      }
                  }
-@@ -359,9 +359,9 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
+@@ -361,9 +361,9 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {
                  this.biomeSource.possibleBiomes().stream().map(Holder::value).forEach(set::add);
              } else {
                  ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPosx) -> {
@@ -9859,7 +9831,7 @@ index d7200aadcfec81ef5dd87c90abd4e4426f405dd9..9e7421134d4588e96030ed3b474362b9
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
-index 934f13afcb3485f7337c1e3a5d96eb1d732fe4ca..5975a6c6f969d2369481a3be49b4273480415d37 100644
+index 601ddb5758e2df264119f79b586d0b9aceb37e35..bc5895d6220787ac4c488347c8db59f81903befb 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseGeneratorSettings.java
 @@ -13,18 +13,22 @@ import net.minecraft.world.level.block.Blocks;
@@ -10291,14 +10263,14 @@ index 49b8643f8b947df7e1ea7ce69979b6aa5db435f9..bcd3c8582e45c71acd920f18f4bea71a
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
-index facddd7a6236028d7400091bee755d15a29cf4fe..602948c9c63b363c7520b586d0f36661e3d60bb5 100644
+index 3836c746848c97756b532445120ec04554f799f7..b915a5f5288dc887c59ec3d3e99a8b2472e81735 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/NoiseSettings.java
-@@ -11,38 +11,13 @@ import net.minecraft.util.Mth;
+@@ -10,32 +10,13 @@ import net.minecraft.util.Mth;
  import net.minecraft.world.level.biome.TerrainShaper;
  import net.minecraft.world.level.dimension.DimensionType;
  
--public record NoiseSettings(int f, int g, NoiseSamplingSettings h, NoiseSlider i, NoiseSlider j, int k, int l, boolean m, boolean n, boolean o, TerrainShaper p) {
+-public record NoiseSettings(int f, int g, NoiseSamplingSettings h, NoiseSlider i, NoiseSlider j, int k, int l, TerrainShaper m) {
 -    private final int minY;
 -    private final int height;
 -    private final NoiseSamplingSettings noiseSamplingSettings;
@@ -10306,19 +10278,16 @@ index facddd7a6236028d7400091bee755d15a29cf4fe..602948c9c63b363c7520b586d0f36661
 -    private final NoiseSlider bottomSlideSettings;
 -    private final int noiseSizeHorizontal;
 -    private final int noiseSizeVertical;
--    private final boolean islandNoiseOverride;
--    private final boolean isAmplified;
--    private final boolean largeBiomes;
 -    private final TerrainShaper terrainShaper;
--    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified), Codec.BOOL.optionalFieldOf("large_biomes", false, Lifecycle.experimental()).forGetter(NoiseSettings::largeBiomes), TerrainShaper.CODEC.fieldOf("terrain_shaper").forGetter(NoiseSettings::terrainShaper)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
-+public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, boolean islandNoiseOverride, boolean isAmplified, boolean largeBiomes, TerrainShaper terrainShaper) {
-+    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.<NoiseSettings>create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), Codec.BOOL.optionalFieldOf("island_noise_override", false, Lifecycle.experimental()).forGetter(NoiseSettings::islandNoiseOverride), Codec.BOOL.optionalFieldOf("amplified", false, Lifecycle.experimental()).forGetter(NoiseSettings::isAmplified), Codec.BOOL.optionalFieldOf("large_biomes", false, Lifecycle.experimental()).forGetter(NoiseSettings::largeBiomes), TerrainShaper.CODEC.fieldOf("terrain_shaper").forGetter(NoiseSettings::terrainShaper)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
-     static final NoiseSettings NETHER_NOISE_SETTINGS = create(0, 128, new NoiseSamplingSettings(1.0D, 3.0D, 80.0D, 60.0D), new NoiseSlider(0.9375D, 3, 0), new NoiseSlider(2.5D, 4, -1), 1, 2, false, false, false, TerrainProvider.nether());
-     static final NoiseSettings END_NOISE_SETTINGS = create(0, 128, new NoiseSamplingSettings(2.0D, 1.0D, 80.0D, 160.0D), new NoiseSlider(-23.4375D, 64, -46), new NoiseSlider(-0.234375D, 7, 1), 2, 1, true, false, false, TerrainProvider.end());
-     static final NoiseSettings CAVES_NOISE_SETTINGS = create(-64, 192, new NoiseSamplingSettings(1.0D, 3.0D, 80.0D, 60.0D), new NoiseSlider(0.9375D, 3, 0), new NoiseSlider(2.5D, 4, -1), 1, 2, false, false, false, TerrainProvider.caves());
-     static final NoiseSettings FLOATING_ISLANDS_NOISE_SETTINGS = create(0, 256, new NoiseSamplingSettings(2.0D, 1.0D, 80.0D, 160.0D), new NoiseSlider(-23.4375D, 64, -46), new NoiseSlider(-0.234375D, 7, 1), 2, 1, false, false, false, TerrainProvider.floatingIslands());
+-    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), TerrainShaper.CODEC.fieldOf("terrain_shaper").forGetter(NoiseSettings::terrainShaper)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
++public record NoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, TerrainShaper terrainShaper) {
++    public static final Codec<NoiseSettings> CODEC = RecordCodecBuilder.<NoiseSettings>create((instance) -> instance.group(Codec.intRange(DimensionType.MIN_Y, DimensionType.MAX_Y).fieldOf("min_y").forGetter(NoiseSettings::minY), Codec.intRange(0, DimensionType.Y_SIZE).fieldOf("height").forGetter(NoiseSettings::height), NoiseSamplingSettings.CODEC.fieldOf("sampling").forGetter(NoiseSettings::noiseSamplingSettings), NoiseSlider.CODEC.fieldOf("top_slide").forGetter(NoiseSettings::topSlideSettings), NoiseSlider.CODEC.fieldOf("bottom_slide").forGetter(NoiseSettings::bottomSlideSettings), Codec.intRange(1, 4).fieldOf("size_horizontal").forGetter(NoiseSettings::noiseSizeHorizontal), Codec.intRange(1, 4).fieldOf("size_vertical").forGetter(NoiseSettings::noiseSizeVertical), TerrainShaper.CODEC.fieldOf("terrain_shaper").forGetter(NoiseSettings::terrainShaper)).apply(instance, NoiseSettings::new)).comapFlatMap(NoiseSettings::guardY, Function.identity());
+     static final NoiseSettings NETHER_NOISE_SETTINGS = create(0, 128, new NoiseSamplingSettings(1.0D, 3.0D, 80.0D, 60.0D), new NoiseSlider(0.9375D, 3, 0), new NoiseSlider(2.5D, 4, -1), 1, 2, TerrainProvider.nether());
+     static final NoiseSettings END_NOISE_SETTINGS = create(0, 128, new NoiseSamplingSettings(2.0D, 1.0D, 80.0D, 160.0D), new NoiseSlider(-23.4375D, 64, -46), new NoiseSlider(-0.234375D, 7, 1), 2, 1, TerrainProvider.end());
+     static final NoiseSettings CAVES_NOISE_SETTINGS = create(-64, 192, new NoiseSamplingSettings(1.0D, 3.0D, 80.0D, 60.0D), new NoiseSlider(0.9375D, 3, 0), new NoiseSlider(2.5D, 4, -1), 1, 2, TerrainProvider.caves());
+     static final NoiseSettings FLOATING_ISLANDS_NOISE_SETTINGS = create(0, 256, new NoiseSamplingSettings(2.0D, 1.0D, 80.0D, 160.0D), new NoiseSlider(-23.4375D, 64, -46), new NoiseSlider(-0.234375D, 7, 1), 2, 1, TerrainProvider.floatingIslands());
  
--    public NoiseSettings(int i, int i2, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider noiseSlider, NoiseSlider noiseSlider2, int i3, int i4, boolean flag, boolean flag2, boolean flag3, TerrainShaper terrainShaper) {
+-    public NoiseSettings(int i, int i2, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider noiseSlider, NoiseSlider noiseSlider2, int i3, int i4, TerrainShaper terrainShaper) {
 -        this.minY = i;
 -        this.height = i2;
 -        this.noiseSamplingSettings = noiseSamplingSettings;
@@ -10326,41 +10295,21 @@ index facddd7a6236028d7400091bee755d15a29cf4fe..602948c9c63b363c7520b586d0f36661
 -        this.bottomSlideSettings = noiseSlider2;
 -        this.noiseSizeHorizontal = i3;
 -        this.noiseSizeVertical = i4;
--        this.islandNoiseOverride = flag;
--        this.isAmplified = flag2;
--        this.largeBiomes = flag3;
 -        this.terrainShaper = terrainShaper;
 -    }
 -
      private static DataResult<NoiseSettings> guardY(NoiseSettings noiseSettings) {
          if (noiseSettings.minY() + noiseSettings.height() > DimensionType.MAX_Y + 1) {
              return DataResult.error("min_y + height cannot be higher than: " + (DimensionType.MAX_Y + 1));
-@@ -65,24 +40,6 @@ public record NoiseSettings(int f, int g, NoiseSamplingSettings h, NoiseSlider i
-         return create(-64, 384, new NoiseSamplingSettings(1.0D, 1.0D, 80.0D, 160.0D), new NoiseSlider(-0.078125D, 2, flag ? 0 : 8), new NoiseSlider(flag ? 0.4D : 0.1171875D, 3, 0), 1, 2, false, flag, flag2, TerrainProvider.overworld(flag));
+@@ -57,7 +38,6 @@ public record NoiseSettings(int f, int g, NoiseSamplingSettings h, NoiseSlider i
+     static NoiseSettings overworldNoiseSettings(boolean flag) {
+         return create(-64, 384, new NoiseSamplingSettings(1.0D, 1.0D, 80.0D, 160.0D), new NoiseSlider(-0.078125D, 2, flag ? 0 : 8), new NoiseSlider(flag ? 0.4D : 0.1171875D, 3, 0), 1, 2, TerrainProvider.overworld(flag));
      }
- 
--    /** @deprecated */
--    @Deprecated
--    public boolean islandNoiseOverride() {
--        return this.islandNoiseOverride;
--    }
--
--    /** @deprecated */
--    @Deprecated
--    public boolean isAmplified() {
--        return this.isAmplified;
--    }
--
--    /** @deprecated */
--    @Deprecated
--    public boolean largeBiomes() {
--        return this.largeBiomes;
--    }
 -
      public int getCellHeight() {
          return QuartPos.toBlock(this.noiseSizeVertical());
      }
-@@ -98,36 +55,4 @@ public record NoiseSettings(int f, int g, NoiseSamplingSettings h, NoiseSlider i
+@@ -73,36 +53,4 @@ public record NoiseSettings(int f, int g, NoiseSamplingSettings h, NoiseSlider i
      public int getMinCellY() {
          return Mth.intFloorDiv(this.minY(), this.getCellHeight());
      }
@@ -11161,19 +11110,18 @@ index 55599099f4c5e83989ece077b28cbf3282b1c9a8..f77f4f3ae332e849a25fcd9c4486a4ae
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/ConfiguredFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/ConfiguredFeature.java
-index 024e65b2c37829aec8b028aed771af346c2fbd99..ce3a9d60a6d016653c3a758dca622e070901181a 100644
+index 0442de4bb9c003b7c3c383c07bd12a95f12f2724..9d04cec7313100d91fc5bf7c648241fc2bb0443f 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/ConfiguredFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/ConfiguredFeature.java
-@@ -14,19 +14,12 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
+@@ -13,18 +13,11 @@ import net.minecraft.world.level.WorldGenLevel;
+ import net.minecraft.world.level.chunk.ChunkGenerator;
  import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
- import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
  
--public record ConfiguredFeature<FC extends FeatureConfiguration, F extends Feature<FC>>(F e, FC f) {
+-public record ConfiguredFeature<FC extends FeatureConfiguration, F extends Feature<FC>>(F d, FC e) {
 -    private final F feature;
 -    private final FC config;
 +public record ConfiguredFeature<FC extends FeatureConfiguration, F extends Feature<FC>>(F feature, FC config) {
      public static final Codec<ConfiguredFeature<?, ?>> DIRECT_CODEC = Registry.FEATURE.byNameCodec().dispatch((configuredFeature) -> configuredFeature.feature, Feature::configuredCodec);
-     public static final Codec<ConfiguredFeature<?, ?>> NETWORK_CODEC = Codec.unit(() -> new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE));
      public static final Codec<Holder<ConfiguredFeature<?, ?>>> CODEC = RegistryFileCodec.create(Registry.CONFIGURED_FEATURE_REGISTRY, DIRECT_CODEC);
      public static final Codec<HolderSet<ConfiguredFeature<?, ?>>> LIST_CODEC = RegistryCodecs.homogeneousList(Registry.CONFIGURED_FEATURE_REGISTRY, DIRECT_CODEC);
  
@@ -11185,7 +11133,7 @@ index 024e65b2c37829aec8b028aed771af346c2fbd99..ce3a9d60a6d016653c3a758dca622e07
      public boolean place(WorldGenLevel worldGenLevel, ChunkGenerator chunkGenerator, Random random, BlockPos blockPos) {
          return this.feature.place(this.config, worldGenLevel, chunkGenerator, random, blockPos);
      }
-@@ -38,12 +31,4 @@ public record ConfiguredFeature<FC extends FeatureConfiguration, F extends Featu
+@@ -36,12 +29,4 @@ public record ConfiguredFeature<FC extends FeatureConfiguration, F extends Featu
      public String toString() {
          return "Configured: " + this.feature + ": " + this.config;
      }
@@ -12062,7 +12010,7 @@ index b2be92a87da95e916d39ae7a2952422a27be53cf..b4152f47ad3e31db882264e1e68aeb79
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/placement/ConcentricRingsStructurePlacement.java b/src/main/java/net/minecraft/world/level/levelgen/structure/placement/ConcentricRingsStructurePlacement.java
-index 0137491567c2f9b67b19690925754bdfa964e7cf..858d4fc30e20291b3701713012e05e3cf3b2a43e 100644
+index cb5680a8f8b51b4bccbb1f091c56e537a6589aaf..d7bb4117f5ddaf0f47a3c3fcf5437ed68147bee7 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/placement/ConcentricRingsStructurePlacement.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/placement/ConcentricRingsStructurePlacement.java
 @@ -6,18 +6,9 @@ import java.util.List;
@@ -12082,7 +12030,7 @@ index 0137491567c2f9b67b19690925754bdfa964e7cf..858d4fc30e20291b3701713012e05e3c
 -        this.count = i3;
 -    }
 -
-     public boolean isFeatureChunk(ChunkGenerator chunkGenerator, int i, int i2) {
+     public boolean isFeatureChunk(ChunkGenerator chunkGenerator, long l, int i, int i2) {
          List<ChunkPos> list = chunkGenerator.getRingPositionsFor(this);
          return list == null ? false : list.contains(new ChunkPos(i, i2));
 @@ -26,16 +17,4 @@ public record ConcentricRingsStructurePlacement(int c, int d, int e) implements
@@ -12104,7 +12052,7 @@ index 0137491567c2f9b67b19690925754bdfa964e7cf..858d4fc30e20291b3701713012e05e3c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/placement/RandomSpreadStructurePlacement.java b/src/main/java/net/minecraft/world/level/levelgen/structure/placement/RandomSpreadStructurePlacement.java
-index 14e6326f4f65422abc1d5e077935e87f9cea2e88..ad43e4e34f62a02798f62eed30fed47a7ad9f8fe 100644
+index bec8d3561145d94b9a39d86424ab19a747c64614..3127767430410136b1c62fb660e592be87a81b67 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/placement/RandomSpreadStructurePlacement.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/placement/RandomSpreadStructurePlacement.java
 @@ -10,24 +10,11 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -12367,7 +12315,7 @@ index 7cadd6ef88f0904ce5748e269f6713840d416739..a97e8481af27dc6692b8d187ab751098
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
-index e41e2fdb2bbd86b631be1b752f8514b52e95d752..4199afd2acf0544480b010af6422661c07cb9995 100644
+index 9630e25ddc692a8d19c0a701bde62c4bc41d2bd8..0f16b0a5f68f18285ce4fe53571be49e37590fc8 100644
 --- a/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 +++ b/src/main/java/net/minecraft/world/level/storage/LevelStorageSource.java
 @@ -86,20 +86,20 @@ public class LevelStorageSource {
