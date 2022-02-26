@@ -3180,7 +3180,7 @@ index d5f079da34464ec8b9e234728a235c8f2f39e320..c4742a0799531fd9f5653d9907e23aba
              Thread thread = new Thread("Server Shutdown Thread") {
                  public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 2670dd1a41d58c6fffb4f372c87d21622527a23b..42c44e3aaba2e63a95cfc0dfa8ace92b7a6bc022 100644
+index e7085b66e52c5500cced5194fdfb3bea0cf0f898..1ab884057a1c24e2b7e88758b799efd56e589786 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -772,7 +772,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -3192,7 +3192,7 @@ index 2670dd1a41d58c6fffb4f372c87d21622527a23b..42c44e3aaba2e63a95cfc0dfa8ace92b
          this.getProfiler().incrementCounter("runTask");
          super.doRunTask(tickTask);
      }
-@@ -1272,7 +1272,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1273,7 +1273,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      public CompletableFuture<Void> reloadResources(Collection<String> collection) {
          RegistryAccess.Frozen frozen = this.registryAccess();
@@ -3201,7 +3201,7 @@ index 2670dd1a41d58c6fffb4f372c87d21622527a23b..42c44e3aaba2e63a95cfc0dfa8ace92b
              CloseableResourceManager closeableResourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, immutableList);
              return ReloadableServerResources.loadResources(closeableResourceManager, frozen, this.isDedicatedServer() ? Commands.CommandSelection.DEDICATED : Commands.CommandSelection.INTEGRATED, this.getFunctionCompilationLevel(), this.executor, this).whenComplete((reloadableServerResources, throwable) -> {
                  if (throwable != null) {
-@@ -1754,26 +1754,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1755,26 +1755,10 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
  
@@ -3546,7 +3546,7 @@ index 945e8be448a1b52511562e4a3b51bb6b8ea49457..ffd4ee5ee4d86096227076a81ed84874
      }
  
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index f9a1b28c1b9c0b01d7532f880a220ca4ff0f3c1b..4895994b347a5371a6d364301ca9ce0c09312d26 100644
+index c003b1b02bfad11a6264dc5537072e30ca1c7220..81bb9a666c8dca800003a2f97cba4526b8b2bf6b 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -275,7 +275,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -3596,7 +3596,7 @@ index f9a1b28c1b9c0b01d7532f880a220ca4ff0f3c1b..4895994b347a5371a6d364301ca9ce0c
                      chunkHolder.replaceProtoChunk(new ImposterProtoChunk(levelChunk, false));
                  }
  
-@@ -921,7 +921,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -919,7 +919,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
              }
          }
  
@@ -3605,7 +3605,7 @@ index f9a1b28c1b9c0b01d7532f880a220ca4ff0f3c1b..4895994b347a5371a6d364301ca9ce0c
          int i2 = SectionPos.blockToSectionCoord(serverPlayer.getBlockZ());
          SectionPos sectionPos = serverPlayer.getLastSectionPos();
          SectionPos sectionPos2 = SectionPos.of(serverPlayer);
-@@ -955,16 +955,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -953,16 +953,16 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
  
          int i3 = sectionPos.x();
          int i4 = sectionPos.z();
@@ -3626,7 +3626,7 @@ index f9a1b28c1b9c0b01d7532f880a220ca4ff0f3c1b..4895994b347a5371a6d364301ca9ce0c
                      this.updateChunkTracking(serverPlayer, new ChunkPos(i9, i10), new MutableObject(), flag4, flag5);
                  }
              }
-@@ -979,9 +979,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -977,9 +977,9 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
                  }
              }
  
@@ -3652,7 +3652,7 @@ index eec3d990ced630be3e153dda0ba32b2ceb82f489..b42bdefb9648aa7a6ef057b366a6fac1
      private final String name;
      private final LongSet acquired = new LongOpenHashSet();
 diff --git a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java b/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java
-index 33da26034aadeb5ce8544f43cab5a59a48e70ce5..69e1362c7bfe94c7e993930ffb5a9860863b3f7d 100644
+index f387b3a28c194ae1c3b08bd1d76145ea285631c9..95f9813ab912e1ff7e9f9a726e4c34af8a1d7515 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkTaskPriorityQueueSorter.java
 @@ -44,7 +44,7 @@ public class ChunkTaskPriorityQueueSorter implements ChunkHolder.LevelChangeList
