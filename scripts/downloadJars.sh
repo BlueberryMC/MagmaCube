@@ -38,7 +38,7 @@ curl $clientMappingUrl --output "$clientMappingPath" || (
 )
 echo "Applying mapping"
 "$basedir"/work/MC-Remapper/bin/MC-Remapper --fixlocalvar=rename --output-name="$clientRemappedJarPath" "$clientJarPath" "$clientMappingPath" || exit 1
-java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.3.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$MAPPINGS_VERSION.pr" || exit 1
+java -Xmx2G -jar "$basedir/work/ParameterRemapper/ParameterRemapper-1.0.4.jar" --input-file="$clientRemappedJarPath" --output-file="$clientRemappedJarPath.2" --mapping-file="$basedir/work/mappings/mappings/$MAPPINGS_VERSION.pr" || exit 1
 echo "Applying AccessTransformers"
 java -Xmx2G -jar "$basedir/work/AccessTransformers/accesstransformers-8.0.4-fatjar.jar" --inJar "$clientRemappedJarPath.2" --outJar "$clientRemappedJarPath" --atFile "$basedir/work/mappings/mappings/$MAPPINGS_VERSION.at" || exit 1
 echo "Deleting intermediate jar"
