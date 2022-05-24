@@ -6,7 +6,7 @@
 
     <groupId>net.blueberrymc.magmacube</groupId>
     <artifactId>magmacube-parent</artifactId>
-    <version>1.18.2</version>
+    <version>1.19-pre2</version>
     <modules>
         <module>Minecraft</module>
     </modules>
@@ -40,7 +40,7 @@
     <repositories>
         <repository>
             <id>blueberrymc-repo</id>
-            <url>https://repo.blueberrymc.net/</url>
+            <url>https://repo.blueberrymc.net/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>22.0.0</version>
+            <version>23.0.0</version>
         </dependency>
     </dependencies>
 </project>
