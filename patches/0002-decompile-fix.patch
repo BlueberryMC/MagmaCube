@@ -4383,7 +4383,7 @@ index 008bf2217680acf83d17883b8a6bcbf75387756b..93c81ad3b73fd17e4192b09881d62b9a
              } else {
                  return DataResult.error("Not a registry ops");
 diff --git a/src/main/java/net/minecraft/resources/RegistryResourceAccess.java b/src/main/java/net/minecraft/resources/RegistryResourceAccess.java
-index b5d2069a2459ab29883c20b95ce3b59b4a5719ff..2d4a073eabfe8089400876a6eed0ba95d127a387 100644
+index b5d2069a2459ab29883c20b95ce3b59b4a5719ff..108190b318952211da4dc696a4eb6ae88ce04c0d 100644
 --- a/src/main/java/net/minecraft/resources/RegistryResourceAccess.java
 +++ b/src/main/java/net/minecraft/resources/RegistryResourceAccess.java
 @@ -40,7 +40,7 @@ public interface RegistryResourceAccess {
@@ -4426,7 +4426,7 @@ index b5d2069a2459ab29883c20b95ce3b59b4a5719ff..2d4a073eabfe8089400876a6eed0ba95
 -
 -            public Lifecycle lifecycle() {
 -                return this.lifecycle;
-+                return (DataResult) decoder.parse(dynamicOps, this.data).setLifecycle(this.lifecycle).map((object) -> ParsedEntry.createWithId((int)object, this.id));
++                return decoder.parse(dynamicOps, this.data).setLifecycle(this.lifecycle).map((object) -> ParsedEntry.createWithId(object, this.id));
              }
          }
      }
