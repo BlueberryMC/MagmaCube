@@ -6,10 +6,10 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..71cb6494983c49cfcf0587b14f6b37c6ba6d99ec
+index 0000000000000000000000000000000000000000..d5a8c3ec84840583721aa6541af1e1adcc74b9be
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,374 @@
+@@ -0,0 +1,380 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<project xmlns="http://maven.apache.org/POM/4.0.0"
 +         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,16 +17,16 @@ index 0000000000000000000000000000000000000000..71cb6494983c49cfcf0587b14f6b37c6
 +    <parent>
 +        <artifactId>magmacube-parent</artifactId>
 +        <groupId>net.blueberrymc.magmacube</groupId>
-+        <version>1.18.2</version>
++        <version>1.19-pre2</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
 +    <properties>
-+        <text2speech.version>1.12.4</text2speech.version>
++        <text2speech.version>1.13.9</text2speech.version>
 +        <maven.compiler.source>17</maven.compiler.source>
 +        <maven.compiler.target>17</maven.compiler.target>
 +        <log4j.version>2.17.1</log4j.version>
-+        <lwjgl.version>3.2.2</lwjgl.version>
++        <lwjgl.version>3.3.1</lwjgl.version>
 +    </properties>
 +
 +    <artifactId>magmacube</artifactId>
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..71cb6494983c49cfcf0587b14f6b37c6
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.3.39</version>
++            <version>3.5.41</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -117,7 +117,7 @@ index 0000000000000000000000000000000000000000..71cb6494983c49cfcf0587b14f6b37c6
 +        <dependency>
 +            <groupId>io.netty</groupId>
 +            <artifactId>netty-all</artifactId>
-+            <version>4.1.68.Final</version>
++            <version>4.1.76.Final</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.google.guava</groupId>
@@ -127,7 +127,7 @@ index 0000000000000000000000000000000000000000..71cb6494983c49cfcf0587b14f6b37c6
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>datafixerupper</artifactId>
-+            <version>4.1.27</version>
++            <version>5.0.28</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
@@ -359,6 +359,12 @@ index 0000000000000000000000000000000000000000..71cb6494983c49cfcf0587b14f6b37c6
 +            <groupId>net.java.jutils</groupId>
 +            <artifactId>jutils</artifactId>
 +            <version>1.0.0</version>
++        </dependency>
++        <dependency>
++            <groupId>ca.weblite</groupId>
++            <artifactId>java-objc-bridge</artifactId>
++            <version>1.1</version>
++            <scope>provided</scope>
 +        </dependency>
 +
 +        <!-- Logger -->

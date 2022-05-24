@@ -106,13 +106,13 @@
     ]
   },
   "assetIndex": {
-    "id": "1.18",
-    "sha1": "7fcda714d4a391a711ce434fa1dbbebe73ecf179",
-    "size": 348330,
-    "totalSize": 466558267,
-    "url": "https://launchermeta.mojang.com/v1/packages/7fcda714d4a391a711ce434fa1dbbebe73ecf179/1.18.json"
+    "id": "1.19",
+    "sha1": "85a5e9d6f9601d46187c7cc1f44b2e3394ce725b",
+    "size": 385216,
+    "totalSize": 552706153,
+    "url": "https://launchermeta.mojang.com/v1/packages/85a5e9d6f9601d46187c7cc1f44b2e3394ce725b/1.19.json"
   },
-  "assets": "1.18",
+  "assets": "1.19",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -126,99 +126,69 @@
     }
   },
   "javaVersion": {
-    "component": "java-runtime-beta",
+    "component": "java-runtime-gamma",
     "majorVersion": 17
   },
   "libraries": [
     {
       "downloads": {
         "artifact": {
-          "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar",
-          "sha1": "1f618f522dbdd93218c270bcfd8f8dd84be31717",
-          "size": 12874,
-          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar"
+          "path": "com/mojang/text2speech/1.13.9/text2speech-1.13.9.jar",
+          "sha1": "5f4e3a6ef86cb021f7ca87ca192cddb50c26eb59",
+          "size": 12123,
+          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.13.9/text2speech-1.13.9.jar"
         }
       },
-      "name": "com.mojang:text2speech:1.12.4"
+      "name": "com.mojang:text2speech:1.13.9"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar",
-          "sha1": "1f618f522dbdd93218c270bcfd8f8dd84be31717",
-          "size": 12874,
-          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4.jar"
-        },
-        "classifiers": {
-          "natives-linux": {
-            "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-linux.jar",
-            "sha1": "9571b1360a268311d7fa625614186965914f0215",
-            "size": 7833,
-            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-linux.jar"
-          },
-          "natives-windows": {
-            "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-windows.jar",
-            "sha1": "7e37c535186a058d730ec03491182fae2efb57be",
-            "size": 81379,
-            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4-natives-windows.jar"
-          },
-          "sources": {
-            "path": "com/mojang/text2speech/1.12.4/text2speech-1.12.4-sources.jar",
-            "sha1": "2c08f3a985dfc7f86dcd705a360e5e1a13eac068",
-            "size": 5242,
-            "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.12.4/text2speech-1.12.4-sources.jar"
-          }
+          "path": "com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-windows.jar",
+          "sha1": "7a90898b29e5c72f90ba6ebe86fa78a6afd7d3eb",
+          "size": 81379,
+          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-windows.jar"
         }
       },
-      "extract": {
-        "exclude": [
-          "META-INF/"
-        ]
-      },
-      "name": "com.mojang:text2speech:1.12.4",
-      "natives": {
-        "linux": "natives-linux",
-        "windows": "natives-windows"
-      }
+      "name": "com.mojang:text2speech:1.13.9:natives-windows",
+      "rules": [
+        {
+          "action": "allow",
+          "os": {
+            "name": "windows"
+          }
+        }
+      ]
     },
     {
       "downloads": {
         "artifact": {
-          "path": "ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0.jar",
-          "sha1": "6ef160c3133a78de015830860197602ca1c855d3",
-          "size": 40502,
-          "url": "https://libraries.minecraft.net/ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0.jar"
-        },
-        "classifiers": {
-          "javadoc": {
-            "path": "ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0-javadoc.jar",
-            "sha1": "fb0092f22cb4fe8e631452f577b7a238778abf2a",
-            "size": 174060,
-            "url": "https://libraries.minecraft.net/ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0-javadoc.jar"
-          },
-          "natives-osx": {
-            "path": "ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0-natives-osx.jar",
-            "sha1": "08befab4894d55875f33c3d300f4f71e6e828f64",
-            "size": 5629,
-            "url": "https://libraries.minecraft.net/ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0-natives-osx.jar"
-          },
-          "sources": {
-            "path": "ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0-sources.jar",
-            "sha1": "865837a198189aee737019561ece842827f24278",
-            "size": 43283,
-            "url": "https://libraries.minecraft.net/ca/weblite/java-objc-bridge/1.0.0/java-objc-bridge-1.0.0-sources.jar"
-          }
+          "path": "com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-linux.jar",
+          "sha1": "6c63ecb3b6408dcfdde6440c9ee62c060542af33",
+          "size": 7833,
+          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-linux.jar"
         }
       },
-      "extract": {
-        "exclude": [
-          "META-INF/"
-        ]
+      "name": "com.mojang:text2speech:1.13.9:natives-linux",
+      "rules": [
+        {
+          "action": "allow",
+          "os": {
+            "name": "linux"
+          }
+        }
+      ]
+    },
+    {
+      "downloads": {
+        "artifact": {
+          "path": "ca/weblite/java-objc-bridge/1.1/java-objc-bridge-1.1.jar",
+          "sha1": "1227f9e0666314f9de41477e3ec277e542ed7f7b",
+          "size": 1330045,
+          "url": "https://libraries.minecraft.net/ca/weblite/java-objc-bridge/1.1/java-objc-bridge-1.1.jar"
+        }
       },
       "name": "ca.weblite:java-objc-bridge:1.0.0",
-      "natives": {
-        "osx": "natives-osx"
-      },
       "rules": [
         {
           "action": "allow",
@@ -229,10 +199,10 @@
       ]
     }
   ],
-  "id": "1.18.2-deobf",
+  "id": "1.19-pre2-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2022-03-04T00:00:00+00:00",
-  "time": "2022-03-04T00:00:00+00:00",
+  "releaseTime": "2022-05-24T00:00:00+00:00",
+  "time": "2022-05-24T00:00:00+00:00",
   "type": "snapshot"
 }

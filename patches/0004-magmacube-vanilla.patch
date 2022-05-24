@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 362d4e39eea1ebe693baf49db4e4f887f2e7915f..17fb1e67255087b9bd5788c276134317baf8c9a6 100644
+index a4456d784166a34c885f013f04a2865f81c3350e..ca7885cefc56a6d5d6b9c37ad00783bbfceab54d 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -17,9 +17,9 @@ index 362d4e39eea1ebe693baf49db4e4f887f2e7915f..17fb1e67255087b9bd5788c276134317
      private DetectedVersion() {
          this.id = UUID.randomUUID().toString().replaceAll("-", "");
 @@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
-         this.dataPackVersion = 9;
+         this.dataPackVersion = 10;
          this.buildTime = new Date();
-         this.releaseTarget = "1.18.2";
+         this.releaseTarget = "1.19";
 +        this.magmaCubeVersion = "debug"; // MagmaCube
      }
  
@@ -63,10 +63,10 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 6b72e301a30fe9ae71f9b2fd468edb7fa587c8c4..5b124c326c64542ced70ad043473edc0cda74786 100644
+index a168f1cb6a7e72c6e6bbd986a349f5142ec1d438..c2b12c1ac9d96aab4878d15013a65fddd601680b 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -334,6 +334,7 @@ public class TitleScreen extends Screen {
+@@ -303,6 +303,7 @@ public class TitleScreen extends Screen {
                  s = s + I18n.get("menu.modded");
              }
  
@@ -75,10 +75,10 @@ index 6b72e301a30fe9ae71f9b2fd468edb7fa587c8c4..5b124c326c64542ced70ad043473edc0
  
              for(GuiEventListener guiEventListener : this.children()) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 42c44e3aaba2e63a95cfc0dfa8ace92b7a6bc022..43456fd567efa6c99c9bd46cbfa3de4db8bb4115 100644
+index 0c44eac4c2cd68753f31555425b38193ed7ddab9..f3ce5b2b9aaf2427cc412c96bab35055af606751 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -953,7 +953,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -918,7 +918,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
