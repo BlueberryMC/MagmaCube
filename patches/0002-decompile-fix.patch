@@ -1482,10 +1482,10 @@ index cd3de5c1ca37d227e3534c80b8c5e3d4db33ddbc..1870c5697304ea309cee9c061982f6f7
                          }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 042d6f729438e6284f4755a8626c17d5ef869dad..4377629a887891f7a63177b3f98dacadac9da2f1 100644
+index 77a00f230400fb1a5d6451dde9b966300c1231d1..f7bfefc02ed41ea5a47ffcb1c746e00871e25c5f 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -1298,9 +1298,9 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1297,9 +1297,9 @@ public class ClientPacketListener implements ClientGamePacketListener {
  
      private <T> void updateTagsForRegistry(ResourceKey<? extends Registry<? extends T>> resourceKey, TagNetworkSerialization.NetworkPayload networkPayload) {
          if (!networkPayload.isEmpty()) {
@@ -1497,7 +1497,7 @@ index 042d6f729438e6284f4755a8626c17d5ef869dad..4377629a887891f7a63177b3f98dacad
              registry.bindTags(map);
          }
      }
-@@ -1538,10 +1538,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1537,10 +1537,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
              } else {
                  this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                          this.minecraft.setScreen((Screen)null);
@@ -1511,7 +1511,7 @@ index 042d6f729438e6284f4755a8626c17d5ef869dad..4377629a887891f7a63177b3f98dacad
                              }
  
                              this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
-@@ -1550,13 +1550,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1549,13 +1549,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
                              this.send(ServerboundResourcePackPacket.Action.DECLINED);
                              if (flag) {
                                  this.connection.disconnect(Component.translatable("multiplayer.requiredTexturePrompt.disconnect"));
@@ -2124,29 +2124,34 @@ index 7a6398da7bd7d607181c0fcb7d4d4652816529a2..c09e448f49172e90540c23cc960adb03
              try {
                  entitySelectorParser.parse();
 diff --git a/src/main/java/net/minecraft/commands/arguments/MessageArgument.java b/src/main/java/net/minecraft/commands/arguments/MessageArgument.java
-index 5b7e48828a407d70d81237279d7025a15e699643..8db2e15c006fb453c7462368cf4ea49b65dfdbff 100644
+index 0853dbc390223680f750399c110bb1581ec36687..60f755e25ca6343298e5fe9f8c135725bcbd1a04 100644
 --- a/src/main/java/net/minecraft/commands/arguments/MessageArgument.java
 +++ b/src/main/java/net/minecraft/commands/arguments/MessageArgument.java
-@@ -72,11 +72,7 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
+@@ -74,12 +74,7 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
          });
      }
  
--    public static record ChatMessage(Component a, MessageSignature b, boolean c) {
--        private final Component plain;
+-    public static record ChatMessage(String a, Component b, MessageSignature c, boolean d) {
+-        private final String plain;
+-        private final Component formatted;
 -        private final MessageSignature signature;
 -        private final boolean signedPreview;
 -
-+    public static record ChatMessage(Component plain, MessageSignature signature, boolean signedPreview) {
++    public static record ChatMessage(String plain, Component formatted, MessageSignature signature, boolean signedPreview) {
          public CompletableFuture<FilteredText<PlayerChatMessage>> resolve(CommandSourceStack commandSourceStack) {
-             CompletableFuture<FilteredText<PlayerChatMessage>> completableFuture = this.filterComponent(commandSourceStack, this.plain).thenComposeAsync((filteredText) -> {
+             CompletableFuture<FilteredText<PlayerChatMessage>> completableFuture = this.filterComponent(commandSourceStack, this.formatted).thenComposeAsync((filteredText) -> {
                  ChatDecorator chatDecorator = commandSourceStack.getServer().getChatDecorator();
-@@ -98,18 +94,6 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
+@@ -116,22 +111,6 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
              ServerPlayer serverPlayer = commandSourceStack.getPlayer();
              return serverPlayer != null ? serverPlayer.getTextFilter().processStreamComponent(component) : CompletableFuture.completedFuture(FilteredText.<Component>passThrough(component));
          }
 -
--        public Component plain() {
+-        public String plain() {
 -            return this.plain;
+-        }
+-
+-        public Component formatted() {
+-            return this.formatted;
 -        }
 -
 -        public MessageSignature signature() {
@@ -3573,7 +3578,7 @@ index 089e0b2c94a3a1764d079312474a57131d0db8cc..0debe2329df9cd586c47eac9bde5353f
          }
  
 diff --git a/src/main/java/net/minecraft/network/chat/MessageSignature.java b/src/main/java/net/minecraft/network/chat/MessageSignature.java
-index cb7d2f21ee5a9518ff333243fa4a058ed36cb0cd..05a933274add1f219c8e78b174d3eb0ace57902c 100644
+index 4676a5c9302f972da6dfe435caa4f7957bc4364c..61c0906afb53c9fe49b6908183ed230037ad7cf4 100644
 --- a/src/main/java/net/minecraft/network/chat/MessageSignature.java
 +++ b/src/main/java/net/minecraft/network/chat/MessageSignature.java
 @@ -11,11 +11,7 @@ import net.minecraft.util.Crypt;
@@ -3589,9 +3594,9 @@ index cb7d2f21ee5a9518ff333243fa4a058ed36cb0cd..05a933274add1f219c8e78b174d3eb0a
      public static MessageSignature unsigned() {
          return new MessageSignature(Util.NIL_UUID, Instant.now(), Crypt.SaltSignaturePair.EMPTY);
      }
-@@ -46,16 +42,4 @@ public record MessageSignature(UUID a, Instant b, Crypt.SaltSignaturePair c) {
-     public boolean isValid() {
-         return this.sender != Util.NIL_UUID && this.saltSignature.isValid();
+@@ -50,16 +46,4 @@ public record MessageSignature(UUID a, Instant b, Crypt.SaltSignaturePair c) {
+     public boolean isValid(UUID uuid) {
+         return this.isValid() && uuid.equals(this.sender);
      }
 -
 -    public UUID sender() {
@@ -5250,10 +5255,10 @@ index 11ba01afaf935a8cc2bf9493dfe9e8e848622243..494a0230b21a7c0c7ac52e1a3a8730ce
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index b21c8e2df64e8b8c4524227c7ebc965997df72c8..20439648c9e2fc429e96d29eaee0deadfb14a1bc 100644
+index 56ff2b326959bfe1bb60a298a804916a4c7546f3..35f224dbafe81f1eb1eaf04f9f0e7a1f9175bbcd 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1528,7 +1528,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -1533,7 +1533,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
              }
  
              for(int i = 0; i < list.size(); ++i) {
@@ -5263,10 +5268,10 @@ index b21c8e2df64e8b8c4524227c7ebc965997df72c8..20439648c9e2fc429e96d29eaee0dead
                      signBlockEntity.setMessage(i, filteredText.filteredOrElse(CommonComponents.EMPTY));
                  } else {
 diff --git a/src/main/java/net/minecraft/server/network/TextFilterClient.java b/src/main/java/net/minecraft/server/network/TextFilterClient.java
-index bce7d520907d81762931cf7c63442f5ad6a6ba28..a9628d87bde742a2ad15f657ecb9bc88d471a083 100644
+index e880814c63478404864d30f335b16a2516a5b18b..18822bb69650a4628850eea8b9569d186a164162 100644
 --- a/src/main/java/net/minecraft/server/network/TextFilterClient.java
 +++ b/src/main/java/net/minecraft/server/network/TextFilterClient.java
-@@ -96,36 +96,36 @@ public class TextFilterClient implements AutoCloseable {
+@@ -96,38 +96,38 @@ public class TextFilterClient implements AutoCloseable {
                      URL url2 = getEndpoint(uri, jsonObject2, "join", "v1/join");
                      URL url3 = getEndpoint(uri, jsonObject2, "leave", "v1/leave");
                      TextFilterClient.JoinOrLeaveEncoder joinOrLeaveEncoder = (gameProfile) -> {
@@ -5293,6 +5298,7 @@ index bce7d520907d81762931cf7c63442f5ad6a6ba28..a9628d87bde742a2ad15f657ecb9bc88
 -                            jsonObject.addProperty("player", gameProfile.getId().toString());
 -                            jsonObject.addProperty("player_display_name", gameProfile.getName());
 -                            jsonObject.addProperty("text", s3x);
+-                            jsonObject.addProperty("language", "*");
 -                            return jsonObject;
 +                            JsonObject jsonObjectIn = new JsonObject();
 +                            jsonObjectIn.addProperty("rule", i);
@@ -5301,6 +5307,7 @@ index bce7d520907d81762931cf7c63442f5ad6a6ba28..a9628d87bde742a2ad15f657ecb9bc88
 +                            jsonObjectIn.addProperty("player", gameProfile.getId().toString());
 +                            jsonObjectIn.addProperty("player_display_name", gameProfile.getName());
 +                            jsonObjectIn.addProperty("text", s3x);
++                            jsonObjectIn.addProperty("language", "*");
 +                            return jsonObjectIn;
                          };
                      } else {
@@ -5313,6 +5320,7 @@ index bce7d520907d81762931cf7c63442f5ad6a6ba28..a9628d87bde742a2ad15f657ecb9bc88
 -                            jsonObject.addProperty("user_id", gameProfile.getId().toString());
 -                            jsonObject.addProperty("user_display_name", gameProfile.getName());
 -                            jsonObject.addProperty("text", s4x);
+-                            jsonObject.addProperty("language", "*");
 -                            return jsonObject;
 +                            JsonObject jsonObjectIn = new JsonObject();
 +                            jsonObjectIn.addProperty("rule_id", s6);
@@ -5321,6 +5329,7 @@ index bce7d520907d81762931cf7c63442f5ad6a6ba28..a9628d87bde742a2ad15f657ecb9bc88
 +                            jsonObjectIn.addProperty("user_id", gameProfile.getId().toString());
 +                            jsonObjectIn.addProperty("user_display_name", gameProfile.getName());
 +                            jsonObjectIn.addProperty("text", s4x);
++                            jsonObjectIn.addProperty("language", "*");
 +                            return jsonObjectIn;
                          };
                      }
@@ -8645,10 +8654,10 @@ index b40c50361119138876d7fcbd3e633b70d9de9b20..f425337b35dde7a5224bb576adc47222
              optional = Optional.empty();
          }
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 9b762a15bb23d5a242f82b6dbfd7410ed7bfb253..b863a90c79348fca1e1279b75459ca4645cecb61 100644
+index 05487617b1bed3167748b45d09361959fc92fc2e..70de3a2c521dcd70c24a56b27d6d5060b9f5611d 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3306,16 +3306,6 @@ public abstract class LivingEntity extends Entity {
+@@ -3308,16 +3308,6 @@ public abstract class LivingEntity extends Entity {
          return this.getMainHandItem().getItem() instanceof AxeItem;
      }
  
@@ -8668,10 +8677,10 @@ index 9b762a15bb23d5a242f82b6dbfd7410ed7bfb253..b863a90c79348fca1e1279b75459ca46
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 3860d27dfe6a38a6f4981cc3e127bdfb9d558b14..71d3caea936e9e8f389b61a8d96a947a0c05426e 100644
+index 27c9430c0af0a6ac6414f39cff6307c42d12e5da..6b52b6f6cbc661739ee04781ff6afd1fa12aa59d 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1070,7 +1070,7 @@ public abstract class Mob extends LivingEntity {
+@@ -1071,7 +1071,7 @@ public abstract class Mob extends LivingEntity {
              if (itemStack.getItem() instanceof SpawnEggItem) {
                  if (this.level instanceof ServerLevel) {
                      SpawnEggItem spawnEggItem = (SpawnEggItem)itemStack.getItem();
@@ -9017,10 +9026,10 @@ index 0b5e59cddc16723b6ae20a971a81fa7fd1743e7d..2c7737429ff88d6d6ba860ef6352f70d
      private EatBlockGoal eatBlockGoal;
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index 9b0c8012164754c4c0b13563b468783cfaf8c433..fc72555e78db6af51e799a6dbe4fcb814be232ec 100644
+index cef1c0987618e1f483cb3a5613e7a18ada162ce4..7053c0f67e49c2d93ea1f40986dbecf8763765d1 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -87,7 +87,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
+@@ -89,7 +89,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
      }
  
      public Brain<Allay> getBrain() {
@@ -9029,7 +9038,7 @@ index 9b0c8012164754c4c0b13563b468783cfaf8c433..fc72555e78db6af51e799a6dbe4fcb81
      }
  
      public static AttributeSupplier.Builder createAttributes() {
-@@ -131,9 +131,8 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
+@@ -133,9 +133,8 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
      }
  
      public boolean hurt(DamageSource damageSource, float f) {
@@ -9041,7 +9050,7 @@ index 9b0c8012164754c4c0b13563b468783cfaf8c433..fc72555e78db6af51e799a6dbe4fcb81
              Optional<UUID> optional = this.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER);
              if (optional.isPresent() && player.getUUID().equals(optional.get())) {
                  return false;
-@@ -337,7 +336,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
+@@ -339,7 +338,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
          super.readAdditionalSaveData(compoundTag);
          this.inventory.fromTag(compoundTag.getList("Inventory", 10));
          if (compoundTag.contains("listener", 10)) {
@@ -9086,7 +9095,7 @@ index 242c12d62f96671b7559ccd6db8ae372de0f754c..15ebae9746505193a9a292d865fcfecc
  
      protected void sendDebugPackets() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
-index 7d69dd76ce5798aedbfd133e51ada16ad7379e2a..b03b94b9b8a11d3b3acf96380e4482e148720cd9 100644
+index 87b0e497dd1125001302fe507824cd669a23de03..bd8fbc36afd1ba994197a52a26a0737cf44b8640 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
 @@ -102,7 +102,7 @@ public class Frog extends Animal {
@@ -9318,7 +9327,7 @@ index ecdb96e8023d01ec1f04d9dafa9ae5db2ec9b640..5744aa264a2219d39bfa610f5629f986
              if (entity.equals(entity2)) {
                  return 0;
 diff --git a/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java b/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
-index 77feedc53cc4070c98d083efa365ab7c4206e2f2..2b70b09ff7bb833a15fb8457d87234f3fb9bd6ab 100644
+index d7aa327a8086e89e217a4c19b9a1271fbe914de6..4a50774524fd5d204eee2c5d93eca2ddcdf24e63 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
 @@ -339,7 +339,7 @@ public class Warden extends Monster implements VibrationListener.VibrationListen
@@ -10263,7 +10272,7 @@ index f36aeb222dcf0648d626f423d9ba26ca0a2f3be3..6d688bc0d308f09cc21b0f01476ba387
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index 2bc60735d60d3c1925dee9a35cf925659e1d6c3a..357642f0346f38c81af4d4ae0c3f2d0f948bb570 100644
+index 900ced861bd57ab63656a70b33ea430dff403183..41b9a522a62d1c93571af98bdbb3855435b39646 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
 @@ -984,7 +984,7 @@ public class Blocks {
