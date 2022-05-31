@@ -5255,10 +5255,10 @@ index 11ba01afaf935a8cc2bf9493dfe9e8e848622243..494a0230b21a7c0c7ac52e1a3a8730ce
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 56ff2b326959bfe1bb60a298a804916a4c7546f3..35f224dbafe81f1eb1eaf04f9f0e7a1f9175bbcd 100644
+index 7ece6cdb5ab8ec579f8503b4999282b1bb49208c..86afc1a2841949449c4e6afd31536a093a542a01 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1533,7 +1533,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -1540,7 +1540,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
              }
  
              for(int i = 0; i < list.size(); ++i) {
@@ -8654,7 +8654,7 @@ index b40c50361119138876d7fcbd3e633b70d9de9b20..f425337b35dde7a5224bb576adc47222
              optional = Optional.empty();
          }
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 05487617b1bed3167748b45d09361959fc92fc2e..70de3a2c521dcd70c24a56b27d6d5060b9f5611d 100644
+index 1fc46ea28e1539cf59f84d690fb15bbb6b9036f9..7934a3807c8761dab05a3444551c65317b44db3b 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -3308,16 +3308,6 @@ public abstract class LivingEntity extends Entity {
@@ -10756,7 +10756,7 @@ index 6dbed27582e96b832059559493361c2efff8bdce..54a7f7e3ed5609df977c95db923e408b
  
      public PalettedContainer<BlockState> getStates() {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-index 00c7907640c14238e49b858a3b1189e2dfa8f450..7c551fe7f87efd6516509677c28770de8b58950f 100644
+index 3e225aec6e38bc1a8ad9b080f84ee762396e7043..69ca9db2a5a6b276614baf5b7862f0fa3654048f 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 @@ -40,7 +40,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
@@ -10793,9 +10793,9 @@ index 00c7907640c14238e49b858a3b1189e2dfa8f450..7c551fe7f87efd6516509677c28770de
          public void copyFrom(Palette<T> palette, BitStorage bitStorage) {
              for(int i = 0; i < bitStorage.getSize(); ++i) {
                  T object = palette.valueFor(bitStorage.get(i));
-@@ -302,31 +295,9 @@ public class PalettedContainer<T> implements PaletteResize<T> {
-             this.palette.write(friendlyByteBuf);
-             friendlyByteBuf.writeLongArray(this.storage.getRaw());
+@@ -306,31 +299,9 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+         public PalettedContainer.Data<T> copy() {
+             return new PalettedContainer.Data<>(this.configuration, this.storage.copy(), this.palette.copy());
          }
 -
 -        public PalettedContainer.Configuration<T> configuration() {
