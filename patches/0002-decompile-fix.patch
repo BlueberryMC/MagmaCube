@@ -445,10 +445,10 @@ index 0291cfd057281f9bc27a6ef307d6b02081dd02a9..878edfcea87f342356d596006a615384
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index fd511aeef161061cc0f9e23c43ccdef550c8367d..429f760733d6108d09b320fec9de4341f69edde3 100644
+index ecdadb1dc2dc10e837ba51cdb45dcd9dfa9b3d4f..09a4ef5af86afcdac75154df15b498fed37a1ef0 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -513,7 +513,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -514,7 +514,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen().set(this.window.isFullscreen());
              }
          } else {
@@ -457,7 +457,7 @@ index fd511aeef161061cc0f9e23c43ccdef550c8367d..429f760733d6108d09b320fec9de4341
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -675,9 +675,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -676,9 +676,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      private void createSearchTrees() {
@@ -470,7 +470,7 @@ index fd511aeef161061cc0f9e23c43ccdef550c8367d..429f760733d6108d09b320fec9de4341
      }
  
      private void onFullscreenError(int i, long l) {
-@@ -963,7 +963,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -978,7 +978,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -479,7 +479,7 @@ index fd511aeef161061cc0f9e23c43ccdef550c8367d..429f760733d6108d09b320fec9de4341
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2134,13 +2134,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2149,13 +2149,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -496,7 +496,7 @@ index fd511aeef161061cc0f9e23c43ccdef550c8367d..429f760733d6108d09b320fec9de4341
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2162,7 +2162,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2177,7 +2177,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -988,10 +988,10 @@ index ab76002a8d1acead635f52cc73ad85d35d3a600e..49d078ac21606ef00c366ef4d5894961
                  }
              }
 diff --git a/src/main/java/net/minecraft/client/gui/Gui.java b/src/main/java/net/minecraft/client/gui/Gui.java
-index 7c7f51bc5c61d6bd4e0d28839349fcade6795054..ee055e180d1c701ca008d3980a7223e77d304da3 100644
+index 9e71cf48e5eb11e960acd80359a2cc6af110ba1c..33ac419c6d1d549b500c145209bc3f441e79cb46 100644
 --- a/src/main/java/net/minecraft/client/gui/Gui.java
 +++ b/src/main/java/net/minecraft/client/gui/Gui.java
-@@ -441,7 +441,7 @@ public class Gui extends GuiComponent {
+@@ -442,7 +442,7 @@ public class Gui extends GuiComponent {
  
              RenderSystem.enableBlend();
              int i = 0;
@@ -1000,7 +1000,7 @@ index 7c7f51bc5c61d6bd4e0d28839349fcade6795054..ee055e180d1c701ca008d3980a7223e7
              MobEffectTextureManager mobEffectTextureManager = this.minecraft.getMobEffectTextures();
              List<Runnable> list = Lists.newArrayListWithExpectedSize(collection.size());
              RenderSystem.setShaderTexture(0, AbstractContainerScreen.INVENTORY_LOCATION);
-@@ -459,8 +459,8 @@ public class Gui extends GuiComponent {
+@@ -460,8 +460,8 @@ public class Gui extends GuiComponent {
                          ++i;
                          i3 -= 25 * i;
                      } else {
@@ -8641,7 +8641,7 @@ index 062fd8d8274266fffc4c6e0131dcda4dc8efdb56..bb06aff0a217788d2ea4808052c6e3f7
              while(var34.hasNext()) {
                  ChunkStorage chunkStorage2 = (ChunkStorage)var34.next();
 diff --git a/src/main/java/net/minecraft/world/effect/MobEffectInstance.java b/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
-index b40c50361119138876d7fcbd3e633b70d9de9b20..f425337b35dde7a5224bb576adc4722246f29dd7 100644
+index df05ca4650cf0b95d152986e9395f6a04ae186e2..9c8b14c6776cfb01ab9a24d18c87d861f8b0baa0 100644
 --- a/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
 +++ b/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
 @@ -274,7 +274,7 @@ public class MobEffectInstance implements Comparable<MobEffectInstance> {
@@ -8654,7 +8654,7 @@ index b40c50361119138876d7fcbd3e633b70d9de9b20..f425337b35dde7a5224bb576adc47222
              optional = Optional.empty();
          }
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 1fc46ea28e1539cf59f84d690fb15bbb6b9036f9..7934a3807c8761dab05a3444551c65317b44db3b 100644
+index d5462c1c1242d882b0a35f3f45a380539f06a0c5..b044e21a7a0802529f46fc95160a8265f27d0765 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -3308,16 +3308,6 @@ public abstract class LivingEntity extends Entity {
@@ -9026,7 +9026,7 @@ index 0b5e59cddc16723b6ae20a971a81fa7fd1743e7d..2c7737429ff88d6d6ba860ef6352f70d
      private EatBlockGoal eatBlockGoal;
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index cef1c0987618e1f483cb3a5613e7a18ada162ce4..7053c0f67e49c2d93ea1f40986dbecf8763765d1 100644
+index da343911af2d1867ce265a3d4dcc83c654592180..97ac4c90a66f5f8dac1b2eeb41a9fc8fd5b3a03e 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 @@ -89,7 +89,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
@@ -9327,7 +9327,7 @@ index ecdb96e8023d01ec1f04d9dafa9ae5db2ec9b640..5744aa264a2219d39bfa610f5629f986
              if (entity.equals(entity2)) {
                  return 0;
 diff --git a/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java b/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
-index d7aa327a8086e89e217a4c19b9a1271fbe914de6..4a50774524fd5d204eee2c5d93eca2ddcdf24e63 100644
+index 51a3dfe2bd6875d70166a44b3bb0efb54b2eca5f..025ff0c796db75f4655766bd7677a2de4e5073c5 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
 @@ -339,7 +339,7 @@ public class Warden extends Monster implements VibrationListener.VibrationListen
@@ -10334,10 +10334,10 @@ index 4186147b04fa1a6e286969cd3484a4f9ec864f8e..432a87a9d892212697585a0a59e29aad
              }
          }
 diff --git a/src/main/java/net/minecraft/world/level/block/PointedDripstoneBlock.java b/src/main/java/net/minecraft/world/level/block/PointedDripstoneBlock.java
-index 426c17f1fb12f3cb85f07f9fa2a68e495a417a80..b1db17abab82b9cb103e45238aa63cb7d4c33037 100644
+index a59462f8cdf9be9c88e7e89b777f2fe1ff9654e0..c7faa4c84636b5d4b7b54c64fc4449c3fbb0c084 100644
 --- a/src/main/java/net/minecraft/world/level/block/PointedDripstoneBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PointedDripstoneBlock.java
-@@ -509,15 +509,15 @@ public class PointedDripstoneBlock extends Block implements Fallable, SimpleWate
+@@ -510,15 +510,15 @@ public class PointedDripstoneBlock extends Block implements Fallable, SimpleWate
      private static Optional<PointedDripstoneBlock.FluidInfo> getFluidAboveStalactite(Level level, BlockPos blockPos, BlockState blockState) {
          return !isStalactite(blockState) ? Optional.empty() : findRootBlock(level, blockPos, blockState, 11).map((blockPosx) -> {
              BlockPos blockPos2 = blockPosx.above();
@@ -10356,7 +10356,7 @@ index 426c17f1fb12f3cb85f07f9fa2a68e495a417a80..b1db17abab82b9cb103e45238aa63cb7
          });
      }
  
-@@ -569,21 +569,6 @@ public class PointedDripstoneBlock extends Block implements Fallable, SimpleWate
+@@ -570,21 +570,6 @@ public class PointedDripstoneBlock extends Block implements Fallable, SimpleWate
          }
      }
  
@@ -10735,7 +10735,7 @@ index ad3271f1a53ab025b6175e78b384d4a3a2a347cb..75d0aa5ab076c4704061848fc6ed7340
              this.removeBlockEntityTicker(blockEntity.getBlockPos());
          } else {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunkSection.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunkSection.java
-index 6dbed27582e96b832059559493361c2efff8bdce..54a7f7e3ed5609df977c95db923e408b94ef1478 100644
+index be53b9a09cc117d7cfee85dbc1f431e485809b51..800443d3dd65556d148f5dcd99c3272f8863b266 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunkSection.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunkSection.java
 @@ -143,11 +143,11 @@ public class LevelChunkSection {
@@ -10756,19 +10756,19 @@ index 6dbed27582e96b832059559493361c2efff8bdce..54a7f7e3ed5609df977c95db923e408b
  
      public PalettedContainer<BlockState> getStates() {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-index 3e225aec6e38bc1a8ad9b080f84ee762396e7043..69ca9db2a5a6b276614baf5b7862f0fa3654048f 100644
+index 780646bb661f8f0e3c2b4272c40e7f56c3c585a9..a5c1aeb1a1fd0101d56b50384e2337616d749158 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-@@ -40,7 +40,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -50,7 +50,7 @@ public class PalettedContainer<T> implements PaletteResize<T>, PalettedContainer
      }
  
-     public static <T> Codec<PalettedContainer<T>> codec(IdMap<T> idMap, Codec<T> codec, PalettedContainer.Strategy strategy, T object) {
--        return RecordCodecBuilder.create((instance) -> instance.group(codec.mapResult(ExtraCodecs.orElsePartial(object)).listOf().fieldOf("palette").forGetter(PalettedContainer.DiscData::paletteEntries), Codec.LONG_STREAM.optionalFieldOf("data").forGetter(PalettedContainer.DiscData::storage)).apply(instance, PalettedContainer.DiscData::new)).comapFlatMap((discData) -> read(idMap, strategy, discData), (palettedContainer) -> palettedContainer.write(idMap, strategy));
-+        return RecordCodecBuilder.<DiscData<T>>create((instance) -> instance.group(codec.mapResult(ExtraCodecs.orElsePartial(object)).listOf().fieldOf("palette").forGetter(PalettedContainer.DiscData<T>::paletteEntries), Codec.LONG_STREAM.optionalFieldOf("data").forGetter(PalettedContainer.DiscData<T>::storage)).apply(instance, PalettedContainer.DiscData::new)).comapFlatMap((discData) -> read(idMap, strategy, discData), (palettedContainer) -> palettedContainer.write(idMap, strategy));
+     private static <T, C extends PalettedContainerRO<T>> Codec<C> codec(IdMap<T> idMap, Codec<T> codec, PalettedContainer.Strategy strategy, T object, PalettedContainerRO.Unpacker<T, C> unpacker) {
+-        return RecordCodecBuilder.create((instance) -> instance.group(codec.mapResult(ExtraCodecs.orElsePartial(object)).listOf().fieldOf("palette").forGetter(PalettedContainerRO.PackedData::paletteEntries), Codec.LONG_STREAM.optionalFieldOf("data").forGetter(PalettedContainerRO.PackedData::storage)).apply(instance, PalettedContainerRO.PackedData::new)).comapFlatMap((packedData) -> unpacker.read(idMap, strategy, packedData), (palettedContainerRO) -> palettedContainerRO.pack(idMap, strategy));
++        return RecordCodecBuilder.<PalettedContainerRO.PackedData<T>>create((instance) -> instance.group(codec.mapResult(ExtraCodecs.orElsePartial(object)).listOf().fieldOf("palette").forGetter(PalettedContainerRO.PackedData::paletteEntries), Codec.LONG_STREAM.optionalFieldOf("data").forGetter(PalettedContainerRO.PackedData::storage)).apply(instance, PalettedContainerRO.PackedData::new)).comapFlatMap((packedData) -> unpacker.read(idMap, strategy, packedData), (palettedContainerRO) -> palettedContainerRO.pack(idMap, strategy));
      }
  
      public PalettedContainer(IdMap<T> idMap, PalettedContainer.Strategy strategy, PalettedContainer.Configuration<T> configuration, BitStorage bitStorage, List<T> list) {
-@@ -256,10 +256,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -270,10 +270,7 @@ public class PalettedContainer<T> implements PaletteResize<T>, PalettedContainer
          }
      }
  
@@ -10780,7 +10780,7 @@ index 3e225aec6e38bc1a8ad9b080f84ee762396e7043..69ca9db2a5a6b276614baf5b7862f0fa
          public PalettedContainer.Data<T> createData(IdMap<T> idMap, PaletteResize<T> paletteResize, int i) {
              BitStorage bitStorage = (BitStorage)(this.bits == 0 ? new ZeroBitStorage(i) : new SimpleBitStorage(this.bits, i));
              Palette<T> palette = this.factory.create(this.bits, idMap, paletteResize, List.of());
-@@ -280,11 +277,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -294,11 +291,7 @@ public class PalettedContainer<T> implements PaletteResize<T>, PalettedContainer
          void accept(T var1, int var2);
      }
  
@@ -10793,7 +10793,7 @@ index 3e225aec6e38bc1a8ad9b080f84ee762396e7043..69ca9db2a5a6b276614baf5b7862f0fa
          public void copyFrom(Palette<T> palette, BitStorage bitStorage) {
              for(int i = 0; i < bitStorage.getSize(); ++i) {
                  T object = palette.valueFor(bitStorage.get(i));
-@@ -306,31 +299,9 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -320,18 +313,6 @@ public class PalettedContainer<T> implements PaletteResize<T>, PalettedContainer
          public PalettedContainer.Data<T> copy() {
              return new PalettedContainer.Data<>(this.configuration, this.storage.copy(), this.palette.copy());
          }
@@ -10811,7 +10811,16 @@ index 3e225aec6e38bc1a8ad9b080f84ee762396e7043..69ca9db2a5a6b276614baf5b7862f0fa
 -        }
      }
  
--    static record DiscData<T>(List<T> a, Optional<LongStream> b) {
+     public abstract static class Strategy {
+diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainerRO.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainerRO.java
+index fe6f3f3a8dd8f81ef044a22fb4ad0edb0c61e4ca..1eb1343176fb5bc9e31b10bcbebc352d23725473 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainerRO.java
++++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainerRO.java
+@@ -26,17 +26,7 @@ public interface PalettedContainerRO<T> {
+ 
+     PalettedContainerRO.PackedData<T> pack(IdMap<T> var1, PalettedContainer.Strategy var2);
+ 
+-    public static record PackedData<T>(List<T> a, Optional<LongStream> b) {
 -        private final List<T> paletteEntries;
 -        private final Optional<LongStream> storage;
 -
@@ -10822,15 +10831,15 @@ index 3e225aec6e38bc1a8ad9b080f84ee762396e7043..69ca9db2a5a6b276614baf5b7862f0fa
 -        public Optional<LongStream> storage() {
 -            return this.storage;
 -        }
-+    static record DiscData<T>(List<T> paletteEntries, Optional<LongStream> storage) {
++    public static record PackedData<T>(List<T> paletteEntries, Optional<LongStream> storage) {
      }
  
-     public abstract static class Strategy {
+     public interface Unpacker<T, C extends PalettedContainerRO<T>> {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
-index aeec3a0d27667ffd1aa862c947b9ec8345f435dc..564d542f399e5b58e40bf0ff6c2d913578358095 100644
+index 009e1184040764fdf1a6f6cd31d9a4c2ce04530d..3b96f7c4597961d8d901bb30b669b26632c6d575 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/ChunkSerializer.java
-@@ -140,7 +140,7 @@ public class ChunkSerializer {
+@@ -141,7 +141,7 @@ public class ChunkSerializer {
          ChunkStatus.ChunkType chunkType = getChunkTypeFromTag(compoundTag);
          BlendingData blendingData;
          if (compoundTag.contains("blending_data", 10)) {
@@ -10839,7 +10848,7 @@ index aeec3a0d27667ffd1aa862c947b9ec8345f435dc..564d542f399e5b58e40bf0ff6c2d9135
          } else {
              blendingData = null;
          }
-@@ -157,7 +157,7 @@ public class ChunkSerializer {
+@@ -158,7 +158,7 @@ public class ChunkSerializer {
              chunkAccess = protoChunk;
              protoChunk.setInhabitedTime(l);
              if (compoundTag.contains("below_zero_retrogen", 10)) {
@@ -10848,7 +10857,7 @@ index aeec3a0d27667ffd1aa862c947b9ec8345f435dc..564d542f399e5b58e40bf0ff6c2d9135
              }
  
              ChunkStatus chunkStatus = ChunkStatus.byName(compoundTag.getString("Status"));
-@@ -383,13 +383,13 @@ public class ChunkSerializer {
+@@ -384,13 +384,13 @@ public class ChunkSerializer {
  
              if (listTag2 != null) {
                  for(int i = 0; i < listTag2.size(); ++i) {
@@ -13194,6 +13203,19 @@ index ef52de64bcd924fb4b5e499bfe7ccbcd6eaacbb3..fdd41065720208c14618fee29e65a917
      }
  }
 \ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/level/levelgen/presets/WorldPreset.java b/src/main/java/net/minecraft/world/level/levelgen/presets/WorldPreset.java
+index 7c0cd14f80bd37d91b7a5f59bd4fda9e276101a3..1cd848fffca9ed0c857c8ccb8fd376a6f34cb2c3 100644
+--- a/src/main/java/net/minecraft/world/level/levelgen/presets/WorldPreset.java
++++ b/src/main/java/net/minecraft/world/level/levelgen/presets/WorldPreset.java
+@@ -17,7 +17,7 @@ import net.minecraft.world.level.dimension.LevelStem;
+ import net.minecraft.world.level.levelgen.WorldGenSettings;
+ 
+ public class WorldPreset {
+-    public static final Codec<WorldPreset> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.unboundedMap(ResourceKey.codec(Registry.LEVEL_STEM_REGISTRY), LevelStem.CODEC).fieldOf("dimensions").forGetter((worldPreset) -> worldPreset.dimensions)).apply(instance, WorldPreset::new)).flatXmap(WorldPreset::requireOverworld, WorldPreset::requireOverworld);
++    public static final Codec<WorldPreset> DIRECT_CODEC = RecordCodecBuilder.<WorldPreset>create((instance) -> instance.group(Codec.unboundedMap(ResourceKey.codec(Registry.LEVEL_STEM_REGISTRY), LevelStem.CODEC).fieldOf("dimensions").forGetter((worldPreset) -> worldPreset.dimensions)).apply(instance, WorldPreset::new)).flatXmap(WorldPreset::requireOverworld, WorldPreset::requireOverworld);
+     public static final Codec<Holder<WorldPreset>> CODEC = RegistryFileCodec.create(Registry.WORLD_PRESET_REGISTRY, DIRECT_CODEC);
+     private final Map<ResourceKey<LevelStem>, LevelStem> dimensions;
+ 
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/Structure.java b/src/main/java/net/minecraft/world/level/levelgen/structure/Structure.java
 index c89a19037d63ec4b48cfd8d8a219000ce1381fec..b058b6ae0bde7ccfc272c5f9b10325650b0feddc 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/Structure.java
