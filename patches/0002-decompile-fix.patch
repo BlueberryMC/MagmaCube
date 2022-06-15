@@ -445,10 +445,10 @@ index 0291cfd057281f9bc27a6ef307d6b02081dd02a9..878edfcea87f342356d596006a615384
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index ecdadb1dc2dc10e837ba51cdb45dcd9dfa9b3d4f..09a4ef5af86afcdac75154df15b498fed37a1ef0 100644
+index f8f3ef6b3331ae7eb87c27559e296581b64d4325..b1f602e434dcf90c1a6e27958d48b05732dfefee 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -514,7 +514,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -518,7 +518,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen().set(this.window.isFullscreen());
              }
          } else {
@@ -457,7 +457,7 @@ index ecdadb1dc2dc10e837ba51cdb45dcd9dfa9b3d4f..09a4ef5af86afcdac75154df15b498fe
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -676,9 +676,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -681,9 +681,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      private void createSearchTrees() {
@@ -470,7 +470,7 @@ index ecdadb1dc2dc10e837ba51cdb45dcd9dfa9b3d4f..09a4ef5af86afcdac75154df15b498fe
      }
  
      private void onFullscreenError(int i, long l) {
-@@ -978,7 +978,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -983,7 +983,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -479,7 +479,7 @@ index ecdadb1dc2dc10e837ba51cdb45dcd9dfa9b3d4f..09a4ef5af86afcdac75154df15b498fe
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2149,13 +2149,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2155,13 +2155,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -496,7 +496,7 @@ index ecdadb1dc2dc10e837ba51cdb45dcd9dfa9b3d4f..09a4ef5af86afcdac75154df15b498fe
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2177,7 +2177,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2183,7 +2183,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -966,7 +966,7 @@ index 0a1d6fb7913883987fe1367389b2b4aad4bfada2..4077b980c25fd6b13edd8369dc524c73
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/Font.java b/src/main/java/net/minecraft/client/gui/Font.java
-index ab76002a8d1acead635f52cc73ad85d35d3a600e..49d078ac21606ef00c366ef4d589496122f7dce0 100644
+index 906354353afa4645f0af2c1148a726112a294e93..476c1acf37d5ec98e12f5cac8b103a98dcc38de4 100644
 --- a/src/main/java/net/minecraft/client/gui/Font.java
 +++ b/src/main/java/net/minecraft/client/gui/Font.java
 @@ -131,14 +131,14 @@ public class Font {
@@ -988,10 +988,10 @@ index ab76002a8d1acead635f52cc73ad85d35d3a600e..49d078ac21606ef00c366ef4d5894961
                  }
              }
 diff --git a/src/main/java/net/minecraft/client/gui/Gui.java b/src/main/java/net/minecraft/client/gui/Gui.java
-index 9e71cf48e5eb11e960acd80359a2cc6af110ba1c..33ac419c6d1d549b500c145209bc3f441e79cb46 100644
+index 667ee6fef955db73a96667abd526c4a5784e047d..9473f72e9ed3342fe9391f162dbab5cc0d458557 100644
 --- a/src/main/java/net/minecraft/client/gui/Gui.java
 +++ b/src/main/java/net/minecraft/client/gui/Gui.java
-@@ -442,7 +442,7 @@ public class Gui extends GuiComponent {
+@@ -439,7 +439,7 @@ public class Gui extends GuiComponent {
  
              RenderSystem.enableBlend();
              int i = 0;
@@ -1000,7 +1000,7 @@ index 9e71cf48e5eb11e960acd80359a2cc6af110ba1c..33ac419c6d1d549b500c145209bc3f44
              MobEffectTextureManager mobEffectTextureManager = this.minecraft.getMobEffectTextures();
              List<Runnable> list = Lists.newArrayListWithExpectedSize(collection.size());
              RenderSystem.setShaderTexture(0, AbstractContainerScreen.INVENTORY_LOCATION);
-@@ -460,8 +460,8 @@ public class Gui extends GuiComponent {
+@@ -457,8 +457,8 @@ public class Gui extends GuiComponent {
                          ++i;
                          i3 -= 25 * i;
                      } else {
@@ -1086,6 +1086,30 @@ index f094790ef4447d84c2a948e201c6b9501e85de12..9eb94544e403df2278868e6165dece64
      }
  
      public static class Builder<T> {
+diff --git a/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java b/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java
+index 615abae4440674e9382ec204181eacb571e582cd..97bc42952e20d4abe7fc5af3eeceff301c69170e 100644
+--- a/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java
++++ b/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java
+@@ -352,17 +352,7 @@ public class MultilineTextField {
+         }
+     }
+ 
+-    protected static record StringView(int a, int b) {
+-        final int beginIndex;
+-        final int endIndex;
++    protected static record StringView(int beginIndex, int endIndex) {
+         static final MultilineTextField.StringView EMPTY = new MultilineTextField.StringView(0, 0);
+-
+-        public int beginIndex() {
+-            return this.beginIndex;
+-        }
+-
+-        public int endIndex() {
+-            return this.endIndex;
+-        }
+     }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/font/FontManager.java b/src/main/java/net/minecraft/client/gui/font/FontManager.java
 index 7c660a4898e5e932c4a54a4fe7ab8d27eddb286e..532aed64c98da5298be79c44b89cbf63411acb71 100644
 --- a/src/main/java/net/minecraft/client/gui/font/FontManager.java
@@ -1386,6 +1410,88 @@ index 95783c372c409555bd4547fa29f27e242cbb2f02..94851e50636f38ccce260eb985b761c5
                                  NativeImage nativeImage = NativeImage.read(inputStream);
                                  textureManager.register(resourceLocation, new DynamicTexture(nativeImage));
                                  var8 = resourceLocation;
+diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatLogSegmenter.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatLogSegmenter.java
+index 5d6c6f2f65d2d2fe2d533ed5b7cea021057b7778..9329b7fdf5437e00bbb10386e263881e1c0bd6a3 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatLogSegmenter.java
++++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatLogSegmenter.java
+@@ -41,16 +41,6 @@ public class ChatLogSegmenter {
+         }
+     }
+ 
+-    public static record Results(List<LoggedChat.WithId> a, ChatLogSegmenter.MessageType b) {
+-        private final List<LoggedChat.WithId> messages;
+-        private final ChatLogSegmenter.MessageType type;
+-
+-        public List<LoggedChat.WithId> messages() {
+-            return this.messages;
+-        }
+-
+-        public ChatLogSegmenter.MessageType type() {
+-            return this.type;
+-        }
++    public static record Results(List<LoggedChat.WithId> messages, ChatLogSegmenter.MessageType type) {
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
+index bc33c69fadd14e2db92f43cf78bd67b7f4374865..8a80b7cddb0bb3bfb9a4658fca822d02d09a9e2a 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
++++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
+@@ -85,8 +85,8 @@ public class ChatReportScreen extends Screen {
+                 this.onReportChanged();
+             }))));
+         Component component3 = Util.mapNullable(reportReason, ReportReason::title, SELECT_REASON);
+-        this.addRenderableWidget(new Button(this.contentLeft(), this.selectInfoTop(), 280, 20, component3, (button) -> this.minecraft.setScreen(new ReportReasonSelectionScreen(this, this.report.reason(), (reportReason) -> {
+-                this.report.setReason(reportReason);
++        this.addRenderableWidget(new Button(this.contentLeft(), this.selectInfoTop(), 280, 20, component3, (button) -> this.minecraft.setScreen(new ReportReasonSelectionScreen(this, this.report.reason(), (reportReasonIn) -> {
++                this.report.setReason(reportReasonIn);
+                 this.onReportChanged();
+             }))));
+         this.commentBox = this.addRenderableWidget(new MultiLineEditBox(this.minecraft.font, this.contentLeft(), this.commentBoxTop(), 280, this.commentBoxBottom() - this.commentBoxTop(), DESCRIBE_PLACEHOLDER, Component.translatable("gui.chatReport.comments")));
+diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
+index 25a2b5893c35fc629f5a5a18d1ea48d3c16d2c6e..d7e6f887fa1c795f2092eec7b0f6a4b5215204ee 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
++++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
+@@ -242,21 +242,10 @@ public class ChatSelectionScreen extends Screen {
+             }
+         }
+ 
+-        static record Heading(UUID a, ChatSelectionScreen.ChatSelectionList.Entry b) {
+-            private final UUID sender;
+-            private final ChatSelectionScreen.ChatSelectionList.Entry entry;
+-
++        static record Heading(UUID sender, ChatSelectionScreen.ChatSelectionList.Entry entry) {
+             public boolean canCombine(ChatSelectionScreen.ChatSelectionList.Heading heading) {
+                 return heading.sender.equals(this.sender);
+             }
+-
+-            public UUID sender() {
+-                return this.sender;
+-            }
+-
+-            public ChatSelectionScreen.ChatSelectionList.Entry entry() {
+-                return this.entry;
+-            }
+         }
+ 
+         public class MessageEntry extends ChatSelectionScreen.ChatSelectionList.Entry {
+diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
+index 5bf4a366d0b938f2c04f79b125c7f1eb5b4efacb..f11f6dd866ca154efdb89a414daaf31225d09fca 100644
+--- a/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
++++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
+@@ -39,9 +39,9 @@ public class ReportReasonSelectionScreen extends Screen {
+         ReportReasonSelectionScreen.ReasonSelectionList.Entry entry = Util.mapNullable(this.selectedReasonOnInit, this.reasonSelectionList::findEntry);
+         this.reasonSelectionList.setSelected(entry);
+         this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 32, 150, 20, CommonComponents.GUI_DONE, (button) -> {
+-            ReportReasonSelectionScreen.ReasonSelectionList.Entry entry = this.reasonSelectionList.getSelected();
+-            if (entry != null) {
+-                this.onSelectedReason.accept(entry.getReason());
++            ReportReasonSelectionScreen.ReasonSelectionList.Entry entryIn = this.reasonSelectionList.getSelected();
++            if (entryIn != null) {
++                this.onSelectedReason.accept(entryIn.getReason());
+             }
+ 
+             this.minecraft.setScreen(this.lastScreen);
 diff --git a/src/main/java/net/minecraft/client/gui/screens/worldselection/EditGameRulesScreen.java b/src/main/java/net/minecraft/client/gui/screens/worldselection/EditGameRulesScreen.java
 index 688575d63bf1e1611fd31db74b2c4defe7c01ddc..a0af34388d2b13cacb991392b833277ab5eef9a8 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/worldselection/EditGameRulesScreen.java
@@ -1482,10 +1588,10 @@ index cd3de5c1ca37d227e3534c80b8c5e3d4db33ddbc..1870c5697304ea309cee9c061982f6f7
                          }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 77a00f230400fb1a5d6451dde9b966300c1231d1..f7bfefc02ed41ea5a47ffcb1c746e00871e25c5f 100644
+index 9913d680a3dd8e3b3b80b93ec00b9dffb8b73921..c589d9593e66062d7c3f85e0e1decae30bf6ed79 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-@@ -1297,9 +1297,9 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1324,9 +1324,9 @@ public class ClientPacketListener implements ClientGamePacketListener {
  
      private <T> void updateTagsForRegistry(ResourceKey<? extends Registry<? extends T>> resourceKey, TagNetworkSerialization.NetworkPayload networkPayload) {
          if (!networkPayload.isEmpty()) {
@@ -1497,7 +1603,7 @@ index 77a00f230400fb1a5d6451dde9b966300c1231d1..f7bfefc02ed41ea5a47ffcb1c746e008
              registry.bindTags(map);
          }
      }
-@@ -1537,10 +1537,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1564,10 +1564,10 @@ public class ClientPacketListener implements ClientGamePacketListener {
              } else {
                  this.minecraft.execute(() -> this.minecraft.setScreen(new ConfirmScreen((flag2) -> {
                          this.minecraft.setScreen((Screen)null);
@@ -1511,7 +1617,7 @@ index 77a00f230400fb1a5d6451dde9b966300c1231d1..f7bfefc02ed41ea5a47ffcb1c746e008
                              }
  
                              this.send(ServerboundResourcePackPacket.Action.ACCEPTED);
-@@ -1549,13 +1549,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
+@@ -1576,13 +1576,13 @@ public class ClientPacketListener implements ClientGamePacketListener {
                              this.send(ServerboundResourcePackPacket.Action.DECLINED);
                              if (flag) {
                                  this.connection.disconnect(Component.translatable("multiplayer.requiredTexturePrompt.disconnect"));
@@ -1529,6 +1635,239 @@ index 77a00f230400fb1a5d6451dde9b966300c1231d1..f7bfefc02ed41ea5a47ffcb1c746e008
                          }
  
                      }, flag ? Component.translatable("multiplayer.requiredTexturePrompt.line1") : Component.translatable("multiplayer.texturePrompt.line1"), preparePackPrompt(flag ? Component.translatable("multiplayer.requiredTexturePrompt.line2").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD) : Component.translatable("multiplayer.texturePrompt.line2"), clientboundResourcePackPacket.getPrompt()), flag ? CommonComponents.GUI_PROCEED : CommonComponents.GUI_YES, (Component)(flag ? Component.translatable("menu.disconnect") : CommonComponents.GUI_NO))));
+diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChat.java b/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChat.java
+index 3e01d56e6fc916721d64d1f9ceeb1db33e0c3d92..d6aed64aae92ae06f42219fd2187e1117d2a4be8 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChat.java
++++ b/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChat.java
+@@ -28,10 +28,7 @@ public interface LoggedChat {
+ 
+     boolean canReport(UUID var1);
+ 
+-    public static record Player(GameProfile a, Component b, PlayerChatMessage c) implements LoggedChat {
+-        private final GameProfile profile;
+-        private final Component displayName;
+-        private final PlayerChatMessage message;
++    public static record Player(GameProfile profile, Component displayName, PlayerChatMessage message) implements LoggedChat {
+         private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+ 
+         public Component toContentComponent() {
+@@ -61,24 +58,9 @@ public interface LoggedChat {
+         public UUID profileId() {
+             return this.profile.getId();
+         }
+-
+-        public GameProfile profile() {
+-            return this.profile;
+-        }
+-
+-        public Component displayName() {
+-            return this.displayName;
+-        }
+-
+-        public PlayerChatMessage message() {
+-            return this.message;
+-        }
+     }
+ 
+-    public static record System(Component a, Instant b) implements LoggedChat {
+-        private final Component message;
+-        private final Instant timeStamp;
+-
++    public static record System(Component message, Instant timeStamp) implements LoggedChat {
+         public Component toContentComponent() {
+             return this.message;
+         }
+@@ -86,26 +68,8 @@ public interface LoggedChat {
+         public boolean canReport(UUID uuid) {
+             return false;
+         }
+-
+-        public Component message() {
+-            return this.message;
+-        }
+-
+-        public Instant timeStamp() {
+-            return this.timeStamp;
+-        }
+     }
+ 
+-    public static record WithId(int a, LoggedChat b) {
+-        private final int id;
+-        private final LoggedChat message;
+-
+-        public int id() {
+-            return this.id;
+-        }
+-
+-        public LoggedChat message() {
+-            return this.message;
+-        }
++    public static record WithId(int id, LoggedChat message) {
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/AbuseReportSender.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/AbuseReportSender.java
+index d47d34f9ced34306902e92e2a9dac8c11bcf6593..3a673a8102b2e6125546d645a3d15045820b0bce 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/chat/report/AbuseReportSender.java
++++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/AbuseReportSender.java
+@@ -33,9 +33,7 @@ public interface AbuseReportSender {
+         }
+     }
+ 
+-    public static record Services(ReportEnvironment a, UserApiService b) implements AbuseReportSender {
+-        private final ReportEnvironment environment;
+-        private final UserApiService userApiService;
++    public static record Services(ReportEnvironment environment, UserApiService userApiService) implements AbuseReportSender {
+         private static final Component SERVICE_UNAVAILABLE_TEXT = Component.translatable("gui.abuseReport.send.service_unavailable");
+         private static final Component HTTP_ERROR_TEXT = Component.translatable("gui.abuseReport.send.http_error");
+         private static final Component JSON_ERROR_TEXT = Component.translatable("gui.abuseReport.send.json_error");
+@@ -87,13 +85,5 @@ public interface AbuseReportSender {
+         public AbuseReportLimits reportLimits() {
+             return this.userApiService.getAbuseReportLimits();
+         }
+-
+-        public ReportEnvironment environment() {
+-            return this.environment;
+-        }
+-
+-        public UserApiService userApiService() {
+-            return this.userApiService;
+-        }
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java
+index c29538a2f65d9e6a36cffa2c45a4821432d87936..6b359c802debd572a2a00f8c2e5f9e78f4b2b918 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java
++++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java
+@@ -166,8 +166,7 @@ public class ChatReportBuilder {
+         return chatReportBuilder;
+     }
+ 
+-    public static record CannotBuildReason(Component e) {
+-        private final Component message;
++    public static record CannotBuildReason(Component message) {
+         public static final ChatReportBuilder.CannotBuildReason NO_REASON = new ChatReportBuilder.CannotBuildReason(Component.translatable("gui.chatReport.send.no_reason"));
+         public static final ChatReportBuilder.CannotBuildReason NO_REPORTED_MESSAGES = new ChatReportBuilder.CannotBuildReason(Component.translatable("gui.chatReport.send.no_reported_messages"));
+         public static final ChatReportBuilder.CannotBuildReason TOO_MANY_MESSAGES = new ChatReportBuilder.CannotBuildReason(Component.translatable("gui.chatReport.send.too_many_messages"));
+@@ -178,16 +177,6 @@ public class ChatReportBuilder {
+         }
+     }
+ 
+-    public static record Result(UUID a, AbuseReport b) {
+-        private final UUID id;
+-        private final AbuseReport report;
+-
+-        public UUID id() {
+-            return this.id;
+-        }
+-
+-        public AbuseReport report() {
+-            return this.report;
+-        }
++    public static record Result(UUID id, AbuseReport report) {
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
+index 4e8b98acef631733f4e829c7cab8963c7ebae06b..c75523b1c5c3a0bef7f87049a841299362ff101d 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
++++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
+@@ -7,11 +7,7 @@ import com.mojang.realmsclient.dto.RealmsServer;
+ import javax.annotation.Nullable;
+ import net.minecraft.client.Minecraft;
+ 
+-public record ReportEnvironment(String a, @Nullable ReportEnvironment.Server b) {
+-    private final String clientVersion;
+-    @Nullable
+-    private final ReportEnvironment.Server server;
+-
++public record ReportEnvironment(String clientVersion, @Nullable ReportEnvironment.Server server) {
+     public static ReportEnvironment local() {
+         return create((ReportEnvironment.Server)null);
+     }
+@@ -64,39 +60,14 @@ public record ReportEnvironment(String a, @Nullable ReportEnvironment.Server b)
+         return stringBuilder.toString();
+     }
+ 
+-    public String clientVersion() {
+-        return this.clientVersion;
+-    }
+-
+-    @Nullable
+-    public ReportEnvironment.Server server() {
+-        return this.server;
+-    }
+-
+     public interface Server {
+-        public static record Realm(long a, int b) implements ReportEnvironment.Server {
+-            private final long realmId;
+-            private final int slotId;
+-
++        public static record Realm(long realmId, int slotId) implements ReportEnvironment.Server {
+             public Realm(RealmsServer realmsServer) {
+                 this(realmsServer.id, realmsServer.activeSlot);
+             }
+-
+-            public long realmId() {
+-                return this.realmId;
+-            }
+-
+-            public int slotId() {
+-                return this.slotId;
+-            }
+         }
+ 
+-        public static record ThirdParty(String a) implements ReportEnvironment.Server {
+-            final String ip;
+-
+-            public String ip() {
+-                return this.ip;
+-            }
++        public static record ThirdParty(String ip) implements ReportEnvironment.Server {
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportingContext.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportingContext.java
+index 77693e9fe66a4b7467b69373a0b6154ff911e98e..fb42ba8eae655e0ab552e28e8ad26cf8ff150625 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportingContext.java
++++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportingContext.java
+@@ -5,14 +5,11 @@ import java.util.Objects;
+ import net.minecraft.client.multiplayer.chat.ChatLog;
+ import net.minecraft.client.multiplayer.chat.RollingMemoryChatLog;
+ 
+-public record ReportingContext(AbuseReportSender a, ReportEnvironment b, ChatLog c) {
+-    private final AbuseReportSender sender;
+-    private final ReportEnvironment environment;
+-    private final ChatLog chatLog;
++public record ReportingContext(AbuseReportSender sender, ReportEnvironment environment, ChatLog chatLog) {
+     private static final int LOG_CAPACITY = 1024;
+ 
+     public static ReportingContext create(ReportEnvironment reportEnvironment, UserApiService userApiService) {
+-        RollingMemoryChatLog rollingMemoryChatLog = new RollingMemoryChatLog(1024);
++        RollingMemoryChatLog rollingMemoryChatLog = new RollingMemoryChatLog(LOG_CAPACITY);
+         AbuseReportSender abuseReportSender = AbuseReportSender.create(reportEnvironment, userApiService);
+         return new ReportingContext(abuseReportSender, reportEnvironment, rollingMemoryChatLog);
+     }
+@@ -20,16 +17,4 @@ public record ReportingContext(AbuseReportSender a, ReportEnvironment b, ChatLog
+     public boolean matches(ReportEnvironment reportEnvironment) {
+         return Objects.equals(this.environment, reportEnvironment);
+     }
+-
+-    public AbuseReportSender sender() {
+-        return this.sender;
+-    }
+-
+-    public ReportEnvironment environment() {
+-        return this.environment;
+-    }
+-
+-    public ChatLog chatLog() {
+-        return this.chatLog;
+-    }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/particle/SculkChargeParticle.java b/src/main/java/net/minecraft/client/particle/SculkChargeParticle.java
 index c633481d90ea4d549116c636b7666a9ea965b28a..0b004c62f1c3461c99ca50717fe60e0be76bd730 100644
 --- a/src/main/java/net/minecraft/client/particle/SculkChargeParticle.java
@@ -1930,20 +2269,20 @@ index ce8671a6ea9284aa8327b11cd165834e87ebffa4..64258228cf8133f66afcb67952e59211
      private final Set<Stitcher.Holder> texturesToBeStitched = Sets.newHashSetWithExpectedSize(256);
      private final List<Stitcher.Region> storage = Lists.newArrayListWithCapacity(256);
 diff --git a/src/main/java/net/minecraft/client/resources/ClientPackSource.java b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
-index 40ffe5b33c73e6be2034e0b34ce40ee8bcf01b46..a917cf4f15b3c16d768a7efee805a086d8c5dc58 100644
+index 914ae8bb7fa681ef27162f2bcd97a66c088b1b5d..73644127185b83dc344694eb9e8887b472ed3f28 100644
 --- a/src/main/java/net/minecraft/client/resources/ClientPackSource.java
 +++ b/src/main/java/net/minecraft/client/resources/ClientPackSource.java
-@@ -147,8 +147,8 @@ public class ClientPackSource implements RepositorySource {
+@@ -142,8 +142,8 @@ public class ClientPackSource implements RepositorySource {
+             }).exceptionallyCompose((throwable) -> this.clearServerPack().thenAcceptAsync((void_) -> {
                      LOGGER.warn("Pack application failed: {}, deleting file {}", throwable.getMessage(), file);
                      deleteQuietly(file);
-                     Minecraft minecraft = Minecraft.getInstance();
--                    minecraft.execute(() -> minecraft.setScreen(new ConfirmScreen((flag) -> {
--                            if (flag) {
-+                    minecraft.execute(() -> minecraft.setScreen(new ConfirmScreen((flagIn) -> {
-+                            if (flagIn) {
-                                 minecraft.setScreen((Screen)null);
-                             } else {
-                                 ClientPacketListener clientPacketListener = minecraft.getConnection();
+-                }, Util.ioPool()).thenAcceptAsync((void_) -> minecraft.setScreen(new ConfirmScreen((flag) -> {
+-                        if (flag) {
++                }, Util.ioPool()).thenAcceptAsync((void_) -> minecraft.setScreen(new ConfirmScreen((flagIn) -> {
++                        if (flagIn) {
+                             minecraft.setScreen((Screen)null);
+                         } else {
+                             ClientPacketListener clientPacketListener = minecraft.getConnection();
 diff --git a/src/main/java/net/minecraft/client/resources/model/ModelBakery.java b/src/main/java/net/minecraft/client/resources/model/ModelBakery.java
 index 86610f970ad9c57fcf6e305eb5743ed061bf6600..5e5e868e9b4f4610187e03e107c6372bac8eaa20 100644
 --- a/src/main/java/net/minecraft/client/resources/model/ModelBakery.java
@@ -2066,10 +2405,10 @@ index c57581b2b587ef068d3926c5c75342bd081a1eb6..c9b2688d8124c752ea76e713ba2b9ea5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/commands/Commands.java b/src/main/java/net/minecraft/commands/Commands.java
-index bdbe66b2566d7dfdf28aa2969f9cc412a284ea02..de29ef1f06ce19d796db6aa7b03a62156660d1df 100644
+index 1ea7971ed1bf8ac0b75590ea4866ee711640530d..e271671b9a1042c352bba35f051a7b7ca558970c 100644
 --- a/src/main/java/net/minecraft/commands/Commands.java
 +++ b/src/main/java/net/minecraft/commands/Commands.java
-@@ -273,7 +273,7 @@ public class Commands {
+@@ -274,7 +274,7 @@ public class Commands {
      private void fillUsableCommands(CommandNode<CommandSourceStack> commandNode, CommandNode<SharedSuggestionProvider> commandNode2, CommandSourceStack commandSourceStack, Map<CommandNode<CommandSourceStack>, CommandNode<SharedSuggestionProvider>> map) {
          for(CommandNode<CommandSourceStack> commandNode3 : commandNode.getChildren()) {
              if (commandNode3.canUse(commandSourceStack)) {
@@ -3432,41 +3771,6 @@ index 9d40c5d2878e862e899f50f95350ccbc0b9d5bad..69f6ae99400bcfdde52053eaff88f3b3
      }
  
      public <K, V, M extends Map<K, V>> M readMap(IntFunction<M> intFunction, FriendlyByteBuf.Reader<K> reader, FriendlyByteBuf.Reader<V> reader2) {
-diff --git a/src/main/java/net/minecraft/network/chat/ChatDecoration.java b/src/main/java/net/minecraft/network/chat/ChatDecoration.java
-index 3aeab81296fd3150f9842a72f94cb8d9b05d5e67..412d8fa95d8a217d907d20cec3497803ca8430f0 100644
---- a/src/main/java/net/minecraft/network/chat/ChatDecoration.java
-+++ b/src/main/java/net/minecraft/network/chat/ChatDecoration.java
-@@ -8,10 +8,7 @@ import javax.annotation.Nullable;
- import net.minecraft.ChatFormatting;
- import net.minecraft.util.StringRepresentable;
- 
--public record ChatDecoration(String b, List<ChatDecoration.Parameter> c, Style d) {
--    private final String translationKey;
--    private final List<ChatDecoration.Parameter> parameters;
--    private final Style style;
-+public record ChatDecoration(String translationKey, List<ChatDecoration.Parameter> parameters, Style style) {
-     public static final Codec<ChatDecoration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.STRING.fieldOf("translation_key").forGetter(ChatDecoration::translationKey), ChatDecoration.Parameter.CODEC.listOf().fieldOf("parameters").forGetter(ChatDecoration::parameters), Style.FORMATTING_CODEC.fieldOf("style").forGetter(ChatDecoration::style)).apply(instance, ChatDecoration::new));
- 
-     public static ChatDecoration withSender(String s) {
-@@ -43,18 +40,6 @@ public record ChatDecoration(String b, List<ChatDecoration.Parameter> c, Style d
-         return components;
-     }
- 
--    public String translationKey() {
--        return this.translationKey;
--    }
--
--    public List<ChatDecoration.Parameter> parameters() {
--        return this.parameters;
--    }
--
--    public Style style() {
--        return this.style;
--    }
--
-     public static enum Parameter implements StringRepresentable {
-         SENDER("sender", (component, chatSender) -> chatSender != null ? chatSender.name() : null),
-         TEAM_NAME("team_name", (component, chatSender) -> chatSender != null ? chatSender.teamName() : null),
 diff --git a/src/main/java/net/minecraft/network/chat/ChatSender.java b/src/main/java/net/minecraft/network/chat/ChatSender.java
 index 914d3402171fa1fa63745d3898749e369fc9d14a..0127af4450885267ab30a39976cc7d4ce3ed5504 100644
 --- a/src/main/java/net/minecraft/network/chat/ChatSender.java
@@ -3505,22 +3809,22 @@ index 914d3402171fa1fa63745d3898749e369fc9d14a..0127af4450885267ab30a39976cc7d4c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/network/chat/ChatType.java b/src/main/java/net/minecraft/network/chat/ChatType.java
-index 62533bc7508db3139d8f800cfc52e78f6bef6648..9cc516de6e26cb72cef3bbadfb0fed28295dd47a 100644
+index c79c1db954894267658dc3c53823a653e89b0b96..01887bfe183da9a58b565ba4eb642c4dd497c216 100644
 --- a/src/main/java/net/minecraft/network/chat/ChatType.java
 +++ b/src/main/java/net/minecraft/network/chat/ChatType.java
 @@ -11,10 +11,7 @@ import net.minecraft.resources.ResourceKey;
  import net.minecraft.resources.ResourceLocation;
  import net.minecraft.util.StringRepresentable;
  
--public record ChatType(Optional<ChatType.TextDisplay> j, Optional<ChatType.TextDisplay> k, Optional<ChatType.Narration> l) {
+-public record ChatType(Optional<ChatType.TextDisplay> k, Optional<ChatType.TextDisplay> l, Optional<ChatType.Narration> m) {
 -    private final Optional<ChatType.TextDisplay> chat;
 -    private final Optional<ChatType.TextDisplay> overlay;
 -    private final Optional<ChatType.Narration> narration;
 +public record ChatType(Optional<ChatType.TextDisplay> chat, Optional<ChatType.TextDisplay> overlay, Optional<ChatType.Narration> narration) {
      public static final Codec<ChatType> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ChatType.TextDisplay.CODEC.optionalFieldOf("chat").forGetter(ChatType::chat), ChatType.TextDisplay.CODEC.optionalFieldOf("overlay").forGetter(ChatType::overlay), ChatType.Narration.CODEC.optionalFieldOf("narration").forGetter(ChatType::narration)).apply(instance, ChatType::new));
+     public static final ChatTypeDecoration DEFAULT_CHAT_DECORATION = ChatTypeDecoration.withSender("chat.type.text");
      public static final ResourceKey<ChatType> CHAT = create("chat");
-     public static final ResourceKey<ChatType> SYSTEM = create("system");
-@@ -40,21 +37,7 @@ public record ChatType(Optional<ChatType.TextDisplay> j, Optional<ChatType.TextD
+@@ -41,21 +38,7 @@ public record ChatType(Optional<ChatType.TextDisplay> k, Optional<ChatType.TextD
          return BuiltinRegistries.register(registry, TELLRAW_COMMAND, new ChatType(Optional.of(ChatType.TextDisplay.undecorated()), Optional.empty(), Optional.of(ChatType.Narration.undecorated(ChatType.Narration.Priority.CHAT))));
      }
  
@@ -3536,23 +3840,58 @@ index 62533bc7508db3139d8f800cfc52e78f6bef6648..9cc516de6e26cb72cef3bbadfb0fed28
 -        return this.narration;
 -    }
 -
--    public static record Narration(Optional<ChatDecoration> b, ChatType.Narration.Priority c) {
--        private final Optional<ChatDecoration> decoration;
+-    public static record Narration(Optional<ChatTypeDecoration> b, ChatType.Narration.Priority c) {
+-        private final Optional<ChatTypeDecoration> decoration;
 -        private final ChatType.Narration.Priority priority;
-+    public static record Narration(Optional<ChatDecoration> decoration, ChatType.Narration.Priority priority) {
-         public static final Codec<ChatType.Narration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ChatDecoration.CODEC.optionalFieldOf("decoration").forGetter(ChatType.Narration::decoration), ChatType.Narration.Priority.CODEC.fieldOf("priority").forGetter(ChatType.Narration::priority)).apply(instance, ChatType.Narration::new));
++    public static record Narration(Optional<ChatTypeDecoration> decoration, ChatType.Narration.Priority priority) {
+         public static final Codec<ChatType.Narration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ChatTypeDecoration.CODEC.optionalFieldOf("decoration").forGetter(ChatType.Narration::decoration), ChatType.Narration.Priority.CODEC.fieldOf("priority").forGetter(ChatType.Narration::priority)).apply(instance, ChatType.Narration::new));
  
          public static ChatType.Narration undecorated(ChatType.Narration.Priority priority) {
-@@ -100,8 +83,7 @@ public record ChatType(Optional<ChatType.TextDisplay> j, Optional<ChatType.TextD
+@@ -101,8 +84,7 @@ public record ChatType(Optional<ChatType.TextDisplay> k, Optional<ChatType.TextD
          }
      }
  
--    public static record TextDisplay(Optional<ChatDecoration> b) {
--        private final Optional<ChatDecoration> decoration;
-+    public static record TextDisplay(Optional<ChatDecoration> decoration) {
-         public static final Codec<ChatType.TextDisplay> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ChatDecoration.CODEC.optionalFieldOf("decoration").forGetter(ChatType.TextDisplay::decoration)).apply(instance, ChatType.TextDisplay::new));
+-    public static record TextDisplay(Optional<ChatTypeDecoration> b) {
+-        private final Optional<ChatTypeDecoration> decoration;
++    public static record TextDisplay(Optional<ChatTypeDecoration> decoration) {
+         public static final Codec<ChatType.TextDisplay> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ChatTypeDecoration.CODEC.optionalFieldOf("decoration").forGetter(ChatType.TextDisplay::decoration)).apply(instance, ChatType.TextDisplay::new));
  
          public static ChatType.TextDisplay undecorated() {
+diff --git a/src/main/java/net/minecraft/network/chat/ChatTypeDecoration.java b/src/main/java/net/minecraft/network/chat/ChatTypeDecoration.java
+index c162da7ecda159b6beb8edfbc06c6eb361eeba15..2907487ac471b13745c219dc811558b22f60b6ee 100644
+--- a/src/main/java/net/minecraft/network/chat/ChatTypeDecoration.java
++++ b/src/main/java/net/minecraft/network/chat/ChatTypeDecoration.java
+@@ -8,10 +8,7 @@ import javax.annotation.Nullable;
+ import net.minecraft.ChatFormatting;
+ import net.minecraft.util.StringRepresentable;
+ 
+-public record ChatTypeDecoration(String b, List<ChatTypeDecoration.Parameter> c, Style d) {
+-    private final String translationKey;
+-    private final List<ChatTypeDecoration.Parameter> parameters;
+-    private final Style style;
++public record ChatTypeDecoration(String translationKey, List<ChatTypeDecoration.Parameter> parameters, Style style) {
+     public static final Codec<ChatTypeDecoration> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.STRING.fieldOf("translation_key").forGetter(ChatTypeDecoration::translationKey), ChatTypeDecoration.Parameter.CODEC.listOf().fieldOf("parameters").forGetter(ChatTypeDecoration::parameters), Style.FORMATTING_CODEC.optionalFieldOf("style", Style.EMPTY).forGetter(ChatTypeDecoration::style)).apply(instance, ChatTypeDecoration::new));
+ 
+     public static ChatTypeDecoration withSender(String s) {
+@@ -43,18 +40,6 @@ public record ChatTypeDecoration(String b, List<ChatTypeDecoration.Parameter> c,
+         return components;
+     }
+ 
+-    public String translationKey() {
+-        return this.translationKey;
+-    }
+-
+-    public List<ChatTypeDecoration.Parameter> parameters() {
+-        return this.parameters;
+-    }
+-
+-    public Style style() {
+-        return this.style;
+-    }
+-
+     public static enum Parameter implements StringRepresentable {
+         SENDER("sender", (component, chatSender) -> chatSender != null ? chatSender.name() : null),
+         TEAM_NAME("team_name", (component, chatSender) -> chatSender != null ? chatSender.teamName() : null),
 diff --git a/src/main/java/net/minecraft/network/chat/ComponentUtils.java b/src/main/java/net/minecraft/network/chat/ComponentUtils.java
 index 089e0b2c94a3a1764d079312474a57131d0db8cc..0debe2329df9cd586c47eac9bde5353f0690f404 100644
 --- a/src/main/java/net/minecraft/network/chat/ComponentUtils.java
@@ -3648,7 +3987,7 @@ index 3bf611a2f482e604fb3c6d316793604c9419ac32..d907249f068603dba1a6c92dd26c9871
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java b/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java
-index 142bd163e86d782953d0f8604c71f9c33476eeab..4e802dd50fb2778475412bcc7120c3b7e777b01a 100644
+index 2e0f254ad2faf19a8924848daac7b707f27cefeb..254039e452d85d83a91e9e98112e36cf6cc65219 100644
 --- a/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java
 +++ b/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java
 @@ -7,11 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
@@ -4526,10 +4865,10 @@ index d057a07b5f3b007c0b2fe1ef378f5498b5c4f8e3..3ef4b97f18968f75213c7d3ce9276d91
              Thread thread = new Thread("Server Shutdown Thread") {
                  public void run() {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 31b5a845fca90aeabb16b756fca63d0b7aca0ab4..0c44eac4c2cd68753f31555425b38193ed7ddab9 100644
+index 424334ab91bec36e402cc534e9a5bbe62bb5efbc..3ecaf08c81b6164fd5cb5482f0b4800dfd001f01 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -737,7 +737,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -739,7 +739,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
  
@@ -4538,7 +4877,7 @@ index 31b5a845fca90aeabb16b756fca63d0b7aca0ab4..0c44eac4c2cd68753f31555425b38193
          this.getProfiler().incrementCounter("runTask");
          super.doRunTask(tickTask);
      }
-@@ -1736,46 +1736,13 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1739,46 +1739,13 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          return ChatDecorator.PLAIN;
      }
  
@@ -5255,10 +5594,23 @@ index 11ba01afaf935a8cc2bf9493dfe9e8e848622243..494a0230b21a7c0c7ac52e1a3a8730ce
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 7ece6cdb5ab8ec579f8503b4999282b1bb49208c..86afc1a2841949449c4e6afd31536a093a542a01 100644
+index c4b3d0d032522b6b97971eeff79976bd14369cc9..702f8d92848c40f53e67b631d0ef1da9e3b2173a 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1540,7 +1540,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -591,9 +591,9 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+                 return;
+             }
+ 
+-            String s = SharedConstants.filterText(serverboundRenameItemPacket.getName());
+-            if (s.length() <= 50) {
+-                anvilMenu.setItemName(s);
++            String filteredText = SharedConstants.filterText(serverboundRenameItemPacket.getName());
++            if (filteredText.length() <= 50) {
++                anvilMenu.setItemName(filteredText);
+             }
+         }
+ 
+@@ -1564,7 +1564,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
              }
  
              for(int i = 0; i < list.size(); ++i) {
@@ -5461,7 +5813,7 @@ index 4ac92b5e4a830d4b5ed2be16dcd428c519daef91..865f2b1eea798d13bffe9cc7e6a4823e
                  return new ProfiledReloadInstance.State(preparableReloadListener.getName(), activeProfiler.getResults(), activeProfiler2.getResults(), atomicLong, atomicLong2);
              }, executor2);
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 27be34d33f824d744ad69177c23f7b940dd3d359..2315eee555287dc204684ee922a56fca16e8ac08 100644
+index 5f2531295efd71d5757efad16c6a91d7b9d0ef45..52029aa5f5f0b225b78cb91d2cc78030ac8d9c7f 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -323,7 +323,7 @@ public abstract class PlayerList {
@@ -8654,7 +9006,7 @@ index df05ca4650cf0b95d152986e9395f6a04ae186e2..9c8b14c6776cfb01ab9a24d18c87d861
              optional = Optional.empty();
          }
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index d5462c1c1242d882b0a35f3f45a380539f06a0c5..b044e21a7a0802529f46fc95160a8265f27d0765 100644
+index 858be99461843dcc6e40a1b29b8cf874a7cfd0b0..248c435794d9763dacaffd7e06132bd9128400a9 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -3308,16 +3308,6 @@ public abstract class LivingEntity extends Entity {
@@ -9026,10 +9378,10 @@ index 0b5e59cddc16723b6ae20a971a81fa7fd1743e7d..2c7737429ff88d6d6ba860ef6352f70d
      private EatBlockGoal eatBlockGoal;
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index da343911af2d1867ce265a3d4dcc83c654592180..97ac4c90a66f5f8dac1b2eeb41a9fc8fd5b3a03e 100644
+index b3cd77164cb0a58bab941472a38baa79f294be1f..c1d4728bf106aaf65ca359301d064fb822762e89 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -89,7 +89,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
+@@ -115,7 +115,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
      }
  
      public Brain<Allay> getBrain() {
@@ -9038,7 +9390,7 @@ index da343911af2d1867ce265a3d4dcc83c654592180..97ac4c90a66f5f8dac1b2eeb41a9fc8f
      }
  
      public static AttributeSupplier.Builder createAttributes() {
-@@ -133,9 +133,8 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
+@@ -165,9 +165,8 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
      }
  
      public boolean hurt(DamageSource damageSource, float f) {
@@ -9050,15 +9402,15 @@ index da343911af2d1867ce265a3d4dcc83c654592180..97ac4c90a66f5f8dac1b2eeb41a9fc8f
              Optional<UUID> optional = this.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER);
              if (optional.isPresent() && player.getUUID().equals(optional.get())) {
                  return false;
-@@ -339,7 +338,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationL
+@@ -415,7 +414,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
          super.readAdditionalSaveData(compoundTag);
          this.inventory.fromTag(compoundTag.getList("Inventory", 10));
          if (compoundTag.contains("listener", 10)) {
--            VibrationListener.codec(this).parse(new Dynamic(NbtOps.INSTANCE, compoundTag.getCompound("listener"))).resultOrPartial(LOGGER::error).ifPresent((vibrationListener) -> this.dynamicGameEventListener.updateListener(vibrationListener, this.level));
-+            VibrationListener.codec(this).parse(new Dynamic<>(NbtOps.INSTANCE, compoundTag.getCompound("listener"))).resultOrPartial(LOGGER::error).ifPresent((vibrationListener) -> this.dynamicGameEventListener.updateListener(vibrationListener, this.level));
+-            VibrationListener.codec(this.vibrationListenerConfig).parse(new Dynamic(NbtOps.INSTANCE, compoundTag.getCompound("listener"))).resultOrPartial(LOGGER::error).ifPresent((vibrationListener) -> this.dynamicVibrationListener.updateListener(vibrationListener, this.level));
++            VibrationListener.codec(this.vibrationListenerConfig).parse(new Dynamic<>(NbtOps.INSTANCE, compoundTag.getCompound("listener"))).resultOrPartial(LOGGER::error).ifPresent((vibrationListener) -> this.dynamicVibrationListener.updateListener(vibrationListener, this.level));
          }
  
-     }
+         this.duplicationCooldown = (long)compoundTag.getInt("DuplicationCooldown");
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/AllayAi.java b/src/main/java/net/minecraft/world/entity/animal/allay/AllayAi.java
 index ebd005ffc9994464e2f3a3c612abb3cb0a986b24..06d220c3164181f123dc3def9df8eaa62fde1daf 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/AllayAi.java
@@ -11127,10 +11479,10 @@ index d22d47fbce75c55c27528b2b997834de9128d694..86ee111a7aa0907bd11ea194e34da98d
              this.sectionStorage.getExistingSectionPositionsInChunk(l).forEach((lx) -> {
                  EntitySection<T> entitySection = this.sectionStorage.getSection(lx);
 diff --git a/src/main/java/net/minecraft/world/level/gameevent/GameEvent.java b/src/main/java/net/minecraft/world/level/gameevent/GameEvent.java
-index 607eab8983dfc80c05ad1525afcbf69596c14e69..b6fc2664ce8d3d85de893a932f91880d4c311fe3 100644
+index ba7176f55f23994127e27db1bc17184f5abae5e8..a404f75178f4efc6ea9f217eb519d6e76517a903 100644
 --- a/src/main/java/net/minecraft/world/level/gameevent/GameEvent.java
 +++ b/src/main/java/net/minecraft/world/level/gameevent/GameEvent.java
-@@ -93,12 +93,7 @@ public class GameEvent {
+@@ -95,12 +95,7 @@ public class GameEvent {
          return this.builtInRegistryHolder.is(tagKey);
      }
  
@@ -11144,7 +11496,7 @@ index 607eab8983dfc80c05ad1525afcbf69596c14e69..b6fc2664ce8d3d85de893a932f91880d
          public static GameEvent.Context of(@Nullable Entity entity) {
              return new GameEvent.Context(entity, (BlockState)null);
          }
-@@ -110,16 +105,6 @@ public class GameEvent {
+@@ -112,16 +107,6 @@ public class GameEvent {
          public static GameEvent.Context of(@Nullable Entity entity, @Nullable BlockState blockState) {
              return new GameEvent.Context(entity, blockState);
          }

@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..c3f75e11bba5764496c806c17fe5325553580c4e
+index 0000000000000000000000000000000000000000..cbe6c3381aaaf8e782cd11ec01912af8c581c07b
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,380 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..c3f75e11bba5764496c806c17fe53255
 +    <parent>
 +        <artifactId>magmacube-parent</artifactId>
 +        <groupId>net.blueberrymc.magmacube</groupId>
-+        <version>1.19</version>
++        <version>22w24a</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..c3f75e11bba5764496c806c17fe53255
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.5.41</version>
++            <version>3.6.42</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -117,7 +117,7 @@ index 0000000000000000000000000000000000000000..c3f75e11bba5764496c806c17fe53255
 +        <dependency>
 +            <groupId>io.netty</groupId>
 +            <artifactId>netty-all</artifactId>
-+            <version>4.1.76.Final</version>
++            <version>4.1.77.Final</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.google.guava</groupId>

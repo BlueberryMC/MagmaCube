@@ -107,10 +107,10 @@
   },
   "assetIndex": {
     "id": "1.19",
-    "sha1": "72f061c25c8a96c4b8dd9b5609a6da6a8fb7fd73",
+    "sha1": "d45eb5e0c20e5d753468de3d68b05c45a946f49b",
     "size": 385216,
-    "totalSize": 553651102,
-    "url": "https://launchermeta.mojang.com/v1/packages/72f061c25c8a96c4b8dd9b5609a6da6a8fb7fd73/1.19.json"
+    "totalSize": 553754183,
+    "url": "https://piston-meta.mojang.com/v1/packages/d45eb5e0c20e5d753468de3d68b05c45a946f49b/1.19.json"
   },
   "assets": "1.19",
   "logging": {
@@ -199,10 +199,10 @@
       ]
     }
   ],
-  "id": "1.19-deobf",
+  "id": "22w24a-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2022-06-07T00:00:00+00:00",
-  "time": "2022-06-07T00:00:00+00:00",
+  "releaseTime": "2022-06-15T00:00:00+00:00",
+  "time": "2022-06-15T00:00:00+00:00",
   "type": "snapshot"
 }
