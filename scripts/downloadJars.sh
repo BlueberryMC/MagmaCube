@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 source ./scripts/functions.sh
-clientJarUrl="https://piston-data.mojang.com/v1/objects/dc26b29eb345cbb60e3939af0b7c78fa52a60daa/client.jar"
+clientJarUrl="https://piston-data.mojang.com/v1/objects/6031a555a696b88b6dd39dd6ef034d70e7115a3c/client.jar"
 clientJarPath="$basedir"/work/Minecraft/$version/client.jar
-clientMappingUrl="https://piston-data.mojang.com/v1/objects/e30571a5d3b123b42dcf141570ed0737434e8c4c/client.txt"
+clientMappingUrl="https://piston-data.mojang.com/v1/objects/b8b77a71ae0e9498d7fce7ebb8b6496718589eea/client.txt"
 clientMappingPath="$basedir"/work/Minecraft/$version/mapping.txt
 clientRemappedJarPath="$basedir"/work/Minecraft/$version/client-remapped.jar
 FF_URL="https://maven.minecraftforge.net/net/minecraftforge/forgeflower/1.5.498.29/forgeflower-1.5.498.29.jar"

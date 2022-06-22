@@ -296,8 +296,74 @@ index b4e1dd11f658264ce49346b7ee150c2b898cf01d..d97f1796073031ce7630da1b88b1cbe9
              }
          }).start();
      }
+diff --git a/src/main/java/com/mojang/realmsclient/gui/task/DataFetcher.java b/src/main/java/com/mojang/realmsclient/gui/task/DataFetcher.java
+index d391b49fa8219516b773458b7bde90a1ace814ec..b6500cb5216e4210a9b014bd46a99b109d6eae45 100644
+--- a/src/main/java/com/mojang/realmsclient/gui/task/DataFetcher.java
++++ b/src/main/java/com/mojang/realmsclient/gui/task/DataFetcher.java
+@@ -39,17 +39,7 @@ public class DataFetcher {
+         return new DataFetcher.Subscription();
+     }
+ 
+-    static record ComputationResult<T>(Either<T, Exception> a, long b) {
+-        private final Either<T, Exception> value;
+-        final long time;
+-
+-        public Either<T, Exception> value() {
+-            return this.value;
+-        }
+-
+-        public long time() {
+-            return this.time;
+-        }
++    static record ComputationResult<T>(Either<T, Exception> value, long time) {
+     }
+ 
+     class SubscribedTask<T> {
+@@ -122,17 +112,7 @@ public class DataFetcher {
+         }
+     }
+ 
+-    static record SuccessfulComputationResult<T>(T a, long b) {
+-        final T value;
+-        final long time;
+-
+-        public T value() {
+-            return this.value;
+-        }
+-
+-        public long time() {
+-            return this.time;
+-        }
++    static record SuccessfulComputationResult<T>(T value, long time) {
+     }
+ 
+     public class Task<T> {
+@@ -166,9 +146,9 @@ public class DataFetcher {
+                     this.lastResult = new DataFetcher.SuccessfulComputationResult<>((T)object, l2);
+                     this.nextUpdate = l2 + this.period * this.repeatStrategy.delayCyclesAfterSuccess();
+                 }).ifRight((exception) -> {
+-                    long l2 = this.repeatStrategy.delayCyclesAfterFailure();
+-                    DataFetcher.LOGGER.warn("Failed to process task {}, will repeat after {} cycles", new Object[]{this.id, l2, exception});
+-                    this.nextUpdate = l2 + this.period * l2;
++                    long cycles = this.repeatStrategy.delayCyclesAfterFailure();
++                    DataFetcher.LOGGER.warn("Failed to process task {}, will repeat after {} cycles", new Object[]{this.id, cycles, exception});
++                    this.nextUpdate = cycles + this.period * cycles;
+                 });
+             }
+ 
+@@ -176,8 +156,8 @@ public class DataFetcher {
+                 this.pendingTask = CompletableFuture.supplyAsync(() -> {
+                     try {
+                         T object = (T)this.updater.call();
+-                        long l = DataFetcher.this.timeSource.get(DataFetcher.this.resolution);
+-                        return new DataFetcher.ComputationResult(Either.left(object), l);
++                        long l1 = DataFetcher.this.timeSource.get(DataFetcher.this.resolution);
++                        return new DataFetcher.ComputationResult(Either.left(object), l1);
+                     } catch (Exception var4) {
+                         long l2 = DataFetcher.this.timeSource.get(DataFetcher.this.resolution);
+                         return new DataFetcher.ComputationResult(Either.right(var4), l2);
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 791aebc28fb787764aaf9d377b88d5b0edf03f8c..f7cb7bbc3af34c680af9c934398a60e4455cf1a3 100644
+index 6a58fb69f4367e8f3b459dd6c6fd2025906e7aad..629a9280693be3ca103bf82f1cde0cf86b76e6bc 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -30,6 +30,7 @@ import java.nio.file.Path;
@@ -445,10 +511,10 @@ index 0291cfd057281f9bc27a6ef307d6b02081dd02a9..878edfcea87f342356d596006a615384
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index f8f3ef6b3331ae7eb87c27559e296581b64d4325..b1f602e434dcf90c1a6e27958d48b05732dfefee 100644
+index 47ad696b1f2b9d3d438cc483be6bd9be138e25c7..f3e70e1c14b6f40e12149630fab7403f4f9cf092 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -518,7 +518,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -524,7 +524,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen().set(this.window.isFullscreen());
              }
          } else {
@@ -457,7 +523,7 @@ index f8f3ef6b3331ae7eb87c27559e296581b64d4325..b1f602e434dcf90c1a6e27958d48b057
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -681,9 +681,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -695,9 +695,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      private void createSearchTrees() {
@@ -470,7 +536,7 @@ index f8f3ef6b3331ae7eb87c27559e296581b64d4325..b1f602e434dcf90c1a6e27958d48b057
      }
  
      private void onFullscreenError(int i, long l) {
-@@ -983,7 +983,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -997,7 +997,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -479,7 +545,7 @@ index f8f3ef6b3331ae7eb87c27559e296581b64d4325..b1f602e434dcf90c1a6e27958d48b057
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2155,13 +2155,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2178,13 +2178,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -496,7 +562,7 @@ index f8f3ef6b3331ae7eb87c27559e296581b64d4325..b1f602e434dcf90c1a6e27958d48b057
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2183,7 +2183,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2206,7 +2206,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -1087,10 +1153,10 @@ index f094790ef4447d84c2a948e201c6b9501e85de12..9eb94544e403df2278868e6165dece64
  
      public static class Builder<T> {
 diff --git a/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java b/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java
-index 615abae4440674e9382ec204181eacb571e582cd..97bc42952e20d4abe7fc5af3eeceff301c69170e 100644
+index 9d2126cb7894d7e101d58c232e65a601dc43d55e..dcccff07481a12be3ef81751c5334f516023a197 100644
 --- a/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java
 +++ b/src/main/java/net/minecraft/client/gui/components/MultilineTextField.java
-@@ -352,17 +352,7 @@ public class MultilineTextField {
+@@ -354,17 +354,7 @@ public class MultilineTextField {
          }
      }
  
@@ -1434,7 +1500,7 @@ index 5d6c6f2f65d2d2fe2d533ed5b7cea021057b7778..9329b7fdf5437e00bbb10386e263881e
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
-index bc33c69fadd14e2db92f43cf78bd67b7f4374865..8a80b7cddb0bb3bfb9a4658fca822d02d09a9e2a 100644
+index e52cc2ebde3356695b9f7e1974c2e79875ae6a2e..74c9f136033ba128ef1740c9f91f223f2fd3b492 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
 @@ -85,8 +85,8 @@ public class ChatReportScreen extends Screen {
@@ -1449,10 +1515,10 @@ index bc33c69fadd14e2db92f43cf78bd67b7f4374865..8a80b7cddb0bb3bfb9a4658fca822d02
              }))));
          this.commentBox = this.addRenderableWidget(new MultiLineEditBox(this.minecraft.font, this.contentLeft(), this.commentBoxTop(), 280, this.commentBoxBottom() - this.commentBoxTop(), DESCRIBE_PLACEHOLDER, Component.translatable("gui.chatReport.comments")));
 diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
-index 25a2b5893c35fc629f5a5a18d1ea48d3c16d2c6e..d7e6f887fa1c795f2092eec7b0f6a4b5215204ee 100644
+index 7bd4240380bbc6a2de453d7a511cb2eb16764c61..657df81115b1d1047ccaf2f23cf293bdc00cacc0 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
-@@ -242,21 +242,10 @@ public class ChatSelectionScreen extends Screen {
+@@ -257,21 +257,10 @@ public class ChatSelectionScreen extends Screen {
              }
          }
  
@@ -1476,13 +1542,13 @@ index 25a2b5893c35fc629f5a5a18d1ea48d3c16d2c6e..d7e6f887fa1c795f2092eec7b0f6a4b5
  
          public class MessageEntry extends ChatSelectionScreen.ChatSelectionList.Entry {
 diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
-index 5bf4a366d0b938f2c04f79b125c7f1eb5b4efacb..f11f6dd866ca154efdb89a414daaf31225d09fca 100644
+index e6ebc98bbc475c4b3d08e93d9f9c53b21b90ccd0..1148db78fcecb614177f9df2dedd4191841ae106 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
-@@ -39,9 +39,9 @@ public class ReportReasonSelectionScreen extends Screen {
+@@ -57,9 +57,9 @@ public class ReportReasonSelectionScreen extends Screen {
          ReportReasonSelectionScreen.ReasonSelectionList.Entry entry = Util.mapNullable(this.selectedReasonOnInit, this.reasonSelectionList::findEntry);
          this.reasonSelectionList.setSelected(entry);
-         this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 32, 150, 20, CommonComponents.GUI_DONE, (button) -> {
+         this.addRenderableWidget(new Button(this.buttonLeft(), this.buttonTop(), 150, 20, CommonComponents.GUI_DONE, (button) -> {
 -            ReportReasonSelectionScreen.ReasonSelectionList.Entry entry = this.reasonSelectionList.getSelected();
 -            if (entry != null) {
 -                this.onSelectedReason.accept(entry.getReason());
@@ -1560,10 +1626,10 @@ index 403e05edd80d2e39608db0af4a26290958f6c3ff..ed7f979397d6c6bcb0c14e9ff9ae6180
  
      private void importSettings(WorldGenSettings worldGenSettings) {
 diff --git a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
-index cd3de5c1ca37d227e3534c80b8c5e3d4db33ddbc..1870c5697304ea309cee9c061982f6f79680758a 100644
+index 557ca8ba202e7e43f3274c069c88fbbe8ff47989..e5436aaee34a8f3a0fe4a79265eb5c88ac47a829 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/worldselection/WorldSelectionList.java
-@@ -391,10 +391,10 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.E
+@@ -392,10 +392,10 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.E
                      Component component = Component.translatable(s2, this.summary.getWorldVersionName(), SharedConstants.getCurrentVersion().getName());
                      this.minecraft.setScreen(new BackupConfirmScreen(this.screen, (flag, flag2) -> {
                          if (flag) {
@@ -1576,7 +1642,7 @@ index cd3de5c1ca37d227e3534c80b8c5e3d4db33ddbc..1870c5697304ea309cee9c061982f6f7
  
                                  try {
                                      EditWorldScreen.makeBackupAndShowToast(levelStorageAccess);
-@@ -414,8 +414,8 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.E
+@@ -415,8 +415,8 @@ public class WorldSelectionList extends ObjectSelectionList<WorldSelectionList.E
                                      levelStorageAccess.close();
                                  }
                              } catch (IOException var9) {
@@ -1770,7 +1836,7 @@ index c29538a2f65d9e6a36cffa2c45a4821432d87936..6b359c802debd572a2a00f8c2e5f9e78
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
-index 4e8b98acef631733f4e829c7cab8963c7ebae06b..c75523b1c5c3a0bef7f87049a841299362ff101d 100644
+index 5c7bf8323a50fdca944e08e84eaeb7a0b666d7f4..4642801b974191098935de69d144070f773ba331 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 @@ -7,11 +7,7 @@ import com.mojang.realmsclient.dto.RealmsServer;
@@ -9378,7 +9444,7 @@ index 0b5e59cddc16723b6ae20a971a81fa7fd1743e7d..2c7737429ff88d6d6ba860ef6352f70d
      private EatBlockGoal eatBlockGoal;
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index b3cd77164cb0a58bab941472a38baa79f294be1f..c1d4728bf106aaf65ca359301d064fb822762e89 100644
+index 209a3aec86250635d1158c6def9d3202a6346958..bc47e9d079b6d0d9e592bf76c4faf1e115779b73 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 @@ -115,7 +115,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
@@ -9402,7 +9468,7 @@ index b3cd77164cb0a58bab941472a38baa79f294be1f..c1d4728bf106aaf65ca359301d064fb8
              Optional<UUID> optional = this.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER);
              if (optional.isPresent() && player.getUUID().equals(optional.get())) {
                  return false;
-@@ -415,7 +414,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
+@@ -407,7 +406,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
          super.readAdditionalSaveData(compoundTag);
          this.inventory.fromTag(compoundTag.getList("Inventory", 10));
          if (compoundTag.contains("listener", 10)) {
