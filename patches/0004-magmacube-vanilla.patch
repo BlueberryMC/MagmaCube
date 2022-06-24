@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 089f5a29ae56de6e4682806d7e6c356bd902160f..fb72e225f98cf4ead2d903a645965489ab3d121d 100644
+index f3ede9f780787b10181a3475f09d5cb9b1736357..1e110685839e47df6df97e4e08c521db1c55af52 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -63,10 +63,10 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index a168f1cb6a7e72c6e6bbd986a349f5142ec1d438..c2b12c1ac9d96aab4878d15013a65fddd601680b 100644
+index 03273b019b87f27345e8ddaa92ec558e6c42439f..91c4d21d32e80cb7c0d686a0bbd915cc3972e1cb 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -303,6 +303,7 @@ public class TitleScreen extends Screen {
+@@ -314,6 +314,7 @@ public class TitleScreen extends Screen {
                  s = s + I18n.get("menu.modded");
              }
  

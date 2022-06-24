@@ -511,7 +511,7 @@ index 0291cfd057281f9bc27a6ef307d6b02081dd02a9..878edfcea87f342356d596006a615384
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 47ad696b1f2b9d3d438cc483be6bd9be138e25c7..f3e70e1c14b6f40e12149630fab7403f4f9cf092 100644
+index a9b2cd79505973cb0a745760869f62806eacf642..33d43573684cff826783466503af0a8ea70ad626 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
 @@ -524,7 +524,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
@@ -1367,10 +1367,10 @@ index a09b012699adcdd4740366ba35dae6bc69b59698..e2fabeb269d335846a67bc25695783d2
  
              public void render(PoseStack poseStack, int i, int i2, int i3, int i4, int i5, int i6, int i7, boolean flag, float f) {
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index b4f88ba664cdbad95fd89c280669f1be8a8286aa..a168f1cb6a7e72c6e6bbd986a349f5142ec1d438 100644
+index 041ad21477830efdd274613dfbc82bbf8d7a49fb..03273b019b87f27345e8ddaa92ec558e6c42439f 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -365,31 +365,10 @@ public class TitleScreen extends Screen {
+@@ -376,31 +376,10 @@ public class TitleScreen extends Screen {
          this.minecraft.setScreen(this);
      }
  
@@ -1500,10 +1500,10 @@ index 5d6c6f2f65d2d2fe2d533ed5b7cea021057b7778..9329b7fdf5437e00bbb10386e263881e
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
-index e52cc2ebde3356695b9f7e1974c2e79875ae6a2e..74c9f136033ba128ef1740c9f91f223f2fd3b492 100644
+index f2efec92988c05d977627e5f0ca69a4a96d29e9a..b1c2674c44dc2fca97afe7846439475a96f03262 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatReportScreen.java
-@@ -85,8 +85,8 @@ public class ChatReportScreen extends Screen {
+@@ -87,8 +87,8 @@ public class ChatReportScreen extends Screen {
                  this.onReportChanged();
              }))));
          Component component3 = Util.mapNullable(reportReason, ReportReason::title, SELECT_REASON);
@@ -1515,10 +1515,10 @@ index e52cc2ebde3356695b9f7e1974c2e79875ae6a2e..74c9f136033ba128ef1740c9f91f223f
              }))));
          this.commentBox = this.addRenderableWidget(new MultiLineEditBox(this.minecraft.font, this.contentLeft(), this.commentBoxTop(), 280, this.commentBoxBottom() - this.commentBoxTop(), DESCRIBE_PLACEHOLDER, Component.translatable("gui.chatReport.comments")));
 diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
-index 7bd4240380bbc6a2de453d7a511cb2eb16764c61..657df81115b1d1047ccaf2f23cf293bdc00cacc0 100644
+index d6917a0e88dda862d5a9b0c5a6dc517bf76fd099..76d9ffc7e85ab324ffdf34c29510c71a266fbd13 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ChatSelectionScreen.java
-@@ -257,21 +257,10 @@ public class ChatSelectionScreen extends Screen {
+@@ -271,21 +271,10 @@ public class ChatSelectionScreen extends Screen {
              }
          }
  
@@ -1542,13 +1542,13 @@ index 7bd4240380bbc6a2de453d7a511cb2eb16764c61..657df81115b1d1047ccaf2f23cf293bd
  
          public class MessageEntry extends ChatSelectionScreen.ChatSelectionList.Entry {
 diff --git a/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java b/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
-index e6ebc98bbc475c4b3d08e93d9f9c53b21b90ccd0..1148db78fcecb614177f9df2dedd4191841ae106 100644
+index 8ea96df9a8a49f50b22d336a29c3f98649db18ea..50c4150f737df7821019667597027ccb6229f668 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen.java
-@@ -57,9 +57,9 @@ public class ReportReasonSelectionScreen extends Screen {
-         ReportReasonSelectionScreen.ReasonSelectionList.Entry entry = Util.mapNullable(this.selectedReasonOnInit, this.reasonSelectionList::findEntry);
-         this.reasonSelectionList.setSelected(entry);
-         this.addRenderableWidget(new Button(this.buttonLeft(), this.buttonTop(), 150, 20, CommonComponents.GUI_DONE, (button) -> {
+@@ -55,9 +55,9 @@ public class ReportReasonSelectionScreen extends Screen {
+             }, "https://aka.ms/aboutjavareporting", true))));
+         int i2 = this.width / 2 + 5;
+         this.addRenderableWidget(new Button(i2, this.buttonTop(), 150, 20, CommonComponents.GUI_DONE, (button) -> {
 -            ReportReasonSelectionScreen.ReasonSelectionList.Entry entry = this.reasonSelectionList.getSelected();
 -            if (entry != null) {
 -                this.onSelectedReason.accept(entry.getReason());
@@ -1803,10 +1803,10 @@ index d47d34f9ced34306902e92e2a9dac8c11bcf6593..3a673a8102b2e6125546d645a3d15045
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java
-index c29538a2f65d9e6a36cffa2c45a4821432d87936..6b359c802debd572a2a00f8c2e5f9e78f4b2b918 100644
+index 3e82afa4a7c12d40c3c01fad0434650d1baa3735..6fa6927fe562b65d88a9dfe36e10e632cbe391fa 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ChatReportBuilder.java
-@@ -166,8 +166,7 @@ public class ChatReportBuilder {
+@@ -164,8 +164,7 @@ public class ChatReportBuilder {
          return chatReportBuilder;
      }
  
@@ -1816,7 +1816,7 @@ index c29538a2f65d9e6a36cffa2c45a4821432d87936..6b359c802debd572a2a00f8c2e5f9e78
          public static final ChatReportBuilder.CannotBuildReason NO_REASON = new ChatReportBuilder.CannotBuildReason(Component.translatable("gui.chatReport.send.no_reason"));
          public static final ChatReportBuilder.CannotBuildReason NO_REPORTED_MESSAGES = new ChatReportBuilder.CannotBuildReason(Component.translatable("gui.chatReport.send.no_reported_messages"));
          public static final ChatReportBuilder.CannotBuildReason TOO_MANY_MESSAGES = new ChatReportBuilder.CannotBuildReason(Component.translatable("gui.chatReport.send.too_many_messages"));
-@@ -178,16 +177,6 @@ public class ChatReportBuilder {
+@@ -176,16 +175,6 @@ public class ChatReportBuilder {
          }
      }
  
@@ -1836,7 +1836,7 @@ index c29538a2f65d9e6a36cffa2c45a4821432d87936..6b359c802debd572a2a00f8c2e5f9e78
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
-index 5c7bf8323a50fdca944e08e84eaeb7a0b666d7f4..4642801b974191098935de69d144070f773ba331 100644
+index a7599cd85ca27f666aba5fbed1fcb8dd9c9f22d8..cd32e8080b0f38120a5180ea48b8c96a6734d911 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 @@ -7,11 +7,7 @@ import com.mojang.realmsclient.dto.RealmsServer;
@@ -6439,10 +6439,10 @@ index 5de36cff3ecfa67e45b1dbddab60a947bb8f6a86..cac0a559498a3f35e3d6b06d8a88de0f
              return new StringRepresentable.EnumCodec<>(enums, (s) -> {
                  for(E enum_ : enums) {
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixers.java b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-index d74ea869eabbb2c0d274d3d022aea97356119432..bc4d9a2061b2e6259a201907d3c44180dc880259 100644
+index da09b2ec2892ca6af1d72528f56211abca78aa3c..7fd1fc01b9b4ad0a7865179a56dddadd81bfa6bf 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixers.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixers.java
-@@ -610,17 +610,17 @@ public class DataFixers {
+@@ -611,17 +611,17 @@ public class DataFixers {
          dataFixerBuilder.addFixer(new AddNewChoices(schema132, "Added Glow Squid", References.ENTITY));
          dataFixerBuilder.addFixer(new AddNewChoices(schema132, "Added Glow Item Frame", References.ENTITY));
          Schema schema133 = dataFixerBuilder.addSchema(2690, SAME_NAMESPACED);
@@ -6463,7 +6463,7 @@ index d74ea869eabbb2c0d274d3d022aea97356119432..bc4d9a2061b2e6259a201907d3c44180
          dataFixerBuilder.addFixer(ItemRenameFix.create(schema136, "Renamed grimstone block items to deepslate", createRenamer(immutableMap3)));
          dataFixerBuilder.addFixer(BlockRenameFixWithJigsaw.create(schema136, "Renamed grimstone blocks to deepslate", createRenamer(immutableMap3)));
          Schema schema137 = dataFixerBuilder.addSchema(2700, SAME_NAMESPACED);
-@@ -680,9 +680,9 @@ public class DataFixers {
+@@ -681,9 +681,9 @@ public class DataFixers {
          Schema schema161 = dataFixerBuilder.addSchema(3083, V3083::new);
          dataFixerBuilder.addFixer(new AddNewChoices(schema161, "Added Allay", References.ENTITY));
          Schema schema162 = dataFixerBuilder.addSchema(3084, SAME_NAMESPACED);
@@ -6475,7 +6475,7 @@ index d74ea869eabbb2c0d274d3d022aea97356119432..bc4d9a2061b2e6259a201907d3c44180
              int2ObjectOpenHashMap.defaultReturnValue("minecraft:tabby");
              int2ObjectOpenHashMap.put(0, "minecraft:tabby");
              int2ObjectOpenHashMap.put(1, "minecraft:black");
-@@ -696,10 +696,10 @@ public class DataFixers {
+@@ -697,10 +697,10 @@ public class DataFixers {
              int2ObjectOpenHashMap.put(9, "minecraft:jellie");
              int2ObjectOpenHashMap.put(10, "minecraft:all_black");
          })::get));
@@ -9444,10 +9444,10 @@ index 0b5e59cddc16723b6ae20a971a81fa7fd1743e7d..2c7737429ff88d6d6ba860ef6352f70d
      private EatBlockGoal eatBlockGoal;
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index 209a3aec86250635d1158c6def9d3202a6346958..bc47e9d079b6d0d9e592bf76c4faf1e115779b73 100644
+index d7320eaecd38074ded21f654ec0dc06cf90bff7d..126aca1c7f205e22c46782dce9049a337a350613 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -115,7 +115,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
+@@ -116,7 +116,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
      }
  
      public Brain<Allay> getBrain() {
@@ -9456,7 +9456,7 @@ index 209a3aec86250635d1158c6def9d3202a6346958..bc47e9d079b6d0d9e592bf76c4faf1e1
      }
  
      public static AttributeSupplier.Builder createAttributes() {
-@@ -165,9 +165,8 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
+@@ -166,9 +166,8 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
      }
  
      public boolean hurt(DamageSource damageSource, float f) {
@@ -9468,7 +9468,7 @@ index 209a3aec86250635d1158c6def9d3202a6346958..bc47e9d079b6d0d9e592bf76c4faf1e1
              Optional<UUID> optional = this.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER);
              if (optional.isPresent() && player.getUUID().equals(optional.get())) {
                  return false;
-@@ -407,7 +406,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
+@@ -408,7 +407,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier {
          super.readAdditionalSaveData(compoundTag);
          this.inventory.fromTag(compoundTag.getList("Inventory", 10));
          if (compoundTag.contains("listener", 10)) {
@@ -9959,10 +9959,10 @@ index 1d49a1a3f7ccd5d0a4ec6089d22bdd2d6ee9390b..c7eabd7cdca001a2a5b2c132b0433904
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java b/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java
-index 2eb202c128588d1d7b0843d3157bf22211059d36..9d5ae2df5ec5e271659336fba44ff99d7014ac02 100644
+index 9a1fb80e0037a5f466b08d1acb53608bfb26c890..cc1bb980490591933c875ed47c25a2f202d654d1 100644
 --- a/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java
 +++ b/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java
-@@ -14,8 +14,7 @@ import net.minecraft.util.CryptException;
+@@ -16,8 +16,7 @@ import net.minecraft.util.CryptException;
  import net.minecraft.util.ExtraCodecs;
  import net.minecraft.util.SignatureValidator;
  
@@ -9972,7 +9972,7 @@ index 2eb202c128588d1d7b0843d3157bf22211059d36..9d5ae2df5ec5e271659336fba44ff99d
      public static final Codec<ProfilePublicKey> TRUSTED_CODEC = ProfilePublicKey.Data.CODEC.comapFlatMap((data) -> {
          try {
              return DataResult.success(createTrusted(data));
-@@ -46,15 +45,12 @@ public record ProfilePublicKey(ProfilePublicKey.Data b) {
+@@ -48,15 +47,12 @@ public record ProfilePublicKey(ProfilePublicKey.Data b) {
          return this.data;
      }
  
@@ -9982,7 +9982,7 @@ index 2eb202c128588d1d7b0843d3157bf22211059d36..9d5ae2df5ec5e271659336fba44ff99d
 -        private final byte[] keySignature;
 +    public static record Data(Instant expiresAt, PublicKey key, byte[] keySignature) {
          private static final int MAX_KEY_SIGNATURE_SIZE = 4096;
-         public static final Codec<ProfilePublicKey.Data> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ExtraCodecs.INSTANT_ISO8601.fieldOf("expires_at").forGetter(ProfilePublicKey.Data::expiresAt), Crypt.PUBLIC_KEY_CODEC.fieldOf("key").forGetter(ProfilePublicKey.Data::key), ExtraCodecs.BASE64_STRING.fieldOf("signature").forGetter(ProfilePublicKey.Data::keySignature)).apply(instance, ProfilePublicKey.Data::new));
+         public static final Codec<ProfilePublicKey.Data> CODEC = RecordCodecBuilder.create((instance) -> instance.group(ExtraCodecs.INSTANT_ISO8601.fieldOf("expires_at").forGetter(ProfilePublicKey.Data::expiresAt), Crypt.PUBLIC_KEY_CODEC.fieldOf("key").forGetter(ProfilePublicKey.Data::key), ExtraCodecs.BASE64_STRING.fieldOf("signature_v2").forGetter(ProfilePublicKey.Data::keySignature)).apply(instance, ProfilePublicKey.Data::new));
  
          public Data(FriendlyByteBuf friendlyByteBuf) {
 -            this(friendlyByteBuf.readInstant(), friendlyByteBuf.readPublicKey(), friendlyByteBuf.readByteArray(4096));
@@ -9990,7 +9990,7 @@ index 2eb202c128588d1d7b0843d3157bf22211059d36..9d5ae2df5ec5e271659336fba44ff99d
          }
  
          public void write(FriendlyByteBuf friendlyByteBuf) {
-@@ -75,17 +71,5 @@ public record ProfilePublicKey(ProfilePublicKey.Data b) {
+@@ -80,17 +76,5 @@ public record ProfilePublicKey(ProfilePublicKey.Data b) {
          public boolean hasExpired() {
              return this.expiresAt.isBefore(Instant.now());
          }
@@ -11075,7 +11075,7 @@ index 07b08f1f8b1936b63604882c23931097ccc63dd7..ff1ac6e2affa1a8b46d741418eb6ebc1
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-index b03ace78e9d4b487f9bf1cd893c30f47f97dc027..05c38fa26a15e5ac08125b775b122bb93d4f57a6 100644
+index d7e17304461b98494fb36938472dfefb4eca95ea..29cd944e44827593e7a12f906971b1ad39b27ed5 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 @@ -208,7 +208,7 @@ public abstract class ChunkGenerator {
@@ -11087,7 +11087,7 @@ index b03ace78e9d4b487f9bf1cd893c30f47f97dc027..05c38fa26a15e5ac08125b775b122bb9
              }
          }
  
-@@ -358,9 +358,9 @@ public abstract class ChunkGenerator {
+@@ -360,9 +360,9 @@ public abstract class ChunkGenerator {
              long l = worldgenRandom.setDecorationSeed(worldGenLevel.getSeed(), blockPos.getX(), blockPos.getZ());
              Set<Holder<Biome>> set = new ObjectArraySet();
              ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPosx) -> {
