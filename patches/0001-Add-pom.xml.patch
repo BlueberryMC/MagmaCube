@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..0401d7b4cc2cbb0e25418a579f237649b5560d3f
+index 0000000000000000000000000000000000000000..40118e271c72806cc057e1cc00c296dd419216a3
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,380 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..0401d7b4cc2cbb0e25418a579f237649
 +    <parent>
 +        <artifactId>magmacube-parent</artifactId>
 +        <groupId>net.blueberrymc.magmacube</groupId>
-+        <version>1.19.1-rc1</version>
++        <version>1.19.1-pre2</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
