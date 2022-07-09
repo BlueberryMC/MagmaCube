@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index f3ede9f780787b10181a3475f09d5cb9b1736357..1e110685839e47df6df97e4e08c521db1c55af52 100644
+index 33596cc4f0edaa27d69261071c1db9b90510a5cb..679c78c0978cf0f7f179cb307e9534e7d099f92a 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -75,10 +75,10 @@ index 03273b019b87f27345e8ddaa92ec558e6c42439f..91c4d21d32e80cb7c0d686a0bbd915cc
  
              for(GuiEventListener guiEventListener : this.children()) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 3ecaf08c81b6164fd5cb5482f0b4800dfd001f01..f631124b85fb375c6375d595aa5a635b371734d1 100644
+index c1c40ca0fea4d891274662d1fde173efb7433323..40971e87b03fd4689bd41e3bebf03e76ab8ae43e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -920,7 +920,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -918,7 +918,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
