@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 33596cc4f0edaa27d69261071c1db9b90510a5cb..679c78c0978cf0f7f179cb307e9534e7d099f92a 100644
+index 1a99a8ddf047386171fccd4316df6a1d4ddf91ea..389d4c818b898142864b6a5937f98ba62495f4ec 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -33,10 +33,10 @@ index 33596cc4f0edaa27d69261071c1db9b90510a5cb..679c78c0978cf0f7f179cb307e9534e7
  
      public static WorldVersion tryDetectVersion() {
 diff --git a/src/main/java/net/minecraft/SystemReport.java b/src/main/java/net/minecraft/SystemReport.java
-index 04e68a7fed2381d420567c4b52577c94cb43cc2a..da5ac7b22dd629ec1fffcdabc35743c161c5d611 100644
+index a506f452e9357dd504701050482d3495e80fb8df..d407afcacaad89de4836abdc8a975f73570614ef 100644
 --- a/src/main/java/net/minecraft/SystemReport.java
 +++ b/src/main/java/net/minecraft/SystemReport.java
-@@ -26,6 +26,7 @@ public class SystemReport {
+@@ -27,6 +27,7 @@ public class SystemReport {
      private final Map<String, String> entries = Maps.newLinkedHashMap();
  
      public SystemReport() {
@@ -75,7 +75,7 @@ index 03273b019b87f27345e8ddaa92ec558e6c42439f..91c4d21d32e80cb7c0d686a0bbd915cc
  
              for(GuiEventListener guiEventListener : this.children()) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c1c40ca0fea4d891274662d1fde173efb7433323..40971e87b03fd4689bd41e3bebf03e76ab8ae43e 100644
+index b19c9980abd8d3c263ea90fa66355ca48d747ac1..c0dce76855fa79b614e39ff01e088c00057d1d2d 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -918,7 +918,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
