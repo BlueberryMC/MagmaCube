@@ -573,7 +573,7 @@ index cd7b43c85c9defba4ef25e0440f054fbfac9f3d9..acd98de647cd9ba5d98e96d2535d51df
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/GuiMessageTag.java b/src/main/java/net/minecraft/client/GuiMessageTag.java
-index 87db21a74300e8da398812c45fbf767d5e4b5034..7bf742e9fa0a06303aed39af0297c517c2b7d3ea 100644
+index 800319d9467c9d633e0d69d7feb0d5e3a7938ece..2b4719babfdd66bfd0749c71fe5a6bfed7184e9a 100644
 --- a/src/main/java/net/minecraft/client/GuiMessageTag.java
 +++ b/src/main/java/net/minecraft/client/GuiMessageTag.java
 @@ -9,14 +9,7 @@ import net.minecraft.network.chat.CommonComponents;
@@ -591,9 +591,9 @@ index 87db21a74300e8da398812c45fbf767d5e4b5034..7bf742e9fa0a06303aed39af0297c517
 +public record GuiMessageTag(int indicatorColor, @Nullable GuiMessageTag.Icon icon, @Nullable Component text, @Nullable String logTag) {
      private static final Component CHAT_NOT_SECURE_TEXT = Component.translatable("chat.tag.not_secure").withStyle(ChatFormatting.UNDERLINE);
      private static final Component CHAT_MODIFIED_TEXT = Component.translatable("chat.tag.modified").withStyle(ChatFormatting.UNDERLINE);
-     private static final int SYSTEM_INDICATOR_COLOR = 10526880;
-@@ -40,25 +33,6 @@ public record GuiMessageTag(int a, @Nullable GuiMessageTag.Icon b, @Nullable Com
-         return new GuiMessageTag(15386724, GuiMessageTag.Icon.CHAT_MODIFIED, component2, "Modified");
+     private static final Component CHAT_FILTERED_TEXT = Component.translatable("chat.tag.filtered").withStyle(ChatFormatting.UNDERLINE);
+@@ -46,25 +39,6 @@ public record GuiMessageTag(int a, @Nullable GuiMessageTag.Icon b, @Nullable Com
+         return CHAT_FILTERED;
      }
  
 -    public int indicatorColor() {
@@ -619,10 +619,10 @@ index 87db21a74300e8da398812c45fbf767d5e4b5034..7bf742e9fa0a06303aed39af0297c517
          CHAT_NOT_SECURE(0, 0, 9, 9),
          CHAT_MODIFIED(9, 0, 9, 9);
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index 41f5629399c3c427399f218641b71d253b7658b8..f250901d6d24197499aeec4ded8afb350daf6e27 100644
+index b5c5d581b771e6faa6e89e25075d32f1b6507594..1feeba6f52abf6f75d31769888639b0eb94db5da 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -526,7 +526,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -528,7 +528,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen().set(this.window.isFullscreen());
              }
          } else {
@@ -631,7 +631,7 @@ index 41f5629399c3c427399f218641b71d253b7658b8..f250901d6d24197499aeec4ded8afb35
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -701,9 +701,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -703,9 +703,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      private void createSearchTrees() {
@@ -644,7 +644,7 @@ index 41f5629399c3c427399f218641b71d253b7658b8..f250901d6d24197499aeec4ded8afb35
      }
  
      private void onFullscreenError(int i, long l) {
-@@ -1003,7 +1003,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -1005,7 +1005,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -653,7 +653,7 @@ index 41f5629399c3c427399f218641b71d253b7658b8..f250901d6d24197499aeec4ded8afb35
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2185,13 +2185,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2187,13 +2187,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -670,7 +670,7 @@ index 41f5629399c3c427399f218641b71d253b7658b8..f250901d6d24197499aeec4ded8afb35
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2213,7 +2213,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2215,7 +2215,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -1162,10 +1162,10 @@ index 0a1d6fb7913883987fe1367389b2b4aad4bfada2..4077b980c25fd6b13edd8369dc524c73
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/Font.java b/src/main/java/net/minecraft/client/gui/Font.java
-index 906354353afa4645f0af2c1148a726112a294e93..476c1acf37d5ec98e12f5cac8b103a98dcc38de4 100644
+index 04efa107791b0c6fb03a3668bb3337e9b36865d9..d112fd34f36e33d9434f31a102df2d59de61174e 100644
 --- a/src/main/java/net/minecraft/client/gui/Font.java
 +++ b/src/main/java/net/minecraft/client/gui/Font.java
-@@ -131,14 +131,14 @@ public class Font {
+@@ -133,14 +133,14 @@ public class Font {
                      float[] floats = new float[]{f};
                      int i7 = i5;
                      int i8 = i6;
@@ -1173,8 +1173,8 @@ index 906354353afa4645f0af2c1148a726112a294e93..476c1acf37d5ec98e12f5cac8b103a98
 +                    formattedCharSequence.accept((i4x, style, i5x) -> {
                          boolean flag = style.isBold();
                          FontSet fontSet = this.getFontSet(style.getFont());
--                        GlyphInfo glyphInfo = fontSet.getGlyphInfo(i5);
-+                        GlyphInfo glyphInfo = fontSet.getGlyphInfo(i5x);
+-                        GlyphInfo glyphInfo = fontSet.getGlyphInfo(i5, this.filterFishyGlyphs);
++                        GlyphInfo glyphInfo = fontSet.getGlyphInfo(i5x, this.filterFishyGlyphs);
                          stringRenderOutput.x = floats[0] + (float)i7 * glyphInfo.getShadowOffset();
                          stringRenderOutput.y = f2 + (float)i8 * glyphInfo.getShadowOffset();
                          floats[0] += glyphInfo.getAdvance(flag);
@@ -1332,8 +1332,29 @@ index 9d2126cb7894d7e101d58c232e65a601dc43d55e..dcccff07481a12be3ef81751c5334f51
      }
  }
 \ No newline at end of file
+diff --git a/src/main/java/net/minecraft/client/gui/components/toasts/ToastComponent.java b/src/main/java/net/minecraft/client/gui/components/toasts/ToastComponent.java
+index f5ec525e6c8614a4b86292d49baec98a1c3e25aa..ef5df1482c6e9efca0f219ba16e44ea03944066c 100644
+--- a/src/main/java/net/minecraft/client/gui/components/toasts/ToastComponent.java
++++ b/src/main/java/net/minecraft/client/gui/components/toasts/ToastComponent.java
+@@ -38,11 +38,11 @@ public class ToastComponent extends GuiComponent {
+             });
+             if (!this.queued.isEmpty() && this.freeSlots() > 0) {
+                 this.queued.removeIf((toast) -> {
+-                    int i = toast.slotCount();
+-                    int i2 = this.findFreeIndex(i);
+-                    if (i2 != -1) {
+-                        this.visible.add(new ToastComponent.ToastInstance<>(toast, i2, i));
+-                        this.occupiedSlots.set(i2, i2 + i);
++                    int slotCount = toast.slotCount();
++                    int freeIndex = this.findFreeIndex(slotCount);
++                    if (freeIndex != -1) {
++                        this.visible.add(new ToastComponent.ToastInstance<>(toast, freeIndex, slotCount));
++                        this.occupiedSlots.set(freeIndex, freeIndex + slotCount);
+                         return true;
+                     } else {
+                         return false;
 diff --git a/src/main/java/net/minecraft/client/gui/font/FontManager.java b/src/main/java/net/minecraft/client/gui/font/FontManager.java
-index 7c660a4898e5e932c4a54a4fe7ab8d27eddb286e..532aed64c98da5298be79c44b89cbf63411acb71 100644
+index fe50f261c8e6898b38503a1e0bad587750fc094a..8a7b92ad791b9114df527f4faa8112b2062fe6a1 100644
 --- a/src/main/java/net/minecraft/client/gui/font/FontManager.java
 +++ b/src/main/java/net/minecraft/client/gui/font/FontManager.java
 @@ -108,7 +108,7 @@ public class FontManager implements AutoCloseable {
@@ -1346,10 +1367,10 @@ index 7c660a4898e5e932c4a54a4fe7ab8d27eddb286e..532aed64c98da5298be79c44b89cbf63
                          for(GlyphProvider glyphProvider : Lists.reverse(list)) {
                              if (glyphProvider.getGlyph(ix) != null) {
 diff --git a/src/main/java/net/minecraft/client/gui/font/FontSet.java b/src/main/java/net/minecraft/client/gui/font/FontSet.java
-index 0d62ee2e0fe01b91cd0cb65d5b35170d119cf143..281d27befe71ebd9eb932a270d145f7782b9ebe3 100644
+index a6b98ac28cc3c36d7faa299d71e6dbb5d39f4d51..fbd252a454726e1ad077343fb655cf032d18c364 100644
 --- a/src/main/java/net/minecraft/client/gui/font/FontSet.java
 +++ b/src/main/java/net/minecraft/client/gui/font/FontSet.java
-@@ -52,7 +52,7 @@ public class FontSet implements AutoCloseable {
+@@ -53,7 +53,7 @@ public class FontSet implements AutoCloseable {
          }
  
          Set<GlyphProvider> set = Sets.newHashSet();
@@ -1358,6 +1379,30 @@ index 0d62ee2e0fe01b91cd0cb65d5b35170d119cf143..281d27befe71ebd9eb932a270d145f77
              for(GlyphProvider glyphProvider : list) {
                  GlyphInfo glyphInfo = glyphProvider.getGlyph(i);
                  if (glyphInfo != null) {
+@@ -162,21 +162,11 @@ public class FontSet implements AutoCloseable {
+         return this.whiteGlyph;
+     }
+ 
+-    static record GlyphInfoFilter(GlyphInfo a, GlyphInfo b) {
+-        private final GlyphInfo glyphInfo;
+-        private final GlyphInfo glyphInfoNotFishy;
++    static record GlyphInfoFilter(GlyphInfo glyphInfo, GlyphInfo glyphInfoNotFishy) {
+         static final FontSet.GlyphInfoFilter MISSING = new FontSet.GlyphInfoFilter(SpecialGlyphs.MISSING, SpecialGlyphs.MISSING);
+ 
+         GlyphInfo select(boolean flag) {
+             return flag ? this.glyphInfoNotFishy : this.glyphInfo;
+         }
+-
+-        public GlyphInfo glyphInfo() {
+-            return this.glyphInfo;
+-        }
+-
+-        public GlyphInfo glyphInfoNotFishy() {
+-            return this.glyphInfoNotFishy;
+-        }
+     }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/font/providers/BitmapProvider.java b/src/main/java/net/minecraft/client/gui/font/providers/BitmapProvider.java
 index 2f4b55d2877619d34e57b83fac6afeb551ead46f..191ff802265ec139fa9b1fcbd2f08cb10fca96a9 100644
 --- a/src/main/java/net/minecraft/client/gui/font/providers/BitmapProvider.java
@@ -1523,10 +1568,10 @@ index a09b012699adcdd4740366ba35dae6bc69b59698..e2fabeb269d335846a67bc25695783d2
  
              public void render(PoseStack poseStack, int i, int i2, int i3, int i4, int i5, int i6, int i7, boolean flag, float f) {
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 041ad21477830efdd274613dfbc82bbf8d7a49fb..03273b019b87f27345e8ddaa92ec558e6c42439f 100644
+index 73e6f1f07747992bd7e4b46f035056bd26352653..7dd313d03f33c621bb101d5caa03038a08d77247 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -376,31 +376,10 @@ public class TitleScreen extends Screen {
+@@ -378,31 +378,10 @@ public class TitleScreen extends Screen {
          this.minecraft.setScreen(this);
      }
  
@@ -1715,23 +1760,23 @@ index b894e7bf405792ddc7540b22d4811faa69ae482c..1988a5d85a620c4842cfce056bf02012
  
              this.minecraft.setScreen(this.lastScreen);
 diff --git a/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java b/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java
-index 72bdd20417da3db9e6143d8cf4230f85a721d611..f53988bcf0d750588b2d1e99a5957e394832ac48 100644
+index 5110228158c68e4ee564271c4a839089f67a9c7a..9f3b14286bab5aaa623a306130cc4c9528fe0aad 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java
-@@ -74,9 +74,9 @@ public class SocialInteractionsPlayerList extends ContainerObjectSelectionList<P
+@@ -75,9 +75,9 @@ public class SocialInteractionsPlayerList extends ContainerObjectSelectionList<P
                  GameProfile gameProfile = (GameProfile)var4.next();
                  if (flag) {
                      playerEntry = (PlayerEntry)map.computeIfAbsent(gameProfile.getId(), (uuid) -> {
--                        PlayerEntry playerEntry = new PlayerEntry(this.minecraft, this.socialInteractionsScreen, gameProfile.getId(), gameProfile.getName(), Suppliers.memoize(() -> this.minecraft.getSkinManager().getInsecureSkinLocation(gameProfile)));
+-                        PlayerEntry playerEntry = new PlayerEntry(this.minecraft, this.socialInteractionsScreen, gameProfile.getId(), gameProfile.getName(), Suppliers.memoize(() -> this.minecraft.getSkinManager().getInsecureSkinLocation(gameProfile)), true);
 -                        playerEntry.setRemoved(true);
 -                        return playerEntry;
-+                        PlayerEntry playerEntryIn = new PlayerEntry(this.minecraft, this.socialInteractionsScreen, gameProfile.getId(), gameProfile.getName(), Suppliers.memoize(() -> this.minecraft.getSkinManager().getInsecureSkinLocation(gameProfile)));
++                        PlayerEntry playerEntryIn = new PlayerEntry(this.minecraft, this.socialInteractionsScreen, gameProfile.getId(), gameProfile.getName(), Suppliers.memoize(() -> this.minecraft.getSkinManager().getInsecureSkinLocation(gameProfile)), true);
 +                        playerEntryIn.setRemoved(true);
 +                        return playerEntryIn;
                      });
                      break;
                  }
-@@ -89,7 +89,7 @@ public class SocialInteractionsPlayerList extends ContainerObjectSelectionList<P
+@@ -90,7 +90,7 @@ public class SocialInteractionsPlayerList extends ContainerObjectSelectionList<P
      }
  
      private void sortPlayerEntries() {
@@ -1836,7 +1881,7 @@ index 557ca8ba202e7e43f3274c069c88fbbe8ff47989..e5436aaee34a8f3a0fe4a79265eb5c88
                          }
  
 diff --git a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
-index 7e36dbe4243dcb2a6063effa5d71568329713904..ff66fac866de3f881f5f861fb0ddffb660f091de 100644
+index f98a210460b9cdb663244754ff2786b8e02fc658..2e46234ccedb1d914583f6fd46d42fd23437299a 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/ClientPacketListener.java
 @@ -1307,9 +1307,9 @@ public class ClientPacketListener implements ClientGamePacketListener {
@@ -1884,7 +1929,7 @@ index 7e36dbe4243dcb2a6063effa5d71568329713904..ff66fac866de3f881f5f861fb0ddffb6
  
                      }, flag ? Component.translatable("multiplayer.requiredTexturePrompt.line1") : Component.translatable("multiplayer.texturePrompt.line1"), preparePackPrompt(flag ? Component.translatable("multiplayer.requiredTexturePrompt.line2").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD) : Component.translatable("multiplayer.texturePrompt.line2"), clientboundResourcePackPacket.getPrompt()), flag ? CommonComponents.GUI_PROCEED : CommonComponents.GUI_YES, (Component)(flag ? Component.translatable("menu.disconnect") : CommonComponents.GUI_NO))));
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/ChatLog.java b/src/main/java/net/minecraft/client/multiplayer/chat/ChatLog.java
-index 3997b4de4a9b60d3b3b2b7df2475a852f87bcef3..db75567b76902074cdbc7f986825445170799610 100644
+index 1aa4368a3b2813068eef097e75ff4cb52b13205f..50ad9112e8ac6de2464f9096fb242b5c072b5b3a 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/ChatLog.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/chat/ChatLog.java
 @@ -84,22 +84,11 @@ public interface ChatLog {
@@ -1912,10 +1957,10 @@ index 3997b4de4a9b60d3b3b2b7df2475a852f87bcef3..db75567b76902074cdbc7f9868254451
  
      public static class Selection {
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChatMessage.java b/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChatMessage.java
-index 328141ab98b5a9543be1e69f5edd548148c1f02a..feee09323c37ece222d0bc01f05f1d4d3050ff4c 100644
+index f04513516a37b7144495b8f20a6aa469d107f5ca..9b45c019ae9a2c5bd3a37607c021f02f11c89954 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChatMessage.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/chat/LoggedChatMessage.java
-@@ -30,11 +30,7 @@ public interface LoggedChatMessage extends LoggedChatEvent {
+@@ -32,11 +32,7 @@ public interface LoggedChatMessage extends LoggedChatEvent {
  
      boolean canReport(UUID var1);
  
@@ -1928,7 +1973,7 @@ index 328141ab98b5a9543be1e69f5edd548148c1f02a..feee09323c37ece222d0bc01f05f1d4d
          private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
  
          public Component toContentComponent() {
-@@ -76,28 +72,9 @@ public interface LoggedChatMessage extends LoggedChatEvent {
+@@ -83,28 +79,9 @@ public interface LoggedChatMessage extends LoggedChatEvent {
          public UUID profileId() {
              return this.profile.getId();
          }
@@ -1958,7 +2003,7 @@ index 328141ab98b5a9543be1e69f5edd548148c1f02a..feee09323c37ece222d0bc01f05f1d4d
          public Component toContentComponent() {
              return this.message;
          }
-@@ -105,13 +82,5 @@ public interface LoggedChatMessage extends LoggedChatEvent {
+@@ -112,13 +89,5 @@ public interface LoggedChatMessage extends LoggedChatEvent {
          public boolean canReport(UUID uuid) {
              return false;
          }
@@ -2065,7 +2110,7 @@ index f23a0fffffa76aa4c5eb6a3a0f418c9b86572c92..5bfd1e12cdb6a967141ec2b472974b2a
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
-index 86e9e2100e4bebf5babc86161131646ae51138ac..0f744d86da910cd992766cb421d959e63100fd7c 100644
+index 52071ee17cbddbbcbc18bfb085d5ffc6e9dbec33..37b2957613c5684bcf3617f6b0245b0685d4c425 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 @@ -7,11 +7,7 @@ import com.mojang.realmsclient.dto.RealmsServer;
@@ -2775,36 +2820,25 @@ index 7a6398da7bd7d607181c0fcb7d4d4652816529a2..c09e448f49172e90540c23cc960adb03
              try {
                  entitySelectorParser.parse();
 diff --git a/src/main/java/net/minecraft/commands/arguments/MessageArgument.java b/src/main/java/net/minecraft/commands/arguments/MessageArgument.java
-index d39567c0879c5905d951156543d1e10691ac697e..a312b6e061b5cb7921e83e5f6076f89130914cb8 100644
+index bda19974d86a53f64649b221ca4e40482cd383df..f39346dcdd4cae9f8936adf11ef1ce12efbc4675 100644
 --- a/src/main/java/net/minecraft/commands/arguments/MessageArgument.java
 +++ b/src/main/java/net/minecraft/commands/arguments/MessageArgument.java
-@@ -79,15 +79,12 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
+@@ -80,9 +80,7 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
          });
      }
  
--    public static record ChatMessage(Component a, PlayerChatMessage b) {
--        private final Component formatted;
+-    public static record ChatMessage(PlayerChatMessage a) {
 -        private final PlayerChatMessage signedArgument;
 -
-+    public static record ChatMessage(Component formatted, PlayerChatMessage signedArgument) {
-         public void resolve(CommandSourceStack commandSourceStack, Consumer<FilteredText<PlayerChatMessage>> consumer) {
++    public static record ChatMessage(PlayerChatMessage signedArgument) {
+         public void resolve(CommandSourceStack commandSourceStack, Consumer<PlayerChatMessage> consumer) {
              MinecraftServer minecraftServer = commandSourceStack.getServer();
-             String s = this.signedArgument.signedContent().plain();
-             commandSourceStack.getChatMessageChainer().append(() -> this.filterPlainText(commandSourceStack, s).thenComposeAsync((filteredText) -> {
--                    FilteredText<Component> filteredText2 = filteredText.rebuildIfNeeded(this.formatted, (s) -> this.rebuildFilteredMessage(commandSourceStack, s));
-+                    FilteredText<Component> filteredText2 = filteredText.rebuildIfNeeded(this.formatted, (sIn) -> this.rebuildFilteredMessage(commandSourceStack, sIn));
-                     return this.resolveFiltered(commandSourceStack, filteredText, filteredText2);
-                 }, minecraftServer).thenAcceptAsync(consumer, minecraftServer));
-         }
-@@ -129,15 +126,6 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
-                     playerList.broadcastMessageHeader((PlayerChatMessage)filteredText.raw(), Set.of());
+             commandSourceStack.getChatMessageChainer().append(() -> {
+@@ -107,11 +105,6 @@ public class MessageArgument implements SignedArgument<MessageArgument.Message>
+                     playerList.broadcastMessageHeader(playerChatMessage, Set.of());
                  });
              }
 -
--        }
--
--        public Component formatted() {
--            return this.formatted;
 -        }
 -
 -        public PlayerChatMessage signedArgument() {
@@ -4011,6 +4045,25 @@ index f489b40e83e14e2718eea8425c7098e47315a00e..cd81e798a1b9f2888e0644ed4ad4f942
 -    }
  }
 \ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
+index 3d9ecc91b8a43558571560db1c33c5c336d2a7c2..cc8e1e3c7c9b472c24ed895efdbf7da81f5d7911 100644
+--- a/src/main/java/net/minecraft/network/Connection.java
++++ b/src/main/java/net/minecraft/network/Connection.java
+@@ -194,10 +194,10 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
+                 if (future.isSuccess()) {
+                     packetSendListener.onSuccess();
+                 } else {
+-                    Packet<?> packet = packetSendListener.onFailure();
+-                    if (packet != null) {
+-                        ChannelFuture channelFuture = this.channel.writeAndFlush(packet);
+-                        channelFuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
++                    Packet<?> packetIn = packetSendListener.onFailure();
++                    if (packetIn != null) {
++                        ChannelFuture channelFutureIn = this.channel.writeAndFlush(packetIn);
++                        channelFutureIn.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+                     }
+                 }
+ 
 diff --git a/src/main/java/net/minecraft/network/ConnectionProtocol.java b/src/main/java/net/minecraft/network/ConnectionProtocol.java
 index 5ec19845ccc82e17218a53e589a6deae06340041..6137c5451826788b59cd7967ec01040605a8e04d 100644
 --- a/src/main/java/net/minecraft/network/ConnectionProtocol.java
@@ -4081,12 +4134,12 @@ index 9d40c5d2878e862e899f50f95350ccbc0b9d5bad..69f6ae99400bcfdde52053eaff88f3b3
  
      public <K, V, M extends Map<K, V>> M readMap(IntFunction<M> intFunction, FriendlyByteBuf.Reader<K> reader, FriendlyByteBuf.Reader<V> reader2) {
 diff --git a/src/main/java/net/minecraft/network/chat/ChatMessageContent.java b/src/main/java/net/minecraft/network/chat/ChatMessageContent.java
-index 939e3a4fdff03ac9e35203b1f5d0b0c041d310d6..1497e7ba063dc69070b688e69f5f39505f9efb40 100644
+index b4642641dae496dcec0c5c67f57f4bc797f2907a..8e6bf52e68704a1f3f735d2f3a6be3c0ffa8e90b 100644
 --- a/src/main/java/net/minecraft/network/chat/ChatMessageContent.java
 +++ b/src/main/java/net/minecraft/network/chat/ChatMessageContent.java
-@@ -4,10 +4,7 @@ import java.util.Objects;
+@@ -3,10 +3,7 @@ package net.minecraft.network.chat;
+ import java.util.Objects;
  import net.minecraft.network.FriendlyByteBuf;
- import net.minecraft.server.network.FilteredText;
  
 -public record ChatMessageContent(String a, Component b) {
 -    private final String plain;
@@ -4096,7 +4149,7 @@ index 939e3a4fdff03ac9e35203b1f5d0b0c041d310d6..1497e7ba063dc69070b688e69f5f3950
      public ChatMessageContent(String s) {
          this(s, Component.literal(s));
      }
-@@ -35,12 +32,4 @@ public record ChatMessageContent(String a, Component b) {
+@@ -26,12 +23,4 @@ public record ChatMessageContent(String a, Component b) {
          Component component = chatMessageContent.isDecorated() ? chatMessageContent.decorated() : null;
          friendlyByteBuf.writeNullable(component, FriendlyByteBuf::writeComponent);
      }
@@ -4444,25 +4497,26 @@ index fc8e2b71d6a10c3c224d3c31c265cc60f7289e2e..f2bf17e8b468f42c7afb52da4bbe0844
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java b/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java
-index cbf757bddbac6ea87c0f70a63ce07bf4234110ef..ad2b8ea542906963f4eebe40e5c19756ee3652b1 100644
+index 922c70865a427d4c4ce56e03860835f395bafe75..495fc439b54e2250875d80da9e9713113e4f52eb 100644
 --- a/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java
 +++ b/src/main/java/net/minecraft/network/chat/PlayerChatMessage.java
-@@ -10,11 +10,7 @@ import net.minecraft.server.network.FilteredText;
+@@ -9,12 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
  import net.minecraft.util.SignatureValidator;
  import net.minecraft.world.entity.player.ProfilePublicKey;
  
--public record PlayerChatMessage(SignedMessageHeader c, MessageSignature d, SignedMessageBody e, Optional<Component> f) {
+-public record PlayerChatMessage(SignedMessageHeader c, MessageSignature d, SignedMessageBody e, Optional<Component> f, FilterMask g) {
 -    private final SignedMessageHeader signedHeader;
 -    private final MessageSignature headerSignature;
 -    private final SignedMessageBody signedBody;
 -    private final Optional<Component> unsignedContent;
-+public record PlayerChatMessage(SignedMessageHeader signedHeader, MessageSignature headerSignature, SignedMessageBody signedBody, Optional<Component> unsignedContent) {
+-    private final FilterMask filterMask;
++public record PlayerChatMessage(SignedMessageHeader signedHeader, MessageSignature headerSignature, SignedMessageBody signedBody, Optional<Component> unsignedContent, FilterMask filterMask) {
      public static final Duration MESSAGE_EXPIRES_AFTER_SERVER = Duration.ofMinutes(5L);
      public static final Duration MESSAGE_EXPIRES_AFTER_CLIENT = MESSAGE_EXPIRES_AFTER_SERVER.plus(Duration.ofMinutes(2L));
  
-@@ -100,20 +96,4 @@ public record PlayerChatMessage(SignedMessageHeader c, MessageSignature d, Signe
-     public boolean hasSignatureFrom(ServerPlayer serverPlayer) {
-         return !this.headerSignature.isEmpty() && this.signedHeader.sender().equals(serverPlayer.getUUID());
+@@ -112,24 +107,4 @@ public record PlayerChatMessage(SignedMessageHeader c, MessageSignature d, Signe
+     public boolean isFullyFiltered() {
+         return this.filterMask.isFullyFiltered();
      }
 -
 -    public SignedMessageHeader signedHeader() {
@@ -4479,6 +4533,10 @@ index cbf757bddbac6ea87c0f70a63ce07bf4234110ef..ad2b8ea542906963f4eebe40e5c19756
 -
 -    public Optional<Component> unsignedContent() {
 -        return this.unsignedContent;
+-    }
+-
+-    public FilterMask filterMask() {
+-        return this.filterMask;
 -    }
  }
 \ No newline at end of file
@@ -4582,10 +4640,10 @@ index 04de242eaabbce592ad0d290620dd5906edd8981..5a45b16630c5f879128e73bc96aaebba
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
-index 2717b07f1596a5b423b3bae43a8fb062c09ae526..aced8b37bcc39ac9d01cf45408728fa749e26aeb 100644
+index 747772b01312eb1d1a28c40870a6e8cdc6b8e021..30f9b7a72ec7eb38b8fbe128ac3eaec560297721 100644
 --- a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
 +++ b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
-@@ -52,11 +52,6 @@ public class SignedMessageChain {
+@@ -54,11 +54,6 @@ public class SignedMessageChain {
          SignedMessageChain.Link pack(Signer var1, MessageSigner var2, ChatMessageContent var3, LastSeenMessages var4);
      }
  
@@ -5056,10 +5114,10 @@ index 96e03f2b2de55baa5fae0859d1909978f060ce67..f1dd80f2b65c792b1390aea5f15eb833
          if (this.colorPatch != null) {
              friendlyByteBuf.writeByte(this.colorPatch.width);
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerChatHeaderPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerChatHeaderPacket.java
-index 09704a3b20517fb0a31ee9b02a9a1af939226537..02cc29f140d13007b87649a19126484e30dd3be2 100644
+index 8125c6fc80901bb196ab5b8327e2f786fe847351..36efc14de02066f19276f01e37be4230f80962ae 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerChatHeaderPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerChatHeaderPacket.java
-@@ -5,11 +5,7 @@ import net.minecraft.network.chat.MessageSignature;
+@@ -6,11 +6,7 @@ import net.minecraft.network.chat.PlayerChatMessage;
  import net.minecraft.network.chat.SignedMessageHeader;
  import net.minecraft.network.protocol.Packet;
  
@@ -5069,10 +5127,10 @@ index 09704a3b20517fb0a31ee9b02a9a1af939226537..02cc29f140d13007b87649a19126484e
 -    private final byte[] bodyDigest;
 -
 +public record ClientboundPlayerChatHeaderPacket(SignedMessageHeader header, MessageSignature headerSignature, byte[] bodyDigest) implements Packet<ClientGamePacketListener> {
-     public ClientboundPlayerChatHeaderPacket(FriendlyByteBuf friendlyByteBuf) {
-         this(new SignedMessageHeader(friendlyByteBuf), new MessageSignature(friendlyByteBuf), friendlyByteBuf.readByteArray());
+     public ClientboundPlayerChatHeaderPacket(PlayerChatMessage playerChatMessage) {
+         this(playerChatMessage.signedHeader(), playerChatMessage.headerSignature(), playerChatMessage.signedBody().hash().asBytes());
      }
-@@ -23,16 +19,4 @@ public record ClientboundPlayerChatHeaderPacket(SignedMessageHeader a, MessageSi
+@@ -28,16 +24,4 @@ public record ClientboundPlayerChatHeaderPacket(SignedMessageHeader a, MessageSi
      public void handle(ClientGamePacketListener clientGamePacketListener) {
          clientGamePacketListener.handlePlayerChatHeader(this);
      }
@@ -6362,43 +6420,39 @@ index b69f662d756fa09c941882f6507dc0e5123c60d7..954f0f717e1e7fff201531f776905029
              }
          }
 diff --git a/src/main/java/net/minecraft/server/network/FilteredText.java b/src/main/java/net/minecraft/server/network/FilteredText.java
-index 1c5fdd6c61e2777cbfdd1007859831101fb58947..9358ffa25e63beb28e2cdaf580004b188a97fed5 100644
+index b5a5dc7a2fbae2b915eef4ac53b0aa28eaca2c4a..ecc63d5b8a12cd13b39a2f9a620e1b6daafc3645 100644
 --- a/src/main/java/net/minecraft/server/network/FilteredText.java
 +++ b/src/main/java/net/minecraft/server/network/FilteredText.java
-@@ -7,11 +7,8 @@ import net.minecraft.Util;
- import net.minecraft.commands.CommandSourceStack;
- import net.minecraft.server.level.ServerPlayer;
+@@ -4,9 +4,7 @@ import java.util.Objects;
+ import javax.annotation.Nullable;
+ import net.minecraft.network.chat.FilterMask;
  
--public record FilteredText<T>(T b, @Nullable T c) {
--    private final T raw;
--    @Nullable
--    private final T filtered;
--    public static final FilteredText<String> EMPTY_STRING = passThrough((T)"");
-+public record FilteredText<T>(T raw, @Nullable T filtered) {
-+    public static final FilteredText<String> EMPTY_STRING = passThrough("");
+-public record FilteredText(String b, FilterMask c) {
+-    private final String raw;
+-    private final FilterMask mask;
++public record FilteredText(String raw, FilterMask mask) {
+     public static final FilteredText EMPTY = passThrough("");
  
-     public static <T> FilteredText<T> passThrough(T object) {
-         return new FilteredText<>(object, object);
-@@ -68,13 +65,4 @@ public record FilteredText<T>(T b, @Nullable T c) {
-     public T select(boolean flag) {
-         return (T)(flag ? this.filtered : this.raw);
+     public static FilteredText passThrough(String s) {
+@@ -29,12 +27,4 @@ public record FilteredText(String b, FilterMask c) {
+     public boolean isFiltered() {
+         return !this.mask.isEmpty();
      }
 -
--    public T raw() {
+-    public String raw() {
 -        return this.raw;
 -    }
 -
--    @Nullable
--    public T filtered() {
--        return this.filtered;
+-    public FilterMask mask() {
+-        return this.mask;
 -    }
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index ad961d87d53b13e626f3c591b7d34050acf06b6c..b2a28d879e10b5f2b9909b37fbb79aff426f9fa1 100644
+index 6875ac5f37c8c853c9cd7561dbae0ff9f5052ce9..abc45c8a1c005759b44cd412442f4714771f9830 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -611,9 +611,9 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+@@ -610,9 +610,9 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
                  return;
              }
  
@@ -6411,20 +6465,22 @@ index ad961d87d53b13e626f3c591b7d34050acf06b6c..b2a28d879e10b5f2b9909b37fbb79aff
              }
          }
  
-@@ -1703,7 +1703,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
-             }
- 
-             for(int i = 0; i < list.size(); ++i) {
--                FilteredText<Component> filteredText = ((FilteredText)list.get(i)).map(Component::literal);
-+                FilteredText<Component> filteredText = list.get(i).map(Component::literal);
-                 if (this.player.isTextFilteringEnabled()) {
-                     signBlockEntity.setMessage(i, filteredText.filteredOrElse(CommonComponents.EMPTY));
-                 } else {
+@@ -1178,8 +1178,8 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+                             CompletableFuture<PlayerChatMessage> completableFuture2 = this.server.getChatDecorator().decorate(this.player, playerChatMessage);
+                             return CompletableFuture.allOf(completableFuture, completableFuture2).thenAcceptAsync((void_) -> {
+                                 FilterMask filterMask = ((FilteredText)completableFuture.join()).mask();
+-                                PlayerChatMessage playerChatMessage = ((PlayerChatMessage)completableFuture2.join()).filter(filterMask);
+-                                this.broadcastChatMessage(playerChatMessage);
++                                PlayerChatMessage playerChatMessageIn = ((PlayerChatMessage)completableFuture2.join()).filter(filterMask);
++                                this.broadcastChatMessage(playerChatMessageIn);
+                             }, this.server);
+                         });
+                     }
 diff --git a/src/main/java/net/minecraft/server/network/TextFilterClient.java b/src/main/java/net/minecraft/server/network/TextFilterClient.java
-index e880814c63478404864d30f335b16a2516a5b18b..18822bb69650a4628850eea8b9569d186a164162 100644
+index 2d01181eb1a36384951602501bcac91aa127e30f..f99dbcd660f82f9ec7a05c404e3f8c153b82583f 100644
 --- a/src/main/java/net/minecraft/server/network/TextFilterClient.java
 +++ b/src/main/java/net/minecraft/server/network/TextFilterClient.java
-@@ -96,38 +96,38 @@ public class TextFilterClient implements AutoCloseable {
+@@ -98,38 +98,38 @@ public class TextFilterClient implements AutoCloseable {
                      URL url2 = getEndpoint(uri, jsonObject2, "join", "v1/join");
                      URL url3 = getEndpoint(uri, jsonObject2, "leave", "v1/leave");
                      TextFilterClient.JoinOrLeaveEncoder joinOrLeaveEncoder = (gameProfile) -> {
@@ -6614,7 +6670,7 @@ index 4ac92b5e4a830d4b5ed2be16dcd428c519daef91..865f2b1eea798d13bffe9cc7e6a4823e
                  return new ProfiledReloadInstance.State(preparableReloadListener.getName(), activeProfiler.getResults(), activeProfiler2.getResults(), atomicLong, atomicLong2);
              }, executor2);
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 951cdabca62ae96bb0e0ad0f86923a15bbb218e1..028e49c0409e0a754955a3a6d3e265b4bd6559f3 100644
+index f00ceb2c9f93bfbe77d65fc9dbad3ebdf7bcfb2e..d06b8673efce982e10d700ee5dfc4905e51f5143 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -326,7 +326,7 @@ public abstract class PlayerList {
