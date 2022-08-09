@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-version=1.19.1
-name="1.19.1"
-releaseTarget="1.19.1"
+version=1.19.2
+name="1.19.2"
+releaseTarget="1.19.2"
 stable="true"
 seriesId="main"
 basedir="$(pwd -P)/"
-WORLD_VERSION=3117
+WORLD_VERSION=3120
 PROTOCOL_VERSION=760
 RESOURCE_VERSION=9
 DATA_VERSION=10

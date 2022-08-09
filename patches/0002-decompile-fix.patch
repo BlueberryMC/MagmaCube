@@ -619,10 +619,10 @@ index 800319d9467c9d633e0d69d7feb0d5e3a7938ece..2b4719babfdd66bfd0749c71fe5a6bfe
          CHAT_NOT_SECURE(0, 0, 9, 9),
          CHAT_MODIFIED(9, 0, 9, 9);
 diff --git a/src/main/java/net/minecraft/client/Minecraft.java b/src/main/java/net/minecraft/client/Minecraft.java
-index b5c5d581b771e6faa6e89e25075d32f1b6507594..1feeba6f52abf6f75d31769888639b0eb94db5da 100644
+index e7f68be3ccae376acd9ab2049b31b487d198a3a4..16e504d87cbe557bfb878703e8ea03b4f9481abe 100644
 --- a/src/main/java/net/minecraft/client/Minecraft.java
 +++ b/src/main/java/net/minecraft/client/Minecraft.java
-@@ -528,7 +528,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -529,7 +529,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
                  this.options.fullscreen().set(this.window.isFullscreen());
              }
          } else {
@@ -631,7 +631,7 @@ index b5c5d581b771e6faa6e89e25075d32f1b6507594..1feeba6f52abf6f75d31769888639b0e
              if (GlDebug.isDebugEnabled()) {
                  stringBuilder.append("\n\nReported GL debug messages:\n").append(String.join("\n", GlDebug.getLastOpenGlDebugMessages()));
              }
-@@ -703,9 +703,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -704,9 +704,9 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      private void createSearchTrees() {
@@ -644,7 +644,7 @@ index b5c5d581b771e6faa6e89e25075d32f1b6507594..1feeba6f52abf6f75d31769888639b0e
      }
  
      private void onFullscreenError(int i, long l) {
-@@ -1005,7 +1005,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -1006,7 +1006,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              this.profiler.pop();
              this.profiler.push("tick");
  
@@ -653,7 +653,7 @@ index b5c5d581b771e6faa6e89e25075d32f1b6507594..1feeba6f52abf6f75d31769888639b0e
                  this.profiler.incrementCounter("clientTick");
                  this.tick();
              }
-@@ -2187,13 +2187,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2189,13 +2189,13 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
              systemReport.setDetail("Resource Packs", (Supplier<String>)(() -> {
                  StringBuilder stringBuilder = new StringBuilder();
  
@@ -670,7 +670,7 @@ index b5c5d581b771e6faa6e89e25075d32f1b6507594..1feeba6f52abf6f75d31769888639b0e
                          stringBuilder.append(" (incompatible)");
                      }
                  }
-@@ -2215,7 +2215,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
+@@ -2217,7 +2217,7 @@ public class Minecraft extends ReentrantBlockableEventLoop<Runnable> implements
      }
  
      public CompletableFuture<Void> delayTextureReload() {
@@ -1760,7 +1760,7 @@ index b894e7bf405792ddc7540b22d4811faa69ae482c..1988a5d85a620c4842cfce056bf02012
  
              this.minecraft.setScreen(this.lastScreen);
 diff --git a/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java b/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java
-index 5110228158c68e4ee564271c4a839089f67a9c7a..9f3b14286bab5aaa623a306130cc4c9528fe0aad 100644
+index e13440e94808956f3d0d6f92d3ab6eee877ca4f8..befefcbfc741ef434c7b8a6fdbf22c767c27f065 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/social/SocialInteractionsPlayerList.java
 @@ -75,9 +75,9 @@ public class SocialInteractionsPlayerList extends ContainerObjectSelectionList<P
@@ -1928,6 +1928,33 @@ index f98a210460b9cdb663244754ff2786b8e02fc658..2e46234ccedb1d914583f6fd46d42fd2
                          }
  
                      }, flag ? Component.translatable("multiplayer.requiredTexturePrompt.line1") : Component.translatable("multiplayer.texturePrompt.line1"), preparePackPrompt(flag ? Component.translatable("multiplayer.requiredTexturePrompt.line2").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD) : Component.translatable("multiplayer.texturePrompt.line2"), clientboundResourcePackPacket.getPrompt()), flag ? CommonComponents.GUI_PROCEED : CommonComponents.GUI_YES, (Component)(flag ? Component.translatable("menu.disconnect") : CommonComponents.GUI_NO))));
+diff --git a/src/main/java/net/minecraft/client/multiplayer/ProfileKeyPairManager.java b/src/main/java/net/minecraft/client/multiplayer/ProfileKeyPairManager.java
+index fc70dd539c71c85a22447471ff1c6c1525593ca4..c109cdd5c09799e961417f1e84a52a20eff3d26b 100644
+--- a/src/main/java/net/minecraft/client/multiplayer/ProfileKeyPairManager.java
++++ b/src/main/java/net/minecraft/client/multiplayer/ProfileKeyPairManager.java
+@@ -163,20 +163,9 @@ public class ProfileKeyPairManager {
+         return (this.keyPair.join()).map((result) -> result.keyPair().publicKey());
+     }
+ 
+-    static record Result(ProfileKeyPair a, Signer b) {
+-        private final ProfileKeyPair keyPair;
+-        private final Signer signer;
+-
++    static record Result(ProfileKeyPair keyPair, Signer signer) {
+         public Result(ProfileKeyPair profileKeyPair) {
+             this(profileKeyPair, Signer.from(profileKeyPair.privateKey(), "SHA256withRSA"));
+         }
+-
+-        public ProfileKeyPair keyPair() {
+-            return this.keyPair;
+-        }
+-
+-        public Signer signer() {
+-            return this.signer;
+-        }
+     }
+ }
+\ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/ChatLog.java b/src/main/java/net/minecraft/client/multiplayer/chat/ChatLog.java
 index 1aa4368a3b2813068eef097e75ff4cb52b13205f..50ad9112e8ac6de2464f9096fb242b5c072b5b3a 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/ChatLog.java
@@ -2110,7 +2137,7 @@ index f23a0fffffa76aa4c5eb6a3a0f418c9b86572c92..5bfd1e12cdb6a967141ec2b472974b2a
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
-index 52071ee17cbddbbcbc18bfb085d5ffc6e9dbec33..37b2957613c5684bcf3617f6b0245b0685d4c425 100644
+index 0c0a038b5aa5e312753f7dc2553704338c024772..9bc7978c2524cf12b0ec7508c763c9b88bb9599d 100644
 --- a/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 +++ b/src/main/java/net/minecraft/client/multiplayer/chat/report/ReportEnvironment.java
 @@ -7,11 +7,7 @@ import com.mojang.realmsclient.dto.RealmsServer;
@@ -6449,7 +6476,7 @@ index b5a5dc7a2fbae2b915eef4ac53b0aa28eaca2c4a..ecc63d5b8a12cd13b39a2f9a620e1b6d
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 6875ac5f37c8c853c9cd7561dbae0ff9f5052ce9..abc45c8a1c005759b44cd412442f4714771f9830 100644
+index da1e3f629000eb764a6ea219914756920aad56c4..dbed090e0f5ee1ce937d41f15c8e066e9944d6e5 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -610,9 +610,9 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
@@ -10750,20 +10777,20 @@ index 1d49a1a3f7ccd5d0a4ec6089d22bdd2d6ee9390b..c7eabd7cdca001a2a5b2c132b0433904
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java b/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java
-index 9a1fb80e0037a5f466b08d1acb53608bfb26c890..cc1bb980490591933c875ed47c25a2f202d654d1 100644
+index 5fb078bb088d48c6c69c93c1ca31954a189c4980..377f0be3f1ca27a8558e188b2b1c071b628d08ae 100644
 --- a/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java
 +++ b/src/main/java/net/minecraft/world/entity/player/ProfilePublicKey.java
-@@ -16,8 +16,7 @@ import net.minecraft.util.CryptException;
+@@ -15,8 +15,7 @@ import net.minecraft.util.Crypt;
  import net.minecraft.util.ExtraCodecs;
  import net.minecraft.util.SignatureValidator;
  
--public record ProfilePublicKey(ProfilePublicKey.Data b) {
+-public record ProfilePublicKey(ProfilePublicKey.Data e) {
 -    private final ProfilePublicKey.Data data;
 +public record ProfilePublicKey(ProfilePublicKey.Data data) {
-     public static final Codec<ProfilePublicKey> TRUSTED_CODEC = ProfilePublicKey.Data.CODEC.comapFlatMap((data) -> {
-         try {
-             return DataResult.success(createTrusted(data));
-@@ -48,15 +47,12 @@ public record ProfilePublicKey(ProfilePublicKey.Data b) {
+     public static final Component MISSING_PROFILE_PUBLIC_KEY = Component.translatable("multiplayer.disconnect.missing_public_key");
+     public static final Component EXPIRED_PROFILE_PUBLIC_KEY = Component.translatable("multiplayer.disconnect.expired_public_key");
+     private static final Component INVALID_SIGNATURE = Component.translatable("multiplayer.disconnect.invalid_public_key_signature");
+@@ -41,15 +40,12 @@ public record ProfilePublicKey(ProfilePublicKey.Data e) {
          return this.data;
      }
  
@@ -10781,9 +10808,9 @@ index 9a1fb80e0037a5f466b08d1acb53608bfb26c890..cc1bb980490591933c875ed47c25a2f2
          }
  
          public void write(FriendlyByteBuf friendlyByteBuf) {
-@@ -80,17 +76,5 @@ public record ProfilePublicKey(ProfilePublicKey.Data b) {
-         public boolean hasExpired() {
-             return this.expiresAt.isBefore(Instant.now());
+@@ -77,18 +73,6 @@ public record ProfilePublicKey(ProfilePublicKey.Data e) {
+         public boolean hasExpired(Duration duration) {
+             return this.expiresAt.plus(duration).isBefore(Instant.now());
          }
 -
 -        public Instant expiresAt() {
@@ -10798,8 +10825,8 @@ index 9a1fb80e0037a5f466b08d1acb53608bfb26c890..cc1bb980490591933c875ed47c25a2f2
 -            return this.keySignature;
 -        }
      }
- }
-\ No newline at end of file
+ 
+     public static class ValidationException extends ThrowingComponent {
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 index 561537e18b44c3610cb1dd0a622e99c27a3fc69e..238501ee5e82d62299bec5893c7aebd3f4ea3fc6 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java

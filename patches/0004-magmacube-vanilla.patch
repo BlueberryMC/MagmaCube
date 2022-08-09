@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 784ca552819734d3f8a2f9d34944f492a133504e..05fa165a1d91fede049ac6f606e447008383ed9a 100644
+index c66402af31bfdcebf9b7009fa1af395d8ddafbac..6937e154d90f5661c832722da3d6c9fc8b907740 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
@@ -19,7 +19,7 @@ index 784ca552819734d3f8a2f9d34944f492a133504e..05fa165a1d91fede049ac6f606e44700
 @@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
          this.dataPackVersion = 10;
          this.buildTime = new Date();
-         this.releaseTarget = "1.19.1";
+         this.releaseTarget = "1.19.2";
 +        this.magmaCubeVersion = "debug"; // MagmaCube
      }
  
