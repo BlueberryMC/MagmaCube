@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-version=1.19.2
-name="1.19.2"
-releaseTarget="1.19.2"
-stable="true"
+version=22w42a
+name="22w42a"
+releaseTarget="1.20"
+stable="false"
 seriesId="main"
 basedir="$(pwd -P)/"
-WORLD_VERSION=3120
-PROTOCOL_VERSION=760
-RESOURCE_VERSION=9
+WORLD_VERSION=3205
+PROTOCOL_VERSION=1073741928
+RESOURCE_VERSION=11
 DATA_VERSION=10
 MAPPINGS_VERSION=22w05a

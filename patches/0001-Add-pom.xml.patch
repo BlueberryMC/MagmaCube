@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..41c9180c65bb03476fc120671c1c4742bb7e3a69
+index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd4f1a11b2
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,380 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..41c9180c65bb03476fc120671c1c4742
 +    <parent>
 +        <artifactId>magmacube-parent</artifactId>
 +        <groupId>net.blueberrymc.magmacube</groupId>
-+        <version>1.19.2</version>
++        <version>22w42a</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..41c9180c65bb03476fc120671c1c4742
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.11.49</version>
++            <version>3.13.56</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -137,7 +137,7 @@ index 0000000000000000000000000000000000000000..41c9180c65bb03476fc120671c1c4742
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>javabridge</artifactId>
-+            <version>1.2.24</version>
++            <version>2.0.25</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.lwjgl</groupId>

@@ -15,6 +15,10 @@
       "${auth_uuid}",
       "--accessToken",
       "${auth_access_token}",
+      "--clientId",
+      "${clientid}",
+      "--xuid",
+      "${auth_xuid}",
       "--userType",
       "${user_type}",
       "--versionType",
@@ -106,13 +110,13 @@
     ]
   },
   "assetIndex": {
-    "id": "1.19",
-    "sha1": "b5c7548ddb9e584e84a5f762da5b78211c715a63",
-    "size": 385416,
-    "totalSize": 555198875,
-    "url": "https://piston-meta.mojang.com/v1/packages/b5c7548ddb9e584e84a5f762da5b78211c715a63/1.19.json"
+    "id": "1",
+    "sha1": "76b5e87160f10ac4f4a22ddd283cc11a8255697e",
+    "size": 385260,
+    "totalSize": 558450776,
+    "url": "https://piston-meta.mojang.com/v1/packages/76b5e87160f10ac4f4a22ddd283cc11a8255697e/1.json"
   },
-  "assets": "1.19",
+  "assets": "1",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -199,10 +203,10 @@
       ]
     }
   ],
-  "id": "1.19.2-deobf",
+  "id": "22w42a-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2022-07-22T00:00:00+00:00",
-  "time": "2022-07-22T00:00:00+00:00",
+  "releaseTime": "2022-10-19T00:00:00+00:00",
+  "time": "2022-10-19T00:00:00+00:00",
   "type": "snapshot"
 }

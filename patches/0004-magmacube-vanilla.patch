@@ -5,26 +5,26 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index c66402af31bfdcebf9b7009fa1af395d8ddafbac..6937e154d90f5661c832722da3d6c9fc8b907740 100644
+index 9fd9cc332f103755be9d7cc1bb9d0f08863d76b2..089d1e75b8ffc4ecd8ac5bc1f375ce2981dbf633 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
-@@ -26,6 +26,7 @@ public class DetectedVersion implements WorldVersion {
+@@ -25,6 +25,7 @@ public class DetectedVersion implements WorldVersion {
+     private final int resourcePackVersion;
      private final int dataPackVersion;
      private final Date buildTime;
-     private final String releaseTarget;
 +    @javax.annotation.Nullable public final String magmaCubeVersion; // MagmaCube
  
      private DetectedVersion() {
          this.id = UUID.randomUUID().toString().replaceAll("-", "");
-@@ -37,6 +38,7 @@ public class DetectedVersion implements WorldVersion {
+@@ -35,6 +36,7 @@ public class DetectedVersion implements WorldVersion {
+         this.resourcePackVersion = 11;
          this.dataPackVersion = 10;
          this.buildTime = new Date();
-         this.releaseTarget = "1.19.2";
 +        this.magmaCubeVersion = "debug"; // MagmaCube
      }
  
      private DetectedVersion(JsonObject json) {
-@@ -50,6 +52,7 @@ public class DetectedVersion implements WorldVersion {
+@@ -47,6 +49,7 @@ public class DetectedVersion implements WorldVersion {
          this.resourcePackVersion = GsonHelper.getAsInt(jsonObject2, "resource");
          this.dataPackVersion = GsonHelper.getAsInt(jsonObject2, "data");
          this.buildTime = Date.from(ZonedDateTime.parse(GsonHelper.getAsString(json, "build_time")).toInstant());
@@ -63,10 +63,10 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 7dd313d03f33c621bb101d5caa03038a08d77247..c1f77ffabfd20929deb5006dcd874c365780c0b9 100644
+index 72efc05b80421997068ef28cb7be60db68e79437..748854aee2761770282485b06b57d524434b3a52 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -315,6 +315,7 @@ public class TitleScreen extends Screen {
+@@ -314,6 +314,7 @@ public class TitleScreen extends Screen {
                  s = s + I18n.get("menu.modded");
              }
  
@@ -75,10 +75,10 @@ index 7dd313d03f33c621bb101d5caa03038a08d77247..c1f77ffabfd20929deb5006dcd874c36
  
              for(GuiEventListener guiEventListener : this.children()) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index b19c9980abd8d3c263ea90fa66355ca48d747ac1..c0dce76855fa79b614e39ff01e088c00057d1d2d 100644
+index 0a6d292c016ea7cc00c6ad04afc5594387324ea6..15a34bb8882df68f01a6e8b1e37cc6ea097eb907 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -918,7 +918,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -925,7 +925,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
