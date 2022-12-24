@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 9fd9cc332f103755be9d7cc1bb9d0f08863d76b2..089d1e75b8ffc4ecd8ac5bc1f375ce2981dbf633 100644
+index c50996ee9dc0cf532c7b6f4e62c6d0a18a54727a..1b288d043121e30b90bf2b0fdd66f5155bfbe451 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -25,6 +25,7 @@ public class DetectedVersion implements WorldVersion {
@@ -17,7 +17,7 @@ index 9fd9cc332f103755be9d7cc1bb9d0f08863d76b2..089d1e75b8ffc4ecd8ac5bc1f375ce29
      private DetectedVersion() {
          this.id = UUID.randomUUID().toString().replaceAll("-", "");
 @@ -35,6 +36,7 @@ public class DetectedVersion implements WorldVersion {
-         this.resourcePackVersion = 11;
+         this.resourcePackVersion = 12;
          this.dataPackVersion = 10;
          this.buildTime = new Date();
 +        this.magmaCubeVersion = "debug"; // MagmaCube
@@ -63,10 +63,10 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index 72efc05b80421997068ef28cb7be60db68e79437..748854aee2761770282485b06b57d524434b3a52 100644
+index a7da012f117c34b505b4238f908f6d64c8b91a1e..cd03142651556e2c0c38f3405e541e8ffd8ba408 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -314,6 +314,7 @@ public class TitleScreen extends Screen {
+@@ -306,6 +306,7 @@ public class TitleScreen extends Screen {
                  s = s + I18n.get("menu.modded");
              }
  
@@ -75,7 +75,7 @@ index 72efc05b80421997068ef28cb7be60db68e79437..748854aee2761770282485b06b57d524
  
              for(GuiEventListener guiEventListener : this.children()) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 0a6d292c016ea7cc00c6ad04afc5594387324ea6..15a34bb8882df68f01a6e8b1e37cc6ea097eb907 100644
+index 45364d9658a0c92d94fd784bd83639af3f705cd8..6907041caf3253dec59edac9b2dfba26127f9e33 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -925,7 +925,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa

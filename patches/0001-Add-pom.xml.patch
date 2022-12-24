@@ -6,10 +6,10 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd4f1a11b2
+index 0000000000000000000000000000000000000000..3af2b309bfa996e8945d1c90f9a05c60aeb55d62
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,380 @@
+@@ -0,0 +1,385 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<project xmlns="http://maven.apache.org/POM/4.0.0"
 +         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +    <parent>
 +        <artifactId>magmacube-parent</artifactId>
 +        <groupId>net.blueberrymc.magmacube</groupId>
-+        <version>22w42a</version>
++        <version>1.19.3</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -25,7 +25,7 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        <text2speech.version>1.13.9</text2speech.version>
 +        <maven.compiler.source>17</maven.compiler.source>
 +        <maven.compiler.target>17</maven.compiler.target>
-+        <log4j.version>2.17.1</log4j.version>
++        <log4j.version>2.19.0</log4j.version>
 +        <lwjgl.version>3.3.1</lwjgl.version>
 +    </properties>
 +
@@ -97,12 +97,12 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        <dependency>
 +            <groupId>com.google.code.gson</groupId>
 +            <artifactId>gson</artifactId>
-+            <version>2.8.9</version>
++            <version>2.10</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.13.56</version>
++            <version>3.16.29</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -117,12 +117,12 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        <dependency>
 +            <groupId>io.netty</groupId>
 +            <artifactId>netty-all</artifactId>
-+            <version>4.1.77.Final</version>
++            <version>4.1.82.Final</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.google.guava</groupId>
 +            <artifactId>guava</artifactId>
-+            <version>31.0.1-jre</version>
++            <version>31.1-jre</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
@@ -303,7 +303,7 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        <dependency>
 +            <groupId>it.unimi.dsi</groupId>
 +            <artifactId>fastutil</artifactId>
-+            <version>8.5.6</version>
++            <version>8.5.9</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.apache.commons</groupId>
@@ -323,7 +323,7 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        <dependency>
 +            <groupId>org.apache.httpcomponents</groupId>
 +            <artifactId>httpcore</artifactId>
-+            <version>4.4.14</version>
++            <version>4.4.15</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.apache.commons</groupId>
@@ -333,12 +333,12 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        <dependency>
 +            <groupId>com.ibm.icu</groupId>
 +            <artifactId>icu4j</artifactId>
-+            <version>70.1</version>
++            <version>71.1</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.github.oshi</groupId>
 +            <artifactId>oshi-core</artifactId>
-+            <version>5.8.5</version>
++            <version>6.2.2</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
@@ -348,7 +348,7 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>logging</artifactId>
-+            <version>1.0.0</version>
++            <version>1.1.1</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
@@ -380,13 +380,18 @@ index 0000000000000000000000000000000000000000..d5dc1b54cfc559626b737dfa516f92fd
 +        </dependency>
 +        <dependency>
 +            <groupId>org.apache.logging.log4j</groupId>
-+            <artifactId>log4j-slf4j18-impl</artifactId>
++            <artifactId>log4j-slf4j2-impl</artifactId>
 +            <version>${log4j.version}</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.slf4j</groupId>
 +            <artifactId>slf4j-api</artifactId>
-+            <version>1.8.0-beta4</version>
++            <version>2.0.1</version>
++        </dependency>
++        <dependency>
++            <groupId>org.joml</groupId>
++            <artifactId>joml</artifactId>
++            <version>1.10.5</version>
 +        </dependency>
 +    </dependencies>
 +</project>

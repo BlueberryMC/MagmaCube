@@ -110,13 +110,13 @@
     ]
   },
   "assetIndex": {
-    "id": "1",
-    "sha1": "76b5e87160f10ac4f4a22ddd283cc11a8255697e",
-    "size": 385260,
-    "totalSize": 558450776,
-    "url": "https://piston-meta.mojang.com/v1/packages/76b5e87160f10ac4f4a22ddd283cc11a8255697e/1.json"
+    "id": "2",
+    "sha1": "c492375ded5da34b646b8c5c0842a0028bc69cec",
+    "size": 390746,
+    "totalSize": 548701912,
+    "url": "https://piston-meta.mojang.com/v1/packages/c492375ded5da34b646b8c5c0842a0028bc69cec/2.json"
   },
-  "assets": "1",
+  "assets": "2",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -203,10 +203,10 @@
       ]
     }
   ],
-  "id": "22w42a-deobf",
+  "id": "1.19.3-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2022-10-19T00:00:00+00:00",
-  "time": "2022-10-19T00:00:00+00:00",
-  "type": "snapshot"
+  "releaseTime": "2022-12-24T00:00:00+00:00",
+  "time": "2022-12-24T00:00:00+00:00",
+  "type": "release"
 }
