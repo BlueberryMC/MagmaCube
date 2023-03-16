@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..3af2b309bfa996e8945d1c90f9a05c60aeb55d62
+index 0000000000000000000000000000000000000000..f527bfc7bf7708d3f922a34e003860fa1ea668dc
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,385 @@
@@ -17,7 +17,7 @@ index 0000000000000000000000000000000000000000..3af2b309bfa996e8945d1c90f9a05c60
 +    <parent>
 +        <artifactId>magmacube-parent</artifactId>
 +        <groupId>net.blueberrymc.magmacube</groupId>
-+        <version>1.19.3</version>
++        <version>1.19.4</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
 +    
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..3af2b309bfa996e8945d1c90f9a05c60
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.16.29</version>
++            <version>3.18.38</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -127,7 +127,7 @@ index 0000000000000000000000000000000000000000..3af2b309bfa996e8945d1c90f9a05c60
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>datafixerupper</artifactId>
-+            <version>5.0.28</version>
++            <version>6.0.6</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>

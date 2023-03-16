@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index c50996ee9dc0cf532c7b6f4e62c6d0a18a54727a..1b288d043121e30b90bf2b0fdd66f5155bfbe451 100644
+index a22ca1889e7b45a009c29ce269d077782423a9a2..0439b7b1a1cf9d35b7a5f2e9cd3b0460c24233de 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -25,6 +25,7 @@ public class DetectedVersion implements WorldVersion {
@@ -17,8 +17,8 @@ index c50996ee9dc0cf532c7b6f4e62c6d0a18a54727a..1b288d043121e30b90bf2b0fdd66f515
      private DetectedVersion() {
          this.id = UUID.randomUUID().toString().replaceAll("-", "");
 @@ -35,6 +36,7 @@ public class DetectedVersion implements WorldVersion {
-         this.resourcePackVersion = 12;
-         this.dataPackVersion = 10;
+         this.resourcePackVersion = 13;
+         this.dataPackVersion = 12;
          this.buildTime = new Date();
 +        this.magmaCubeVersion = "debug"; // MagmaCube
      }
@@ -63,22 +63,22 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index a7da012f117c34b505b4238f908f6d64c8b91a1e..cd03142651556e2c0c38f3405e541e8ffd8ba408 100644
+index ef7764d92dc5b651478b804925aa8c9827efabeb..717cfc1d9832d575d72fb9e4379539016bc14cfb 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -306,6 +306,7 @@ public class TitleScreen extends Screen {
+@@ -282,6 +282,7 @@ public class TitleScreen extends Screen {
                  s = s + I18n.get("menu.modded");
              }
  
-+            drawString(poseStack, this.font, "MagmaCube " + ((net.minecraft.DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion, 2, this.height - 20, 0xFFFFFF | i6); // MagmaCube
-             drawString(poseStack, this.font, s, 2, this.height - 10, 16777215 | i6);
++            drawString(poseStack, this.font, "MagmaCube " + ((net.minecraft.DetectedVersion) SharedConstants.getCurrentVersion()).magmaCubeVersion, 2, this.height - 20, 0xFFFFFF | i3); // MagmaCube
+             drawString(poseStack, this.font, s, 2, this.height - 10, 16777215 | i3);
  
              for(GuiEventListener guiEventListener : this.children()) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 45364d9658a0c92d94fd784bd83639af3f705cd8..6907041caf3253dec59edac9b2dfba26127f9e33 100644
+index 02a43d0d27177d4dd3eaab4165de9743e4711271..e60fe3c67c4ce77246f7de89c3f7cad7051d7f24 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -925,7 +925,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -944,7 +944,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
