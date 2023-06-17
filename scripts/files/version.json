@@ -49,6 +49,62 @@
           "--height",
           "${resolution_height}"
         ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "has_quick_plays_support": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlayPath",
+          "${quickPlayPath}"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "is_quick_play_singleplayer": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlaySingleplayer",
+          "${quickPlaySingleplayer}"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "is_quick_play_multiplayer": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlayMultiplayer",
+          "${quickPlayMultiplayer}"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "is_quick_play_realms": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlayRealms",
+          "${quickPlayRealms}"
+        ]
       }
     ],
     "jvm": [
@@ -81,21 +137,6 @@
           {
             "action": "allow",
             "os": {
-              "name": "windows",
-              "version": "^10\\."
-            }
-          }
-        ],
-        "value": [
-          "-Dos.name=Windows 10",
-          "-Dos.version=10.0"
-        ]
-      },
-      {
-        "rules": [
-          {
-            "action": "allow",
-            "os": {
               "arch": "x86"
             }
           }
@@ -103,6 +144,9 @@
         "value": "-Xss1M"
       },
       "-Djava.library.path=${natives_directory}",
+      "-Djna.tmpdir=${natives_directory}",
+      "-Dorg.lwjgl.system.SharedLibraryExtractPath=${natives_directory}",
+      "-Dio.netty.native.workdir=${natives_directory}",
       "-Dminecraft.launcher.brand=${launcher_name}",
       "-Dminecraft.launcher.version=${launcher_version}",
       "-cp",
@@ -110,13 +154,13 @@
     ]
   },
   "assetIndex": {
-    "id": "2",
-    "sha1": "c492375ded5da34b646b8c5c0842a0028bc69cec",
-    "size": 390746,
-    "totalSize": 548701912,
-    "url": "https://piston-meta.mojang.com/v1/packages/c492375ded5da34b646b8c5c0842a0028bc69cec/2.json"
+    "id": "5",
+    "sha1": "9d58fdd2538c6877fb5c5c558ebc60ee0b6d0e84",
+    "size": 411581,
+    "totalSize": 617718799,
+    "url": "https://piston-meta.mojang.com/v1/packages/9d58fdd2538c6877fb5c5c558ebc60ee0b6d0e84/5.json"
   },
-  "assets": "2",
+  "assets": "5",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -137,51 +181,13 @@
     {
       "downloads": {
         "artifact": {
-          "path": "com/mojang/text2speech/1.13.9/text2speech-1.13.9.jar",
-          "sha1": "5f4e3a6ef86cb021f7ca87ca192cddb50c26eb59",
-          "size": 12123,
-          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.13.9/text2speech-1.13.9.jar"
+          "path": "com/mojang/text2speech/1.17.9/text2speech-1.17.9.jar",
+          "sha1": "3cad216e3a7f0c19b4b394388bc9ffc446f13b14",
+          "size": 12243,
+          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.17.9/text2speech-1.17.9.jar"
         }
       },
-      "name": "com.mojang:text2speech:1.13.9"
-    },
-    {
-      "downloads": {
-        "artifact": {
-          "path": "com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-windows.jar",
-          "sha1": "7a90898b29e5c72f90ba6ebe86fa78a6afd7d3eb",
-          "size": 81379,
-          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-windows.jar"
-        }
-      },
-      "name": "com.mojang:text2speech:1.13.9:natives-windows",
-      "rules": [
-        {
-          "action": "allow",
-          "os": {
-            "name": "windows"
-          }
-        }
-      ]
-    },
-    {
-      "downloads": {
-        "artifact": {
-          "path": "com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-linux.jar",
-          "sha1": "6c63ecb3b6408dcfdde6440c9ee62c060542af33",
-          "size": 7833,
-          "url": "https://libraries.minecraft.net/com/mojang/text2speech/1.13.9/text2speech-1.13.9-natives-linux.jar"
-        }
-      },
-      "name": "com.mojang:text2speech:1.13.9:natives-linux",
-      "rules": [
-        {
-          "action": "allow",
-          "os": {
-            "name": "linux"
-          }
-        }
-      ]
+      "name": "com.mojang:text2speech:1.17.9"
     },
     {
       "downloads": {
@@ -203,10 +209,10 @@
       ]
     }
   ],
-  "id": "1.19.3-deobf",
+  "id": "1.20.1-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2022-12-24T00:00:00+00:00",
-  "time": "2022-12-24T00:00:00+00:00",
+  "releaseTime": "2023-06-15T00:00:00+00:00",
+  "time": "2023-06-15T00:00:00+00:00",
   "type": "release"
 }

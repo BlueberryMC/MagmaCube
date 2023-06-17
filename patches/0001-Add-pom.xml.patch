@@ -6,7 +6,7 @@ Subject: [PATCH] Add pom.xml
 
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..f527bfc7bf7708d3f922a34e003860fa1ea668dc
+index 0000000000000000000000000000000000000000..5f41e47c22caa5dc6798dfaa51121b30d1e8e5d6
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,385 @@
@@ -17,12 +17,12 @@ index 0000000000000000000000000000000000000000..f527bfc7bf7708d3f922a34e003860fa
 +    <parent>
 +        <artifactId>magmacube-parent</artifactId>
 +        <groupId>net.blueberrymc.magmacube</groupId>
-+        <version>1.19.4</version>
++        <version>1.20.1</version>
 +    </parent>
 +    <modelVersion>4.0.0</modelVersion>
-+    
++
 +    <properties>
-+        <text2speech.version>1.13.9</text2speech.version>
++        <text2speech.version>1.17.9</text2speech.version>
 +        <maven.compiler.source>17</maven.compiler.source>
 +        <maven.compiler.target>17</maven.compiler.target>
 +        <log4j.version>2.19.0</log4j.version>
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..f527bfc7bf7708d3f922a34e003860fa
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>authlib</artifactId>
-+            <version>3.18.38</version>
++            <version>4.0.43</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
@@ -127,16 +127,16 @@ index 0000000000000000000000000000000000000000..f527bfc7bf7708d3f922a34e003860fa
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>datafixerupper</artifactId>
-+            <version>6.0.6</version>
++            <version>6.0.8</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
 +            <artifactId>brigadier</artifactId>
-+            <version>1.0.18</version>
++            <version>1.1.8</version>
 +        </dependency>
 +        <dependency>
 +            <groupId>com.mojang</groupId>
-+            <artifactId>javabridge</artifactId>
++            <artifactId>javabridge</artifactId> <!-- TODO: removed? -->
 +            <version>2.0.25</version>
 +        </dependency>
 +        <dependency>
