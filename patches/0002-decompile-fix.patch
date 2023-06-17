@@ -19834,7 +19834,7 @@ index b131148afd4825fbc95da54aa53b2ed673017812..ed5a02d3a577a7895028682e1eabb4cb
  
      private int calculatePriority(int i, int i2) {
 diff --git a/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java b/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java
-index bce964e358698354f3be2f988713baa0c8cf0c92..5fb5436d352c3491fb66d8ec82484f59c0e619ba 100644
+index bce964e358698354f3be2f988713baa0c8cf0c92..c79683d30c14e6a2b182fd041981c72eb2508e67 100644
 --- a/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java
 @@ -149,10 +149,10 @@ public abstract class LayerLightSectionStorage<M extends DataLayerStorageMap<M>>
@@ -19851,6 +19851,15 @@ index bce964e358698354f3be2f988713baa0c8cf0c92..5fb5436d352c3491fb66d8ec82484f59
                  long l3 = entry.getLongKey();
                  if (this.storingLightForSection(l3)) {
                      DataLayer dataLayer3 = (DataLayer)entry.getValue();
+@@ -161,7 +161,7 @@ public abstract class LayerLightSectionStorage<M extends DataLayerStorageMap<M>>
+                         this.changedSections.add(l3);
+                     }
+ 
+-                    objectIterator.remove();
++                    objectIteratorIn.remove();
+                 }
+             }
+ 
 @@ -333,4 +333,4 @@ public abstract class LayerLightSectionStorage<M extends DataLayerStorageMap<M>>
              return this.display;
          }
