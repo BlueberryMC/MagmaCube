@@ -20162,7 +20162,7 @@ index 9149072433dd1d18efbdf2a6b2b624e595214116..b772e6f69ce75e844eaba6868b5f0e81
 +public record LootDataId<T>(LootDataType<T> type, ResourceLocation location) {
 +}
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/LootDataManager.java b/src/main/java/net/minecraft/world/level/storage/loot/LootDataManager.java
-index 30e94f1098a24ffb9a02ff3c8f987ba7b5e52f55..7e0a05c4f9a347a510422112bb5135befdcf65ad 100644
+index 30e94f1098a24ffb9a02ff3c8f987ba7b5e52f55..48408dd24a174c30ddb6db4822124ad37c1884f6 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/LootDataManager.java
 +++ b/src/main/java/net/minecraft/world/level/storage/loot/LootDataManager.java
 @@ -45,9 +45,9 @@ public class LootDataManager implements PreparableReloadListener, LootDataResolv
@@ -20174,7 +20174,7 @@ index 30e94f1098a24ffb9a02ff3c8f987ba7b5e52f55..7e0a05c4f9a347a510422112bb5135be
 -            map2.forEach((resourceLocation, jsonElement) -> lootDataType.deserialize(resourceLocation, jsonElement).ifPresent((object) -> map2.put(resourceLocation, object)));
 +            Map<ResourceLocation, JsonElement> elements = new HashMap();
 +            SimpleJsonResourceReloadListener.scanDirectory(resourceManager, lootDataType.directory(), lootDataType.parser(), elements);
-+            elements.forEach((resourceLocation, jsonElement) -> lootDataType.deserialize(resourceLocation, jsonElement).ifPresent((object) -> elements.put(resourceLocation, (JsonElement) object)));
++            elements.forEach((resourceLocation, jsonElement) -> lootDataType.deserialize(resourceLocation, jsonElement).ifPresent((object) -> map2.put(resourceLocation, object)));
          }, executor);
      }
  
