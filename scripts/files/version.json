@@ -154,13 +154,13 @@
     ]
   },
   "assetIndex": {
-    "id": "5",
-    "sha1": "9d58fdd2538c6877fb5c5c558ebc60ee0b6d0e84",
-    "size": 411581,
-    "totalSize": 617718799,
-    "url": "https://piston-meta.mojang.com/v1/packages/9d58fdd2538c6877fb5c5c558ebc60ee0b6d0e84/5.json"
+    "id": "8",
+    "sha1": "682d40601076a696477736377a2ed4677722d6a2",
+    "size": 414035,
+    "totalSize": 619487335,
+    "url": "https://piston-meta.mojang.com/v1/packages/682d40601076a696477736377a2ed4677722d6a2/8.json"
   },
-  "assets": "5",
+  "assets": "8",
   "logging": {
     "client": {
       "argument": "-Dlog4j.configurationFile=${path}",
@@ -209,10 +209,10 @@
       ]
     }
   ],
-  "id": "1.20.1-deobf",
+  "id": "1.20.2-deobf",
   "mainClass": "net.minecraft.client.main.Main",
   "minimumLauncherVersion": 21,
-  "releaseTime": "2023-06-15T00:00:00+00:00",
-  "time": "2023-06-15T00:00:00+00:00",
+  "releaseTime": "2023-09-24T00:00:00+00:00",
+  "time": "2023-09-24T00:00:00+00:00",
   "type": "release"
 }
