@@ -6,7 +6,7 @@
 
     <groupId>net.blueberrymc.magmacube</groupId>
     <artifactId>magmacube-parent</artifactId>
-    <version>1.20.1</version>
+    <version>1.20.2</version>
     <modules>
         <module>Minecraft</module>
     </modules>
@@ -40,7 +40,7 @@
     <repositories>
         <repository>
             <id>blueberrymc-repo</id>
-            <url>https://repo.blueberrymc.net/repository/maven-public/</url>
+            <url>https://repo.azisaba.net/repository/maven-public/</url>
         </repository>
     </repositories>
 

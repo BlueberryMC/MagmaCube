@@ -5,7 +5,7 @@ Subject: [PATCH] magmacube > vanilla!
 
 
 diff --git a/src/main/java/net/minecraft/DetectedVersion.java b/src/main/java/net/minecraft/DetectedVersion.java
-index 44483459c2cf1d1202aa8e7e3a43bc167ce36a78..ca86a0c5e402071251ad4097ce87be04d35c0074 100644
+index 364b02952a3b85e8356772dfe9e9aaefadc9d217..26b2e932049ccbacd747c8eccb21f75ddc7983a0 100644
 --- a/src/main/java/net/minecraft/DetectedVersion.java
 +++ b/src/main/java/net/minecraft/DetectedVersion.java
 @@ -25,6 +25,7 @@ public class DetectedVersion implements WorldVersion {
@@ -17,8 +17,8 @@ index 44483459c2cf1d1202aa8e7e3a43bc167ce36a78..ca86a0c5e402071251ad4097ce87be04
      private DetectedVersion() {
          this.id = UUID.randomUUID().toString().replaceAll("-", "");
 @@ -35,6 +36,7 @@ public class DetectedVersion implements WorldVersion {
-         this.resourcePackVersion = 15;
-         this.dataPackVersion = 15;
+         this.resourcePackVersion = 18;
+         this.dataPackVersion = 18;
          this.buildTime = new Date();
 +        this.magmaCubeVersion = "debug"; // MagmaCube
      }
@@ -63,10 +63,10 @@ index a71fa408ba7e733c02f450dd5c18a17bee53a427..fb84bbcd532981037e97b33e7b8bdef5
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-index b32aa0f50990ffd8cfdfeb6986820d20b8f462f6..f2d82c4cae6215e16563c2542853a26bc22117dc 100644
+index 2fb422f45c4eab5f7a4912c0c5eaae9292565438..7876b74a1af00eb73e25619c0036e0f82760df77 100644
 --- a/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/src/main/java/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -275,6 +275,7 @@ public class TitleScreen extends Screen {
+@@ -279,6 +279,7 @@ public class TitleScreen extends Screen {
              }
  
              guiGraphics.drawString(this.font, s, 2, this.height - 10, 16777215 | i3);
@@ -75,10 +75,10 @@ index b32aa0f50990ffd8cfdfeb6986820d20b8f462f6..f2d82c4cae6215e16563c2542853a26b
              for(GuiEventListener guiEventListener : this.children()) {
                  if (guiEventListener instanceof AbstractWidget) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 32d8b4eb9aa5ba8f7bdb93f405ca14ce60d89baa..1eec24171a152be1b2d3c6e8fac0748fdc1a14a4 100644
+index 803f81e3ecc96978caf9c82419bbcd5a04c53e9e..e7ca55d6860645896beffcd40a00eb23f455fa2f 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -943,7 +943,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -949,7 +949,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
